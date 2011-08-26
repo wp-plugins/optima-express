@@ -32,7 +32,9 @@ The Optima Express Pro package includes all the features of Optima Express base 
 
 = OPTIMA EXPRESS PAGES =
 
-The Optima Express plugin creates links to IDX pages that can be added to your WordPress navigation menu and other portions of your site.  The following IDX pages are provided:
+The Optima Express plugin creates links to IDX pages that can be added to your WordPress navigation menu and other portions of your site.
+
+The following IDX pages are provided:
 
 = Property Search =
 
@@ -44,11 +46,11 @@ The Featured Properties page displays your current listings, or listings from yo
 
 = Top Picks =
 
-Top Picks pages display a list of saved searches, such as listings in your market area, homes with water views, distressed properties, and so on. (see an example at <a href="http://blog.anyhomesrealty.com/homes-for-sale-toppicks/">http://blog.anyhomesrealty.com/homes-for-sale-toppicks/</a>)
+Top Picks pages display a list of saved searches such as listings in your market area, homes with water views, distressed properties, and so on. (see an example at <a href="http://blog.anyhomesrealty.com/homes-for-sale-toppicks/">http://blog.anyhomesrealty.com/homes-for-sale-toppicks/</a>)
 
 = Email Alerts =
 
-Your site visitors can sign-up for daily email alerts containing listings that match their desired search criteria. Email alert sign-ups and activity are tracked in your iHomefinder Control Panel. (see an example at  <a href="http://blog.anyhomesrealty.com/email-alerts/">http://blog.anyhomesrealty.com/email-alerts/</a>)
+Your site visitors can sign-up for daily email alerts containing listings that match their desired search criteria. Email alert sign-ups and activity are tracked in your iHomefinder Control Panel. (see an example at <a href="http://blog.anyhomesrealty.com/email-alerts/">http://blog.anyhomesrealty.com/email-alerts/</a>)
 
 = Property Organizer  =
 
@@ -68,11 +70,11 @@ Display your Featured Properties in an attractive WordPress widget on any page o
 
 = Top Picks Gallery Widget =
 
-Display the results of a saved search created in your iHomefinder Control Panel.  Showcase the type of listings you specialize in, such as REOs, condos, or waterfront properties.  Or, highlight the different neighborhoods and subdivisions that you cover. (Optima Express Pro only)
+Display the results of a saved search created in your iHomefinder Control Panel. Showcase the type of listings you specialize in, such as REOs, condos, or waterfront properties. Or, highlight the different neighborhoods and subdivisions that you cover. (Optima Express Pro only)
 
 = Saved Search Gallery Widget  =
 
-Similar to a Top Picks Gallery Widget, except you can define the saved search using basic search parameters within your WordPress Dashboard rather than the iHomefinder Control Panel.  (Optima Express Pro only)
+Similar to a Top Picks Gallery Widget, except you can define the saved search using basic search parameters within your WordPress Dashboard rather than the iHomefinder Control Panel. (Optima Express Pro only)
 
 = Saved Search Link Widget  =
 
@@ -87,12 +89,12 @@ A WordPress Theme defines the layout and design of your WordPress website. Optim
 * Twenty Eleven
 * Headway 2012
 
-Technical note: Other WordPress themes are likely to display Optima Express content correctly provided that the theme is properly coded with jQuery set to run in “no conflict” mode. Please contact iHomefinder support (<a href="mailto:support@ihomefinder.com">support@ihomefinder.com</a>) for assistance with specific themes.
+Technical note: Other WordPress themes are likely to display Optima Express content correctly provided that the theme is properly coded with jQuery set to run in 'no conflict' mode. Please contact iHomefinder support (<a href="mailto:support@ihomefinder.com">support@ihomefinder.com</a>) for assistance with specific themes.
 
 Optima Express pages are 620 pixels wide, and widgets are 180 pixels wide.
 
 = CONTROL PANEL =
-Your Optima Express pages display IDX pages as set-up in your iHomefinder Control Panel.  Note that this is separate from your WordPress Dashboard. Use the Control Panel to configure property search settings, Top Picks, Featured Properties, branding for Email Alerts, lead management and much more.  The Help system, located in the top right corner of the Control Panel, provides detailed instructions for all account features.
+Your Optima Express pages display IDX pages as set-up in your iHomefinder Control Panel. Note that this is separate from your WordPress Dashboard. Use the Control Panel to configure property search settings, Top Picks, Featured Properties, branding for Email Alerts, lead management and much more. The Help system, located in the top right corner of the Control Panel, provides detailed instructions for all account features.
 
 To learn more: http://blog.ihomefinder.com/optima-express
 
@@ -112,7 +114,7 @@ You need to install WordPress on your own hosted website.
 
 If you do not have your own hosted WordPress page, please see if your web hosting company provides a quick installation method.
 
-If they do not you will need to visit ‘WordPress.org’ and navigate to the ‘download page’.
+If they do not you will need to visit 'WordPress.org' and navigate to the 'download page'.
 Here is the [link to download](http://wordpress.org/download/), and there is also a [handy guide](http://codex.wordpress.org/Installing_WordPress) which will help you in this process.
 
 
@@ -120,15 +122,15 @@ Here is the [link to download](http://wordpress.org/download/), and there is als
 
 Login to the Wordpress as an administrator.
 
-In the Plugins menu, select "Add New" and "Search". Search for the term "Optima Express" and select "Install Now". This will install Optima Express from the Wordpress repository and you will receive notification if the plugin requires updates.
+In the Plugins menu, select 'Add New' and 'Search'. Search for the term 'Optima Express' and select 'Install Now'. This will install Optima Express from the Wordpress repository and you will receive notification if the plugin requires updates.
 
 
 
 = Register =
 
-After you have activated the plugin, click on the "Register" link which is found on the side menu under Optima Express Information &gt; Register.
+After you have activated the plugin, click on the 'Register' link which is found on the side menu under Optima Express Information &gt; Register.
 
-Insert your registration key and click "Save Changes". See the FAQ for information about acquiring a registration key.
+Insert your registration key and click 'Save Changes'. See the FAQ for information about acquiring a registration key.
 
 
 = Modify Permalinks =
@@ -211,17 +213,17 @@ The Pro package includes a full mobile IDX site that will work on any browser-en
 
 == Screenshots ==
 
-1. Great SEO  Optima Express delivers the powerful features of Optima IDX directly on your WordPress website. Optima IDX makes sure all listing data and pages in your account are indexed by search engines and WordPress is also designed for Search Engine Optimization (SEO). The combination of WordPress and Optima Express will provide you with a website with IDX that search engines will love.
+1. Great SEO Optima Express delivers the powerful features of Optima IDX directly on your WordPress website. Optima IDX makes sure all listing data and pages in your account are indexed by search engines and WordPress is also designed for Search Engine Optimization (SEO). The combination of WordPress and Optima Express will provide you with a website with IDX that search engines will love.
 
-2. Elegant Interface &amp; Gorgeous Property Photos.  A picture is worth a thousand words, and the photos in Optima Express say it all. A simple and elegant interface with beautiful photos is what you’ll find with Optima Express.
+2. Elegant Interface &amp; Gorgeous Property Photos. A picture is worth a thousand words, and the photos in Optima Express say it all. A simple and elegant interface with beautiful photos is what you'll find with Optima Express.
 
-3. Quicksearch &amp; Property Gallery widgets.  Website visitors will love how easy it is to find the information they’re looking for with features like Quicksearch &amp; Property Gallery widgets.
+3. Quicksearch &amp; Property Gallery widgets. Website visitors will love how easy it is to find the information they're looking for with features like Quicksearch &amp; Property Gallery widgets.
 
-4. Facebook &amp; Twitter Integration  With a click of the Share button, website visitors or realtors themselves can share property details on social media networks. Sharing of listings on social media accounts also provides valuable backlinks to your site which benefits your SEO.
+4. Facebook &amp; Twitter Integration. With a click of the Share button, website visitors or realtors themselves can share property details on social media networks. Sharing of listings on social media accounts also provides valuable backlinks to your site which benefits your SEO.
 
-5. Mobile MLS Search  With the Optima Express Pro package, you’ll get a Mobile MLS Search site.  It looks and feels like an app but works right away on mobile devices with a browser.  Please note that with Optima Express Pro, you'll need to download a plugin so that when visitors come to your site on their mobile phone, they will be automatically re-directed to your mobile site.
+5. Mobile MLS Search With the Optima Express Pro package, you'll get a Mobile MLS Search site. It looks and feels like an app but works right away on mobile devices with a browser. Please note that with Optima Express Pro, you'll need to download a plugin so that when visitors come to your site on their mobile phone, they will be automatically re-directed to your mobile site.
 
-6. Email Alerts  Email Alerts are a great way of staying connected to your prospects and delivering value to them. Each time a property that matches their saved search criteria comes to market, they'll receive an email with your name and brand giving them the information they want and need.
+6. Email Alerts. Email Alerts are a great way of staying connected to your prospects and delivering value to them. Each time a property that matches their saved search criteria comes to market, they'll receive an email with your name and brand giving them the information they want and need.
 
 == Changelog ==
 
