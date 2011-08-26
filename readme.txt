@@ -46,7 +46,7 @@ The Featured Properties page displays your current listings, or listings from yo
 
 = Top Picks =
 
-Top Picks pages display a list of saved searches such as listings in your market area, homes with water views, distressed properties, and so on. (see an example at <a href="http://blog.anyhomesrealty.com/homes-for-sale-toppicks/">http://blog.anyhomesrealty.com/homes-for-sale-toppicks/</a>)
+Top Picks pages display a list of saved searches such as listings in your market area, homes with water views, distressed properties, and so on. (see an example at <a href="http://blog.anyhomesrealty.com/homes-for-sale-toppicks/">http://blog.anyhomesrealty.com/homes-for-sale-toppicks/</a>)
 
 = Email Alerts =
 
@@ -62,7 +62,7 @@ You can enhance your WordPress site with a selection of Quicksearch and Property
 
 = Quick Search Widget  =
 
-Add property search to any page by dragging the Quicksearch widget to the page’s sidebar.
+Add property search to any page by dragging the Quicksearch widget to the page's sidebar.
 
 = Featured Properties Gallery Widget =
 
@@ -94,6 +94,7 @@ Technical note: Other WordPress themes are likely to display Optima Express cont
 Optima Express pages are 620 pixels wide, and widgets are 180 pixels wide.
 
 = CONTROL PANEL =
+
 Your Optima Express pages display IDX pages as set-up in your iHomefinder Control Panel. Note that this is separate from your WordPress Dashboard. Use the Control Panel to configure property search settings, Top Picks, Featured Properties, branding for Email Alerts, lead management and much more. The Help system, located in the top right corner of the Control Panel, provides detailed instructions for all account features.
 
 To learn more: http://blog.ihomefinder.com/optima-express
