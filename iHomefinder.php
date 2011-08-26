@@ -1,11 +1,11 @@
 <?php
 /*
 Plugin Name: Optima Express IDX Plugin
-Plugin URI: http://www.ihomefinder.com
+Plugin URI: http://wordpress.org/extend/plugins/optima-express/
 Description: This plugin integrates your Wordpress site with IDX search functionality.  This plugin requires an activation key.
 Version: 1.0.0
 Author: iHomefinder
-Author URI: www.ihomefinder.com
+Author URI: http://www.ihomefinder.com
 License: GPL
 */
 
@@ -27,7 +27,7 @@ include_once 'iHomefinderSubscriber.php';
 include_once 'iHomefinderUrlFactory.php';
 include_once 'iHomefinderUtility.php';
 
-/** 
+/**
  * Load  Widgets
  */
 include("widget/iHomefinderPropertiesGallery.php");
@@ -53,9 +53,9 @@ if( is_admin()){
 	//Remember the users state in the application (subscriber info and last search)
 	add_action('plugins_loaded',array(IHomefinderStateManager::getInstance(), "initialize"), 5);
 	add_action('plugins_loaded', array(IHomefinderStateManager::getInstance(), "saveLastSearch"), 8);
-	
+
 	add_filter( 'the_content', array(IHomefinderFilterDispatcher::getInstance(), "filter") );
-	add_filter( 'the_posts', array(IHomefinderFilterDispatcher::getInstance(), "postCleanUp") );	
+	add_filter( 'the_posts', array(IHomefinderFilterDispatcher::getInstance(), "postCleanUp") );
 }
 
 
