@@ -129,9 +129,10 @@ In the Plugins menu, select 'Add New' and 'Search'. Search for the term 'Optima 
 
 = Register =
 
-After you have activated the plugin, click on the 'Register' link which is found on the side menu under Optima Express Information &gt; Register.
+1. To obtain your Registration Key, go to your iHomefinder Control Panel and Navigate to Account Setup > General Settings. Find the section titled 'Registration Key'. Highlight this key and then right click > Copy.
 
-Insert your registration key and click 'Save Changes'. See the FAQ for information about acquiring a registration key.
+2. Go back to your WordPress Admin panel and navigate the left menu to find Optima Express Information > Register. Paste in your registration key and click 'Save Changes'.
+
 
 
 = Modify Permalinks =
