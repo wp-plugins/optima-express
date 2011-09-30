@@ -13,6 +13,7 @@ if( !interface_exists('IHomefinderConstants')){
 		const OPTION_ACTIVATE="ihf-option-activate";
         const OPTION_PAGES="ihf-option-pages";
         
+        const VERSION_OPTION="ihf_version_option";
 		const ACTIVATION_TOKEN_OPTION="ihf_activation_token";
 		const ACTIVATION_DATE_OPTION="ihf_activation_date";
 		

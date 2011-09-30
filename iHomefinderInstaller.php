@@ -61,10 +61,18 @@ if(!class_exists('IHomefinderInstaller')){
 		 * upgrade
 		 */
 		public function upgrade(){
-			$this->ihfAdmin->deleteAuthenticationToken() ;
-			$this->ihfAdmin->updateAuthenticationToken() ;
-		    $this->ihfRewriteRules->initialize();
-		    $this->ihfRewriteRules->flushRules();			
+			
+			$currentVersion=get_option(IHomefinderConstants::VERSION_OPTION);
+			
+			if( $currentVersion != IHomefinderConstants::VERSION ){
+				$this->ihfAdmin->deleteAuthenticationToken() ;
+				$this->ihfAdmin->updateAuthenticationToken() ;
+				$this->ihfRewriteRules->initialize();
+				$this->ihfRewriteRules->flushRules();
+
+				update_option(IHomefinderConstants::VERSION_OPTION, IHomefinderConstants::VERSION );
+			}
+
 		}
 	}
 }//end if(!class_exists('IHomefinderInstaller'))

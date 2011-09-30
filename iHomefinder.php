@@ -49,6 +49,7 @@ add_action('init',array(IHomefinderRewriteRules::getInstance(), "initialize"));
 //add_action('init',array(IHomefinderRewriteRules::getInstance(), "flushRules"));
 
 if( is_admin()){
+	add_action('admin_menu', array(IHomefinderInstaller::getInstance(), 'upgrade'));
 	add_action('admin_menu', array(IHomefinderAdmin::getInstance(), "createAdminMenu"));
 	add_action( 'admin_init', array(IHomefinderAdmin::getInstance(), "registerSettings") );
 } else {
