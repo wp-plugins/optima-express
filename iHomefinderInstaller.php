@@ -64,7 +64,7 @@ if(!class_exists('IHomefinderInstaller')){
 			
 			$currentVersion=get_option(IHomefinderConstants::VERSION_OPTION);
 			
-			if( $currentVersion != IHomefinderConstants::VERSION ){
+			if( $currentVersion != IHomefinderConstants::VERSION && $this->ihfAdmin->previouslyActivated() ){
 				$this->ihfAdmin->deleteAuthenticationToken() ;
 				$this->ihfAdmin->updateAuthenticationToken() ;
 				$this->ihfRewriteRules->initialize();

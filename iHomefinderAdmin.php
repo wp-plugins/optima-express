@@ -78,7 +78,7 @@ if( !class_exists('IHomefinderAdmin')) {
 			return $authenticationToken ;
 		}			
 		
-		private function previouslyActivated(){
+		public function previouslyActivated(){
 			return get_option(IHomefinderConstants::IS_ACTIVATED_OPTION);
 		}
 		
