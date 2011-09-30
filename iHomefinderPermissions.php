@@ -4,7 +4,7 @@ if( !class_exists('IHomefinderPermissions')) {
 	 * 
 	 * This singleton class remembers permissions.
 	 * 
-	 * @author iHomefinder
+	 * @author ihomefinder
 	 */
 	class IHomefinderPermissions {	
 		

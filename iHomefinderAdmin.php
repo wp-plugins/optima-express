@@ -60,6 +60,11 @@ if( !class_exists('IHomefinderAdmin')) {
 			}						
 		}	
 		
+		public function deleteAuthenticationToken(){
+			//This forces reactivation of the plugin at next site visit.
+		    delete_transient(IHomefinderConstants::AUTHENTICATION_TOKEN_CACHE);
+		}
+		
 		/** 
 		 * If the authentication token has expired then generate a new authentication token
 		 * from the activationToken.
@@ -97,6 +102,7 @@ if( !class_exists('IHomefinderAdmin')) {
 			$urlFactory=IHomefinderUrlFactory::getInstance();
 			$permissions=IHomefinderPermissions::getInstance();
 			$this->createOneLink('Home Search', $urlFactory->getListingsSearchFormUrl(true), 'Find your home today.');
+			$this->createOneLink('Advanced Home Search', $urlFactory->getListingsAdvancedSearchFormUrl(true), 'Find your home today with advanced search parameters.');
 			
 			if($permissions->isFeaturedPropertiesEnabled()){
 				$this->createOneLink('Featured Listings', $urlFactory->getFeaturedSearchResultsUrl(true), 'Offers a list of featured properties.');
@@ -134,6 +140,7 @@ if( !class_exists('IHomefinderAdmin')) {
 			$organizerResendConfirmationEmailUrl  = urlencode($urlFactory->getOrganizerResendConfirmationEmailUrl(true));
 			$organizerActivateSubscriberUrl       = urlencode($urlFactory->getOrganizerActivateSubscriberUrl(true));
 			$organizerSendSubscriberPasswordUrl   = urlencode($urlFactory->getOrganizerSendSubscriberPasswordUrl(true));
+			$listingsAdvancedSearchFormUrl        = urlencode($urlFactory->getListingsAdvancedSearchFormUrl(true));
 			
 			$ihfUrl = IHomefinderConstants::EXTERNAL_URL  ;
 			$postData= array(
@@ -160,7 +167,8 @@ if( !class_exists('IHomefinderAdmin')) {
 				'organizerViewSavedListingListUrl'=> $organizerViewSavedListingListUrl,
 				'organizerResendConfirmationEmailUrl'=> $organizerResendConfirmationEmailUrl,
 				'organizerActivateSubscriberUrl'=> $organizerActivateSubscriberUrl,
-				'organizerSendSubscriberPasswordUrl'=> $organizerSendSubscriberPasswordUrl
+				'organizerSendSubscriberPasswordUrl'=> $organizerSendSubscriberPasswordUrl,
+				'listingAdvancedSearchFormUrl'=> $listingsAdvancedSearchFormUrl
 			);
 			
 			IHomefinderLogger::getInstance()->debug( '$ihfUrl:::' . $ihfUrl ) ;
@@ -250,6 +258,12 @@ if( !class_exists('IHomefinderAdmin')) {
 					<br/>Main property search form.  Prospective customers can search for properties
 					by price, city, baths, and bedrooms.
 					<br/><br/>
+
+					<h3>Advanced Search Form</h3>
+					<b><?php echo $urlFactory->getListingsAdvancedSearchFormUrl(true)  ;?></b> 
+					<br/>Property search form with MLS specific advanced search fields.  Prospective customers can search for properties
+					by price, city, baths, bedrooms, and other MLS specific fields.
+					<br/><br/>					
 					
 					<h3>Organizer Login</h3>
 					<b><?php echo $urlFactory->getOrganizerLoginUrl(true);?></b> 

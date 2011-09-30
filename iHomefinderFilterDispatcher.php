@@ -4,16 +4,16 @@ if( !class_exists('IHomefinderFilterDispatcher')) {
 	/**
 	 *
 	 * This singleton class is used to filter the content of iHomefinder pages.
-	 * We use the iHomefinderFilterFactory class to retrieve the 
-	 * proper filter implementation. 
-	 * 
-	 * @author iHomefinder
+	 * We use the iHomefinderFilterFactory class to retrieve the
+	 * proper filter implementation.
+	 *
+	 * @author ihomefinder
 	 */
 	class IHomefinderFilterDispatcher {
 
 		private static $instance ;
 		private $ihfAdmin ;
-		
+
 		private $currentFilter = null;
 		private $content = null;
 		private $title = null;
@@ -29,23 +29,17 @@ if( !class_exists('IHomefinderFilterDispatcher')) {
 			}
 			return self::$instance;
 		}
-		
+
 		public function init(){
 			if( !$this->initialized ){
+
 				if( $type = get_query_var(IHomefinderConstants::IHF_TYPE_URL_VAR) ) {
 					$this->currentFilter= IHomefinderFilterFactory::getInstance()->getFilter($type);
 					$authenticationToken=$this->ihfAdmin->getAuthenticationToken();
 			    	$this->content=$this->currentFilter->filter('', $authenticationToken);
 			    	$this->title=$this->currentFilter->getTitle();
 			    	$this->initialized=true;
-				}		
-			}		
-		}
-
-		public function getPageTitle(){
-			$this->init();
-			if( $this->initialized ){	
-				$this->currentFilter->getPageTitle();
+				}
 			}
 		}
 
@@ -57,15 +51,15 @@ if( !class_exists('IHomefinderFilterDispatcher')) {
 		 * during processing.  We cannot set the post content here, because
 		 * Wordpress does some odd formatting of the post_content, if we
 		 * add it here (see the filter method below, where content is properly set)
-		 * 
-		 * 
+		 *
+		 *
 		 *
 		 * @param $posts
 		 */
 		function postCleanUp($posts){
-			
-			$this->init();	
-			if( $this->initialized ){				
+
+			$this->init();
+			if( $this->initialized ){
 				$title = $this->currentFilter->getTitle();
 		        $_postArray['post_title'] = $title ;
 		        $_postArray['post_content'] = 'ihf' ;
@@ -79,7 +73,7 @@ if( !class_exists('IHomefinderFilterDispatcher')) {
 		        $_postArray['post_date'] = current_time('mysql');
 		        $_postObject=(object) $_postArray ;
 		        $_postObject=get_post($_postObject);
-	
+
 	        	$posts= array();
 		    	$posts[0]=$_postObject;
 			}

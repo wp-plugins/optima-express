@@ -16,7 +16,7 @@ if( !class_exists('iHomefinderOrganizerActivateSubscriberFilterImpl')) {
 			
 			$ihfUrl = IHomefinderConstants::EXTERNAL_URL . '?method=handleRequest&viewType=json&requestType=property-organizer-activate-subscriber' ;
 			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "authenticationToken", $authenticationToken);
-			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "email", $email);
+			$ihfUrl = iHomefinderRequestor::addVarsToUrl($ihfUrl, $_REQUEST) ;
 			
 			$contentInfo = IHomefinderRequestor::remoteRequest($ihfUrl);
 			$idxContent = IHomefinderRequestor::getContent( $contentInfo );

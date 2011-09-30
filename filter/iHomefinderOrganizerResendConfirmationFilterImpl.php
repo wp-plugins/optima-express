@@ -30,11 +30,6 @@ if( !class_exists('IHomefinderOrganizerResendConfirmationFilterImpl')) {
 			$idxContent = IHomefinderRequestor::getContent( $contentInfo );
 	
 			$content=$idxContent;
-			$subscriberData=$contentInfo->subscriberInfo ;
-			//var_dump($subscriberData);
-			$subscriberInfo=IHomefinderSubscriber::getInstance($subscriberData->subscriberId,$subscriberData->name, $subscriberData->email );
-			//var_dump($subscriberInfo);
-			IHomefinderStateManager::getInstance()->saveSubscriberLogin($subscriberInfo);
 			
 			IHomefinderLogger::getInstance()->debug( '<br/><br/>' . $ihfUrl ) ;
 			IHomefinderLogger::getInstance()->debug('End IHomefinderOrganizerResendConfirmationFilterImpl');

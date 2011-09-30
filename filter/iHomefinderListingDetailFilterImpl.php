@@ -27,6 +27,8 @@ if( !class_exists('IHomefinderListingDetailFilterImpl')) {
 				. '&requestType=listing-detail' 
 				. '&authenticationToken=' . $authenticationToken;
 				
+			$ihfUrl = iHomefinderRequestor::addVarsToUrl($ihfUrl, $_REQUEST) ;				
+				
 			IHomefinderLogger::getInstance()->debug('before logged in check');
 			if( IHomefinderStateManager::getInstance()->isLoggedIn() ){
 				IHomefinderLogger::getInstance()->debug('is logged in');

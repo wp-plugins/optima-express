@@ -139,8 +139,7 @@ if( !class_exists('IHomefinderAjaxHandler')) {
 			$email = IHomefinderUtility::getInstance()->getRequestVar('email');
 			$password = IHomefinderUtility::getInstance()->getRequestVar('password');
 			$actionType = IHomefinderUtility::getInstance()->getRequestVar('actionType');
-			$subscriberId = IHomefinderUtility::getInstance()->getRequestVar('subscriberId');
-
+			$subscriberId = IHomefinderUtility::getInstance()->getRequestVar('subscriberID');
 
 			$ihfUrl = iHomefinderConstants::EXTERNAL_URL . '?method=handleRequest&viewType=json&requestType=save-property' ;
 			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "action", $action);
@@ -158,22 +157,8 @@ if( !class_exists('IHomefinderAjaxHandler')) {
 			IHomefinderLogger::getInstance()->debugDumpVar($ihfUrl);
 			$contentInfo = IHomefinderRequestor::remoteRequest($ihfUrl);
 			IHomefinderLogger::getInstance()->debugDumpVar($contentInfo);
-			//var_dump($contentInfo);
+			
 			IHomefinderLogger::getInstance()->debug( 'before NOT isError' ) ;
-			if( !IHomefinderRequestor::isError($contentInfo)){
-				IHomefinderLogger::getInstance()->debug( 'begin serialize' ) ;
-				$subscriberId = $contentInfo->subscriberInfo->id ;
-				$subscriberName = $contentInfo->subscriberInfo->name ;
-				$subscriberEmail = $contentInfo->subscriberInfo->email ;
-				$subscriber = IHomefinderSubscriber::getInstance($subscriberId, $subscriberName, $subscriberEmail);
-				IHomefinderLogger::getInstance()->debugDumpVar($subscriber);
-				IHomefinderStateManager::getInstance()->saveSubscriberLogin($subscriber);
-
-				IHomefinderLogger::getInstance()->debug( '<br/><br/>' . $ihfUrl ) ;
-				IHomefinderLogger::getInstance()->debug('End IHomefinderFilter.saveProperty');
-			}
-
-
 
 			$content = IHomefinderRequestor::getContent($contentInfo);
 			echo $content ;
@@ -227,25 +212,27 @@ if( !class_exists('IHomefinderAjaxHandler')) {
 
 			IHomefinderLogger::getInstance()->debugDumpVar($contentInfo );
 
-			if( !IHomefinderRequestor::isError($contentInfo)){
-				IHomefinderLogger::getInstance()->debug( 'begin serialize' ) ;
-				$subscriberId = $contentInfo->subscriberInfo->subscriberId ;
-				$subscriberName = $contentInfo->subscriberInfo->name ;
-				$subscriberEmail = $contentInfo->subscriberInfo->email ;
-				$subscriber = IHomefinderSubscriber::getInstance($subscriberId, $subscriberName, $subscriberEmail);
-				IHomefinderStateManager::getInstance()->saveSubscriberLogin($subscriber);
-			}
-
-			$subscriberData=$contentInfo->subscriberInfo ;
-			//var_dump($subscriberData);
-			$subscriberInfo=IHomefinderSubscriber::getInstance($subscriberData->subscriberId,$subscriberData->name, $subscriberData->email );
-			//var_dump($subscriberInfo);
-			IHomefinderStateManager::getInstance()->saveSubscriberLogin($subscriberInfo);
-
 			IHomefinderLogger::getInstance()->debug( '<br/><br/>' . $ihfUrl ) ;
 			IHomefinderLogger::getInstance()->debug('End IHomefinderFilter.saveSearch');
 
 			echo $content ;
+			die();
+		}
+		
+		public function advancedSearchMultiSelects(){
+			IHomefinderLogger::getInstance()->debug('Begin advancedSearchMultiSelects');
+			$authenticationToken=$this->ihfAdmin->getAuthenticationToken();
+			$ihfUrl = iHomefinderConstants::EXTERNAL_URL . '?method=handleRequest&viewType=json&requestType=advanced-search-multi-select-values' ;
+			$ihfUrl = iHomefinderRequestor::addVarsToUrl($ihfUrl, $_REQUEST) ;
+			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "authenticationToken", $authenticationToken );
+			
+			$contentInfo = IHomefinderRequestor::remoteRequest($ihfUrl);
+
+			$content = IHomefinderRequestor::getContent( $contentInfo );
+
+			echo $content ;
+			IHomefinderLogger::getInstance()->debug('End advancedSearchMultiSelects');
+
 			die();
 		}
 	}//end class

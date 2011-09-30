@@ -5,7 +5,7 @@ if( !class_exists('IHomefinderFilterFactory')) {
 	include_once(   'filter/iHomefinderHotsheetFilterImpl.php');
 	include_once(   'filter/iHomefinderHotsheetListFilterImpl.php');
 	
-	
+	include_once(   'filter/iHomefinderAdvancedSearchFormFilterImpl.php');
 	include_once(   'filter/iHomefinderSearchFormFilterImpl.php');
 	include_once(   'filter/iHomefinderSearchResultsFilterImpl.php');
 	include_once(   'filter/iHomefinderListingDetailFilterImpl.php');
@@ -26,11 +26,11 @@ if( !class_exists('IHomefinderFilterFactory')) {
 	include_once(   'filter/iHomefinderOrganizerResendConfirmationFilterImpl.php');
 	include_once(   'filter/iHomefinderOrganizerActivateSubscriberFilterImpl.php');
 	include_once(   'filter/iHomefinderOrganizerSendSubscriberPasswordFilterImpl.php');	
-	/**
-	 * 
+
+	/** 
 	 * This singleton class creates instances of iHomefinder filters, based
 	 * on a type parameter.
-	 * @author iHomefinder
+	 * @author ihomefinder
 	 */
 	class IHomefinderFilterFactory {
 	
@@ -51,6 +51,7 @@ if( !class_exists('IHomefinderFilterFactory')) {
 		const LISTING_SEARCH_RESULTS="idx-results";
 		const LISTING_DETAIL="idx-detail";
 		const LISTING_SEARCH_FORM="idx-search";
+		const LISTING_ADVANCED_SEARCH_FORM="idx-advanced-search";
 		const FEATURED_SEARCH="idx-featured-search";
 		const HOTSHEET_SEARCH_RESULTS="idx-toppicks";
 		const HOTSHEET_LIST="idx-toppicks-list";
@@ -81,6 +82,9 @@ if( !class_exists('IHomefinderFilterFactory')) {
 			}	
 			else if( $type == IHomefinderFilterFactory::FEATURED_SEARCH){
 				$filter = new IHomefinderFeaturedSearchFilterImpl();
+			}
+			else if( $type == IHomefinderFilterFactory::LISTING_ADVANCED_SEARCH_FORM){
+				$filter = new IHomefinderAdvancedSearchFormFilterImpl();
 			}
 	    	else if( $type == IHomefinderFilterFactory::LISTING_SEARCH_FORM){
 				$filter = new IHomefinderSearchFormFilterImpl();

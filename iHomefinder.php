@@ -3,8 +3,8 @@
 Plugin Name: Optima Express IDX Plugin
 Plugin URI: http://wordpress.org/extend/plugins/optima-express/
 Description: This plugin integrates your Wordpress site with IDX search functionality.  This plugin requires an activation key.
-Version: 1.0.0
-Author: iHomefinder
+Version: 1.1.0
+Author: ihomefinder
 Author URI: http://www.ihomefinder.com
 License: GPL
 */
@@ -27,7 +27,7 @@ include_once 'iHomefinderSubscriber.php';
 include_once 'iHomefinderUrlFactory.php';
 include_once 'iHomefinderUtility.php';
 
-/**
+/** 
  * Load  Widgets
  */
 include("widget/iHomefinderPropertiesGallery.php");
@@ -39,6 +39,8 @@ add_action('widgets_init', create_function('', 'return register_widget("iHomefin
 register_activation_hook(__FILE__,array(IHomefinderInstaller::getInstance(), 'install'));
 /* Runs on plugin deactivation*/
 register_deactivation_hook( __FILE__, array(IHomefinderInstaller::getInstance(), 'remove') );
+/* Runs just before the auto upgrader installs the plugin*/
+add_filter('upgrader_post_install', array(IHomefinderInstaller::getInstance(), 'upgrade'), 10, 2);
 
 /* Rewrite Rules */
 add_action('init',array(IHomefinderRewriteRules::getInstance(), "initialize"));
@@ -53,9 +55,9 @@ if( is_admin()){
 	//Remember the users state in the application (subscriber info and last search)
 	add_action('plugins_loaded',array(IHomefinderStateManager::getInstance(), "initialize"), 5);
 	add_action('plugins_loaded', array(IHomefinderStateManager::getInstance(), "saveLastSearch"), 8);
-
+	
 	add_filter( 'the_content', array(IHomefinderFilterDispatcher::getInstance(), "filter") );
-	add_filter( 'the_posts', array(IHomefinderFilterDispatcher::getInstance(), "postCleanUp") );
+	add_filter( 'the_posts', array(IHomefinderFilterDispatcher::getInstance(), "postCleanUp") );	
 }
 
 
@@ -65,12 +67,14 @@ add_action("wp_ajax_nopriv_ihf_schedule_showing",  array(IHomefinderAjaxHandler:
 add_action("wp_ajax_nopriv_ihf_save_property",     array(IHomefinderAjaxHandler::getInstance(), "saveProperty")) ;
 add_action("wp_ajax_nopriv_ihf_photo_tour",        array(IHomefinderAjaxHandler::getInstance(), "photoTour")) ;
 add_action("wp_ajax_nopriv_ihf_save_search",        array(IHomefinderAjaxHandler::getInstance(), "saveSearch")) ;
+add_action("wp_ajax_nopriv_ihf_advanced_search_multi_selects", array(IHomefinderAjaxHandler::getInstance(), "advancedSearchMultiSelects")) ;
 
 add_action("wp_ajax_ihf_more_info_request",        array(IHomefinderAjaxHandler::getInstance(), "requestMoreInfo")) ;
 add_action("wp_ajax_ihf_schedule_showing",         array(IHomefinderAjaxHandler::getInstance(), "scheduleShowing"));
 add_action("wp_ajax_ihf_save_property",            array(IHomefinderAjaxHandler::getInstance(), "saveProperty")) ;
 add_action("wp_ajax_ihf_photo_tour",               array(IHomefinderAjaxHandler::getInstance(), "photoTour")) ;
 add_action("wp_ajax_ihf_save_search",              array(IHomefinderAjaxHandler::getInstance(), "saveSearch")) ;
+add_action("wp_ajax_ihf_advanced_search_multi_selects",              array(IHomefinderAjaxHandler::getInstance(), "advancedSearchMultiSelects")) ;
 
 //Disable canonical urls, because we use a single page to display all results
 //and Wordpress creates a single canonical url for all of the virtual urls

@@ -23,7 +23,7 @@ if( !class_exists('iHomefinderQuickSearchWidget')) {
 
 	    	//Do not display the search widget on the search form page
 	    	$type = get_query_var(IHomefinderConstants::IHF_TYPE_URL_VAR );
-	    	if( $type && $type==IHomefinderFilterFactory::LISTING_SEARCH_FORM ){
+	    	if( IHomefinderStateManager::getInstance()->isSearchContext() ){
 	    		return;
 	    	}
 

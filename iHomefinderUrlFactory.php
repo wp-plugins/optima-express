@@ -1,14 +1,13 @@
 <?php
 if( !class_exists('IHomefinderUrlFactory')) {
 	/**
-	 *
-	 *
-	 * @author iHomefinder
+	 * @author ihomefinder
 	 */
 	class IHomefinderUrlFactory {
 
 		private $baseUrl=null  ;
 		private $listingsSearchResultsUrl="homes-for-sale-results";
+		private $listingsAdvancedSearchFormUrl="homes-for-sale-search-advanced";
 		private $listingsSearchFormUrl="homes-for-sale-search";
 		private $listingDetailUrl ="homes-for-sale-details";
 		private $featuredSearchResultsUrl ="homes-for-sale-featured";
@@ -74,7 +73,7 @@ if( !class_exists('IHomefinderUrlFactory')) {
 
 		private function prependBaseUrl($value, $includeBaseUrl ){
 			if( $includeBaseUrl ){
-				$value = $this->getBaseUrl() . "/" . $value;
+				$value = $this->getBaseUrl() . "/" . $value ."/";
 			}
 			return $value;
 		}
@@ -89,6 +88,11 @@ if( !class_exists('IHomefinderUrlFactory')) {
 			return 	$value ;
 		}
 
+		public function getListingsAdvancedSearchFormUrl($includeBaseUrl=true){
+			$value = $this->prependBaseUrl( $this->listingsAdvancedSearchFormUrl, $includeBaseUrl );
+			return 	$value ;
+		}
+		
 		public function getListingDetailUrl($includeBaseUrl=true){
 			$value = $this->prependBaseUrl( $this->listingDetailUrl, $includeBaseUrl );
 			return 	$value ;

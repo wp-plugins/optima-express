@@ -13,7 +13,7 @@ The Optima Express plugin from iHomefinder adds IDX / MLS real estate search to 
 
 * Impress prospective homebuyers and sellers with an elegant design, large photos, and attractive widgets.
 * Raise your site's search engine rankings with SEO-friendly listing content indexed under your own domain.
-* Generate more leads with email alerts, a consumer property organizer, social media links and other engagement tools.
+* Generate more leads with email alerts, a consumer property organizer, user registration prompts, social media links and other engagement tools.
 * Customize your site with a collection of property gallery and quicksearch widgets.
 
 IDX property data is copyrighted by Multiple Listing Services, thus an iHomefinder account is required to activate the Optima Express plugin. To get an iHomefinder account please <a href="http://www.ihomefinder.com/contact.cfm">contact us</a>.
@@ -28,7 +28,7 @@ The Optima Express base package provides MLS/IDX search, results, and property d
 
 = Optima Express Pro =
 
-The Optima Express Pro package includes all the features of Optima Express base package plus daily Email Alerts, Top Picks pages, widgets for Top Picks and Saved Searches, and a complete Mobile IDX website.
+The Optima Express Pro package includes all the features of the Optima Express base package plus daily Email Alerts, Top Picks pages & widgets, Saved Searches, User Registration prompts and a complete Mobile IDX website.
 
 = OPTIMA EXPRESS PAGES =
 
@@ -39,6 +39,10 @@ The following IDX pages are provided:
 = Property Search =
 
 Site visitors can search for properties by price, city, baths, and bedrooms. (see an example at <a href="http://blog.anyhomesrealty.com/homes-for-sale-search/">http://blog.anyhomesrealty.com/homes-for-sale-search/</a>)
+
+= Advanced Property Search =
+
+Site visitors can search for properties using advanced search criteria, which varies by MLS. (see an example at http://blog.anyhomesrealty.com/homes-for-sale-search-advanced/)
 
 = Featured Properties =
 
@@ -229,15 +233,25 @@ The Pro package includes a full mobile IDX site that will work on any browser-en
 
 == Changelog ==
 
+= 1.1.0 =
+
+* Added User Registration prompts to collect user information at customizable trigger points (Ultra-light, Light & Heavy options available)
+* Added Advanced Search as well as link to Advanced Search from standard Search page
+* Added click-through login from email notifications
+* Improved subscriber activity tracking 
+* Fixed text display bugs on Top Picks pages
+
 = 1.0.0 =
 
-Initial release.
-
+* Initial release.
 
 == Upgrade Notice ==
 
-= 1.0.0 =
+= 1.1.0 =
 
-Initial release.
+The latest version of Optima Express supports Advanced Search, click-through login from email notifications, improved activity tracking and User Registration prompts for Pro users.
+
+
+
 
 
