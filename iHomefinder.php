@@ -49,9 +49,9 @@ add_action('init',array(IHomefinderRewriteRules::getInstance(), "initialize"));
 //add_action('init',array(IHomefinderRewriteRules::getInstance(), "flushRules"));
 
 if( is_admin()){
-	add_action('admin_menu', array(IHomefinderInstaller::getInstance(), 'upgrade'));
 	add_action('admin_menu', array(IHomefinderAdmin::getInstance(), "createAdminMenu"));
-	add_action( 'admin_init', array(IHomefinderAdmin::getInstance(), "registerSettings") );
+	add_action('admin_init', array(IHomefinderInstaller::getInstance(), 'upgrade'));
+	add_action('admin_init', array(IHomefinderAdmin::getInstance(), "registerSettings") );
 } else {
 	//Remember the users state in the application (subscriber info and last search)
 	add_action('plugins_loaded',array(IHomefinderStateManager::getInstance(), "initialize"), 5);
