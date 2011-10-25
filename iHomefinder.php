@@ -3,7 +3,7 @@
 Plugin Name: Optima Express IDX Plugin
 Plugin URI: http://wordpress.org/extend/plugins/optima-express/
 Description: This plugin integrates your Wordpress site with IDX search functionality.  This plugin requires an activation key.
-Version: 1.1.0
+Version: 1.1.2
 Author: ihomefinder
 Author URI: http://www.ihomefinder.com
 License: GPL
@@ -15,6 +15,7 @@ License: GPL
 include_once 'iHomefinderAdmin.php';
 include_once 'iHomefinderAjaxHandler.php';
 include_once 'iHomefinderConstants.php';
+include_once 'iHomefinderCustomization.php';
 include_once 'iHomefinderFilterDispatcher.php';
 include_once 'iHomefinderFilterFactory.php';
 include_once 'iHomefinderInstaller.php';
@@ -22,16 +23,20 @@ include_once 'iHomefinderLogger.php';
 include_once 'iHomefinderPermissions.php';
 include_once 'iHomefinderRequestor.php';
 include_once 'iHomefinderRewriteRules.php';
+include_once 'iHomefinderShortcodeDispatcher.php';
 include_once 'iHomefinderStateManager.php';
 include_once 'iHomefinderSubscriber.php';
+include_once 'iHomefinderTinyMceManager.php';
 include_once 'iHomefinderUrlFactory.php';
 include_once 'iHomefinderUtility.php';
 
-/** 
- * Load  Widgets
+/**
+ * Load  Widgets and Widget Context Utility
  */
+include("widget/iHomefinderWidgetContextUtility.php");
 include("widget/iHomefinderPropertiesGallery.php");
 include("widget/iHomefinderQuickSearchWidget.php");
+
 add_action('widgets_init', create_function('', 'return register_widget("iHomefinderPropertiesGallery");'));
 add_action('widgets_init', create_function('', 'return register_widget("iHomefinderQuickSearchWidget");'));
 
@@ -52,15 +57,22 @@ if( is_admin()){
 	add_action('admin_menu', array(IHomefinderAdmin::getInstance(), "createAdminMenu"));
 	add_action('admin_init', array(IHomefinderInstaller::getInstance(), 'upgrade'));
 	add_action('admin_init', array(IHomefinderAdmin::getInstance(), "registerSettings") );
+	add_action('admin_init', array(IHomefinderWidgetContextUtility::getInstance(), "loadWidgetJavascript") );
 } else {
 	//Remember the users state in the application (subscriber info and last search)
 	add_action('plugins_loaded',array(IHomefinderStateManager::getInstance(), "initialize"), 5);
-	add_action('plugins_loaded', array(IHomefinderStateManager::getInstance(), "saveLastSearch"), 8);
-	
+	//add_action('plugins_loaded', array(IHomefinderStateManager::getInstance(), "saveLastSearch"), 8);
+
 	add_filter( 'the_content', array(IHomefinderFilterDispatcher::getInstance(), "filter") );
-	add_filter( 'the_posts', array(IHomefinderFilterDispatcher::getInstance(), "postCleanUp") );	
+	add_filter( 'the_posts', array(IHomefinderFilterDispatcher::getInstance(), "postCleanUp") );
+	
+	add_action('wp_footer', array(IHomefinderCustomization::getInstance(), "addCustomCSS"));	
 }
 
+//Adds functionality to the text editor for pages and posts
+//Add buttons to text editor and initialize short codes
+add_action('init', array(IHomefinderTinyMceManager::getInstance(), "addButtons") );
+add_action('init', array(IHomefinderShortcodeDispatcher::getInstance(), "init"));
 
 //AJAX Request handling.
 add_action("wp_ajax_nopriv_ihf_more_info_request", array(IHomefinderAjaxHandler::getInstance(), "requestMoreInfo")) ;

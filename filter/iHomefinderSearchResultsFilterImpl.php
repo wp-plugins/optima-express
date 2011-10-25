@@ -12,6 +12,7 @@ if( !class_exists('IHomefinderSearchResultsFilterImpl')) {
 		}	
 		public function filter( $content, $authenticationToken ){
 			IHomefinderLogger::getInstance()->debug('Begin IHomefinderFilter.filterSearchResults');
+			IHomefinderStateManager::getInstance()->saveLastSearch() ;
 			
 			$ihfUrl = IHomefinderConstants::EXTERNAL_URL . '?method=handleRequest&viewType=json&requestType=listing-search-results' ;
 			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "authenticationToken", $authenticationToken);	
@@ -25,8 +26,7 @@ if( !class_exists('IHomefinderSearchResultsFilterImpl')) {
 			IHomefinderLogger::getInstance()->debug('End IHomefinderFilter.filterSearchResults');
 			
 			return $content ;
-		}
-		
+		}		
 	}
 }
 ?>

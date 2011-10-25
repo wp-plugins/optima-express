@@ -10,7 +10,7 @@ if( !class_exists('IHomefinderStateManager')) {
 		private $subcriberInfoCookieName = "ihf_subscriber_info";
 		private $leadCaptureIdName = "ihf_lead_capture_id";
 		private $cache_timeout=	86400 ;	//Number of seconds for transient to timeout 60*60*24= 86400 = 1 day
-		
+
 		private $searchContext = false;
 
 		private function __construct(){
@@ -28,7 +28,7 @@ if( !class_exists('IHomefinderStateManager')) {
 			if( array_key_exists($this->identifierCookieName, $_COOKIE )){
 				$this->uniqueId = $_COOKIE[$this->identifierCookieName];
 			}
-				
+
 			//IHomefinderLogger::getInstance()->debug("uniqueId: " . $this->uniqueId);
 			if( empty($this->uniqueId) ){
 				$this->uniqueId= uniqid();
@@ -62,19 +62,19 @@ if( !class_exists('IHomefinderStateManager')) {
 			$cacheKey = $this->subcriberInfoCookieName . "_". $this->getUniqueKey() ;
 			return $cacheKey ;
 		}
-		
+
 		/**
-		 * If we are in the search context (like a search form or advanced search form, 
+		 * If we are in the search context (like a search form or advanced search form,
 		 * the we do not want to display certain widgets - for example the search widget
 		 */
 		public function isSearchContext(){
 			return $this->searchContext ;
 		}
-		
+
 		public function setSearchContext( $value ) {
 			$this->searchContext=$value ;
 		}
-			
+
 		/**
 		 * The lead capture id is used to synchronize lead capture status with
 		 * iHomefinder server side lead status.
@@ -100,26 +100,34 @@ if( !class_exists('IHomefinderStateManager')) {
 		 * sure the requested URL is the search URL
 		 */
 		public function saveLastSearch(){
-				
-			$requestUri=$_SERVER['REQUEST_URI'];
-			$pos = strpos( $requestUri, IHomefinderUrlFactory::getInstance()->getListingsSearchResultsUrl(false) );
-				
-			if( $pos !== false ){
-				$cacheKey=$this->getLastSearchKey() ;
-				//IHomefinderLogger::getInstance()->debug("saveLastSearch cacheKey: " . $cacheKey);
-				$lastSearchQueryString = $_SERVER["QUERY_STRING"] ;
 
-				$lastSearchQueryString = str_replace("newSearch=true&", "", $lastSearchQueryString);
-				//setcookie($this->lastSearchCookie, $searchUrl, time()+3600);  /* expire in 1 hour */
-				//IHomefinderLogger::getInstance()->debug("setLastSearchUrl: " .$lastSearchUrl);
-				set_transient($cacheKey, $lastSearchQueryString, $this->cache_timeout);
-			}
+			$host=$_SERVER['HTTP_HOST'];
+			$requestUri=$_SERVER['REQUEST_URI'];
+
+			$cacheKey=$this->getLastSearchKey() ;
+			//IHomefinderLogger::getInstance()->debug("saveLastSearch cacheKey: " . $cacheKey);
+			$lastSearch = "http://" . $host . $requestUri  ;
+
+			$lastSearch = str_replace("newSearch=true&", "", $lastSearch);
+			//setcookie($this->lastSearchCookie, $searchUrl, time()+3600);  /* expire in 1 hour */
+			//IHomefinderLogger::getInstance()->debug("setLastSearchUrl: " .$lastSearchUrl);
+			set_transient($cacheKey, $lastSearch, $this->cache_timeout);
 		}
 
-		public function getLastSearchQueryString(){
+		public function getLastSearch(){
 			$cacheKey=$this->getLastSearchKey() ;
-			$lastSearchQueryString=get_transient($cacheKey);
-			return $lastSearchQueryString;
+			$lastSearch=get_transient($cacheKey);
+			return $lastSearch;
+		}
+                        
+		public function getLastSearchQueryString(){
+			$queryString="";
+			$lastSearch = $this->getLastSearch() ;
+			$searchArray = explode('?', $lastSearch) ;
+			if( isset($searchArray) && is_array($searchArray) && count( $searchArray ) > 1){
+				$queryString=$searchArray[1] ;
+			}
+			return $queryString ;
 		}
 
 		public function getLastSearchQueryArray(){
@@ -135,17 +143,7 @@ if( !class_exists('IHomefinderStateManager')) {
 					}
 				}
 			}
-				
 			return $lastSearchArray ;
-		}
-
-		public function getLastSearchUrl(){
-			$lastSearchUrl=null;
-			$lastSearchQueryString=$this->getLastSearchQueryString() ;
-			if( $lastSearchQueryString != null && !('' == trim($lastSearchQueryString))){
-				$lastSearchUrl = IHomefinderUrlFactory::getInstance()->getListingsSearchResultsUrl(true) . '?' . $lastSearchQueryString ;
-			}
-			return $lastSearchUrl;
 		}
 
 		public function deleteSubscriberLogin( ){

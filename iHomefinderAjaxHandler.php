@@ -205,7 +205,6 @@ if( !class_exists('IHomefinderAjaxHandler')) {
 			$lastSearchQueryString = str_replace('%5B%5D', '', $lastSearchQueryString );
 			$ihfUrl .= '&' . $lastSearchQueryString ;
 
-
 			$contentInfo = IHomefinderRequestor::remoteRequest($ihfUrl);
 
 			$content = IHomefinderRequestor::getContent( $contentInfo );

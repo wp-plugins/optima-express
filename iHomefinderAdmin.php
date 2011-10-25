@@ -18,6 +18,7 @@ if( !class_exists('IHomefinderAdmin')) {
                     add_menu_page('Optima Express Information', 'Optima Express Information', 'manage_options', 'ihf_idx', array( $this, 'adminOptionsForm' ));
                     add_submenu_page( 'ihf_idx', 'Register', 'Register', 'manage_options', IHomefinderConstants::OPTION_ACTIVATE, array( &$this, 'adminOptionsActivateForm'));
                     add_submenu_page( 'ihf_idx', 'Links', 'Links', 'manage_options', IHomefinderConstants::OPTION_PAGES, array( &$this, 'adminOptionsPagesForm'));
+                    add_submenu_page( 'ihf_idx', 'Configuration', 'Configuration', 'manage_options', IHomefinderConstants::OPTION_CONFIG_PAGE, array( &$this, 'adminConfigurationForm'));
 		}
                 
 		public function adminOptionsForm(){
@@ -36,6 +37,8 @@ if( !class_exists('IHomefinderAdmin')) {
                             <b>Register:</b> This option is used to enter the Registration Key.  The Registration Key must be obtained through iHomefinder.
                             <br/><br/>
                             <b>Links:</b> This option is used to view the links for the various pages used by the Optima Express plugin.
+                            <br/><br/>
+                            <b>Configuration:</b> This page provides customization features.
                             <br/><br/>
                             
                         </div>
@@ -180,6 +183,7 @@ if( !class_exists('IHomefinderAdmin')) {
 		public function registerSettings(){
 			register_setting( IHomefinderConstants::OPTION_ACTIVATE, IHomefinderConstants::ACTIVATION_TOKEN_OPTION );
 			register_setting( IHomefinderConstants::OPTION_ACTIVATE, IHomefinderConstants::ACTIVATION_DATE_OPTION );
+			register_setting( IHomefinderConstants::OPTION_CONFIG_PAGE, IHomefinderConstants::CSS_OVERRIDE_OPTION );
 		}
 		
 		public function adminOptionsActivateForm(){
@@ -244,7 +248,30 @@ if( !class_exists('IHomefinderAdmin')) {
 				</div>
 	<?php 	}
 
+		public function adminConfigurationForm(){
+			if (!current_user_can('manage_options'))  {
+				wp_die( __('You do not have sufficient permissions to access this page.') );
+			}
+	?>
+				<div class="wrap">
+				<h2>Configuration</h2>
 
+				<form method="post" action="options.php">
+				    <?php settings_fields( IHomefinderConstants::OPTION_CONFIG_PAGE ); ?>
+				    
+				    <div>CSS Override</div>
+				    <div>
+				    	<textarea name="<?php echo IHomefinderConstants::CSS_OVERRIDE_OPTION ?>" rows="15" cols="100"><?php echo get_option(IHomefinderConstants::CSS_OVERRIDE_OPTION); ?></textarea>
+				    </div>
+
+				    <p class="submit">
+				    <input type="submit" class="button-primary" value="<?php _e('Save Changes') ?>" />
+				    </p>
+
+				</form>
+				</div>
+	<?php 	}
+	
 		public function adminOptionsPagesForm(){
 			$urlFactory = IHomefinderUrlFactory::getInstance() ;
 			$permissions = IHomefinderPermissions::getInstance() ;

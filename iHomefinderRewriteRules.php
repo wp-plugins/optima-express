@@ -90,6 +90,7 @@ if(!class_exists('IHomefinderRewriteRules')){
 			$wp->add_query_var('dateRange');
 			
 			$wp->add_query_var('newSearch');
+			$wp->add_query_var('includeMap');
 		}
 		/**
 	 	 * Function to initialize rewrite rules for the IHF plugin.

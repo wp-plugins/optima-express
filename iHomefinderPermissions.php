@@ -14,6 +14,7 @@ if( !class_exists('IHomefinderPermissions')) {
 		private $hotSheetOptionName="ihf_hotsheet_enabled";
 		private $featuredPropertiesOptionName="ihf_featured_properties_enabled";
 		private $organizerOptionName="ihf_featured_properties_enabled";
+		private $galleryShortcodesOptionName="ihf_gallery_shortcodes_enabled";
 		
 		private static $instance ;
 		
@@ -28,6 +29,9 @@ if( !class_exists('IHomefinderPermissions')) {
 		private $namedSearchEnabled= false;
 		private $featuredPropertiesEnabled= false;
 		
+		//Gallery shortcodes
+		private $galleryShortCodesEnabled=false;
+		
 		
 		private function __construct(){
 			$this->emailUpdatesEnabled=get_option($this->emailUpdatesOptionName, false);
@@ -37,6 +41,7 @@ if( !class_exists('IHomefinderPermissions')) {
 			$this->namedSearchEnabled=$this->isHotSheetEnabled() ;
 			$this->featuredPropertiesEnabled=get_option($this->featuredPropertiesOptionName, false);
 			$this->organizerEnabled=get_option($this->organizerOptionName, false);
+			$this->galleryShortCodesEnabled=get_option($this->galleryShortcodesOptionName, false );
 		}
 		
 		public static function getInstance(){
@@ -51,7 +56,9 @@ if( !class_exists('IHomefinderPermissions')) {
 			update_option($this->saveListingOptionName, strval($permissions->saveListing ));
 			update_option($this->hotSheetOptionName, strval($permissions->hotSheet ));
 			update_option($this->featuredPropertiesOptionName, strval($permissions->featuredProperties ));
-			update_option($this->organizerOptionName, strval($permissions->organizer ));			
+			update_option($this->organizerOptionName, strval($permissions->organizer ));
+			update_option($this->galleryShortcodesOptionName, strval($permissions->hotSheet ));
+			
 			$this->emailUpdatesEnabled=$permissions->emailUpdates;
 			$this->saveListingEnabled=$permissions->saveListing;
 			$this->hotSheetEnabled=$permissions->hotSheet;
@@ -59,6 +66,7 @@ if( !class_exists('IHomefinderPermissions')) {
 			$this->namedSearchEnabled=$this->isHotSheetEnabled() ;
 			$this->featuredPropertiesEnabled=$permissions->featuredProperties ;
 			$this->organizerEnabled=$permissions->organizer ;
+			$this->galleryShortCodesEnabled=$permissions->hotSheet;
 		}
 	
 		public function isEmailUpdatesEnabled(){
@@ -87,5 +95,8 @@ if( !class_exists('IHomefinderPermissions')) {
 		public function isFeaturedPropertiesEnabled(){
 			return (bool) $this->featuredPropertiesEnabled;
 		}		
+		public function isGalleryShortCodesEnabled(){
+			return (bool) $this->galleryShortCodesEnabled ;
+		}
 	}
 }

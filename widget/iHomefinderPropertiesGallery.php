@@ -4,12 +4,16 @@ if( !class_exists('iHomefinderPropertiesGallery')) {
 	 * iHomefinderPropertiesGallery Class
 	 */
 	class iHomefinderPropertiesGallery extends WP_Widget {
+		
+		private $contextUtility ;
+		
 	    /** constructor */
 	    function iHomefinderPropertiesGallery() {
 	    	$options=array('description'=>'Display a list of properties.');
 	        parent::WP_Widget( false,
 	                           $name = 'Optima Express Property Gallery',
 	                           $widget_options=$options  );
+			$this->contextUtility=IHomefinderWidgetContextUtility::getInstance() ; 	                           
 	    }
 
 	    /**
@@ -18,22 +22,26 @@ if( !class_exists('iHomefinderPropertiesGallery')) {
 	     * @see WP_Widget::widget
 	     */
 	    function widget($args, $instance) {
-                $galleryType = $instance['galleryType'];
-                switch ($galleryType) {
-                    case 'hotSheet':
-                        $this->hotSheet($args, $instance);
-                        break;
-                    case 'featuredListing':
-                        $this->featuredListing($args, $instance);
-                        break;
-                    case 'namedSearch':
-                        $this->namedSearch($args, $instance);
-                        break;
-                    case 'linkSearch':
-                        $this->linkSearch($args, $instance);
-                        break;
 
-                }
+	    	if( $this->contextUtility->isEnabled($instance)){
+	    		$galleryType = $instance['galleryType'];
+	    		switch ($galleryType) {
+	    			case 'hotSheet':
+	    				$this->hotSheet($args, $instance);
+	    				break;
+	    			case 'featuredListing':
+	    				$this->featuredListing($args, $instance);
+	    				break;
+	    			case 'namedSearch':
+	    				$this->namedSearch($args, $instance);
+	    				break;
+	    			case 'linkSearch':
+	    				$this->linkSearch($args, $instance);
+	    				break;
+
+	    		}
+	    	}
+
 	    }
 
 
@@ -251,9 +259,8 @@ if( !class_exists('iHomefinderPropertiesGallery')) {
 	     *
 	     *  @see WP_Widget::update
 	     */
-	    function update($new_instance, $old_instance) {
+	    function update($new_instance, $old_instance) {    	
                 $instance = $old_instance;
-                print_r( $new_instance );
                 $instance['galleryType'] = strip_tags(stripslashes($new_instance['galleryType']));
                 $instance['listingID'] = strip_tags(stripslashes($new_instance['listingID']));
                 $instance['name'] = strip_tags(stripslashes($new_instance['name']));
@@ -266,7 +273,9 @@ if( !class_exists('iHomefinderPropertiesGallery')) {
                 $instance['maxPrice'] = strip_tags(stripslashes($new_instance['maxPrice']));
                 $instance['hotSheetId'] = strip_tags(stripslashes($new_instance['hotSheetId']));
                 $instance['linkText'] = strip_tags(stripslashes($new_instance['linkText']));
-
+                
+				$instance = $this->contextUtility->updateContext($new_instance, $instance);
+				
                 $cacheKey=$this->getCacheKey();
                 delete_transient($cacheKey);
 
@@ -279,6 +288,7 @@ if( !class_exists('iHomefinderPropertiesGallery')) {
 	     *  @see WP_Widget::form
 	     */
 	    function form($instance) {
+	    		    	
                 $galleryType = ($instance) ? esc_attr($instance['galleryType']) : '';
                 $listingID = ($instance) ? esc_attr($instance['listingID']) : '';
                 $name = ($instance) ? esc_attr($instance['name']) : '';
@@ -297,6 +307,7 @@ if( !class_exists('iHomefinderPropertiesGallery')) {
                 $citiesList=$galleryFormData->citiesList ;
                 $propertyTypesList=$galleryFormData->propertyTypesList ;
 	        ?>
+	        
 
 
            <script type="text/javascript">
@@ -354,7 +365,6 @@ if( !class_exists('iHomefinderPropertiesGallery')) {
                 			$galleryType="";
                 		}
                 	}
-
                 ?>
 
 
@@ -450,6 +460,11 @@ if( !class_exists('iHomefinderPropertiesGallery')) {
                 <label>Maximum Price:</label><br/>
                 <input class="widefat" type="text" value="<?php echo $maxPrice; ?>" name="<?php echo $this->get_field_name( 'maxPrice' ); ?>" />
             </div>
+            <?php 
+	            //The following call echos a select context for pages to display.
+    	        echo ( $this->contextUtility->getPageSelector($this, $instance, IHomefinderConstants::GALLERY_WIDGET_TYPE));
+    	    ?>
+
 
             <?php
 	    }

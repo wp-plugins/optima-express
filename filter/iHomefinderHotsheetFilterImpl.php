@@ -10,8 +10,16 @@ if( !class_exists('IHomefinderHotsheetFilterImpl')) {
 			return "Top Picks";
 		}
 		public function filter( $content, $authenticationToken ){
+			IHomefinderStateManager::getInstance()->saveLastSearch() ;
 			IHomefinderLogger::getInstance()->debug('Begin IHomefinderHotsheetFilterImpl.filter');
-			$hotSheetId=IHomefinderUtility::getInstance()->getQueryVar('hotSheetId');
+			
+			$includeMap = IHomefinderUtility::getInstance()->getRequestVar('includeMap');
+			$gallery = IHomefinderUtility::getInstance()->getRequestVar('gallery');	
+			$hotSheetId=IHomefinderUtility::getInstance()->getQueryVar('hotSheetId');		
+			if( !isset($hotSheetId) ){
+				//IHomefinderShortCodeDispatcher sets vars in $_REQUEST
+				$hotSheetId=IHomefinderUtility::getInstance()->getRequestVar('hotSheetId');
+			}
 			$startRowNumber=IHomefinderUtility::getInstance()->getQueryVar('startRowNumber');
 			$sortBy=IHomefinderUtility::getInstance()->getQueryVar('sortBy');
 						
@@ -22,6 +30,8 @@ if( !class_exists('IHomefinderHotsheetFilterImpl')) {
 				. '&requestType=hotsheet-results'
 				. '&authenticationToken=' . $authenticationToken;
 				
+			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "includeMap", $includeMap);	
+			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "gallery", $gallery);
 			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "hotSheetId", $hotSheetId);
 			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "startRowNumber", $startRowNumber);
 			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "sortBy", $sortBy);

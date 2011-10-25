@@ -4,12 +4,18 @@ if( !class_exists('iHomefinderQuickSearchWidget')) {
 	 * iHomefinderQuickSearchWidget Class
 	 */
 	class iHomefinderQuickSearchWidget extends WP_Widget {
+	    
+	    private $contextUtility ;
+	    	    
 	    /** constructor */
 	    function iHomefinderQuickSearchWidget() {
 	    	$options=array('description'=>'Property Search form.');
 	        parent::WP_Widget( false,
 	                           $name = 'Optima Express Quick Search',
 	                           $widget_options=$options );
+	        $this->contextUtility=IHomefinderWidgetContextUtility::getInstance() ; 	
+	        
+	        
 	    }
 
 	    /**
@@ -23,31 +29,33 @@ if( !class_exists('iHomefinderQuickSearchWidget')) {
 
 	    	//Do not display the search widget on the search form page
 	    	$type = get_query_var(IHomefinderConstants::IHF_TYPE_URL_VAR );
-	    	if( IHomefinderStateManager::getInstance()->isSearchContext() ){
-	    		return;
+
+	    	if( !IHomefinderStateManager::getInstance()->isSearchContext()){
+	    		if( $this->contextUtility->isEnabled( $instance )){
+
+	    			extract( $args );
+	    			$title = apply_filters('widget_title', $instance['title']);
+
+	    			$quickSearchContent = $this->getCachedVersion($instance);
+	    			if( empty($quickSearchContent)){
+	    				$authenticationToken=IHomefinderAdmin::getInstance()->getAuthenticationToken();
+	    				$ihfUrl = iHomefinderConstants::EXTERNAL_URL . '?method=handleRequest&viewType=json&requestType=listing-search-form' ;
+	    				$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "authenticationToken", $authenticationToken);
+	    				$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "smallView", "true" );
+	    				$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "phpStyle", "true" );
+	    				$contentInfo = iHomefinderRequestor::remoteRequest($ihfUrl);
+	    				$quickSearchContent = $contentInfo->view;
+	    				//$quickSearchContent=IHomefinderRequestor::cleanURLs( $quickSearchContent );
+	    				$this->updateCache($quickSearchContent);
+	    			}
+	    			echo $before_widget;
+	    			if ( $title ){
+	    				echo $before_title . $title . $after_title;
+	    			}
+	    			echo "<br/>" . $quickSearchContent . "<br/>";
+	    			echo $after_widget;
+	    		}
 	    	}
-
-	        extract( $args );
-	        $title = apply_filters('widget_title', $instance['title']);
-
-            $propertyGalleryContent = $this->getCachedVersion($instance);
-            if( empty($propertyGalleryContent)){
-                $authenticationToken=IHomefinderAdmin::getInstance()->getAuthenticationToken();
-                $ihfUrl = iHomefinderConstants::EXTERNAL_URL . '?method=handleRequest&viewType=json&requestType=listing-search-form' ;
-                $ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "authenticationToken", $authenticationToken);
-                $ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "smallView", "true" );
-                $ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "phpStyle", "true" );
-                $contentInfo = iHomefinderRequestor::remoteRequest($ihfUrl);
-                $propertyGalleryContent = $contentInfo->view;
-                //$propertyGalleryContent=IHomefinderRequestor::cleanURLs( $propertyGalleryContent );
-                $this->updateCache($propertyGalleryContent);
-           }
-           echo $before_widget;
-           if ( $title ){
-               echo $before_title . $title . $after_title;
-           }
-           echo "<br/>" . $propertyGalleryContent . "<br/>";
-           echo $after_widget;
 	    }
 
 	    /**
@@ -59,6 +67,10 @@ if( !class_exists('iHomefinderQuickSearchWidget')) {
 	    function update($new_instance, $old_instance) {
 			$instance = $old_instance;
 			$instance['title'] = strip_tags(stripslashes($new_instance['title']));
+			
+			//Add context related values.
+			$instance = $this->contextUtility->updateContext($new_instance, $instance) ;
+			
 			delete_transient($cacheKey);
 	        return $instance;
 	    }
@@ -70,8 +82,8 @@ if( !class_exists('iHomefinderQuickSearchWidget')) {
          function getCachedVersion($instance){
              $cacheKey=$this->getCacheKey();
              // Fetch a saved transient
-             $propertyGalleryContent = get_transient($cacheKey);
-             return $propertyGalleryContent   ;
+             $quickSearchContent = get_transient($cacheKey);
+             return $quickSearchContent   ;
          }
 
 		 function getCacheKey( ){
@@ -80,9 +92,9 @@ if( !class_exists('iHomefinderQuickSearchWidget')) {
         	return $cacheKey;
         }
 
-         function updateCache( $propertyGalleryContent ){
+         function updateCache( $quickSearchContent ){
          	$cacheKey=$this->getCacheKey();
-			set_transient($cacheKey, $propertyGalleryContent, IHomefinderConstants::PROPERTY_GALLERY_CACHE_TIMEOUT);
+			set_transient($cacheKey, $quickSearchContent, IHomefinderConstants::PROPERTY_GALLERY_CACHE_TIMEOUT);
          }
 
 	    /**
@@ -92,13 +104,16 @@ if( !class_exists('iHomefinderQuickSearchWidget')) {
 	     */
 	    function form($instance) {
 	        $title = esc_attr($instance['title']);
-	        ?>
+	    ?>
 	            <p>
 	            	    <?php _e('Title:'); ?>
 	            		<input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $title; ?>" />
 	            </p>
-	        <?php
+	    <?php 
+	    	$this->contextUtility->getPageSelector($this, $instance, IHomefinderConstants::SEARCH_WIDGET_TYPE );
+	            
 	    }
+
 
 	} // class iHomefinderQuickSearchWidget
 }//end if( !class_exists('iHomefinderQuickSearchWidget'))

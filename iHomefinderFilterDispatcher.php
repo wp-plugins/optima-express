@@ -31,6 +31,7 @@ if( !class_exists('IHomefinderFilterDispatcher')) {
 		}
 
 		public function init(){
+			
 			if( !$this->initialized ){
 
 				if( $type = get_query_var(IHomefinderConstants::IHF_TYPE_URL_VAR) ) {
@@ -51,8 +52,6 @@ if( !class_exists('IHomefinderFilterDispatcher')) {
 		 * during processing.  We cannot set the post content here, because
 		 * Wordpress does some odd formatting of the post_content, if we
 		 * add it here (see the filter method below, where content is properly set)
-		 *
-		 *
 		 *
 		 * @param $posts
 		 */
@@ -93,6 +92,7 @@ if( !class_exists('IHomefinderFilterDispatcher')) {
 			if( $this->initialized ){
 		    	$content = $this->content;
 			}
+			
 			return $content;
 		}
 
