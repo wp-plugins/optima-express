@@ -420,7 +420,7 @@ The Pro package includes a full mobile IDX site that will work on any browser-en
 == Changelog ==
 
 
-= 1.2.0 =
+= 1.1.2 =
 
 * Added Listing Gallery display through shortcode on Pages and Posts
 * Added IDX page display selection to Widgets 
