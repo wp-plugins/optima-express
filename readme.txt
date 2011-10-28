@@ -391,11 +391,13 @@ The Pro package includes a full mobile IDX site that will work on any browser-en
 
 == Screenshots ==
 
-1. Insert your registration key and click "Save Updates" to enable the Optima Express IDX Plugin.
-2. In the Optima Expess Information section, Links contains URLs used to access Optima Express functionality.
-3. You will find 2 new widgets under Appearance > Widgets, 'Optima Express Property Gallery' and 'Optima Express Quick Search'. 
-4. The Property Gallery widget may be configured to display Featured Properties, Top Picks/Hot Sheets, and saved searches.
-5. Your final page will be customized to display all of your newly created IDX pages in your WordPress menu as well as the widgets you have chosen.
+1. Great SEO Optima Express delivers the powerful features of Optima IDX directly on your WordPress website. Optima IDX makes sure all listing data and pages in your account are indexed by search engines and WordPress is also designed for Search Engine Optimization (SEO). The combination of WordPress and Optima Express will provide you with a website with IDX that search engines will love.
+2. Elegant Interface &amp; Gorgeous Property Photos. A picture is worth a thousand words, and the photos in Optima Express say it all. A simple and elegant interface with beautiful photos is what you'll find with Optima Express.
+3. Quicksearch &amp; Property Gallery widgets. Website visitors will love how easy it is to find the information they're looking for with features like Quicksearch &amp; Property Gallery widgets.
+4. Facebook &amp; Twitter Integration. With a click of the Share button, website visitors or realtors themselves can share property details on social media networks. Sharing of listings on social media accounts also provides valuable backlinks to your site which benefits your SEO.
+5. Mobile MLS Search With the Optima Express Pro package, you'll get a Mobile MLS Search site. It looks and feels like an app but works right away on mobile devices with a browser. Please note that with Optima Express Pro, you'll need to download a plugin so that when visitors come to your site on their mobile phone, they will be automatically re-directed to your mobile site.
+6. Email Alerts. Email Alerts are a great way of staying connected to your prospects and delivering value to them. Each time a property that matches their saved search criteria comes to market, they'll receive an email with your name and brand giving them the information they want and need.
+
 
 
 == Changelog ==
