@@ -28,6 +28,8 @@ if( !class_exists('IHomefinderFeaturedSearchFilterImpl')) {
 			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "includeMap", $includeMap);
 			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "authenticationToken", $authenticationToken);			
 			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "sortBy", $sortBy);
+			//used to remember search results
+			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "includeSearchSummary", "true");				
 			
 			$contentInfo = IHomefinderRequestor::remoteRequest($ihfUrl);			
 			$idxContent = IHomefinderRequestor::getContent( $contentInfo );

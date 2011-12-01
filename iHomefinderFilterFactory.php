@@ -7,6 +7,7 @@ if( !class_exists('IHomefinderFilterFactory')) {
 	
 	include_once(   'filter/iHomefinderAdvancedSearchFormFilterImpl.php');
 	include_once(   'filter/iHomefinderSearchFormFilterImpl.php');
+	include_once(   'filter/iHomefinderQuickSearchFormFilterImpl.php');
 	include_once(   'filter/iHomefinderSearchResultsFilterImpl.php');
 	include_once(   'filter/iHomefinderListingDetailFilterImpl.php');
 	
@@ -51,6 +52,7 @@ if( !class_exists('IHomefinderFilterFactory')) {
 		const LISTING_SEARCH_RESULTS="idx-results";
 		const LISTING_DETAIL="idx-detail";
 		const LISTING_SEARCH_FORM="idx-search";
+		const LISTING_QUICK_SEARCH_FORM="idx-quick-search";
 		const LISTING_ADVANCED_SEARCH_FORM="idx-advanced-search";
 		const FEATURED_SEARCH="idx-featured-search";
 		const HOTSHEET_SEARCH_RESULTS="idx-toppicks";
@@ -89,6 +91,9 @@ if( !class_exists('IHomefinderFilterFactory')) {
 	    	else if( $type == IHomefinderFilterFactory::LISTING_SEARCH_FORM){
 				$filter = new IHomefinderSearchFormFilterImpl();
 			}
+			else if( $type == IHomefinderFilterFactory::LISTING_QUICK_SEARCH_FORM){
+				$filter = new IHomefinderQuickSearchFormFilterImpl();
+			}			
 			else if( $type == IHomefinderFilterFactory::HOTSHEET_SEARCH_RESULTS ){
 				$filter = new IHomefinderHotsheetFilterImpl() ;
 			}

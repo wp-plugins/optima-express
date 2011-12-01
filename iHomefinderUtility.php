@@ -37,6 +37,39 @@ if( !class_exists('IHomefinderUtility')) {
 			}
 			return $result ;
 		}
+		
+		/**
+		 * When navigating listing detail pages, we need to set the next and previous
+		 * details and pass in the request, to properly create next and previous links
+		 * 
+		 * @param string $ihfUrl
+		 * @param int $boardId
+		 * @param string $listingNumber
+		 */
+		public function setPreviousAndNextInformation( $ihfUrl, $boardId, $listingNumber ){
+			$searchSummaryArray = IHomefinderStateManager::getInstance()->getSearchSummary() ;
+			$key= $boardId . "|" . $listingNumber ;
+			if( isset( $searchSummaryArray )){
+				$searchSummaryObject = $searchSummaryArray[ $key ];				
+				if( isset( $searchSummaryObject )){
+					if( isset($searchSummaryObject->previousId)){
+						$searchSummaryPrevious = $searchSummaryArray[ $searchSummaryObject->previousId ];	
+						$ihfUrl .= "&prevBoardId=" . $searchSummaryPrevious->boardId ;					
+						$ihfUrl .= "&prevListingNumber=" . $searchSummaryPrevious->listingNumber ;
+						$ihfUrl .= "&prevAddress=" . urlencode($searchSummaryPrevious->address) ;
+					}
+					
+					if( isset($searchSummaryObject->nextId)){
+						$searchSummaryNext = $searchSummaryArray[ $searchSummaryObject->nextId ];
+						$ihfUrl .= "&nextBoardId=" . $searchSummaryNext->boardId ;					
+						$ihfUrl .= "&nextListingNumber=" . $searchSummaryNext->listingNumber ;
+						$ihfUrl .= "&nextAddress=" . urlencode($searchSummaryNext->address) ;						
+					}
+				}	
+			}
+			
+			return $ihfUrl ;
+		}		
 	}
 }
 ?>

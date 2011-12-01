@@ -35,6 +35,9 @@ if( !class_exists('IHomefinderHotsheetFilterImpl')) {
 			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "hotSheetId", $hotSheetId);
 			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "startRowNumber", $startRowNumber);
 			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "sortBy", $sortBy);
+			//used to remember search results
+			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "includeSearchSummary", "true");	
+			
 							
 			$contentInfo = IHomefinderRequestor::remoteRequest($ihfUrl);
 			$idxContent = IHomefinderRequestor::getContent( $contentInfo );

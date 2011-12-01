@@ -53,6 +53,11 @@ if( !class_exists('IHomefinderRequestor')){
 				$subscriberInfo=IHomefinderSubscriber::getInstance($subscriberData->subscriberId,$subscriberData->name, $subscriberData->email );
 				IHomefinderStateManager::getInstance()->saveSubscriberLogin($subscriberInfo);
 			}
+			
+			if( !IHomefinderRequestor::isError($contentInfo) && isset( $contentInfo->searchSummary )){
+				$searchSummary=$contentInfo->searchSummary ;
+				IHomefinderStateManager::getInstance()->saveSearchSummary($searchSummary);
+			}
 				
 			IHomefinderLogger::getInstance()->debug("End IHomefinderRequestor.remoteRequest: " );
 				
@@ -129,6 +134,8 @@ if( !class_exists('IHomefinderRequestor')){
 			}
 			return $content ;
 		}
+		
+		
 		
 		public static function addVarsToUrl($url, $arrayOfVars){
 			foreach($arrayOfVars as $key=>$val) {

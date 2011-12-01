@@ -1,14 +1,27 @@
 <?php
 if( !class_exists('IHomefinderStateManager')) {
 
+	/**
+	 * Uses a cookie to uniquely identify users.  The
+	 * cookie id is used to store transient data about 
+	 * the user's state, such as subscriber info and
+	 * last search url.
+	 * 
+	 * @author ihomefinder
+	 */
 	class IHomefinderStateManager {
 
 		private static $instance ;
 		private $uniqueId = null;
 		private $identifierCookieName = "ihf_identifier";
-		private $lastSearchCookieName = "ihf_last_search";
-		private $subcriberInfoCookieName = "ihf_subscriber_info";
+		//url used for last search
+		private $lastSearchName = "ihf_last_search";
+		//subscriber information
+		private $subcriberInfoName = "ihf_subscriber_info";
+		//lead capture id
 		private $leadCaptureIdName = "ihf_lead_capture_id";
+		//summary of search results
+		private $searchSummaryName = "ihf_search_summary";
 		private $cache_timeout=	86400 ;	//Number of seconds for transient to timeout 60*60*24= 86400 = 1 day
 
 		private $searchContext = false;
@@ -51,7 +64,7 @@ if( !class_exists('IHomefinderStateManager')) {
 		 * transient key used to remember the last search
 		 */
 		private function getLastSearchKey(){
-			$cacheKey = $this->lastSearchCookieName . "_" . $this->getUniqueKey() ;
+			$cacheKey = $this->lastSearchName . "_" . $this->getUniqueKey() ;
 			return $cacheKey ;
 		}
 
@@ -59,9 +72,15 @@ if( !class_exists('IHomefinderStateManager')) {
 		 * transient key used to remember a subscriber.
 		 */
 		private function getSubscriberInfoKey(){
-			$cacheKey = $this->subcriberInfoCookieName . "_". $this->getUniqueKey() ;
+			$cacheKey = $this->subcriberInfoName . "_". $this->getUniqueKey() ;
 			return $cacheKey ;
 		}
+		
+		private function getSearchSummaryKey(){
+			$cacheKey = $this->searchSummaryName . "_". $this->getUniqueKey() ;
+			return $cacheKey ;
+		}
+		
 
 		/**
 		 * If we are in the search context (like a search form or advanced search form,
@@ -183,6 +202,18 @@ if( !class_exists('IHomefinderStateManager')) {
 				$result = true ;
 			}
 			return $result ;
+		}
+		
+		public function getSearchSummary(){
+			$cacheKey=$this->getSearchSummaryKey() ;
+			$result = get_transient($cacheKey );
+			return $result ;
+		}		
+		
+		public function saveSearchSummary( $searchSummary){
+			$searchSummaryArray=(array) $searchSummary ;
+			$cacheKey=$this->getSearchSummaryKey() ;
+			set_transient($cacheKey, $searchSummaryArray, $this->cache_timeout);
 		}
 
 	}//end class

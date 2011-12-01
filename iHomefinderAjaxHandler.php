@@ -224,16 +224,40 @@ if( !class_exists('IHomefinderAjaxHandler')) {
 			$ihfUrl = iHomefinderConstants::EXTERNAL_URL . '?method=handleRequest&viewType=json&requestType=advanced-search-multi-select-values' ;
 			$ihfUrl = iHomefinderRequestor::addVarsToUrl($ihfUrl, $_REQUEST) ;
 			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "authenticationToken", $authenticationToken );
+			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "phpStyle", "true" );
 			
+//			echo $ihfUrl ;
+//			die();
 			$contentInfo = IHomefinderRequestor::remoteRequest($ihfUrl);
 
 			$content = IHomefinderRequestor::getContent( $contentInfo );
 
 			echo $content ;
 			IHomefinderLogger::getInstance()->debug('End advancedSearchMultiSelects');
-
 			die();
 		}
+		
+		public function getAdvancedSearchFormFields(){
+			IHomefinderLogger::getInstance()->debug('Begin getAdvancedSearchFormFields');
+			$authenticationToken=$this->ihfAdmin->getAuthenticationToken() ;
+			
+			$boardID = IHomefinderUtility::getInstance()->getRequestVar('boardID');
+			
+			$ihfUrl = iHomefinderConstants::EXTERNAL_URL . '?method=handleRequest&viewType=json&requestType=advanced-search-fields' ;
+			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "authenticationToken", $authenticationToken );
+			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "boardID", $boardID );
+			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "phpStyle", "true" );
+			
+//			echo $ihfUrl ;
+//			die();
+			$contentInfo = IHomefinderRequestor::remoteRequest($ihfUrl);
+
+			$content = IHomefinderRequestor::getContent( $contentInfo );
+
+			echo $content ;
+			IHomefinderLogger::getInstance()->debug('End getAdvancedSearchFormFields');
+			die();
+		}		
 	}//end class
 }//end ifclass_exists
 ?>

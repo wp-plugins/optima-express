@@ -20,6 +20,7 @@ if( !class_exists('IHomefinderShortcodeDispatcher')) {
 		private $toppicksShortCode = "optima_express_toppicks";
 		private $featuredShortCode = "optima_express_featured";
 		private $searchResultsShortCode = "optima_express_search_results";
+		private $quickSearchShortCode = "optima_express_quick_search";
 		
 		private $searchFormData ;
 		private $toppicksFormData ;
@@ -36,12 +37,14 @@ if( !class_exists('IHomefinderShortcodeDispatcher')) {
 		}
 		
 		public function init(){
-			add_shortcode($this->getToppicksShortCode(), array($this, "getToppicks"));
-			add_shortcode($this->getFeaturedShortcode(), array($this, "getFeaturedListings"));
-			add_shortcode($this->getSearchResultsShortcode(), array($this, "getSearchResults"));			
+			//
+			add_shortcode($this->getToppicksShortcode(),      array($this, "getToppicks"));
+			add_shortcode($this->getFeaturedShortcode(),      array($this, "getFeaturedListings"));
+			add_shortcode($this->getSearchResultsShortcode(), array($this, "getSearchResults"));
+			add_shortcode($this->getQuickSearchShortcode(),   array($this, "getQuickSearch"));			
 		}
 		
-		public function getToppicksShortCode(){
+		public function getToppicksShortcode(){
 			return $this->toppicksShortCode;
 		}
 		
@@ -52,6 +55,11 @@ if( !class_exists('IHomefinderShortcodeDispatcher')) {
 		public function getSearchResultsShortcode(){
 			return $this->searchResultsShortCode ;
 		}
+		
+		public function getQuickSearchShortcode(){
+			return $this->quickSearchShortCode ;
+		}
+		
 		/**
 		 * Get the content to replace the short code
 		 *
@@ -95,6 +103,13 @@ if( !class_exists('IHomefinderShortcodeDispatcher')) {
 			$_REQUEST['gallery']='true';				
 			$content=$searchResultsFilter->filter('', $authenticationToken);
 			return $content;
+		}
+		
+		function getQuickSearch(){
+			$quickSearchFilter=IHomefinderFilterFactory::getInstance()->getFilter( IHomefinderFilterFactory::LISTING_QUICK_SEARCH_FORM);
+			$authenticationToken=$this->ihfAdmin->getAuthenticationToken();
+			$content=$quickSearchFilter->filter('', $authenticationToken);
+			return $content ;			
 		}
 
 		function getTopPicksFormData(){

@@ -19,7 +19,9 @@ if( !class_exists('IHomefinderAdvancedSearchFormFilterImpl')) {
 				. '&authenticationToken=' . $authenticationToken
 				. '&phpStyle=true';
 				
-			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "boardId", $boardId);		
+			if( is_numeric($boardId)){
+				$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "boardId", $boardId);		
+			}
 
 			$contentInfo = IHomefinderRequestor::remoteRequest($ihfUrl);
 			$idxContent = IHomefinderRequestor::getContent( $contentInfo );

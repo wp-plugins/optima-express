@@ -28,6 +28,8 @@ if( !class_exists('IHomefinderListingDetailFilterImpl')) {
 				. '&authenticationToken=' . $authenticationToken;
 
 			$ihfUrl = iHomefinderRequestor::addVarsToUrl($ihfUrl, $_REQUEST) ;
+			
+			$ihfUrl = IHomefinderUtility::getInstance()->setPreviousAndNextInformation($ihfUrl,$boardId, $listingNumber ) ;
 
 			IHomefinderLogger::getInstance()->debug('before logged in check');
 			if( IHomefinderStateManager::getInstance()->isLoggedIn() ){
@@ -41,12 +43,19 @@ if( !class_exists('IHomefinderListingDetailFilterImpl')) {
 			$content=$idxContent;
 			IHomefinderLogger::getInstance()->debug('End IHomefinderFilter.filterListingDetail');
 			IHomefinderLogger::getInstance()->debug('<br/><br/>' . $ihfUrl);
+			
+//			if( property_exists($contentInfo, "title")){
+//				//success, display the view
+//				$this->title = $contentInfo->title ;
+//			}
 
 			$previousSearchLink = $this->getPreviousSearchLink();
 			$content = $previousSearchLink . '<br/><br/>' . $content ;
 
 			return $content ;
 		}
+		
+
 
 		/**
 		 *

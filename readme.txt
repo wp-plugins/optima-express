@@ -83,12 +83,13 @@ You can enhance your WordPress site with a selection of Quicksearch and Property
 
 
 
-= Quick Search Widget  =
+= Quick Search Widgets  =
 
 
 
 Add property search to any page by dragging the Quicksearch widget to the page's sidebar.
 
+Add a free text search to the body of a page using the shortcode [optima_express_quick_search].
 
 
 = Featured Properties Gallery Widget =
@@ -403,6 +404,29 @@ The Pro package includes a full mobile IDX site that will work on any browser-en
 == Changelog ==
 
 
+= 1.1.3 =
+
+
+
+* Added Advanced Search criteria to email updates
+
+* Added paging to Next/Previous from property details results
+
+* Fixed Multiple Agent ID issue in Advanced Search
+
+* Fixed paging problem in Advanced Search results
+
+* Fixed widget display issue on Advanced Search page
+
+* Fixed disclosure & map links in Advanced Search
+
+* Advanced Search option is now hidden for property types that do not offer advanced search
+
+* Bed/Bath search fields are deactivated for Commercial property searches
+
+* Removed 'New Search' link from Top Picks pages
+
+* Fixed display problem with Genesis “Featured Posts” widget
 = 1.1.2 =
 
 * Added Listing Gallery display through shortcode on Pages and Posts
@@ -437,6 +461,14 @@ The Pro package includes a full mobile IDX site that will work on any browser-en
 
 
 == Upgrade Notice ==
+
+= 1.1.3 =
+
+
+
+
+
+The latest version of Optima Express adds Advanced Search to email updates and fixes a number of bugs.
 
 
 

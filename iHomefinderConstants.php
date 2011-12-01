@@ -8,7 +8,7 @@
 if( !interface_exists('IHomefinderConstants')){
 	interface IHomefinderConstants{
 
-		const VERSION="1.1.2";
+		const VERSION="1.1.3";
 		const EXTERNAL_URL="http://www.idxre.com/services/wordpress";
 		const OPTION_ACTIVATE="ihf-option-activate";
 		const OPTION_PAGES="ihf-option-pages";
