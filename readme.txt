@@ -142,8 +142,12 @@ A WordPress Theme defines the layout and design of your WordPress website. Optim
 
 
 
-Technical note: Other WordPress themes are likely to display Optima Express content correctly provided that the theme is properly coded with jQuery set to run in 'no conflict' mode. Please contact iHomefinder support (<a href="mailto:support@ihomefinder.com">support@ihomefinder.com</a>) for assistance with specific themes.
+Technical notes: 
 
+Other WordPress themes are likely to display Optima Express content correctly provided that the theme is properly coded with jQuery set to run in 'no conflict' mode. Please contact iHomefinder support (<a href="mailto:support@ihomefinder.com">support@ihomefinder.com</a>) for assistance with specific themes.
+
+
+Page template selection within Optima Express will not work properly in themes that verify the page template against the WP database, due to the dynamic nature of Optima Express pages. Users of the Twenty Eleven Theme who wish to change IDX Page templates should contact iHomefinder support to receive a child theme that supports this.
 
 
 Optima Express pages are 620 pixels wide, and widgets are 180 pixels wide.
@@ -403,30 +407,29 @@ The Pro package includes a full mobile IDX site that will work on any browser-en
 
 == Changelog ==
 
+= 1.1.4 =
+
+* Added ability to modify IDX Page Permalinks
+* Added ability to edit IDX Page Titles
+* Added ability to select IDX Page Template
+* Saved properties can be deleted from Property Organizer
+* Fixed pagination and Next/Previous navigation issues on Advanced Search results and Top Picks pages
+
 
 = 1.1.3 =
 
-
-
 * Added Advanced Search criteria to email updates
-
 * Added paging to Next/Previous from property details results
-
 * Fixed Multiple Agent ID issue in Advanced Search
-
 * Fixed paging problem in Advanced Search results
-
 * Fixed widget display issue on Advanced Search page
-
 * Fixed disclosure & map links in Advanced Search
-
 * Advanced Search option is now hidden for property types that do not offer advanced search
-
 * Bed/Bath search fields are deactivated for Commercial property searches
-
 * Removed 'New Search' link from Top Picks pages
-
 * Fixed display problem with Genesis “Featured Posts” widget
+
+
 = 1.1.2 =
 
 * Added Listing Gallery display through shortcode on Pages and Posts
@@ -438,23 +441,15 @@ The Pro package includes a full mobile IDX site that will work on any browser-en
 
 = 1.1.0 =
 
-
-
 * Added User Registration prompts to collect user information at customizable trigger points (Ultra-light, Light & Heavy options available)
-
 * Added Advanced Search as well as link to Advanced Search from standard Search page
-
 * Added click-through login from email notifications
-
 * Improved subscriber activity tracking 
-
 * Fixed text display bugs on Top Picks pages
 
 
 
 = 1.0.0 =
-
-
 
 * Initial release.
 
@@ -462,15 +457,14 @@ The Pro package includes a full mobile IDX site that will work on any browser-en
 
 == Upgrade Notice ==
 
+= 1.1.4 =
+
+The latest version of Optima Express adds ability to modify IDX Page Permalinks, edit Titles, and select Template.
+
+
 = 1.1.3 =
 
-
-
-
-
 The latest version of Optima Express adds Advanced Search to email updates and fixes a number of bugs.
-
-
 
 = 1.2.0 =
 

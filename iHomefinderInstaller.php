@@ -43,27 +43,21 @@ if(!class_exists('IHomefinderInstaller')){
 		    global $wpdb;
 		    global $wp_rewrite;
 
-		    //We don't delete the activation token, in case the user performs an
-		    //update of the plugin.
-		    //delete_option(IHomefinderConstants::ACTIVATION_TOKEN_OPTION);
-		    //delete_option(IHomefinderConstants::ACTIVATION_DATE_OPTION);
-		   	//delete_option(IHomefinderConstants::ACTIVATION_EXPIRE_DATE_OPTION);
-
 		   	//Clear out any rewrite rules associated with the plugin
-		   	$this->ihfRewriteRules->flushRules();	
-		   	//Delete the authentication token	   	
+		   	$this->ihfRewriteRules->flushRules();
+		   	//Delete the authentication token
 		   	$this->ihfAdmin->deleteAuthenticationToken() ;
 		}
-		
-		
+
+
 		/**
 		 * Update authentictation and rewrite information after
 		 * upgrade
 		 */
 		public function upgrade(){
-			
+
 			$currentVersion=get_option(IHomefinderConstants::VERSION_OPTION);
-			
+
 			if( $currentVersion != IHomefinderConstants::VERSION && $this->ihfAdmin->previouslyActivated() ){
 				$this->ihfAdmin->deleteAuthenticationToken() ;
 				$this->ihfAdmin->updateAuthenticationToken() ;

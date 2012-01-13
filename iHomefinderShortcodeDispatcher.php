@@ -5,7 +5,7 @@ if( !class_exists('IHomefinderShortcodeDispatcher')) {
 	 *
 	 * This singleton class is used to handle short code
 	 * requests and retrieve the correct content from 
-	 * a filter or other code
+	 * a VirtualPage or other code
 	 *
 	 * @author ihomefinder
 	 */
@@ -14,7 +14,6 @@ if( !class_exists('IHomefinderShortcodeDispatcher')) {
 		private static $instance ;
 		private $ihfAdmin ;
 
-		private $currentFilter = null;
 		private $content = null;
 		
 		private $toppicksShortCode = "optima_express_toppicks";
@@ -68,29 +67,37 @@ if( !class_exists('IHomefinderShortcodeDispatcher')) {
 		function getToppicks( $attr ) {
 			$content='';
 			if( isset($attr['id'])){
-				$topPicksFilter=IHomefinderFilterFactory::getInstance()->getFilter( IHomefinderFilterFactory::HOTSHEET_SEARCH_RESULTS );
+				$topPicksVirtualPage=IHomefinderVirtualPageFactory::getInstance()->getVirtualPage( IHomefinderVirtualPageFactory::HOTSHEET_SEARCH_RESULTS );
 				$authenticationToken=$this->ihfAdmin->getAuthenticationToken();
 				$_REQUEST['hotSheetId']=$attr['id'];
+				
+				if( array_key_exists("includeDisplayName", $attr) && 'false' == $attr['includeDisplayName']){
+					$_REQUEST['includeDisplayName']='false';
+				}
+				else{
+					$_REQUEST['includeDisplayName']='true';
+				}
+				
 				$_REQUEST['includeMap']='false';
 				$_REQUEST['gallery']='true';
-				$content=$topPicksFilter->filter('', $authenticationToken);
+				$content=$topPicksVirtualPage->getContent( $authenticationToken);
 			}
 			return $content;
 		}
 		
 		function getFeaturedListings( $attr ) {
 			$content='';
-			$featuredSearchFilter=IHomefinderFilterFactory::getInstance()->getFilter( IHomefinderFilterFactory::FEATURED_SEARCH );
+			$featuredSearchVirtualPage=IHomefinderVirtualPageFactory::getInstance()->getVirtualPage( IHomefinderVirtualPageFactory::FEATURED_SEARCH );
 			$authenticationToken=$this->ihfAdmin->getAuthenticationToken();
 			$_REQUEST['includeMap']='false';
 			$_REQUEST['gallery']='true';
-			$content=$featuredSearchFilter->filter('', $authenticationToken);
+			$content=$featuredSearchVirtualPage->getContent($authenticationToken);
 			return $content;
 		}
 		
 		function getSearchResults( $attr ){
 			$content='';
-			$searchResultsFilter=IHomefinderFilterFactory::getInstance()->getFilter( IHomefinderFilterFactory::LISTING_SEARCH_RESULTS);
+			$searchResultsVirtualPage=IHomefinderVirtualPageFactory::getInstance()->getVirtualPage( IHomefinderVirtualPageFactory::LISTING_SEARCH_RESULTS);
 			$authenticationToken=$this->ihfAdmin->getAuthenticationToken();
 			//All values in the $attr array are convered to lowercase.
 			$_REQUEST['cityId']=$attr['cityid'];
@@ -101,14 +108,14 @@ if( !class_exists('IHomefinderShortcodeDispatcher')) {
 			$_REQUEST['maxListPrice']=$attr['maxprice'];
 			$_REQUEST['includeMap']='false';
 			$_REQUEST['gallery']='true';				
-			$content=$searchResultsFilter->filter('', $authenticationToken);
+			$content=$searchResultsVirtualPage->getContent( $authenticationToken);
 			return $content;
 		}
 		
 		function getQuickSearch(){
-			$quickSearchFilter=IHomefinderFilterFactory::getInstance()->getFilter( IHomefinderFilterFactory::LISTING_QUICK_SEARCH_FORM);
+			$quickSearchVirtualPage=IHomefinderVirtualPageFactory::getInstance()->getVirtualPage( IHomefinderVirtualPageFactory::LISTING_QUICK_SEARCH_FORM);
 			$authenticationToken=$this->ihfAdmin->getAuthenticationToken();
-			$content=$quickSearchFilter->filter('', $authenticationToken);
+			$content=$quickSearchVirtualPage->getContent( $authenticationToken);
 			return $content ;			
 		}
 

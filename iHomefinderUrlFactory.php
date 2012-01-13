@@ -1,42 +1,19 @@
 <?php
 if( !class_exists('IHomefinderUrlFactory')) {
 	/**
+	 * Singleton class that provides convenience methods for building plugin URLs
+	 * 
 	 * @author ihomefinder
 	 */
 	class IHomefinderUrlFactory {
 
 		private $baseUrl=null  ;
-		private $listingsSearchResultsUrl="homes-for-sale-results";
-		private $listingsAdvancedSearchFormUrl="homes-for-sale-search-advanced";
-		private $listingsSearchFormUrl="homes-for-sale-search";
-		private $listingDetailUrl ="homes-for-sale-details";
-		private $featuredSearchResultsUrl ="homes-for-sale-featured";
-		private $hotseetSearchResultsUrl="homes-for-sale-toppicks";
-		//Form to login or create a new account
-		private $organizerLoginUrl="property-organizer-login";
-		private $organizerLogoutUrl="property-organizer-logout";
-		private $organizerLoginSubmitUrl="property-organizer-login-submit";
-		//Display a list of saved searches.  User must be a logged in subscriber to view
-		private $organizerSavedSearchesUrl="property-organizer-saved-searches";
-		//This will have a search form, where one can alter search criteria
-		private $organizerEditSavedSearchUrl="email-alerts";
-		private $organizerEditSavedSearchSubmitUrl ="property-organizer-edit-saved-search-submit";
-		//This will have a search form, where one can alter search criteria
-		private $organizerDeleteSavedSearchSubmitUrl="property-organizer-delete-saved-search-submit";
-		//This will display the results of a saved search
-		private $organizerViewSavedSearchUrl="property-organizer-view-saved-search";
-		private $organizerViewSavedSearchListUrl="property-organizer-view-saved-search-list";
-		private $organizerResendConfirmationEmailUrl ="property-organizer-resend-confirmation-email";
-		private $organizerActivateSubscriberUrl= "property-organizer-activate";
-		private $organizerSendSubscriberPasswordUrl="property-organizer-send-login";
-		
-		//Organizer Saved Listings
-		private $organizerViewSavedListingListUrl="property-organizer-saved-listings";	
-		private $organizerEmailUpdatesConfirmationUrl="email-updates-confirmation";
 		
 		private static $instance ;
+		private $virtualPageFactory ;
 
 		private function __construct(){
+			$this->virtualPageFactory=IHomefinderVirtualPageFactory::getInstance() ;
 		}
 
 		public static function getInstance(){
@@ -44,7 +21,7 @@ if( !class_exists('IHomefinderUrlFactory')) {
 				self::$instance = new IHomefinderUrlFactory();
 			}
 			return self::$instance;
-		}
+		}		
 
 		/**
 		 *
@@ -71,98 +48,147 @@ if( !class_exists('IHomefinderUrlFactory')) {
 			return $currentBlogAddress . '/wp-admin/admin-ajax.php';
 		}
 
-		private function prependBaseUrl($value, $includeBaseUrl ){
+		private function prependBaseUrl($path, $includeBaseUrl ){
 			if( $includeBaseUrl ){
-				$value = $this->getBaseUrl() . "/" . $value ."/";
+				$path = $this->getBaseUrl() . "/" . $path ."/";
 			}
-			return $value;
+			return $path;
 		}
 
 		public function getListingsSearchResultsUrl($includeBaseUrl=true){
-			$value = $this->prependBaseUrl( $this->listingsSearchResultsUrl, $includeBaseUrl );
+			$virtualPage = $this->virtualPageFactory->getVirtualPage( IHomefinderVirtualPageFactory::LISTING_SEARCH_RESULTS );
+			$path=$virtualPage->getPath();
+			$value = $this->prependBaseUrl( $path, $includeBaseUrl );
 			return 	$value ;
 		}
 
 		public function getListingsSearchFormUrl($includeBaseUrl=true){
-			$value = $this->prependBaseUrl( $this->listingsSearchFormUrl, $includeBaseUrl );
+			$virtualPage = $this->virtualPageFactory->getVirtualPage( IHomefinderVirtualPageFactory::LISTING_SEARCH_FORM );
+			$path=$virtualPage->getPath();
+			$value = $this->prependBaseUrl( $path, $includeBaseUrl );
 			return 	$value ;
 		}
-
+		
 		public function getListingsAdvancedSearchFormUrl($includeBaseUrl=true){
-			$value = $this->prependBaseUrl( $this->listingsAdvancedSearchFormUrl, $includeBaseUrl );
+			$virtualPage = $this->virtualPageFactory->getVirtualPage( IHomefinderVirtualPageFactory::LISTING_ADVANCED_SEARCH_FORM );
+			$path=$virtualPage->getPath();	
+			$value = $this->prependBaseUrl( $path, $includeBaseUrl );
 			return 	$value ;
 		}
 		
 		public function getListingDetailUrl($includeBaseUrl=true){
-			$value = $this->prependBaseUrl( $this->listingDetailUrl, $includeBaseUrl );
+			$virtualPage = $this->virtualPageFactory->getVirtualPage( IHomefinderVirtualPageFactory::LISTING_DETAIL );
+			$path=$virtualPage->getPath();				
+			$value = $this->prependBaseUrl( $path, $includeBaseUrl );
 			return 	$value ;
 		}
+
 
 		public function getFeaturedSearchResultsUrl($includeBaseUrl=true){
-			$value = $this->prependBaseUrl( $this->featuredSearchResultsUrl, $includeBaseUrl );
+			$virtualPage = $this->virtualPageFactory->getVirtualPage( IHomefinderVirtualPageFactory::FEATURED_SEARCH );
+			$path=$virtualPage->getPath();				
+			$value = $this->prependBaseUrl( $path, $includeBaseUrl );			
 			return 	$value ;
-		}
+		}	
 
 		public function getHotsheetSearchResultsUrl($includeBaseUrl=true){
-			$value = $this->prependBaseUrl( $this->hotseetSearchResultsUrl, $includeBaseUrl );
+			$virtualPage = $this->virtualPageFactory->getVirtualPage( IHomefinderVirtualPageFactory::HOTSHEET_SEARCH_RESULTS);
+			$path=$virtualPage->getPath();					
+			$value = $this->prependBaseUrl( $path, $includeBaseUrl );			
 			return 	$value ;
-		}
+		}	
+		
+		public function getHotsheetListUrl($includeBaseUrl=true){
+			$virtualPage = $this->virtualPageFactory->getVirtualPage( IHomefinderVirtualPageFactory::HOTSHEET_LIST);
+			$path=$virtualPage->getPath();					
+			$value = $this->prependBaseUrl( $path, $includeBaseUrl );			
+			return 	$value ;
+		}			
 
 		public function getOrganizerLoginUrl($includeBaseUrl=true){
-			$value = $this->prependBaseUrl( $this->organizerLoginUrl, $includeBaseUrl );
+			$virtualPage = $this->virtualPageFactory->getVirtualPage( IHomefinderVirtualPageFactory::ORGANIZER_LOGIN);
+			$path=$virtualPage->getPath();							
+			$value = $this->prependBaseUrl( $path, $includeBaseUrl );			
 			return 	$value ;
 		}
 		public function getOrganizerLogoutUrl($includeBaseUrl=true){
-			$value = $this->prependBaseUrl( $this->organizerLogoutUrl, $includeBaseUrl );
+			$virtualPage = $this->virtualPageFactory->getVirtualPage( IHomefinderVirtualPageFactory::ORGANIZER_LOGOUT);
+			$path=$virtualPage->getPath();										
+			$value = $this->prependBaseUrl( $path, $includeBaseUrl );			
 			return 	$value ;
 		}
 		public function getOrganizerLoginSubmitUrl($includeBaseUrl=true){
-			$value = $this->prependBaseUrl( $this->organizerLoginSubmitUrl, $includeBaseUrl );
-			return 	$value ;
-		}
-		public function getOrganizerSavedSearchesUrl($includeBaseUrl=true){
-			$value = $this->prependBaseUrl( $this->organizerSavedSearchesUrl, $includeBaseUrl );
+			$virtualPage = $this->virtualPageFactory->getVirtualPage( IHomefinderVirtualPageFactory::ORGANIZER_LOGIN_SUBMIT);
+			$path=$virtualPage->getPath();				
+			$value = $this->prependBaseUrl( $path, $includeBaseUrl );			
 			return 	$value ;
 		}
 		public function getOrganizerEditSavedSearchUrl($includeBaseUrl=true){
-			$value = $this->prependBaseUrl( $this->organizerEditSavedSearchUrl, $includeBaseUrl );
+			$virtualPage = $this->virtualPageFactory->getVirtualPage( IHomefinderVirtualPageFactory::ORGANIZER_EDIT_SAVED_SEARCH);
+			$path=$virtualPage->getPath();				
+			$value = $this->prependBaseUrl( $path, $includeBaseUrl );			
 			return 	$value ;
 		}
 		public function getOrganizerEditSavedSearchSubmitUrl($includeBaseUrl=true){
-			$value = $this->prependBaseUrl( $this->organizerEditSavedSearchSubmitUrl, $includeBaseUrl );
+			$virtualPage = $this->virtualPageFactory->getVirtualPage( IHomefinderVirtualPageFactory::ORGANIZER_EDIT_SAVED_SEARCH_SUBMIT);
+			$path=$virtualPage->getPath();				
+			$value = $this->prependBaseUrl( $path, $includeBaseUrl );			
 			return 	$value ;
 		}
 		public function getOrganizerDeleteSavedSearchSubmitUrl($includeBaseUrl=true){
-			$value = $this->prependBaseUrl( $this->organizerDeleteSavedSearchSubmitUrl, $includeBaseUrl );
+			$virtualPage = $this->virtualPageFactory->getVirtualPage( IHomefinderVirtualPageFactory::ORGANIZER_DELETE_SAVED_SEARCH_SUBMIT);
+			$path=$virtualPage->getPath();				
+			$value = $this->prependBaseUrl( $path, $includeBaseUrl );			
 			return 	$value ;
 		}
 		public function getOrganizerViewSavedSearchUrl($includeBaseUrl=true){
-			$value = $this->prependBaseUrl( $this->organizerViewSavedSearchUrl, $includeBaseUrl );
+			$virtualPage = $this->virtualPageFactory->getVirtualPage( IHomefinderVirtualPageFactory::ORGANIZER_VIEW_SAVED_SEARCH);
+			$path=$virtualPage->getPath();							
+			$value = $this->prependBaseUrl( $path, $includeBaseUrl );			
 			return 	$value ;
 		}		
 		public function getOrganizerViewSavedSearchListUrl($includeBaseUrl=true){
-			$value = $this->prependBaseUrl( $this->organizerViewSavedSearchListUrl, $includeBaseUrl );
+			$virtualPage = $this->virtualPageFactory->getVirtualPage( IHomefinderVirtualPageFactory::ORGANIZER_VIEW_SAVED_SEARCH_LIST);
+			$path=$virtualPage->getPath();				
+			$value = $this->prependBaseUrl( $path, $includeBaseUrl );			
 			return 	$value ;
 		}
 		public function getOrganizerResendConfirmationEmailUrl($includeBaseUrl=true){
-			$value = $this->prependBaseUrl( $this->organizerResendConfirmationEmailUrl, $includeBaseUrl );
+			$virtualPage = $this->virtualPageFactory->getVirtualPage( IHomefinderVirtualPageFactory::ORGANIZER_RESEND_CONFIRMATION_EMAIL);
+			$path=$virtualPage->getPath();							
+			$value = $this->prependBaseUrl( $path, $includeBaseUrl );			
 			return 	$value ;
 		}
 		public function getOrganizerActivateSubscriberUrl($includeBaseUrl=true){
-			$value = $this->prependBaseUrl( $this->organizerActivateSubscriberUrl, $includeBaseUrl );
+			$virtualPage = $this->virtualPageFactory->getVirtualPage( IHomefinderVirtualPageFactory::ORGANIZER_ACTIVATE_SUBSCRIBER);
+			$path=$virtualPage->getPath();						
+			$value = $this->prependBaseUrl( $path, $includeBaseUrl );			
 			return 	$value ;
 		}
 		public function getOrganizerSendSubscriberPasswordUrl($includeBaseUrl=true){
-			$value = $this->prependBaseUrl( $this->organizerSendSubscriberPasswordUrl, $includeBaseUrl );
+			$virtualPage = $this->virtualPageFactory->getVirtualPage( IHomefinderVirtualPageFactory::ORGANIZER_SEND_SUBSCRIBER_PASSWORD);
+			$path=$virtualPage->getPath();				
+			$value = $this->prependBaseUrl( $path, $includeBaseUrl );			
 			return 	$value ;
 		}		
 		public function getOrganizerViewSavedListingListUrl($includeBaseUrl=true){
-			$value = $this->prependBaseUrl( $this->organizerViewSavedListingListUrl, $includeBaseUrl );
+			$virtualPage = $this->virtualPageFactory->getVirtualPage( IHomefinderVirtualPageFactory::ORGANIZER_VIEW_SAVED_LISTING_LIST);
+			$path=$virtualPage->getPath();				
+			$value = $this->prependBaseUrl( $path, $includeBaseUrl );			
+			return 	$value ;			
+		}
+
+		public function getOrganizerDeleteSavedListingUrl($includeBaseUrl=true){
+			$virtualPage = $this->virtualPageFactory->getVirtualPage( IHomefinderVirtualPageFactory::ORGANIZER_DELETE_SAVED_LISTING_SUBMIT);
+			$path=$virtualPage->getPath();				
+			$value = $this->prependBaseUrl( $path, $includeBaseUrl );			
 			return 	$value ;			
 		}
 		
 		public function getOrganizerEmailUpdatesConfirmationUrl($includeBaseUrl=true){
-			$value = $this->prependBaseUrl( $this->organizerEmailUpdatesConfirmationUrl, $includeBaseUrl );
+			$virtualPage = $this->virtualPageFactory->getVirtualPage( IHomefinderVirtualPageFactory::ORGANIZER_EMAIL_UPDATES_CONFIRMATION);
+			$path=$virtualPage->getPath();				
+			$value = $this->prependBaseUrl( $path, $includeBaseUrl );
 			return 	$value ;			
 		}
 

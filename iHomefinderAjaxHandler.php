@@ -23,7 +23,7 @@ if( !class_exists('IHomefinderAjaxHandler')) {
 		}
 
 		public function requestMoreInfo(){
-			IHomefinderLogger::getInstance()->debug('Begin IHomefinderFilter.requestMoreInfo');
+			IHomefinderLogger::getInstance()->debug('Begin IHomefinderAjaxHandler.requestMoreInfo');
 			$authenticationToken=$this->ihfAdmin->getAuthenticationToken();
 
 			$action = IHomefinderUtility::getInstance()->getRequestVar('action');
@@ -51,14 +51,14 @@ if( !class_exists('IHomefinderAjaxHandler')) {
 			$contentInfo = IHomefinderRequestor::remoteRequest($ihfUrl);
 			$content = IHomefinderRequestor::getContent( $contentInfo );
 			IHomefinderLogger::getInstance()->debug( '<br/><br/>' . $ihfUrl ) ;
-			IHomefinderLogger::getInstance()->debug('End IHomefinderFilter.requestMoreInfo');
+			IHomefinderLogger::getInstance()->debug('End IHomefinderAjaxHandler.requestMoreInfo');
 
 			echo $content ;
 			die();
 		}
 
 		public function scheduleShowing(){
-			IHomefinderLogger::getInstance()->debug('Begin IHomefinderFilter.scheduleShowing');
+			IHomefinderLogger::getInstance()->debug('Begin IHomefinderAjaxHandler.scheduleShowing');
 			$authenticationToken=$this->ihfAdmin->getAuthenticationToken();
 
 			$action = IHomefinderUtility::getInstance()->getRequestVar('action');
@@ -96,14 +96,14 @@ if( !class_exists('IHomefinderAjaxHandler')) {
 			$content = IHomefinderRequestor::getContent( $contentInfo );
 
 			IHomefinderLogger::getInstance()->debug( '<br/><br/>' . $ihfUrl ) ;
-			IHomefinderLogger::getInstance()->debug('End IHomefinderFilter.scheduleShowing');
+			IHomefinderLogger::getInstance()->debug('End IHomefinderAjaxHandler.scheduleShowing');
 
 			echo $content ;
 			die();
 		}
 
 		public function photoTour(){
-			IHomefinderLogger::getInstance()->debug('Begin IHomefinderFilter.photoTour');
+			IHomefinderLogger::getInstance()->debug('Begin IHomefinderAjaxHandler.photoTour');
 			$authenticationToken=$this->ihfAdmin->getAuthenticationToken();
 
 			$action = IHomefinderUtility::getInstance()->getRequestVar('action');
@@ -120,14 +120,14 @@ if( !class_exists('IHomefinderAjaxHandler')) {
 			$content = IHomefinderRequestor::getContent( $contentInfo );
 
 			IHomefinderLogger::getInstance()->debug( '<br/><br/>' . $ihfUrl ) ;
-			IHomefinderLogger::getInstance()->debug('End IHomefinderFilter.photoTour');
+			IHomefinderLogger::getInstance()->debug('End IHomefinderAjaxHandler.photoTour');
 
 			echo $content ;
 			die();
 		}
 
 		public function saveProperty(){
-			IHomefinderLogger::getInstance()->debug('Begin IHomefinderFilter.saveProperty');
+			IHomefinderLogger::getInstance()->debug('Begin IHomefinderAjaxHandler.saveProperty');
 			$authenticationToken=$this->ihfAdmin->getAuthenticationToken();
 
 			$action = IHomefinderUtility::getInstance()->getRequestVar('action');
@@ -166,7 +166,7 @@ if( !class_exists('IHomefinderAjaxHandler')) {
 		}
 
 		public function saveSearch(){
-			IHomefinderLogger::getInstance()->debug('Begin IHomefinderFilter.saveSearch');
+			IHomefinderLogger::getInstance()->debug('Begin IHomefinderAjaxHandler.saveSearch');
 			$authenticationToken=$this->ihfAdmin->getAuthenticationToken();
 
 			$action = IHomefinderUtility::getInstance()->getRequestVar('action');
@@ -212,7 +212,7 @@ if( !class_exists('IHomefinderAjaxHandler')) {
 			IHomefinderLogger::getInstance()->debugDumpVar($contentInfo );
 
 			IHomefinderLogger::getInstance()->debug( '<br/><br/>' . $ihfUrl ) ;
-			IHomefinderLogger::getInstance()->debug('End IHomefinderFilter.saveSearch');
+			IHomefinderLogger::getInstance()->debug('End IHomefinderAjaxHandler.saveSearch');
 
 			echo $content ;
 			die();

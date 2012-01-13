@@ -8,18 +8,28 @@
 if( !interface_exists('IHomefinderConstants')){
 	interface IHomefinderConstants{
 
-		const VERSION="1.1.3";
+		const VERSION="1.1.4";
 		const EXTERNAL_URL="http://www.idxre.com/services/wordpress";
+
+		//Group for Activation related options
+		//Also used as menu slug for the Activate Menu
 		const OPTION_ACTIVATE="ihf-option-activate";
+		//menu slug for information page
+		const INFORMATION="ihf-information" ;
+		//Menu slug for the option pages
 		const OPTION_PAGES="ihf-option-pages";
 
-		const OPTION_CONFIG_PAGE="ihf-config-page";
-
-        const VERSION_OPTION="ihf_version_option";
+        //Activation related options
 		const ACTIVATION_TOKEN_OPTION="ihf_activation_token";
 		const ACTIVATION_DATE_OPTION="ihf_activation_date";
 
+		//Group for configuration related options
+		//Also menu slug for the configuration page
+		const OPTION_CONFIG_PAGE="ihf-config-page";
+		//Configuration realted option
 		const CSS_OVERRIDE_OPTION="ihf-css-override";
+
+        const VERSION_OPTION="ihf_version_option";
 
 		//Transient value - cached authentication token
 		const AUTHENTICATION_TOKEN_CACHE="ihf_authentication_token";
@@ -41,6 +51,10 @@ if( !interface_exists('IHomefinderConstants')){
 		const PROPERTY_GALLERY_CACHE_TIMEOUT = 86400 ;
 		///////////////////////////////////////////////////////
 
+
+		//Used to set the widget context.
+		//A search widget should not display on a
+		//search related virtual page
 		const SEARCH_WIDGET_TYPE="searchWidget";
 		const GALLERY_WIDGET_TYPE="galleryWidget";
 

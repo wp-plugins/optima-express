@@ -43,7 +43,7 @@ if( !class_exists('IHomefinderTinyMceManager')) {
 		function addTinymcePlugins($plugin_array) {
 			$baseUrl = IHomefinderUrlFactory::getInstance()->getBaseUrl() ;
             $optimaExpressGalleryPluginUrl= $baseUrl . '/wp-content/plugins/' . plugin_basename( dirname(__FILE__) ) . '/tinymce/optimaExpressGallery/editor_plugin.js';
-			$plugin_array['optimaExpressGallery'] = $optimaExpressGalleryPluginUrl ;
+			$plugin_array['optimaExpressGallery'] = $optimaExpressGalleryPluginUrl ;						
 			return $plugin_array;
 		}
 

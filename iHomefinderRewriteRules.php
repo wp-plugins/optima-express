@@ -8,8 +8,8 @@ if(!class_exists('IHomefinderRewriteRules')){
 	 * does not exist.  We do not want to load a real page.  We get the content from the iHomefinder services
 	 * and display it as a virtual Wordpress post.
 	 * 
-	 * The rewrite rules below set a variable iHomefinderConstants::IHF_TYPE_URL_VAR  that is used to determine which filter retrieves the 
-	 * content from iHomefinder
+	 * The rewrite rules below set a variable iHomefinderConstants::IHF_TYPE_URL_VAR  that is used to determine 
+	 * which VirtualPage retrieves the content from iHomefinder
 	 * 
 	 * @author ihomefinder
 	 *
@@ -91,6 +91,7 @@ if(!class_exists('IHomefinderRewriteRules')){
 			
 			$wp->add_query_var('newSearch');
 			$wp->add_query_var('includeMap');
+			$wp->add_query_var('savedListingID');
 		}
 		/**
 	 	 * Function to initialize rewrite rules for the IHF plugin.
@@ -125,7 +126,8 @@ if(!class_exists('IHomefinderRewriteRules')){
 			$this->setOrganizerDeleteSavedSearchSubmitRewriteRules($matchRulePrefix);
 			$this->setOrganizerViewSavedSearchRewriteRules($matchRulePrefix);
 			$this->setOrganizerViewSavedSearchListRewriteRules($matchRulePrefix);
-			$this->setOrganizerViewSavedListingListRewriteRules($matchRulePrefix);			
+			$this->setOrganizerViewSavedListingListRewriteRules($matchRulePrefix);
+			$this->setOrganizerDeleteSavedListingSubmitRewriteRules($matchRulePrefix);			
 			$this->setOrganizerResendConfirmationRewriteRules($matchRulePrefix);	
 			$this->setOrganizerReactivateSubscriberRewriteRules($matchRulePrefix);
 			$this->setOrganizerResendSubscriberPasswordRewriteRules($matchRulePrefix);
@@ -136,7 +138,7 @@ if(!class_exists('IHomefinderRewriteRules')){
 			global $wp_rewrite;
 	  		// matches 'idx-search
 	  		$rewriteUrl=$this->rootPageName ;
-	  		$rewriteUrl .= '&' . iHomefinderConstants::IHF_TYPE_URL_VAR . '=' . IHomefinderFilterFactory::LISTING_ADVANCED_SEARCH_FORM ;
+	  		$rewriteUrl .= '&' . iHomefinderConstants::IHF_TYPE_URL_VAR . '=' . IHomefinderVirtualPageFactory::LISTING_ADVANCED_SEARCH_FORM ;
 	  		
 	  		$wp_rewrite->add_rule( 
 	  			$matchRulePrefix . $this->urlFactory->getListingsAdvancedSearchFormUrl(false) . '/([^/]+)', 
@@ -153,7 +155,7 @@ if(!class_exists('IHomefinderRewriteRules')){
 			global $wp_rewrite;
 	  		// matches 'idx-search
 	  		$rewriteUrl=$this->rootPageName ;
-	  		$rewriteUrl .= '&' . iHomefinderConstants::IHF_TYPE_URL_VAR . '=' . IHomefinderFilterFactory::LISTING_SEARCH_FORM ;
+	  		$rewriteUrl .= '&' . iHomefinderConstants::IHF_TYPE_URL_VAR . '=' . IHomefinderVirtualPageFactory::LISTING_SEARCH_FORM ;
 
 	  		//echo( 'rewriteUrl='.$rewriteUrl."<br>");
 	  		$wp_rewrite->add_rule( 
@@ -166,7 +168,7 @@ if(!class_exists('IHomefinderRewriteRules')){
 			global $wp_rewrite;
 	  		// matches 
 	  		$rewriteUrl=$this->rootPageName;
-	  		$rewriteUrl.='&' . iHomefinderConstants::IHF_TYPE_URL_VAR . '=' . IHomefinderFilterFactory::ORGANIZER_LOGIN_SUBMIT ;
+	  		$rewriteUrl.='&' . iHomefinderConstants::IHF_TYPE_URL_VAR . '=' . IHomefinderVirtualPageFactory::ORGANIZER_LOGIN_SUBMIT ;
 	  		//echo('getOrganizerLoginSubmitUrl=' . $this->urlFactory->getOrganizerLoginSubmitUrl(false)."|");
 	  		//echo( 'rewriteUrl='.$rewriteUrl."<br><br>");
 	  		$wp_rewrite->add_rule(
@@ -180,7 +182,16 @@ if(!class_exists('IHomefinderRewriteRules')){
 	  		// matches 
 	  		$wp_rewrite->add_rule(
 	  			$matchRulePrefix . $this->urlFactory->getOrganizerDeleteSavedSearchSubmitUrl(false) ,
-	            $this->rootPageName . '&' . iHomefinderConstants::IHF_TYPE_URL_VAR . '=' . IHomefinderFilterFactory::ORGANIZER_DELETE_SAVED_SEARCH_SUBMIT , 'top'
+	            $this->rootPageName . '&' . iHomefinderConstants::IHF_TYPE_URL_VAR . '=' . IHomefinderVirtualPageFactory::ORGANIZER_DELETE_SAVED_SEARCH_SUBMIT , 'top'
+	  		);
+		}	
+		
+		private function setOrganizerDeleteSavedListingSubmitRewriteRules($matchRulePrefix ){
+			global $wp_rewrite;
+	  		// matches 
+	  		$wp_rewrite->add_rule(
+	  			$matchRulePrefix . $this->urlFactory->getOrganizerDeleteSavedListingUrl(false) . '/([^/]+)' ,
+	            $this->rootPageName . '&' . iHomefinderConstants::IHF_TYPE_URL_VAR . '=' . IHomefinderVirtualPageFactory::ORGANIZER_DELETE_SAVED_LISTING_SUBMIT  . '&savedListingID=$matches[1]', 'top'
 	  		);
 		}	
 				
@@ -189,7 +200,7 @@ if(!class_exists('IHomefinderRewriteRules')){
 	  		// matches 
 	  		$wp_rewrite->add_rule(
 	  			$matchRulePrefix . $this->urlFactory->getOrganizerEditSavedSearchUrl(false) ,
-	            $this->rootPageName . '&' . iHomefinderConstants::IHF_TYPE_URL_VAR . '=' . IHomefinderFilterFactory::ORGANIZER_EDIT_SAVED_SEARCH , 'top'
+	            $this->rootPageName . '&' . iHomefinderConstants::IHF_TYPE_URL_VAR . '=' . IHomefinderVirtualPageFactory::ORGANIZER_EDIT_SAVED_SEARCH , 'top'
 	  		);
 		}		
 
@@ -198,7 +209,7 @@ if(!class_exists('IHomefinderRewriteRules')){
 	  		// matches 
 	  		$wp_rewrite->add_rule(
 	  			$matchRulePrefix . $this->urlFactory->getOrganizerEditSavedSearchSubmitUrl(false),
-	            $this->rootPageName . '&' . iHomefinderConstants::IHF_TYPE_URL_VAR . '=' . IHomefinderFilterFactory::ORGANIZER_EDIT_SAVED_SEARCH_SUBMIT , 'top'
+	            $this->rootPageName . '&' . iHomefinderConstants::IHF_TYPE_URL_VAR . '=' . IHomefinderVirtualPageFactory::ORGANIZER_EDIT_SAVED_SEARCH_SUBMIT , 'top'
 	  		);
 		}						
 
@@ -207,7 +218,7 @@ if(!class_exists('IHomefinderRewriteRules')){
 	  		// matches 
 	  		$wp_rewrite->add_rule(
 	  			$matchRulePrefix . $this->urlFactory->getOrganizerEmailUpdatesConfirmationUrl(false),
-	            $this->rootPageName . '&' . iHomefinderConstants::IHF_TYPE_URL_VAR . '=' . IHomefinderFilterFactory::ORGANIZER_EMAIL_UPDATES_CONFIRMATION, 'top'
+	            $this->rootPageName . '&' . iHomefinderConstants::IHF_TYPE_URL_VAR . '=' . IHomefinderVirtualPageFactory::ORGANIZER_EMAIL_UPDATES_CONFIRMATION, 'top'
 	  		);
 		}	
 				
@@ -216,7 +227,7 @@ if(!class_exists('IHomefinderRewriteRules')){
 	  		// matches 
 	  		$wp_rewrite->add_rule(
 	  			$matchRulePrefix . $this->urlFactory->getOrganizerLoginUrl(false),
-	            $this->rootPageName . '&' . iHomefinderConstants::IHF_TYPE_URL_VAR . '=' . IHomefinderFilterFactory::ORGANIZER_LOGIN , 'top'
+	            $this->rootPageName . '&' . iHomefinderConstants::IHF_TYPE_URL_VAR . '=' . IHomefinderVirtualPageFactory::ORGANIZER_LOGIN , 'top'
 	  		);
 		}		
 		
@@ -225,7 +236,7 @@ if(!class_exists('IHomefinderRewriteRules')){
 	  		// matches 
 	  		$wp_rewrite->add_rule(
 	  			$matchRulePrefix . $this->urlFactory->getOrganizerLogoutUrl(false),
-	            $this->rootPageName . '&' . iHomefinderConstants::IHF_TYPE_URL_VAR . '=' . IHomefinderFilterFactory::ORGANIZER_LOGOUT , 'top'
+	            $this->rootPageName . '&' . iHomefinderConstants::IHF_TYPE_URL_VAR . '=' . IHomefinderVirtualPageFactory::ORGANIZER_LOGOUT , 'top'
 	  		);
 		}				
 
@@ -234,7 +245,7 @@ if(!class_exists('IHomefinderRewriteRules')){
 	  		// matches 
 	  		$wp_rewrite->add_rule(
 	  			$matchRulePrefix .  $this->urlFactory->getOrganizerViewSavedSearchUrl(false) . '/([^/]+)',
-	            $this->rootPageName . '&' . iHomefinderConstants::IHF_TYPE_URL_VAR . '=' . IHomefinderFilterFactory::ORGANIZER_VIEW_SAVED_SEARCH .  '&searchProfileID=$matches[1]', 'top'
+	            $this->rootPageName . '&' . iHomefinderConstants::IHF_TYPE_URL_VAR . '=' . IHomefinderVirtualPageFactory::ORGANIZER_VIEW_SAVED_SEARCH .  '&searchProfileID=$matches[1]', 'top'
 	  		);
 		}
 		private function setOrganizerViewSavedSearchListRewriteRules($matchRulePrefix ){
@@ -242,7 +253,7 @@ if(!class_exists('IHomefinderRewriteRules')){
 	  		// matches 
 	  		$wp_rewrite->add_rule(
 	  			$matchRulePrefix .  $this->urlFactory->getOrganizerViewSavedSearchListUrl(false),
-	            $this->rootPageName . '&' . iHomefinderConstants::IHF_TYPE_URL_VAR . '=' . IHomefinderFilterFactory::ORGANIZER_VIEW_SAVED_SEARCH_LIST, 'top'
+	            $this->rootPageName . '&' . iHomefinderConstants::IHF_TYPE_URL_VAR . '=' . IHomefinderVirtualPageFactory::ORGANIZER_VIEW_SAVED_SEARCH_LIST, 'top'
 	  		);
 		}
 		private function setOrganizerViewSavedListingListRewriteRules($matchRulePrefix ){
@@ -250,7 +261,7 @@ if(!class_exists('IHomefinderRewriteRules')){
 	  		// matches 
 	  		$wp_rewrite->add_rule(
 	  			$matchRulePrefix .  $this->urlFactory->getOrganizerViewSavedListingListUrl(false),
-	            $this->rootPageName . '&' . iHomefinderConstants::IHF_TYPE_URL_VAR . '=' . IHomefinderFilterFactory::ORGANIZER_VIEW_SAVED_LISTING_LIST, 'top'
+	            $this->rootPageName . '&' . iHomefinderConstants::IHF_TYPE_URL_VAR . '=' . IHomefinderVirtualPageFactory::ORGANIZER_VIEW_SAVED_LISTING_LIST, 'top'
 	  		);
 		}
 		private function setOrganizerResendConfirmationRewriteRules($matchRulePrefix ){
@@ -258,7 +269,7 @@ if(!class_exists('IHomefinderRewriteRules')){
 	  		// matches 
 	  		$wp_rewrite->add_rule(
 	  			$matchRulePrefix .  $this->urlFactory->getOrganizerResendConfirmationEmailUrl(false),
-	            $this->rootPageName . '&' . iHomefinderConstants::IHF_TYPE_URL_VAR . '=' . IHomefinderFilterFactory::ORGANIZER_RESEND_CONFIRMATION_EMAIL , 'top'
+	            $this->rootPageName . '&' . iHomefinderConstants::IHF_TYPE_URL_VAR . '=' . IHomefinderVirtualPageFactory::ORGANIZER_RESEND_CONFIRMATION_EMAIL , 'top'
 	  		);
 		}	
 		private function setOrganizerReactivateSubscriberRewriteRules($matchRulePrefix ){
@@ -266,7 +277,7 @@ if(!class_exists('IHomefinderRewriteRules')){
 	  		// matches 
 	  		$wp_rewrite->add_rule(
 	  			$matchRulePrefix .  $this->urlFactory->getOrganizerActivateSubscriberUrl(false),
-	            $this->rootPageName . '&' . iHomefinderConstants::IHF_TYPE_URL_VAR . '=' . IHomefinderFilterFactory::ORGANIZER_ACTIVATE_SUBSCRIBER , 'top'
+	            $this->rootPageName . '&' . iHomefinderConstants::IHF_TYPE_URL_VAR . '=' . IHomefinderVirtualPageFactory::ORGANIZER_ACTIVATE_SUBSCRIBER , 'top'
 	  		);
 		}									
 
@@ -275,7 +286,7 @@ if(!class_exists('IHomefinderRewriteRules')){
 	  		// matches 
 	  		$wp_rewrite->add_rule(
 	  			$matchRulePrefix . $this->urlFactory->getOrganizerSendSubscriberPasswordUrl(false),
-	            $this->rootPageName . '&' . iHomefinderConstants::IHF_TYPE_URL_VAR . '=' . IHomefinderFilterFactory::ORGANIZER_SEND_SUBSCRIBER_PASSWORD , 'top'
+	            $this->rootPageName . '&' . iHomefinderConstants::IHF_TYPE_URL_VAR . '=' . IHomefinderVirtualPageFactory::ORGANIZER_SEND_SUBSCRIBER_PASSWORD , 'top'
 	  		);
 		}									
 		
@@ -284,17 +295,17 @@ if(!class_exists('IHomefinderRewriteRules')){
 	  		// matches '%hotsheetUrl%/%nameOfHotSheet$/1234', where the hotsheet id =1234
 	  		$wp_rewrite->add_rule(
 	  			$matchRulePrefix . $this->urlFactory->getHotsheetSearchResultsUrl(false) . '/([^/]+)/([^/]+)',
-	            $this->rootPageName . '&' . iHomefinderConstants::IHF_TYPE_URL_VAR . '=' . IHomefinderFilterFactory::HOTSHEET_SEARCH_RESULTS . '&hotSheetId=$matches[2]', 'top'
+	            $this->rootPageName . '&' . iHomefinderConstants::IHF_TYPE_URL_VAR . '=' . IHomefinderVirtualPageFactory::HOTSHEET_SEARCH_RESULTS . '&hotSheetId=$matches[2]', 'top'
 	  		);	  		
 	  		
 	  		// matches '%hotsheetUrl%/1234', where the hotsheet id =1234
 	  		$wp_rewrite->add_rule(
 	  			$matchRulePrefix . $this->urlFactory->getHotsheetSearchResultsUrl(false) . '/([^/]+)',
-	            $this->rootPageName . '&' . iHomefinderConstants::IHF_TYPE_URL_VAR . '=' . IHomefinderFilterFactory::HOTSHEET_SEARCH_RESULTS . '&hotSheetId=$matches[1]', 'top'
+	            $this->rootPageName . '&' . iHomefinderConstants::IHF_TYPE_URL_VAR . '=' . IHomefinderVirtualPageFactory::HOTSHEET_SEARCH_RESULTS . '&hotSheetId=$matches[1]', 'top'
 	  		);
 	  		$wp_rewrite->add_rule(
-	  			$matchRulePrefix . $this->urlFactory->getHotsheetSearchResultsUrl(false) ,
-	            $this->rootPageName . '&' . iHomefinderConstants::IHF_TYPE_URL_VAR . '=' . IHomefinderFilterFactory::HOTSHEET_LIST . '&hotSheetId=$matches[1]', 'top'
+	  			$matchRulePrefix . $this->urlFactory->getHotsheetListUrl(false) ,
+	            $this->rootPageName . '&' . iHomefinderConstants::IHF_TYPE_URL_VAR . '=' . IHomefinderVirtualPageFactory::HOTSHEET_LIST , 'top'
 	  		);
 	  		
 		}		
@@ -304,7 +315,7 @@ if(!class_exists('IHomefinderRewriteRules')){
 	  		// matches 'idx-detail/%address%/12345678/1234', where the listing number =12345678 and bid=1234
 	  		$wp_rewrite->add_rule(
 	  			$matchRulePrefix . $this->urlFactory->getListingDetailUrl(false) . '/([^/]+)/([^/]+)/([^/]+)',
-	            $this->rootPageName . '&' . iHomefinderConstants::IHF_TYPE_URL_VAR . '=' . IHomefinderFilterFactory::LISTING_DETAIL . '&ln=$matches[2]&bid=$matches[3]', 'top'
+	            $this->rootPageName . '&' . iHomefinderConstants::IHF_TYPE_URL_VAR . '=' . IHomefinderVirtualPageFactory::LISTING_DETAIL . '&ln=$matches[2]&bid=$matches[3]', 'top'
 	  		);
 		}
 		private function setListingSearchResultsPageRewriteRules($matchRulePrefix ){
@@ -312,31 +323,31 @@ if(!class_exists('IHomefinderRewriteRules')){
 			// 'idx-results/Berkeley/SFR/3/2/11', where the city=Berkeley, propertyType=SFR, bedrooms=3, bathCount=2, startRowNumber=11
 	  		$wp_rewrite->add_rule(
 	  			$matchRulePrefix . $this->urlFactory->getListingsSearchResultsUrl(false) . '/([^/]+)/([^/]+)/([^/]+)/([^/]+)/([^/]+)',
-	            $this->rootPageName . '&' . iHomefinderConstants::IHF_TYPE_URL_VAR . '=' . IHomefinderFilterFactory::LISTING_SEARCH_RESULTS . '&cityName=$matches[1]&propertyType=$matches[2]&bedrooms=$matches[3]&bathCount=$matches[4]&minListPrice=$matches[5]&maxListPrice=$matches[6]&startRowNumber=$matches[7]', 'top'
+	            $this->rootPageName . '&' . iHomefinderConstants::IHF_TYPE_URL_VAR . '=' . IHomefinderVirtualPageFactory::LISTING_SEARCH_RESULTS . '&cityName=$matches[1]&propertyType=$matches[2]&bedrooms=$matches[3]&bathCount=$matches[4]&minListPrice=$matches[5]&maxListPrice=$matches[6]&startRowNumber=$matches[7]', 'top'
 	  		);
 	
 	  		// 'homesearch/Berkeley/', where the city=Berkeley, propertyType=SFR, bedrooms=3, bathCount=2, startRowNumber=1
 	  		$wp_rewrite->add_rule(
 	  			$matchRulePrefix . $this->urlFactory->getListingsSearchResultsUrl(false) . '/([^/]+)/([^/]+)/([^/]+)/([^/]+)',
-	            $this->rootPageName . '&' . iHomefinderConstants::IHF_TYPE_URL_VAR . '=' . IHomefinderFilterFactory::LISTING_SEARCH_RESULTS . '&cityName=$matches[1]&propertyType=$matches[2]&bedrooms=$matches[3]&bathCount=$matches[4]&minListPrice=$matches[5]&maxListPrice=$matches[6]&startRowNumber=1', 'top'
+	            $this->rootPageName . '&' . iHomefinderConstants::IHF_TYPE_URL_VAR . '=' . IHomefinderVirtualPageFactory::LISTING_SEARCH_RESULTS . '&cityName=$matches[1]&propertyType=$matches[2]&bedrooms=$matches[3]&bathCount=$matches[4]&minListPrice=$matches[5]&maxListPrice=$matches[6]&startRowNumber=1', 'top'
 	  		);
 
 	  		// 'homesearch/Berkeley/11', where the city=Berkeley, startRowNumber=11
 	  		$wp_rewrite->add_rule(
 	  			$matchRulePrefix . $this->urlFactory->getListingsSearchResultsUrl(false) . '/([^/]+)/([^/]+)',
-	            $this->rootPageName . '&' . iHomefinderConstants::IHF_TYPE_URL_VAR . '=' . IHomefinderFilterFactory::LISTING_SEARCH_RESULTS . '&cityName=$matches[1]&startRowNumber=$matches[2]', 'top'
+	            $this->rootPageName . '&' . iHomefinderConstants::IHF_TYPE_URL_VAR . '=' . IHomefinderVirtualPageFactory::LISTING_SEARCH_RESULTS . '&cityName=$matches[1]&startRowNumber=$matches[2]', 'top'
 	  		);
 	  		
 	  		// 'homesearch/Berkeley/', where the city=Berkeley, startRowNumber=1
 	  		$wp_rewrite->add_rule(
 	  			$matchRulePrefix . $this->urlFactory->getListingsSearchResultsUrl(false) . '/([^/]+)',
-	            $this->rootPageName . '&' . iHomefinderConstants::IHF_TYPE_URL_VAR . '=' . IHomefinderFilterFactory::LISTING_SEARCH_RESULTS . '&cityName=$matches[1]&startRowNumber=1', 'top'
+	            $this->rootPageName . '&' . iHomefinderConstants::IHF_TYPE_URL_VAR . '=' . IHomefinderVirtualPageFactory::LISTING_SEARCH_RESULTS . '&cityName=$matches[1]&startRowNumber=1', 'top'
 	  		);
 	  		// In this case, all of the parameters are either set by POST or GET
 	  		// 'homesearch?cityName=Berkeley&propertyType=SFR,CNDbedrooms=5&bathCount=2
 	  		$wp_rewrite->add_rule(
 	  			$matchRulePrefix . $this->urlFactory->getListingsSearchResultsUrl(false),
-	            $this->rootPageName . '&' . iHomefinderConstants::IHF_TYPE_URL_VAR . '=' . IHomefinderFilterFactory::LISTING_SEARCH_RESULTS . '&cityName=$matches[1]&propertyType=$matches[2]&bedrooms=$matches[3]&bathCount=$matches[4]&minListPrice=$matches[5]&maxListPrice=$matches[6]&startRowNumber=1', 'top'
+	            $this->rootPageName . '&' . iHomefinderConstants::IHF_TYPE_URL_VAR . '=' . IHomefinderVirtualPageFactory::LISTING_SEARCH_RESULTS . '&cityName=$matches[1]&propertyType=$matches[2]&bedrooms=$matches[3]&bathCount=$matches[4]&minListPrice=$matches[5]&maxListPrice=$matches[6]&startRowNumber=1', 'top'
 	  		);  
 		}
 		
@@ -346,14 +357,14 @@ if(!class_exists('IHomefinderRewriteRules')){
 	  		// 'featuredsearch/21/', where startRowNumber=21
 	  		$wp_rewrite->add_rule(
 	  			$matchRulePrefix . $this->urlFactory->getFeaturedSearchResultsUrl(false) . '/([^/]+)',
-	            $this->rootPageName . '&' . iHomefinderConstants::IHF_TYPE_URL_VAR . '=' . IHomefinderFilterFactory::FEATURED_SEARCH . '&startRowNumber=$matches[1]', 'top'
+	            $this->rootPageName . '&' . iHomefinderConstants::IHF_TYPE_URL_VAR . '=' . IHomefinderVirtualPageFactory::FEATURED_SEARCH . '&startRowNumber=$matches[1]', 'top'
 	  		);
 	  		
 	  		// In this case, all of the parameters are either set by POST or GET
 	  		// 'featuredsearch?cityName=Berkeley&propertyType=SFR,CNDbedrooms=5&bathCount=2
 	  		$wp_rewrite->add_rule(
 	  			$matchRulePrefix . $this->urlFactory->getFeaturedSearchResultsUrl(false) ,
-	            $this->rootPageName . '&' . iHomefinderConstants::IHF_TYPE_URL_VAR . '=' . IHomefinderFilterFactory::FEATURED_SEARCH . '&startRowNumber=1', 'top'
+	            $this->rootPageName . '&' . iHomefinderConstants::IHF_TYPE_URL_VAR . '=' . IHomefinderVirtualPageFactory::FEATURED_SEARCH . '&startRowNumber=1', 'top'
 	  		);  
 		}
 	}

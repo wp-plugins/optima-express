@@ -47,7 +47,7 @@ if( !class_exists('IHomefinderWidgetContextUtility')) {
 				//this will not work if using shortcodes
 				$result=true;	
 			}
-			else if(!array_key_exists(IHomefinderFilterFactory::LISTING_DETAIL, $widgetInstance)){
+			else if(!array_key_exists(IHomefinderVirtualPageFactory::LISTING_DETAIL, $widgetInstance)){
 				//If the widget instance does not have the listing detail key, then we have a plugin
 				//That has been upgraded, but the user did not update the widget.  In this case
 				//we default to the previous behavior of displaying the widget on all pages.
@@ -55,29 +55,29 @@ if( !class_exists('IHomefinderWidgetContextUtility')) {
 			}
 			else if(array_key_exists($type, $widgetInstance) && $widgetInstance[$type] == "true"){
 				//We have enabled the type for this widget
-				//see IHomefinderFilterFactory for valid types
+				//see IHomefinderVirtualPageFactory for valid types
 				$result=true;				
 			}
 			else{
 				//Special cases that are not covered specifically by type
-				if( $widgetInstance[IHomefinderFilterFactory::HOTSHEET_SEARCH_RESULTS] == "true" ){	
+				if( $widgetInstance[IHomefinderVirtualPageFactory::HOTSHEET_SEARCH_RESULTS] == "true" ){	
 					//If set to display with Hotsheet, then also display in the Hotsheet list.
-					if( $type == IHomefinderFilterFactory::HOTSHEET_LIST){
+					if( $type == IHomefinderVirtualPageFactory::HOTSHEET_LIST){
 						$result="true" ;
 					}
 				}
-				else if( $widgetInstance[IHomefinderFilterFactory::ORGANIZER_LOGIN] == "true" ){
+				else if( $widgetInstance[IHomefinderVirtualPageFactory::ORGANIZER_LOGIN] == "true" ){
 					//If set to display for Organizer, then enabled for saved listings and search
-					if( $type == IHomefinderFilterFactory::ORGANIZER_VIEW_SAVED_LISTING_LIST){
+					if( $type == IHomefinderVirtualPageFactory::ORGANIZER_VIEW_SAVED_LISTING_LIST){
 						$result="true" ;
 					}
-					else if( $type == IHomefinderFilterFactory::ORGANIZER_EDIT_SAVED_SEARCH ){
+					else if( $type == IHomefinderVirtualPageFactory::ORGANIZER_EDIT_SAVED_SEARCH ){
 						$result="true" ;
 					}
 				}
 				//Email Alerts page
-				else if( $widgetInstance[IHomefinderFilterFactory::ORGANIZER_EDIT_SAVED_SEARCH] == "true" ){
-					if( $type == IHomefinderFilterFactory::ORGANIZER_EMAIL_UPDATES_CONFIRMATION ){
+				else if( $widgetInstance[IHomefinderVirtualPageFactory::ORGANIZER_EDIT_SAVED_SEARCH] == "true" ){
+					if( $type == IHomefinderVirtualPageFactory::ORGANIZER_EMAIL_UPDATES_CONFIRMATION ){
 						$result="true" ;
 					}
 				}		
@@ -89,14 +89,14 @@ if( !class_exists('IHomefinderWidgetContextUtility')) {
 		private function listOfPages($widgetType){
 			$listOfPages=
 			array(
-			"Search Form" => IHomefinderFilterFactory::LISTING_SEARCH_FORM,
-			"Advanced Search Form" => IHomefinderFilterFactory::LISTING_ADVANCED_SEARCH_FORM,
-			"Search Results" => IHomefinderFilterFactory::LISTING_SEARCH_RESULTS,			
-			"Listing Details" => IHomefinderFilterFactory::LISTING_DETAIL,
-			"Featured Properties" => IHomefinderFilterFactory::FEATURED_SEARCH,			
-			"Top Picks" => IHomefinderFilterFactory::HOTSHEET_SEARCH_RESULTS,
-			"Email Alerts" => IHomefinderFilterFactory::ORGANIZER_EDIT_SAVED_SEARCH,
-			"Organizer Pages" => IHomefinderFilterFactory::ORGANIZER_LOGIN 		
+			"Search Form" => IHomefinderVirtualPageFactory::LISTING_SEARCH_FORM,
+			"Advanced Search Form" => IHomefinderVirtualPageFactory::LISTING_ADVANCED_SEARCH_FORM,
+			"Search Results" => IHomefinderVirtualPageFactory::LISTING_SEARCH_RESULTS,			
+			"Listing Details" => IHomefinderVirtualPageFactory::LISTING_DETAIL,
+			"Featured Properties" => IHomefinderVirtualPageFactory::FEATURED_SEARCH,			
+			"Top Picks" => IHomefinderVirtualPageFactory::HOTSHEET_SEARCH_RESULTS,
+			"Email Alerts" => IHomefinderVirtualPageFactory::ORGANIZER_EDIT_SAVED_SEARCH,
+			"Organizer Pages" => IHomefinderVirtualPageFactory::ORGANIZER_LOGIN 		
 			);
 			
 			//Search pages are not valid for search widgets.
@@ -139,7 +139,7 @@ if( !class_exists('IHomefinderWidgetContextUtility')) {
 	        
 	        //this is false if the user has upgraded from 1.1.1 to 1.1.2
 	        //because the widget instance does not have the listing detial field
-	        $hasPageSelector = array_key_exists(IHomefinderFilterFactory::LISTING_DETAIL, $instance) ;		
+	        $hasPageSelector = array_key_exists(IHomefinderVirtualPageFactory::LISTING_DETAIL, $instance) ;		
 	        ?>   
 	        
             <br/><br/>
@@ -156,7 +156,7 @@ if( !class_exists('IHomefinderWidgetContextUtility')) {
             //The following call adds for variables to setup a context for pages to display.
     			$listOfPages=$this->listOfPages($widgetType ) ;
 		
-				//The value is the type from IHomefinderFilterFactory
+				//The value is the type from IHomefinderVirtualPageFactory
 		    	foreach ( $listOfPages as $label => $pageType) {
 		    		$fieldName = $widget->get_field_name( $pageType ) ;
 		    		$fieldId = $widget->get_field_id( $pageType ) ;

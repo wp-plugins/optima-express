@@ -3,7 +3,7 @@
 Plugin Name: Optima Express IDX Plugin
 Plugin URI: http://wordpress.org/extend/plugins/optima-express/
 Description: This plugin integrates your Wordpress site with IDX search functionality.  This plugin requires an activation key.
-Version: 1.1.3
+Version: 1.1.4
 Author: ihomefinder
 Author URI: http://www.ihomefinder.com
 License: GPL
@@ -16,8 +16,6 @@ include_once 'iHomefinderAdmin.php';
 include_once 'iHomefinderAjaxHandler.php';
 include_once 'iHomefinderConstants.php';
 include_once 'iHomefinderCustomization.php';
-include_once 'iHomefinderFilterDispatcher.php';
-include_once 'iHomefinderFilterFactory.php';
 include_once 'iHomefinderInstaller.php';
 include_once 'iHomefinderLogger.php';
 include_once 'iHomefinderPermissions.php';
@@ -29,6 +27,9 @@ include_once 'iHomefinderSubscriber.php';
 include_once 'iHomefinderTinyMceManager.php';
 include_once 'iHomefinderUrlFactory.php';
 include_once 'iHomefinderUtility.php';
+include_once 'iHomefinderVirtualPageDispatcher.php';
+include_once 'iHomefinderVirtualPageFactory.php';
+include_once 'iHomefinderVirtualPageHelper.php';
 
 /**
  * Load  Widgets and Widget Context Utility
@@ -51,7 +52,7 @@ add_filter('upgrader_post_install', array(IHomefinderInstaller::getInstance(), '
 add_action('init',array(IHomefinderRewriteRules::getInstance(), "initialize"));
 //uncomment during development, so rule changes can be viewed.
 //in production this should not run, because it is a slow operation.
-//add_action('init',array(IHomefinderRewriteRules::getInstance(), "flushRules"));
+add_action('init',array(IHomefinderRewriteRules::getInstance(), "flushRules"));
 
 if( is_admin()){
 	add_action('admin_menu', array(IHomefinderAdmin::getInstance(), "createAdminMenu"));
@@ -63,8 +64,10 @@ if( is_admin()){
 	add_action('plugins_loaded',array(IHomefinderStateManager::getInstance(), "initialize"), 5);
 	//add_action('plugins_loaded', array(IHomefinderStateManager::getInstance(), "saveLastSearch"), 8);
 
-	add_filter( 'the_content', array(IHomefinderFilterDispatcher::getInstance(), "filter") );
-	add_filter( 'the_posts', array(IHomefinderFilterDispatcher::getInstance(), "postCleanUp") );
+	add_filter( 'page_template', array(IHomefinderVirtualPageDispatcher::getInstance(), "getPageTemplate") );
+	add_filter( 'the_content', array(IHomefinderVirtualPageDispatcher::getInstance(), "getContent") );
+	add_filter( 'the_posts', array(IHomefinderVirtualPageDispatcher::getInstance(), "postCleanUp") );
+	//add_filter( 'the_title', array(IHomefinderVirtualPageDispatcher::getInstance(), "getTitle") );
 	
 	add_action('wp_footer', array(IHomefinderCustomization::getInstance(), "addCustomCSS"));	
 }
