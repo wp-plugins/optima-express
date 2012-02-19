@@ -388,7 +388,7 @@ Other WordPress themes are likely to display Optima Express content correctly pr
 
 
 
-The Pro package includes a full mobile IDX site that will work on any browser-enabled mobile device. We can provide you with a mobile re-direct plugin that will automatically send mobile devices to your mobile IDX site. For more information visit our <a href="http://www.ihomefinder.com/mobileidx.cfm">mobile IDX page</a>.
+The Pro package includes a full mobile IDX site that will work on any browser-enabled mobile device. We can provide you with a mobile re-direct plugin that will automatically send mobile devices to your mobile IDX site. For more information visit our <a href="http://www.ihomefinder.com/product/optima-express/optima-express-features/mobile-site/">mobile IDX page</a>.
 
 
 
