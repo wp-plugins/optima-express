@@ -16,9 +16,9 @@ The Optima Express plugin from iHomefinder adds IDX / MLS real estate search to 
 * Generate more leads with email alerts, a consumer property organizer, user registration prompts, social media links and other engagement tools.
 * Customize your site with a collection of property gallery and quicksearch widgets.
 
-IDX property data is copyrighted by Multiple Listing Services, thus an iHomefinder account is required to activate the Optima Express plugin. To get an iHomefinder account please <a href="http://www.ihomefinder.com/contact.cfm">contact us</a>.
+IDX property data is copyrighted by Multiple Listing Services, thus an iHomefinder account is required to activate the Optima Express plugin. To get an iHomefinder account please <a href="http://www.ihomefinder.com/forms/contact-us/">contact us</a>.
 
-For more details about the Optima Express IDX plugin go to: <a href="http://blog.ihomefinder.com/optima-express"><span style="text-decoration: underline;">http://blog.ihomefinder.com/optima-express</span></a>
+For more details about the Optima Express IDX plugin go to: <a href="http://www.ihomefinder.com/product/optima-express/"><span style="text-decoration: underline;">http://www.ihomefinder.com/product/optima-express/</span></a>
 
 = OPTIMA EXPRESS PACKAGES =
 
@@ -162,7 +162,7 @@ Your Optima Express pages display IDX pages as set-up in your iHomefinder Contro
 
 
 
-To learn more: http://blog.ihomefinder.com/optima-express
+To learn more: http://www.ihomefinder.com/product/optima-express/
 
 
 
@@ -268,7 +268,7 @@ You now have successfully installed Optima Express into WordPress.
 
 
 
-The plugin will not work until you have set up an [iHomefinder Optima Express](http://blog.ihomefinder.com/optima-express/) account. The Optima Express account will provide the required registration key that enables the plugin to work. Please <a href="http://www.ihomefinder.com/contact.cfm">contact us</a> if you have questions about account options or if you would like to sign up for an account.
+The plugin will not work until you have set up an [iHomefinder Optima Express](http://www.ihomefinder.com/product/optima-express/) account. The Optima Express account will provide the required registration key that enables the plugin to work. Please <a href="http://www.ihomefinder.com/forms/contact-us/">contact us</a> if you have questions about account options or if you would like to sign up for an account.
 
 
 
@@ -298,7 +298,7 @@ The base Optima Express service offers a form to request for more information on
 
 
 
-Only real estate professionals who are active members of a [supported MLS](http://www.ihomefinder.com/mlscoverage.cfm) can sign-up for an Optima Express account. If you you don't see your MLS listed, please <a href="http://www.ihomefinder.com/contact.cfm">contact us</a> about adding service for your MLS.
+Only real estate professionals who are active members of a [supported MLS](http://www.ihomefinder.com/mls-coverage/) can sign-up for an Optima Express account. If you you don't see your MLS listed, please <a href="http://www.ihomefinder.com/forms/contact-us/">contact us</a> about adding service for your MLS.
 
 
 
@@ -316,7 +316,7 @@ Our automated IDX licensing will send you any necessary paperwork when you reque
 
 
 
-Please refer to our current list of [supported MLSs](http://www.ihomefinder.com/mlscoverage.cfm).
+Please refer to our current list of [supported MLSs](http://www.ihomefinder.com/mls-coverage/).
 
 
 
@@ -356,7 +356,7 @@ Our listing data is updated every 2 hours for most MLSs, and as frequently as ev
 
 
 
-Please visit the [Optima Express page](http://blog.ihomefinder.com/optima-express/) on our website for the latest news and information.
+Please visit the [Optima Express page](http://www.ihomefinder.com/product/optima-express/) on our website for the latest news and information.
 
 
 
