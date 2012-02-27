@@ -52,7 +52,7 @@ add_filter('upgrader_post_install', array(IHomefinderInstaller::getInstance(), '
 add_action('init',array(IHomefinderRewriteRules::getInstance(), "initialize"));
 //uncomment during development, so rule changes can be viewed.
 //in production this should not run, because it is a slow operation.
-add_action('init',array(IHomefinderRewriteRules::getInstance(), "flushRules"));
+//add_action('init',array(IHomefinderRewriteRules::getInstance(), "flushRules"));
 
 if( is_admin()){
 	add_action('admin_menu', array(IHomefinderAdmin::getInstance(), "createAdminMenu"));
