@@ -28,7 +28,8 @@ if( !class_exists('IHomefinderRequestor')){
 			}
 			
 			IHomefinderLogger::getInstance()->debug("ihfUrl: " . $ihfUrl);
-			$requestArgs = array("timeout"=>"20" );
+			$ihfid=site_url() + ";" + "WordpressPlugin";
+			$requestArgs = array("timeout"=>"20", "ihfid"=> $ihfid );
 			$response = wp_remote_get($ihfUrl, $requestArgs);
 
 			if( is_wp_error($response)){

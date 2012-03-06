@@ -55,16 +55,19 @@ if( !class_exists('IHomefinderAdmin')) {
 			if($activationToken != null && "" != $activationToken){
 				$authenticationInfo=$this->activate($activationToken);
 
-				$authenticationToken = $authenticationInfo->authenticationToken;
-				$permissions = $authenticationInfo->permissions;
+				$authenticationToken = '';
+				if( $authenticationInfo->authenticationToken ){
+					$authenticationToken = $authenticationInfo->authenticationToken;
+					$permissions = $authenticationInfo->permissions;
 
-				IHomefinderLogger::getInstance()->debug( 'authenticationToken' . $authenticationToken ) ;
-				set_transient(IHomefinderConstants::AUTHENTICATION_TOKEN_CACHE, $authenticationToken, IHomefinderConstants::AUTHENTICATION_TOKEN_CACHE_TIMEOUT);
-				IHomefinderPermissions::getInstance()->initialize( $permissions );
+					IHomefinderLogger::getInstance()->debug( 'authenticationToken' . $authenticationToken ) ;
+					IHomefinderPermissions::getInstance()->initialize( $permissions );
 
-				if( !$this->previouslyActivated()){
-					update_option(IHomefinderConstants::IS_ACTIVATED_OPTION,'true');
+					if( !$this->previouslyActivated()){
+						update_option(IHomefinderConstants::IS_ACTIVATED_OPTION,'true');
+					}
 				}
+				set_transient(IHomefinderConstants::AUTHENTICATION_TOKEN_CACHE, $authenticationToken, IHomefinderConstants::AUTHENTICATION_TOKEN_CACHE_TIMEOUT);
 			}
 		}
 
@@ -79,11 +82,14 @@ if( !class_exists('IHomefinderAdmin')) {
 		 */
 		public function getAuthenticationToken(){
 			$authenticationToken = get_transient(IHomefinderConstants::AUTHENTICATION_TOKEN_CACHE);
-			if( false === $authenticationToken  )	{
-				$this->updateAuthenticationToken();
-				$authenticationToken = get_transient(IHomefinderConstants::AUTHENTICATION_TOKEN_CACHE);
-			}
 			return $authenticationToken ;
+		}
+
+		public function synchAuthenticationToken(){
+			$authenticationToken = get_transient(IHomefinderConstants::AUTHENTICATION_TOKEN_CACHE);
+			if( false === $authenticationToken  || '' === $authenticationToken)	{
+				$this->updateAuthenticationToken();
+			}
 		}
 
 		public function previouslyActivated(){
