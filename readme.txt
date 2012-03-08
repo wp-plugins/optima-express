@@ -407,6 +407,10 @@ The Pro package includes a full mobile IDX site that will work on any browser-en
 
 == Changelog ==
 
+= 1.1.5 =
+
+* Updated authentication synchronization code to fix periodic authentication issues.
+
 = 1.1.4 =
 
 * Added ability to modify IDX Page Permalinks
