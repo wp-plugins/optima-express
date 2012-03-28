@@ -76,6 +76,8 @@ if( !class_exists('IHomefinderVirtualPageDispatcher')) {
 				$_postArray['post_excerpt'] = ' ' ;
 				$_postArray['post_status'] = 'publish';
 				$_postArray['post_type'] = 'page';
+				$_postArray['is_page'] = 1;
+				$_postArray['is_single'] = 1;
 				$_postArray['comment_status'] = 'closed';
 				$_postArray['ping_status'] = 'closed';
 				$_postArray['post_category'] = array(1); // the default 'Uncategorized'
@@ -99,7 +101,7 @@ if( !class_exists('IHomefinderVirtualPageDispatcher')) {
 					$title=$virtualPageTitle ;
 				}
 			}
-			return $title ;
+			return $this->title ;
 		}
 		
 		/**
@@ -110,15 +112,19 @@ if( !class_exists('IHomefinderVirtualPageDispatcher')) {
 		 */
 		function getPageTemplate($pageTemplate){					
 			$this->init();
+			$virtualPageTemplate=null;
+			
 			if( $this->initialized ){
 				$virtualPageTemplate=$this->currentVirtualPage->getPageTemplate();
-				//var_dump($this->currentVirtualPage );
-
-				if( $virtualPageTemplate != null && '' != $virtualPageTemplate){
+				if( IHomefinderUtility::getInstance()->isStringEmpty($virtualPageTemplate)){
+					$virtualPageTemplate=IHomefinderVirtualPageHelper::getInstance()->getDefaultTemplate() ;
+				}
+				//If the $virtualPageTemplate is NOT empty, then reset $pageTemplate
+				if( !IHomefinderUtility::getInstance()->isStringEmpty($virtualPageTemplate)){
 					$templates=array($virtualPageTemplate);
 					//gets the disk location of the template
 					$pageTemplate=  locate_template(  $templates ) ; 
-				}
+				}				
 			}
 			return $pageTemplate ;
 		}

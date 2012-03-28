@@ -8,6 +8,9 @@ if( !class_exists('IHomefinderVirtualPageHelper')) {
 		//Group for virtual page related options
 		const OPTION_VIRTUAL_PAGE_CONFIG="ihf-virtual-page-config";
 		
+		//Default template for Virtual Pages that do not have a template.
+		const OPTION_VIRTUAL_PAGE_TEMPLATE_DEFAULT="ihf-virtual-page-template-default";
+		
 		//Listing DetailVirtualPage related options
 		const OPTION_VIRTUAL_PAGE_TITLE_DETAIL="ihf-virtual-page-title-detail";
 		const OPTION_VIRTUAL_PAGE_TEMPLATE_DETAIL="ihf-virtual-page-template-detail";
@@ -58,7 +61,8 @@ if( !class_exists('IHomefinderVirtualPageHelper')) {
 		
 		public function registerOptions(){
 			//Virtual Page settings
-			                                                                                                    
+			register_setting( IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_DEFAULT );
+			
 			register_setting( IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_DETAIL );
 			register_setting( IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_DETAIL );
 			register_setting( IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_DETAIL );
@@ -87,6 +91,11 @@ if( !class_exists('IHomefinderVirtualPageHelper')) {
 			register_setting( IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_HOTSHEET );
 			register_setting( IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_HOTSHEET );
 						
+		}
+		
+		public function getDefaultTemplate(){
+			$defaultTemplate= get_option(IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_DEFAULT);
+			return $defaultTemplate ;
 		}
 		
 

@@ -3,10 +3,10 @@ if( !class_exists('IHomefinderStateManager')) {
 
 	/**
 	 * Uses a cookie to uniquely identify users.  The
-	 * cookie id is used to store transient data about 
+	 * cookie id is used to store transient data about
 	 * the user's state, such as subscriber info and
 	 * last search url.
-	 * 
+	 *
 	 * @author ihomefinder
 	 */
 	class IHomefinderStateManager {
@@ -25,6 +25,8 @@ if( !class_exists('IHomefinderStateManager')) {
 		private $cache_timeout=	86400 ;	//Number of seconds for transient to timeout 60*60*24= 86400 = 1 day
 
 		private $searchContext = false;
+		
+		private $webCrawler=false;
 
 		private function __construct(){
 
@@ -43,13 +45,17 @@ if( !class_exists('IHomefinderStateManager')) {
 			}
 
 			//IHomefinderLogger::getInstance()->debug("uniqueId: " . $this->uniqueId);
-			if( empty($this->uniqueId) ){
+			$isWebCrawler=IHomefinderUtility::getInstance()->isWebCrawler();
+			if( empty($this->uniqueId) && !$this->isWebCrawler() ){
 				$this->uniqueId= uniqid();
 				$expireTime=time()+60*60*24*365*5 ; /* expire in 5 years */
 				setcookie($this->identifierCookieName, $this->uniqueId, $expireTime, "/");
 			}
 		}
-
+		
+		private function isWebCrawler(){
+			return $this->webCrawler ;
+		}
 
 		/**
 		 * The uniqueKey is used to help identify any transients or options for the
@@ -75,12 +81,12 @@ if( !class_exists('IHomefinderStateManager')) {
 			$cacheKey = $this->subcriberInfoName . "_". $this->getUniqueKey() ;
 			return $cacheKey ;
 		}
-		
+
 		private function getSearchSummaryKey(){
 			$cacheKey = $this->searchSummaryName . "_". $this->getUniqueKey() ;
 			return $cacheKey ;
 		}
-		
+
 
 		/**
 		 * If we are in the search context (like a search form or advanced search form,
@@ -104,13 +110,18 @@ if( !class_exists('IHomefinderStateManager')) {
 		}
 
 		public function getLeadCaptureId(){
-			$leadCaptureId=get_option( $this->getLeadCaptureKey() );
+			$leadCaptureId=null;
+			if( !$this->isWebCrawler() ){
+				$leadCaptureId=get_option( $this->getLeadCaptureKey() );
+			}
 			return $leadCaptureId ;
 		}
 
 		public function saveLeadCaptureId( $leadCaptureId ){
-			$optionKey=$this->getLeadCaptureKey();
-			update_option($optionKey, $leadCaptureId );
+			if( !$this->isWebCrawler()){
+				$optionKey=$this->getLeadCaptureKey();
+				update_option($optionKey, $leadCaptureId );
+			}
 		}
 
 		/**
@@ -119,32 +130,38 @@ if( !class_exists('IHomefinderStateManager')) {
 		 * sure the requested URL is the search URL
 		 */
 		public function saveLastSearch(){
+			if( !$this->isWebCrawler()){
+				$host=$_SERVER['HTTP_HOST'];
+				$requestUri=$_SERVER['REQUEST_URI'];
 
-			$host=$_SERVER['HTTP_HOST'];
-			$requestUri=$_SERVER['REQUEST_URI'];
+				$cacheKey=$this->getLastSearchKey() ;
+				//IHomefinderLogger::getInstance()->debug("saveLastSearch cacheKey: " . $cacheKey);
+				$lastSearch = "http://" . $host . $requestUri  ;
 
-			$cacheKey=$this->getLastSearchKey() ;
-			//IHomefinderLogger::getInstance()->debug("saveLastSearch cacheKey: " . $cacheKey);
-			$lastSearch = "http://" . $host . $requestUri  ;
-
-			$lastSearch = str_replace("newSearch=true&", "", $lastSearch);
-			//setcookie($this->lastSearchCookie, $searchUrl, time()+3600);  /* expire in 1 hour */
-			//IHomefinderLogger::getInstance()->debug("setLastSearchUrl: " .$lastSearchUrl);
-			set_transient($cacheKey, $lastSearch, $this->cache_timeout);
+				$lastSearch = str_replace("newSearch=true&", "", $lastSearch);
+				//setcookie($this->lastSearchCookie, $searchUrl, time()+3600);  /* expire in 1 hour */
+				//IHomefinderLogger::getInstance()->debug("setLastSearchUrl: " .$lastSearchUrl);
+				set_transient($cacheKey, $lastSearch, $this->cache_timeout);
+			}
 		}
 
 		public function getLastSearch(){
-			$cacheKey=$this->getLastSearchKey() ;
-			$lastSearch=get_transient($cacheKey);
+			$lastSearch="";
+			if( !$this->isWebCrawler()){
+				$cacheKey=$this->getLastSearchKey() ;
+				$lastSearch=get_transient($cacheKey);
+			}
 			return $lastSearch;
 		}
-                        
+
 		public function getLastSearchQueryString(){
 			$queryString="";
-			$lastSearch = $this->getLastSearch() ;
-			$searchArray = explode('?', $lastSearch) ;
-			if( isset($searchArray) && is_array($searchArray) && count( $searchArray ) > 1){
-				$queryString=$searchArray[1] ;
+			if( !$this->isWebCrawler()){
+				$lastSearch = $this->getLastSearch() ;
+				$searchArray = explode('?', $lastSearch) ;
+				if( isset($searchArray) && is_array($searchArray) && count( $searchArray ) > 1){
+					$queryString=$searchArray[1] ;
+				}
 			}
 			return $queryString ;
 		}
@@ -173,22 +190,26 @@ if( !class_exists('IHomefinderStateManager')) {
 		}
 
 		public function saveSubscriberLogin( $subscriberInfo ){
-			$serializedSubscriber = $subscriberInfo->serializedValue();
-			//echo 'serialized: ' . $serializedSubscriber . '<br/>';
-			$cacheKey=$this->getSubscriberInfoKey();
-			//echo 'cacheKey: ' . $cacheKey . '<br/>';
-			IHomefinderLogger::getInstance()->debugDumpVar($serializedSubscriber);
-			set_transient($cacheKey, $serializedSubscriber, $this->cache_timeout, "/");
+			if( !$this->isWebCrawler() ){
+				$serializedSubscriber = $subscriberInfo->serializedValue();
+				//echo 'serialized: ' . $serializedSubscriber . '<br/>';
+				$cacheKey=$this->getSubscriberInfoKey();
+				//echo 'cacheKey: ' . $cacheKey . '<br/>';
+				IHomefinderLogger::getInstance()->debugDumpVar($serializedSubscriber);
+				set_transient($cacheKey, $serializedSubscriber, $this->cache_timeout, "/");
+			}
 		}
 
 		public function getCurrentSubscriber(){
 			$cacheKey=$this->getSubscriberInfoKey();
 			$subscriberInfo=null;
-			$serializedSubscriber = get_transient($cacheKey);
-			if($serializedSubscriber != null ){
-				$subscriberInfo = IHomefinderSubscriber::getDeserialized($serializedSubscriber);
-				if($subscriberInfo->getId() == null || "" == trim($subscriberInfo->getId())){
-					$subscriberInfo=null;
+			if( !$this->isWebCrawler() ){
+				$serializedSubscriber = get_transient($cacheKey);
+				if($serializedSubscriber != null ){
+					$subscriberInfo = IHomefinderSubscriber::getDeserialized($serializedSubscriber);
+					if($subscriberInfo->getId() == null || "" == trim($subscriberInfo->getId())){
+						$subscriberInfo=null;
+					}
 				}
 			}
 
@@ -203,17 +224,19 @@ if( !class_exists('IHomefinderStateManager')) {
 			}
 			return $result ;
 		}
-		
+
 		public function getSearchSummary(){
 			$cacheKey=$this->getSearchSummaryKey() ;
 			$result = get_transient($cacheKey );
 			return $result ;
-		}		
-		
+		}
+
 		public function saveSearchSummary( $searchSummary){
-			$searchSummaryArray=(array) $searchSummary ;
-			$cacheKey=$this->getSearchSummaryKey() ;
-			set_transient($cacheKey, $searchSummaryArray, $this->cache_timeout);
+			if( !$this->isWebCrawler() ){
+				$searchSummaryArray=(array) $searchSummary ;
+				$cacheKey=$this->getSearchSummaryKey() ;
+				set_transient($cacheKey, $searchSummaryArray, $this->cache_timeout);
+			}
 		}
 
 	}//end class

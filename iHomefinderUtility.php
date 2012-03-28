@@ -69,7 +69,39 @@ if( !class_exists('IHomefinderUtility')) {
 			}
 			
 			return $ihfUrl ;
-		}		
+		}	
+
+		/**
+		 * Returns true is the user agent is a known web crawler
+		 * @return boolean
+		 */
+		public function isWebCrawler(){
+			$result=true;
+			$userAgent = strtolower($_SERVER['HTTP_USER_AGENT']);			
+			$knownCrawlersArray 
+				= array("Mediapartners-Google","Googlebot","Baiduspider","Bingbot","msnbot","Slurp","Twiceler","YandexBot");			
+			foreach ($knownCrawlersArray as $value ){
+				if( strpos($userAgent, $value)){
+					$result=true;
+					break;
+				}
+			}
+			return $result ;
+		}
+		
+		/**
+		 * 
+		 * Return true if the string is empty, else return false
+		 * @param unknown_type $value
+		 */
+		public function isStringEmpty( $value ){
+			$result=true;
+			
+			if( $value != null && strlen($value) > 0){
+				$result=false;
+			}
+			return $result;
+		}
 	}
 }
 ?>

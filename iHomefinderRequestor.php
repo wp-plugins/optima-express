@@ -30,7 +30,9 @@ if( !class_exists('IHomefinderRequestor')){
 			IHomefinderLogger::getInstance()->debug("ihfUrl: " . $ihfUrl);
 			$ihfid=site_url() + ";" + "WordpressPlugin";
 			$requestArgs = array("timeout"=>"20", "ihfid"=> $ihfid );
+			IHomefinderLogger::getInstance()->debug("before request");
 			$response = wp_remote_get($ihfUrl, $requestArgs);
+			IHomefinderLogger::getInstance()->debug("after request");
 
 			if( is_wp_error($response)){
 				$contentInfo=null;
@@ -39,6 +41,7 @@ if( !class_exists('IHomefinderRequestor')){
 				$responseBody = wp_remote_retrieve_body( $response );
 				$contentInfo=json_decode($responseBody);
 			}
+			IHomefinderLogger::getInstance()->debug("after get body");
 				
 			//Save the leadCaptureId, if we get it back.
 			if( isset( $contentInfo->leadCaptureId ) ){

@@ -168,7 +168,11 @@ if( !class_exists('IHomefinderAdmin')) {
 			$authenticationInfo = IHomefinderRequestor::remotePostRequest( $ihfUrl, $postData ) ;
 
 			//We need to flush the rewrite rules, if any permalinks have been updated.
-			IHomefinderRewriteRules::getInstance()->flushRules() ;
+			//Only flush in the admin screens, because that is the only point
+			//where urls patterns may change.
+			if( is_admin() ){
+				IHomefinderRewriteRules::getInstance()->flushRules() ;
+			}
 			IHomefinderLogger::getInstance()->debugDumpVar($authenticationInfo);
 			return $authenticationInfo ;
 		}
@@ -300,6 +304,7 @@ if( !class_exists('IHomefinderAdmin')) {
 				    <?php settings_fields( IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG ); ?>
 
 					<?php
+									
 						$this->getDetailPageSetup();
 						echo('<p/>');
 
@@ -328,7 +333,9 @@ if( !class_exists('IHomefinderAdmin')) {
 							$this->getHotsheetPageSetup() ;
 							echo('<p/>');
 						}
-
+						
+						$this->getDefaultPageSetup();
+						echo('<p/>');		
 
 					?>
 
@@ -342,6 +349,24 @@ if( !class_exists('IHomefinderAdmin')) {
         <?php
 		}
 
+		private function getDefaultPageSetup(){
+			$selectedTemplate=IHomefinderVirtualPageHelper::getInstance()->getDefaultTemplate() ;
+			?>
+			<h3>Other IDX Pages</h3>
+			<table>
+				<tr>
+					<td><b>Theme Template*:</b></td>
+					<td>
+						<select name="<?php echo(IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_DEFAULT)?>">
+							<option value='default'><?php _e('Default Template'); ?></option>
+							<?php page_template_dropdown( $selectedTemplate ); ?>
+						</select>
+					</td>
+				</tr>
+			</table>
+		<?php		
+		}
+		
 		private function getDetailPageSetup(){
 			$urlFactory = IHomefinderUrlFactory::getInstance() ;
 			$virtualPage = $this->virtualPageFactory->getVirtualPage( IHomefinderVirtualPageFactory::LISTING_DETAIL );
@@ -380,7 +405,7 @@ if( !class_exists('IHomefinderAdmin')) {
 					<td><b>Theme Template*:</b></td>
 					<td>
 						<select name="<?php echo(IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_DETAIL)?>">
-							<option value=''><?php _e('Default Template'); ?></option>
+							<option value='default'><?php _e('Default Template'); ?></option>
 							<?php page_template_dropdown($virtualPage->getPageTemplate()); ?>
 						</select>
 					</td>
@@ -426,7 +451,7 @@ if( !class_exists('IHomefinderAdmin')) {
 					<td><b>Theme Template*:</b></td>
 					<td>
 						<select name="<?php echo(IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_SEARCH)?>">
-							<option value=''><?php _e('Default Template'); ?></option>
+							<option value='default'><?php _e('Default Template'); ?></option>
 							<?php page_template_dropdown($virtualPage->getPageTemplate()); ?>
 						</select>
 					</td>
@@ -493,7 +518,7 @@ if( !class_exists('IHomefinderAdmin')) {
 					<td><b>Theme Template*:</b></td>
 					<td>
 						<select name="<?php echo(IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_ADV_SEARCH)?>">
-							<option value=''><?php _e('Default Template'); ?></option>
+							<option value='default'><?php _e('Default Template'); ?></option>
 							<?php page_template_dropdown($virtualPage->getPageTemplate()); ?>
 						</select>
 					</td>
@@ -538,7 +563,7 @@ if( !class_exists('IHomefinderAdmin')) {
 					<td><b>Theme Template*:</b></td>
 					<td>
 						<select name="<?php echo(IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_ORG_LOGIN)?>">
-							<option value=''><?php _e('Default Template'); ?></option>
+							<option value='default'><?php _e('Default Template'); ?></option>
 							<?php page_template_dropdown($virtualPage->getPageTemplate()); ?>
 						</select>
 					</td>
@@ -582,8 +607,8 @@ if( !class_exists('IHomefinderAdmin')) {
 				<tr>
 					<td><b>Theme Template*:</b></td>
 					<td>
-						<select name="<?php echo(IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_ORG_LOGIN)?>">
-							<option value=''><?php _e('Default Template'); ?></option>
+						<select name="<?php echo(IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_EMAIL_UPDATES)?>">
+							<option value='default'><?php _e('Default Template'); ?></option>
 							<?php page_template_dropdown($virtualPage->getPageTemplate()); ?>
 						</select>
 					</td>
@@ -628,7 +653,7 @@ if( !class_exists('IHomefinderAdmin')) {
 					<td><b>Theme Template*:</b></td>
 					<td>
 						<select name="<?php echo(IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_FEATURED)?>">
-							<option value=''><?php _e('Default Template'); ?></option>
+							<option value='default'><?php _e('Default Template'); ?></option>
 							<?php page_template_dropdown($virtualPage->getPageTemplate()); ?>
 						</select>
 					</td>
@@ -693,7 +718,7 @@ if( !class_exists('IHomefinderAdmin')) {
 					<td><b>Theme Template*:</b></td>
 					<td>
 						<select name="<?php echo(IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_HOTSHEET)?>">
-							<option value=''><?php _e('Default Template'); ?></option>
+							<option value='default'><?php _e('Default Template'); ?></option>
 							<?php page_template_dropdown($virtualPage->getPageTemplate()); ?>
 						</select>
 					</td>

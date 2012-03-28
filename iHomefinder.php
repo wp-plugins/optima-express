@@ -3,7 +3,7 @@
 Plugin Name: Optima Express IDX Plugin
 Plugin URI: http://wordpress.org/extend/plugins/optima-express/
 Description: This plugin integrates your Wordpress site with IDX search functionality.  This plugin requires an activation key.
-Version: 1.1.5
+Version: 1.1.6
 Author: ihomefinder
 Author URI: http://www.ihomefinder.com
 License: GPL
@@ -49,7 +49,8 @@ register_deactivation_hook( __FILE__, array(IHomefinderInstaller::getInstance(),
 add_filter('upgrader_post_install', array(IHomefinderInstaller::getInstance(), 'upgrade'), 10, 2);
 
 /* Rewrite Rules */
-add_action('init',array(IHomefinderRewriteRules::getInstance(), "initialize"));
+add_action('init', array(IHomefinderRewriteRules::getInstance(), "initialize"), 1 );
+
 //uncomment during development, so rule changes can be viewed.
 //in production this should not run, because it is a slow operation.
 //add_action('init',array(IHomefinderRewriteRules::getInstance(), "flushRules"));
@@ -59,9 +60,12 @@ if( is_admin()){
 	add_action('admin_init', array(IHomefinderInstaller::getInstance(), 'upgrade'));
 	add_action('admin_init', array(IHomefinderAdmin::getInstance(), "registerSettings") );
 	add_action('admin_init', array(IHomefinderWidgetContextUtility::getInstance(), "loadWidgetJavascript") );
+	//Adds functionality to the text editor for pages and posts
+	//Add buttons to text editor and initialize short codes
+	add_action('admin_init', array(IHomefinderTinyMceManager::getInstance(), "addButtons") );	
 } else {
 	//Resets the authentication token if necessary
-	add_action('init',array(IHomefinderAdmin::getInstance(), "synchAuthenticationToken"));
+	add_action('init',array(IHomefinderAdmin::getInstance(), "synchAuthenticationToken"), 99 );
 	
 	//Remember the users state in the application (subscriber info and last search)
 	add_action('plugins_loaded',array(IHomefinderStateManager::getInstance(), "initialize"), 5);
@@ -75,9 +79,7 @@ if( is_admin()){
 	add_action('wp_footer', array(IHomefinderCustomization::getInstance(), "addCustomCSS"));	
 }
 
-//Adds functionality to the text editor for pages and posts
-//Add buttons to text editor and initialize short codes
-add_action('init', array(IHomefinderTinyMceManager::getInstance(), "addButtons") );
+
 add_action('init', array(IHomefinderShortcodeDispatcher::getInstance(), "init"));
 
 //AJAX Request handling.

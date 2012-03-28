@@ -107,6 +107,7 @@
 			
 			<div id="searchMenu" style="display:none">
 				<div class="mceActionPanel">
+					<div id="searchMenuErrors"></div>
 					<div style="float:left; margin: 10px;">
 					    Cities:<br/>
 						<div><?php createCitySelect(); ?></div>
