@@ -53,23 +53,25 @@ if( !class_exists('IHomefinderUtility')) {
 				$searchSummaryObject = $searchSummaryArray[ $key ];				
 				if( isset( $searchSummaryObject )){
 					if( isset($searchSummaryObject->previousId)){
-						$searchSummaryPrevious = $searchSummaryArray[ $searchSummaryObject->previousId ];	
-						$ihfUrl .= "&prevBoardId=" . $searchSummaryPrevious->boardId ;					
-						$ihfUrl .= "&prevListingNumber=" . $searchSummaryPrevious->listingNumber ;
+						$searchSummaryPrevious = $searchSummaryArray[ $searchSummaryObject->previousId ];
+						$prevBoardAndListingNumber = explode("|", $searchSummaryObject->previousId );
+						$ihfUrl .= "&prevBoardId=" . $prevBoardAndListingNumber[0]; ;					
+						$ihfUrl .= "&prevListingNumber=" . $prevBoardAndListingNumber[1]; ;
 						$ihfUrl .= "&prevAddress=" . urlencode($searchSummaryPrevious->address) ;
 					}
 					
 					if( isset($searchSummaryObject->nextId)){
 						$searchSummaryNext = $searchSummaryArray[ $searchSummaryObject->nextId ];
-						$ihfUrl .= "&nextBoardId=" . $searchSummaryNext->boardId ;					
-						$ihfUrl .= "&nextListingNumber=" . $searchSummaryNext->listingNumber ;
+						$nextBoardAndListingNumber = explode("|", $searchSummaryObject->nextId );
+						$ihfUrl .= "&nextBoardId=" . $nextBoardAndListingNumber[0] ;					
+						$ihfUrl .= "&nextListingNumber=" . $nextBoardAndListingNumber[1] ;
 						$ihfUrl .= "&nextAddress=" . urlencode($searchSummaryNext->address) ;						
 					}
 				}	
 			}
 			
 			return $ihfUrl ;
-		}	
+		}
 
 		/**
 		 * Returns true is the user agent is a known web crawler
