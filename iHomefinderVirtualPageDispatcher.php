@@ -55,6 +55,14 @@ if( !class_exists('IHomefinderVirtualPageDispatcher')) {
 		private function afterFilter(){
 			$this->initialized=false;
 		}
+		
+		/**
+		 * Load JavaScript using Wordpress script queues
+		 * 
+		 */
+		function loadJavaScript(){
+			wp_enqueue_script('jquery');
+		}
 
 		/**
 		 * We identify iHomefinder requests based on the query_var

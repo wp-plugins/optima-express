@@ -64,6 +64,8 @@ if( is_admin()){
 	//Add buttons to text editor and initialize short codes
 	add_action('admin_init', array(IHomefinderTinyMceManager::getInstance(), "addButtons") );	
 } else {
+	add_action('init',array(IHomefinderVirtualPageDispatcher::getInstance(), "loadJavaScript")) ;
+	
 	//Resets the authentication token if necessary
 	add_action('init',array(IHomefinderAdmin::getInstance(), "synchAuthenticationToken"), 99 );
 	

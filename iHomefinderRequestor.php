@@ -27,6 +27,8 @@ if( !class_exists('IHomefinderRequestor')){
 				$ihfUrl = IHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "uagent", $userAgent ) ;	
 			}
 			
+			$ihfUrl = IHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "loadJQuery", "false" ) ;
+			
 			IHomefinderLogger::getInstance()->debug("ihfUrl: " . $ihfUrl);
 			$ihfid=site_url() + ";" + "WordpressPlugin";
 			$requestArgs = array("timeout"=>"20", "ihfid"=> $ihfid );
