@@ -153,7 +153,7 @@ if( !class_exists('IHomefinderAjaxHandler')) {
 			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "email", $email);
 			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "password", $password);
 			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "authenticationToken", $authenticationToken);
-
+			
 			IHomefinderLogger::getInstance()->debugDumpVar($ihfUrl);
 			$contentInfo = IHomefinderRequestor::remoteRequest($ihfUrl);
 			IHomefinderLogger::getInstance()->debugDumpVar($contentInfo);
@@ -204,7 +204,7 @@ if( !class_exists('IHomefinderAjaxHandler')) {
 			$lastSearchQueryString = str_replace('[]', '', $lastSearchQueryString );
 			$lastSearchQueryString = str_replace('%5B%5D', '', $lastSearchQueryString );
 			$ihfUrl .= '&' . $lastSearchQueryString ;
-
+			
 			$contentInfo = IHomefinderRequestor::remoteRequest($ihfUrl);
 
 			$content = IHomefinderRequestor::getContent( $contentInfo );
@@ -226,10 +226,7 @@ if( !class_exists('IHomefinderAjaxHandler')) {
 			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "authenticationToken", $authenticationToken );
 			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "phpStyle", "true" );
 			
-//			echo $ihfUrl ;
-//			die();
 			$contentInfo = IHomefinderRequestor::remoteRequest($ihfUrl);
-
 			$content = IHomefinderRequestor::getContent( $contentInfo );
 
 			echo $content ;

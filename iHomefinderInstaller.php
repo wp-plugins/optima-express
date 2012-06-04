@@ -34,6 +34,8 @@ if(!class_exists('IHomefinderInstaller')){
 
 		    $this->ihfRewriteRules->initialize();
 		    $this->ihfRewriteRules->flushRules();
+		    
+		    wp_schedule_event( current_time( 'timestamp' ), 'hourly', 'ihf_expired_transients_cleanup');
 		}
 
 		/**
@@ -47,6 +49,8 @@ if(!class_exists('IHomefinderInstaller')){
 		   	$this->ihfRewriteRules->flushRules();
 		   	//Delete the authentication token
 		   	$this->ihfAdmin->deleteAuthenticationToken() ;
+		   	
+		   	wp_clear_scheduled_hook( array(IHomefinderCleaner::getInstance(), 'removeExpiredIhfTransients') );
 		}
 
 
@@ -59,14 +63,12 @@ if(!class_exists('IHomefinderInstaller')){
 			$currentVersion=get_option(IHomefinderConstants::VERSION_OPTION);
 
 			if( $currentVersion != IHomefinderConstants::VERSION && $this->ihfAdmin->previouslyActivated() ){
-				$this->ihfAdmin->deleteAuthenticationToken() ;
 				$this->ihfAdmin->updateAuthenticationToken() ;
 				$this->ihfRewriteRules->initialize();
 				$this->ihfRewriteRules->flushRules();
 
 				update_option(IHomefinderConstants::VERSION_OPTION, IHomefinderConstants::VERSION );
 			}
-
 		}
 	}
 }//end if(!class_exists('IHomefinderInstaller'))

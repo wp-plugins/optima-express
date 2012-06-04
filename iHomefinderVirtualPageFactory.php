@@ -28,6 +28,8 @@ if( !class_exists('IHomefinderVirtualPageFactory')) {
 	include_once(   'virtualPage/iHomefinderOrganizerResendConfirmationVirtualPageImpl.php');
 	include_once(   'virtualPage/iHomefinderOrganizerActivateSubscriberVirtualPageImpl.php');
 	include_once(   'virtualPage/iHomefinderOrganizerSendSubscriberPasswordVirtualPageImpl.php');	
+	include_once(   'virtualPage/iHomefinderOrganizerHelpVirtualPageImpl.php');
+	include_once(   'virtualPage/iHomefinderOrganizerEditSubscriberVirtualPageImpl.php');
 
 	/** 
 	 * This singleton class creates instances of iHomefinder VirtualPages, based
@@ -73,6 +75,8 @@ if( !class_exists('IHomefinderVirtualPageFactory')) {
 		const ORGANIZER_RESEND_CONFIRMATION_EMAIL="idx-property-organizer-resend-confirmation-email";
 		const ORGANIZER_ACTIVATE_SUBSCRIBER ="idx-property-organizer-activate-subscriber";
 		const ORGANIZER_SEND_SUBSCRIBER_PASSWORD="idx-property-organizer-send-login";
+		const ORGANIZER_HELP="idx-property-organizer-help";
+		const ORGANIZER_EDIT_SUBSCRIBER="idx-property-organizer-edit-subscriber";
 		///////////////////////////////////////////////////////		
 
 		public function getVirtualPage( $type ){
@@ -144,6 +148,13 @@ if( !class_exists('IHomefinderVirtualPageFactory')) {
 			else if( $type == IHomefinderVirtualPageFactory::ORGANIZER_SEND_SUBSCRIBER_PASSWORD ){
 				$virtualPage = new iHomefinderOrganizerSendSubscriberPasswordVirtualPageImpl() ;
 			}			
+			else if( $type == IHomefinderVirtualPageFactory::ORGANIZER_HELP ){
+				$virtualPage = new iHomefinderOrganizerHelpVirtualPageImpl() ;
+			}			
+			else if( $type == IHomefinderVirtualPageFactory::ORGANIZER_EDIT_SUBSCRIBER ){
+				$virtualPage = new iHomefinderOrganizerEditSubscriberVirtualPageImpl() ;
+			}			
+			
 			IHomefinderLogger::getInstance()->debug('Complete IHomefinderVirtualPageFactory.getVirtualPage');
 			return $virtualPage ;
 		}

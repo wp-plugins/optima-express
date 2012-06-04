@@ -8,7 +8,7 @@
 if( !interface_exists('IHomefinderConstants')){
 	interface IHomefinderConstants{
 
-		const VERSION="1.1.6";
+		const VERSION="1.1.7";
 		const EXTERNAL_URL="http://www.idxre.com/services/wordpress";
 
 		//Group for Activation related options
@@ -34,7 +34,7 @@ if( !interface_exists('IHomefinderConstants')){
 		//Transient value - cached authentication token
 		const AUTHENTICATION_TOKEN_CACHE="ihf_authentication_token";
 		//Number of seconds for transient to timeout 60*60=3600=1 hour
-		const AUTHENTICATION_TOKEN_CACHE_TIMEOUT=3600;
+		//const AUTHENTICATION_TOKEN_CACHE_TIMEOUT=3600;
 
 		//Remember if this plugin has ever been activated on this site.
 		//This affects things like link creation, when the plugin is activated.

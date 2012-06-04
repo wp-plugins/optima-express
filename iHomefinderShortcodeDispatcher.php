@@ -20,9 +20,11 @@ if( !class_exists('IHomefinderShortcodeDispatcher')) {
 		private $featuredShortCode = "optima_express_featured";
 		private $searchResultsShortCode = "optima_express_search_results";
 		private $quickSearchShortCode = "optima_express_quick_search";
+		private $mapSearchShortCode = "optima_express_map_search";
 
 		private $searchFormData ;
 		private $toppicksFormData ;
+		private $mapSearchContent ;
 
 		private function __construct(){
 			$this->ihfAdmin = IHomefinderAdmin::getInstance();
@@ -41,6 +43,7 @@ if( !class_exists('IHomefinderShortcodeDispatcher')) {
 			add_shortcode($this->getFeaturedShortcode(),      array($this, "getFeaturedListings"));
 			add_shortcode($this->getSearchResultsShortcode(), array($this, "getSearchResults"));
 			add_shortcode($this->getQuickSearchShortcode(),   array($this, "getQuickSearch"));
+			add_shortcode($this->getMapSearchShortcode(),     array($this, "getMapSearch"));
 		}
 
 		public function getToppicksShortcode(){
@@ -58,6 +61,10 @@ if( !class_exists('IHomefinderShortcodeDispatcher')) {
 		public function getQuickSearchShortcode(){
 			return $this->quickSearchShortCode ;
 		}
+		
+		public function getMapSearchShortcode(){
+			return $this->mapSearchShortCode ;
+		}		
 
 		/**
 		 * Get the content to replace the short code
@@ -132,6 +139,18 @@ if( !class_exists('IHomefinderShortcodeDispatcher')) {
 			$content=$quickSearchVirtualPage->getContent( $authenticationToken);
 			return $content ;
 		}
+		
+		function getMapSearch($attr){
+			$authenticationToken=$this->ihfAdmin->getAuthenticationToken();
+	         $ihfUrl = iHomefinderConstants::EXTERNAL_URL . '?method=handleRequest&viewType=json&requestType=map-search-widget&authenticationToken=' . $authenticationToken
+	                                                      .'&width=' .$attr['width']
+	                                                      .'&height=' .$attr['height'];
+             $this->mapSearchContent = iHomefinderRequestor::remoteRequest($ihfUrl);
+             $content = IHomefinderRequestor::getContent( $this->mapSearchContent );
+             IHomefinderLogger::getInstance()->debug( $ihfUrl);
+			
+			return $content;
+		}				
 
 		function getTopPicksFormData(){
 			if( !isset( $this->toppicksFormData )){

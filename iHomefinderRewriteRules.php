@@ -131,7 +131,9 @@ if(!class_exists('IHomefinderRewriteRules')){
 			$this->setOrganizerResendConfirmationRewriteRules($matchRulePrefix);	
 			$this->setOrganizerReactivateSubscriberRewriteRules($matchRulePrefix);
 			$this->setOrganizerResendSubscriberPasswordRewriteRules($matchRulePrefix);
-			$this->setOrganizerEmailUpdatesConfirmationRewriteRules($matchRulePrefix);	
+			$this->setOrganizerEmailUpdatesConfirmationRewriteRules($matchRulePrefix);
+			$this->setOrganizerHelpRewriteRules($matchRulePrefix);
+			$this->setOrganizerEditSubscriberRewriteRules($matchRulePrefix);	
 		}
 
 		private function setAdvancedSearchRewriteRules($matchRulePrefix){
@@ -221,7 +223,24 @@ if(!class_exists('IHomefinderRewriteRules')){
 	            $this->rootPageName . '&' . iHomefinderConstants::IHF_TYPE_URL_VAR . '=' . IHomefinderVirtualPageFactory::ORGANIZER_EMAIL_UPDATES_CONFIRMATION, 'top'
 	  		);
 		}	
-				
+
+		private function setOrganizerHelpRewriteRules($matchRulePrefix ){
+			global $wp_rewrite;
+	  		// matches 
+	  		$wp_rewrite->add_rule(
+	  			$matchRulePrefix . $this->urlFactory->getOrganizerHelpUrl(false),
+	            $this->rootPageName . '&' . iHomefinderConstants::IHF_TYPE_URL_VAR . '=' . IHomefinderVirtualPageFactory::ORGANIZER_HELP, 'top'
+	  		);
+		}	
+
+		private function setOrganizerEditSubscriberRewriteRules($matchRulePrefix ){
+			global $wp_rewrite;
+	  		// matches 
+	  		$wp_rewrite->add_rule(
+	  			$matchRulePrefix . $this->urlFactory->getOrganizerEditSubscriberUrl(false),
+	            $this->rootPageName . '&' . iHomefinderConstants::IHF_TYPE_URL_VAR . '=' . IHomefinderVirtualPageFactory::ORGANIZER_EDIT_SUBSCRIBER, 'top'
+	  		);
+		}			
 		private function setOrganizerLoginRewriteRules($matchRulePrefix ){
 			global $wp_rewrite;
 	  		// matches 

@@ -67,13 +67,13 @@ if( !class_exists('IHomefinderAdmin')) {
 						update_option(IHomefinderConstants::IS_ACTIVATED_OPTION,'true');
 					}
 				}
-				set_transient(IHomefinderConstants::AUTHENTICATION_TOKEN_CACHE, $authenticationToken, IHomefinderConstants::AUTHENTICATION_TOKEN_CACHE_TIMEOUT);
+				update_option(IHomefinderConstants::AUTHENTICATION_TOKEN_CACHE, $authenticationToken);
 			}
 		}
 
 		public function deleteAuthenticationToken(){
 			//This forces reactivation of the plugin at next site visit.
-		    delete_transient(IHomefinderConstants::AUTHENTICATION_TOKEN_CACHE);
+		    delete_option(IHomefinderConstants::AUTHENTICATION_TOKEN_CACHE);
 		}
 
 		/**
@@ -81,16 +81,16 @@ if( !class_exists('IHomefinderAdmin')) {
 		 * from the activationToken.
 		 */
 		public function getAuthenticationToken(){
-			$authenticationToken = get_transient(IHomefinderConstants::AUTHENTICATION_TOKEN_CACHE);
+			$authenticationToken = get_option(IHomefinderConstants::AUTHENTICATION_TOKEN_CACHE);
 			return $authenticationToken ;
 		}
 
-		public function synchAuthenticationToken(){
-			$authenticationToken = get_transient(IHomefinderConstants::AUTHENTICATION_TOKEN_CACHE);
-			if( false === $authenticationToken  || '' === $authenticationToken)	{
-				$this->updateAuthenticationToken();
-			}
-		}
+//		public function synchAuthenticationToken(){
+//			$authenticationToken = get_transient(IHomefinderConstants::AUTHENTICATION_TOKEN_CACHE);
+//			if( false === $authenticationToken  || '' === $authenticationToken)	{
+//				$this->updateAuthenticationToken();
+//			}
+//		}
 
 		public function previouslyActivated(){
 			return get_option(IHomefinderConstants::IS_ACTIVATED_OPTION);
@@ -134,7 +134,9 @@ if( !class_exists('IHomefinderAdmin')) {
 			$organizerActivateSubscriberUrl       = urlencode($urlFactory->getOrganizerActivateSubscriberUrl(true));
 			$organizerSendSubscriberPasswordUrl   = urlencode($urlFactory->getOrganizerSendSubscriberPasswordUrl(true));
 			$listingsAdvancedSearchFormUrl        = urlencode($urlFactory->getListingsAdvancedSearchFormUrl(true));
-
+			$organizerHelpUrl                     = urlencode($urlFactory->getOrganizerHelpUrl(true));
+			$organizerEditSubscriberUrl           = urlencode($urlFactory->getOrganizerEditSubscriberUrl(true));
+			
 			$ihfUrl = IHomefinderConstants::EXTERNAL_URL  ;
 			$postData= array(
 				'method'=>'handleRequest',
@@ -161,7 +163,9 @@ if( !class_exists('IHomefinderAdmin')) {
 				'organizerResendConfirmationEmailUrl'=> $organizerResendConfirmationEmailUrl,
 				'organizerActivateSubscriberUrl'=> $organizerActivateSubscriberUrl,
 				'organizerSendSubscriberPasswordUrl'=> $organizerSendSubscriberPasswordUrl,
-				'listingAdvancedSearchFormUrl'=> $listingsAdvancedSearchFormUrl
+				'listingAdvancedSearchFormUrl'=> $listingsAdvancedSearchFormUrl,
+				'organizerHelpUrl'=> $organizerHelpUrl,
+				'organizerEditSubscriberUrl'=> $organizerEditSubscriberUrl
 			);
 
 			IHomefinderLogger::getInstance()->debug( '$ihfUrl:::' . $ihfUrl ) ;
@@ -238,7 +242,7 @@ if( !class_exists('IHomefinderAdmin')) {
 				        <tr valign="top">
 				            <td></td>
 				        	<td>
-				        		<?php if( false !== get_transient(IHomefinderConstants::AUTHENTICATION_TOKEN_CACHE) ){   ?>
+				        		<?php if( false !== $this->getAuthenticationToken() ){   ?>
 				        			<?php if( $this->isUpdated() ){?>
 				        				Your Optima Express plugin has been updated.
 				        			<?php } else  {?>
@@ -304,7 +308,7 @@ if( !class_exists('IHomefinderAdmin')) {
 				    <?php settings_fields( IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG ); ?>
 
 					<?php
-									
+
 						$this->getDetailPageSetup();
 						echo('<p/>');
 
@@ -333,9 +337,9 @@ if( !class_exists('IHomefinderAdmin')) {
 							$this->getHotsheetPageSetup() ;
 							echo('<p/>');
 						}
-						
+
 						$this->getDefaultPageSetup();
-						echo('<p/>');		
+						echo('<p/>');
 
 					?>
 
@@ -364,9 +368,9 @@ if( !class_exists('IHomefinderAdmin')) {
 					</td>
 				</tr>
 			</table>
-		<?php		
+		<?php
 		}
-		
+
 		private function getDetailPageSetup(){
 			$urlFactory = IHomefinderUrlFactory::getInstance() ;
 			$virtualPage = $this->virtualPageFactory->getVirtualPage( IHomefinderVirtualPageFactory::LISTING_DETAIL );

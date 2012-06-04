@@ -3,7 +3,7 @@
 Plugin Name: Optima Express IDX Plugin
 Plugin URI: http://wordpress.org/extend/plugins/optima-express/
 Description: This plugin integrates your Wordpress site with IDX search functionality.  This plugin requires an activation key.
-Version: 1.1.6
+Version: 1.1.7
 Author: ihomefinder
 Author URI: http://www.ihomefinder.com
 License: GPL
@@ -23,6 +23,7 @@ include_once 'iHomefinderRequestor.php';
 include_once 'iHomefinderRewriteRules.php';
 include_once 'iHomefinderShortcodeDispatcher.php';
 include_once 'iHomefinderStateManager.php';
+include_once 'iHomefinderCleaner.php';
 include_once 'iHomefinderSubscriber.php';
 include_once 'iHomefinderTinyMceManager.php';
 include_once 'iHomefinderUrlFactory.php';
@@ -45,11 +46,15 @@ add_action('widgets_init', create_function('', 'return register_widget("iHomefin
 register_activation_hook(__FILE__,array(IHomefinderInstaller::getInstance(), 'install'));
 /* Runs on plugin deactivation*/
 register_deactivation_hook( __FILE__, array(IHomefinderInstaller::getInstance(), 'remove') );
+
+
 /* Runs just before the auto upgrader installs the plugin*/
 add_filter('upgrader_post_install', array(IHomefinderInstaller::getInstance(), 'upgrade'), 10, 2);
 
 /* Rewrite Rules */
 add_action('init', array(IHomefinderRewriteRules::getInstance(), "initialize"), 1 );
+
+
 
 //uncomment during development, so rule changes can be viewed.
 //in production this should not run, because it is a slow operation.
@@ -67,7 +72,7 @@ if( is_admin()){
 	add_action('init',array(IHomefinderVirtualPageDispatcher::getInstance(), "loadJavaScript")) ;
 	
 	//Resets the authentication token if necessary
-	add_action('init',array(IHomefinderAdmin::getInstance(), "synchAuthenticationToken"), 99 );
+	//add_action('init',array(IHomefinderAdmin::getInstance(), "synchAuthenticationToken"), 99 );
 	
 	//Remember the users state in the application (subscriber info and last search)
 	add_action('plugins_loaded',array(IHomefinderStateManager::getInstance(), "initialize"), 5);
@@ -79,6 +84,8 @@ if( is_admin()){
 	//add_filter( 'the_title', array(IHomefinderVirtualPageDispatcher::getInstance(), "getTitle") );
 	
 	add_action('wp_footer', array(IHomefinderCustomization::getInstance(), "addCustomCSS"));	
+	
+	add_action('ihf_expired_transients_cleanup', array(IHomefinderCleaner::getInstance(), "removeExpiredIhfTransients"));
 }
 
 

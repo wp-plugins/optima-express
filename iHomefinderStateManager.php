@@ -14,13 +14,22 @@ if( !class_exists('IHomefinderStateManager')) {
 		private static $instance ;
 		private $uniqueId = null;
 		private $identifierCookieName = "ihf_identifier";
+		
 		//url used for last search
+		//stored as a transient
 		private $lastSearchName = "ihf_last_search";
+		
 		//subscriber information
+		//stored as a transient
 		private $subcriberInfoName = "ihf_subscriber_info";
+
 		//lead capture id
+		//stored as an option
 		private $leadCaptureIdName = "ihf_lead_capture_id";
+		private $leadCaptureId = null ;
+
 		//summary of search results
+		//stored as a transient
 		private $searchSummaryName = "ihf_search_summary";
 		private $cache_timeout=	86400 ;	//Number of seconds for transient to timeout 60*60*24= 86400 = 1 day
 
@@ -51,6 +60,28 @@ if( !class_exists('IHomefinderStateManager')) {
 				$expireTime=time()+60*60*24*365*5 ; /* expire in 5 years */
 				setcookie($this->identifierCookieName, $this->uniqueId, $expireTime, "/");
 			}
+			
+			
+			/**
+			 * We want to store the lead capture information in the cookie, to keep the 
+			 * size of wp_options down to a reasonable size.  When we first get the
+			 * lead capture id, we cannot set the cookie, b/c headers have already 
+			 * been sent.  As a result, we temporarily store the leadCaptureId as
+			 * a transient.  If we cannot get the lead capture id from a cookie, then
+			 * look for the transient.  If the transient is found, then store the
+			 * value as a cookie and delete the transient.
+			 */
+			if( array_key_exists($this->getLeadCaptureKey(), $_COOKIE )){
+				$this->$leadCaptureId = $_COOKIE[$this->getLeadCaptureKey()];
+			}
+			else{
+				$this->leadCaptureId = $this->getLeadCaptureId();
+				if( $this->leadCaptureId != null ){
+					$expireTime=time()+60*60*24*365*5 ; /* expire in 5 years */
+					setcookie($this->getLeadCaptureKey(), $this->leadCaptureId, $expireTime, "/");
+					delete_transient( $this->getLeadCaptureKey() );
+				}
+			}			
 		}
 		
 		private function isWebCrawler(){
@@ -109,18 +140,34 @@ if( !class_exists('IHomefinderStateManager')) {
 			return $cacheKey ;
 		}
 
+		
+		/**
+		 * If leadCaptureId is set, then we have retrieved it from a cookie
+		 * value in the initialize method.  If it is not set, try to get it
+		 * from a transient variable.  We temporarily store the leadCaptureId
+		 * in a transient variable in our first request, because we can no
+		 * longer set the value a a cookie.
+		 */
 		public function getLeadCaptureId(){
-			$leadCaptureId=null;
-			if( !$this->isWebCrawler() ){
-				$leadCaptureId=get_option( $this->getLeadCaptureKey() );
+			if( $this->leadCaptureId == null ){
+				if( !$this->isWebCrawler() ){
+					$leadCaptureId=get_transient( $this->getLeadCaptureKey() );
+				}
+				
 			}
-			return $leadCaptureId ;
+			return $this->leadCaptureId ;
 		}
 
+		/**
+		 * Temporarily store the lead capture id as a transient.  The next time
+		 * initialize is called, we read this transient, store it as a cookie, and
+		 * delete the transient.
+		 * @param unknown_type $leadCaptureId
+		 */
 		public function saveLeadCaptureId( $leadCaptureId ){
 			if( !$this->isWebCrawler()){
-				$optionKey=$this->getLeadCaptureKey();
-				update_option($optionKey, $leadCaptureId );
+				$cacheKey=$this->getLeadCaptureKey();
+				set_transient($cacheKey, $leadCaptureId, $this->cache_timeout );
 			}
 		}
 

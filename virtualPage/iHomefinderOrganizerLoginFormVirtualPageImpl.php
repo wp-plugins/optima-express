@@ -42,25 +42,27 @@ if( !class_exists('IHomefinderOrganizerLoginFormVirtualPageImpl')) {
 				//var_dump($subscriberInfo);
 				IHomefinderStateManager::getInstance()->saveSubscriberLogin($subscriberInfo);			
 			}
+
+			$message=IHomefinderUtility::getInstance()->getQueryVar('message');		
+			$ihfUrl = IHomefinderConstants::EXTERNAL_URL . '?method=handleRequest&viewType=json&requestType=property-organizer-login-form' ;
+			$ihfUrl = IHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "authenticationToken", $authenticationToken);
+			$ihfUrl = IHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "message", $message);
+					
 			$isLoggedIn = IHomefinderStateManager::getInstance()->isLoggedIn();
 			if( $isLoggedIn ){
-				$redirectUrl=IHomefinderUrlFactory::getInstance()->getOrganizerViewSavedListingListUrl();
-				$content = '<meta http-equiv="refresh" content="0;url=' . $redirectUrl . '">';
+				$subscriberInfo=IHomefinderStateManager::getInstance()->getCurrentSubscriber() ;
+				$subscriberId=$subscriberInfo->getId();
+				$ihfUrl = IHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "subscriberId", $subscriberId);
 			}
-			else {	
-				$message=IHomefinderUtility::getInstance()->getQueryVar('message');		
-				$ihfUrl = IHomefinderConstants::EXTERNAL_URL . '?method=handleRequest&viewType=json&requestType=property-organizer-login-form' ;
-				$ihfUrl = IHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "authenticationToken", $authenticationToken);
-				$ihfUrl = IHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "message", $message);
-						
-				$contentInfo = IHomefinderRequestor::remoteRequest($ihfUrl);
-				$idxContent = IHomefinderRequestor::getContent( $contentInfo );
-		
-				$content=$idxContent;
-				
-				IHomefinderLogger::getInstance()->debug( '<br/><br/>' . $ihfUrl ) ;
-				IHomefinderLogger::getInstance()->debug('End PropertyOrganizerLoginFormVirtualPage');
-			}
+			
+			$contentInfo = IHomefinderRequestor::remoteRequest($ihfUrl);
+			$idxContent = IHomefinderRequestor::getContent( $contentInfo );
+	
+			$content=$idxContent;
+			
+			IHomefinderLogger::getInstance()->debug( '<br/><br/>' . $ihfUrl ) ;
+			IHomefinderLogger::getInstance()->debug('End PropertyOrganizerLoginFormVirtualPage');
+
 				
 			return $content ;
 		}		

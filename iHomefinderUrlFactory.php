@@ -191,7 +191,21 @@ if( !class_exists('IHomefinderUrlFactory')) {
 			$value = $this->prependBaseUrl( $path, $includeBaseUrl );
 			return 	$value ;			
 		}
+		
+		public function getOrganizerHelpUrl($includeBaseUrl=true){
+			$virtualPage = $this->virtualPageFactory->getVirtualPage( IHomefinderVirtualPageFactory::ORGANIZER_HELP );
+			$path=$virtualPage->getPath();				
+			$value = $this->prependBaseUrl( $path, $includeBaseUrl );
+			return 	$value ;			
+		}		
 
+		public function getOrganizerEditSubscriberUrl($includeBaseUrl=true){
+			$virtualPage = $this->virtualPageFactory->getVirtualPage( IHomefinderVirtualPageFactory::ORGANIZER_EDIT_SUBSCRIBER );
+			$path=$virtualPage->getPath();				
+			$value = $this->prependBaseUrl( $path, $includeBaseUrl );
+			return 	$value ;			
+		}		
+		
 	}//end class
 }
 ?>
