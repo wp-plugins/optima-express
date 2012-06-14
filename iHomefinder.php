@@ -71,12 +71,8 @@ if( is_admin()){
 } else {
 	add_action('init',array(IHomefinderVirtualPageDispatcher::getInstance(), "loadJavaScript")) ;
 	
-	//Resets the authentication token if necessary
-	//add_action('init',array(IHomefinderAdmin::getInstance(), "synchAuthenticationToken"), 99 );
-	
 	//Remember the users state in the application (subscriber info and last search)
 	add_action('plugins_loaded',array(IHomefinderStateManager::getInstance(), "initialize"), 5);
-	//add_action('plugins_loaded', array(IHomefinderStateManager::getInstance(), "saveLastSearch"), 8);
 
 	add_filter( 'page_template', array(IHomefinderVirtualPageDispatcher::getInstance(), "getPageTemplate") );
 	add_filter( 'the_content', array(IHomefinderVirtualPageDispatcher::getInstance(), "getContent") );

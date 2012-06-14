@@ -72,7 +72,7 @@ if( !class_exists('IHomefinderStateManager')) {
 			 * value as a cookie and delete the transient.
 			 */
 			if( array_key_exists($this->getLeadCaptureKey(), $_COOKIE )){
-				$this->$leadCaptureId = $_COOKIE[$this->getLeadCaptureKey()];
+				$this->leadCaptureId = $_COOKIE[$this->getLeadCaptureKey()];
 			}
 			else{
 				$this->leadCaptureId = $this->getLeadCaptureId();
@@ -151,7 +151,7 @@ if( !class_exists('IHomefinderStateManager')) {
 		public function getLeadCaptureId(){
 			if( $this->leadCaptureId == null ){
 				if( !$this->isWebCrawler() ){
-					$leadCaptureId=get_transient( $this->getLeadCaptureKey() );
+					$this->leadCaptureId=get_transient( $this->getLeadCaptureKey() );
 				}
 				
 			}
