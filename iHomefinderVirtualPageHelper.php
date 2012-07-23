@@ -44,9 +44,37 @@ if( !class_exists('IHomefinderVirtualPageHelper')) {
 		//Hotsheet VirtualPage Options
 		const OPTION_VIRTUAL_PAGE_TITLE_HOTSHEET="ihf-virtual-page-title-hotsheet";
 		const OPTION_VIRTUAL_PAGE_TEMPLATE_HOTSHEET="ihf-virtual-page-template-hotsheet";
-		const OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_HOTSHEET="ihf-virtual-page-permalink-text-hotsheet";	
+		const OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_HOTSHEET="ihf-virtual-page-permalink-text-hotsheet";
 
+		//Contact Form Virtual Page Options
+		const OPTION_VIRTUAL_PAGE_TITLE_CONTACT_FORM="ihf-virtual-page-title-contact-form";
+		const OPTION_VIRTUAL_PAGE_TEMPLATE_CONTACT_FORM="ihf-virtual-page-template-contact-form";
+		const OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_CONTACT_FORM="ihf-virtual-page-permalink-text-contact-form";
 
+		//Valuation Form Virtual Page Options
+		const OPTION_VIRTUAL_PAGE_TITLE_VALUATION_FORM="ihf-virtual-page-title-valuation-form";
+		const OPTION_VIRTUAL_PAGE_TEMPLATE_VALUATION_FORM="ihf-virtual-page-template-valuation-form";
+		const OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_VALUATION_FORM="ihf-virtual-page-permalink-text-valuation-form";
+
+		//Open Home Search Form Virtual Page Options
+		const OPTION_VIRTUAL_PAGE_TITLE_OPEN_HOME_SEARCH_FORM="ihf-virtual-page-title-open-home-search-form";
+		const OPTION_VIRTUAL_PAGE_TEMPLATE_OPEN_HOME_SEARCH_FORM="ihf-virtual-page-template-open-home-search-form";
+		const OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_OPEN_HOME_SEARCH_FORM="ihf-virtual-page-open-home-search-form";
+		
+		//Featured Sold Listings Virtual Page Options
+		const OPTION_VIRTUAL_PAGE_TITLE_SOLD_FEATURED="ihf-virtual-page-title-sold-featured";
+		const OPTION_VIRTUAL_PAGE_TEMPLATE_SOLD_FEATURED="ihf-virtual-page-template-sold-featured";
+		const OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_SOLD_FEATURED="ihf-virtual-page-permalink-text-sold-featured";
+		
+		//Supplemental listings
+		const OPTION_VIRTUAL_PAGE_TITLE_SUPPLEMENTAL_LISTING="ihf-virtual-page-title-supplemental-listing";
+		const OPTION_VIRTUAL_PAGE_TEMPLATE_SUPPLEMENTAL_LISTING="ihf-virtual-page-template-supplemental-listing";
+		const OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_SUPPLEMENTAL_LISTING="ihf-virtual-page-permalink-text-supplemental-listing";
+
+		//Listing SoldDetailVirtualPage related options
+		const OPTION_VIRTUAL_PAGE_TITLE_SOLD_DETAIL="ihf-virtual-page-title-sold-detail";
+		const OPTION_VIRTUAL_PAGE_TEMPLATE_SOLD_DETAIL="ihf-virtual-page-template-sold-detail";
+		const OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_SOLD_DETAIL="ihf-virtual-page-permalink-text-sold-detail";		
 		private static $instance ;
 
 		private function __construct(){
@@ -90,7 +118,31 @@ if( !class_exists('IHomefinderVirtualPageHelper')) {
 			register_setting( IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_HOTSHEET);
 			register_setting( IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_HOTSHEET );
 			register_setting( IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_HOTSHEET );
-						
+
+			register_setting( IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_CONTACT_FORM);
+			register_setting( IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_CONTACT_FORM );
+			register_setting( IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_CONTACT_FORM );
+
+			register_setting( IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_VALUATION_FORM);
+			register_setting( IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_VALUATION_FORM );
+			register_setting( IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_VALUATION_FORM );
+
+			register_setting( IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_OPEN_HOME_SEARCH_FORM);
+			register_setting( IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_OPEN_HOME_SEARCH_FORM );
+			register_setting( IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_OPEN_HOME_SEARCH_FORM);
+
+			register_setting( IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_SUPPLEMENTAL_LISTING);
+			register_setting( IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_SUPPLEMENTAL_LISTING );
+			register_setting( IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_SUPPLEMENTAL_LISTING );
+			
+			register_setting( IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_SOLD_FEATURED);
+			register_setting( IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_SOLD_FEATURED );
+			register_setting( IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_SOLD_FEATURED );
+
+			register_setting( IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_SOLD_DETAIL );
+			register_setting( IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_SOLD_DETAIL );
+			register_setting( IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_SOLD_DETAIL );
+			
 		}
 		
 		public function getDefaultTemplate(){

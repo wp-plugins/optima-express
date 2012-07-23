@@ -136,6 +136,12 @@ if( !class_exists('IHomefinderAdmin')) {
 			$listingsAdvancedSearchFormUrl        = urlencode($urlFactory->getListingsAdvancedSearchFormUrl(true));
 			$organizerHelpUrl                     = urlencode($urlFactory->getOrganizerHelpUrl(true));
 			$organizerEditSubscriberUrl           = urlencode($urlFactory->getOrganizerEditSubscriberUrl(true));
+			$contactFormUrl                       = urlencode($urlFactory->getContactFormUrl(true));
+			$valuationFormUrl                     = urlencode($urlFactory->getValuationFormUrl(true));
+			$listingSoldDetailUrl                 = urlencode($urlFactory->getListingSoldDetailUrl(true));
+			$openHomeSearchFormUrl                = urlencode($urlFactory->getOpenHomeSearchFormUrl(true));
+			$soldFeaturedListingUrl              = urlencode($urlFactory->getSoldFeaturedListingUrl(true));
+			$supplementalListingUrl              = urlencode($urlFactory->getSupplementalListingUrl(true));
 			
 			$ihfUrl = IHomefinderConstants::EXTERNAL_URL  ;
 			$postData= array(
@@ -165,7 +171,13 @@ if( !class_exists('IHomefinderAdmin')) {
 				'organizerSendSubscriberPasswordUrl'=> $organizerSendSubscriberPasswordUrl,
 				'listingAdvancedSearchFormUrl'=> $listingsAdvancedSearchFormUrl,
 				'organizerHelpUrl'=> $organizerHelpUrl,
-				'organizerEditSubscriberUrl'=> $organizerEditSubscriberUrl
+				'organizerEditSubscriberUrl'=> $organizerEditSubscriberUrl,
+				'contactFormUrl'=> $contactFormUrl,
+				'valuationFormUrl'=> $valuationFormUrl,
+				'listingSoldDetailUrl'=> $listingSoldDetailUrl,
+				'openHomeSearchFormUrl'=> $openHomeSearchFormUrl,
+				'soldFeaturedListingUrl'=> $soldFeaturedListingUrl,
+				'supplementalListingUrl'=> $supplementalListingUrl
 			);
 
 			IHomefinderLogger::getInstance()->debug( '$ihfUrl:::' . $ihfUrl ) ;
@@ -338,8 +350,25 @@ if( !class_exists('IHomefinderAdmin')) {
 							echo('<p/>');
 						}
 
-						$this->getDefaultPageSetup();
+						$this->getContactFormPageSetup(); 	
+						echo('<p/>');	
+			
+						$this->getValuationFormPageSetup();
+						echo('<p/>');	
+
+						$this->getOpenHomeSearchFormPageSetup();				
+						echo('<p/>');							
+						
+						$this->getSupplementalListingPageSetup();
+						echo('<p/>');	
+
+						$this->getSoldFeaturedListingPageSetup() ;					
 						echo('<p/>');
+						
+						$this->getSoldDetailPageSetup();
+						echo('<p/>');
+						
+						$this->getDefaultPageSetup();
 
 					?>
 
@@ -371,6 +400,11 @@ if( !class_exists('IHomefinderAdmin')) {
 		<?php
 		}
 
+		/**
+		 * We do not use getPageSetup to display the detail page customization, because we require some 
+		 * extra explanation of the permalink structure for detail pages.
+		 * Otherwisse, this function is similar to getPageSetup.
+		 */
 		private function getDetailPageSetup(){
 			$urlFactory = IHomefinderUrlFactory::getInstance() ;
 			$virtualPage = $this->virtualPageFactory->getVirtualPage( IHomefinderVirtualPageFactory::LISTING_DETAIL );
@@ -416,22 +450,27 @@ if( !class_exists('IHomefinderAdmin')) {
 				</tr>
 			</table>
 		<?php
-		$this->permalinkJavascript( $permalinkId, $urlFactory );
+			$this->permalinkJavascript( $permalinkId, $urlFactory );
 		}
-
-		private function getSearchPageSetup(){
+		
+		/**
+		 * We do not use getPageSetup to display the detail page customization, because we require some 
+		 * extra explanation of the permalink structure for detail pages.
+		 * Otherwisse, this function is similar to getPageSetup.
+		 */
+		private function getSoldDetailPageSetup(){
 			$urlFactory = IHomefinderUrlFactory::getInstance() ;
-			$virtualPage = $this->virtualPageFactory->getVirtualPage( IHomefinderVirtualPageFactory::LISTING_SEARCH_FORM );
-			$permalinkId=IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_SEARCH ;
+			$virtualPage = $this->virtualPageFactory->getVirtualPage( IHomefinderVirtualPageFactory::LISTING_SOLD_DETAIL );
+			$permalinkId=IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_SOLD_DETAIL ;
 		?>
-
-			<h3>Search Form</h3>
+			<h3>Sold Property Details</h3>
 			<table>
 				<tr>
 					<td><b>Permalink:</b></td>
 					<td>
 					  <div id="<?php echo($permalinkId)?>Container">
-					  	<?php echo $urlFactory->getBaseUrl()?>/<span id="<?php echo($permalinkId)?>Text"><?php echo $urlFactory->getListingsSearchFormUrl(false)?></span>/
+					  	<?php echo $urlFactory->getBaseUrl()?>/<span id="<?php echo($permalinkId)?>Text"><?php echo $urlFactory->getListingSoldDetailUrl(false)?></span>
+					  	/%ADDRESS%/%LISTING_NUMBER%/%LISTING_PROVIDER%
 					  	<input id="<?php echo($permalinkId)?>EditButton" type="button" value="Edit">
 					  </div>
 					  <div id="<?php echo($permalinkId)?>Edit" style="display: none;" >
@@ -440,7 +479,8 @@ if( !class_exists('IHomefinderAdmin')) {
 							type="text"
 							id="<?php echo($permalinkId)?>"
 							name="<?php echo($permalinkId)?>"
-							value="<?php echo $urlFactory->getListingsSearchFormUrl(false)?>" />/
+							value="<?php echo $urlFactory->getListingSoldDetailUrl(false)?>" />
+						/%ADDRESS%/%LISTING_NUMBER%/%LISTING_PROVIDER%
 						<input id="<?php echo($permalinkId)?>DoneButton" type="button" value="Done">
 					  </div>
 					</td>
@@ -448,22 +488,34 @@ if( !class_exists('IHomefinderAdmin')) {
 				<tr>
 					<td><b>Title:</b></td>
 					<td>
-						<input type="text" name="<?php echo(IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_SEARCH)?>" value="<?php echo($virtualPage->getTitle())?>" />
+						<input type="text" name="<?php echo(IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_SOLD_DETAIL)?>" value="<?php echo($virtualPage->getTitle())?>" />
+						(If empty, the property address will be the title)
 					</td>
 				</tr>
 				<tr>
 					<td><b>Theme Template*:</b></td>
 					<td>
-						<select name="<?php echo(IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_SEARCH)?>">
+						<select name="<?php echo(IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_SOLD_DETAIL)?>">
 							<option value='default'><?php _e('Default Template'); ?></option>
 							<?php page_template_dropdown($virtualPage->getPageTemplate()); ?>
 						</select>
 					</td>
 				</tr>
 			</table>
-
 		<?php
 			$this->permalinkJavascript( $permalinkId, $urlFactory );
+		}		
+
+		private function getSearchPageSetup(){
+			$urlFactory = IHomefinderUrlFactory::getInstance() ;
+			$this->getPageSetup("Search Form", IHomefinderVirtualPageFactory::LISTING_SEARCH_FORM, 
+				IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_SEARCH,
+				$urlFactory->getListingsSearchFormUrl(false), 
+				IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_SEARCH, 
+				IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_SEARCH);		
+							
+			$virtualPage = $this->virtualPageFactory->getVirtualPage( IHomefinderVirtualPageFactory::LISTING_SEARCH_FORM );
+			$permalinkId=IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_SEARCH ;
 		}
 
 		private function permalinkJavascript( $permalinkId, $urlFactory ){
@@ -489,151 +541,118 @@ if( !class_exists('IHomefinderAdmin')) {
 
 		private function getAdvSearchPageSetup(){
 			$urlFactory = IHomefinderUrlFactory::getInstance() ;
-			$virtualPage = $this->virtualPageFactory->getVirtualPage( IHomefinderVirtualPageFactory::LISTING_ADVANCED_SEARCH_FORM );
-			$permalinkId=IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_ADV_SEARCH ;
-		?>
-			<h3>Advanced Search Form</h3>
-			<table>
-				<tr>
-					<td><b>Permalink:</b></td>
-					<td>
-					  <div id="<?php echo($permalinkId)?>Container">
-					  	<?php echo $urlFactory->getBaseUrl()?>/<span id="<?php echo($permalinkId)?>Text"><?php echo $urlFactory->getListingsAdvancedSearchFormUrl(false)?></span>/
-					  	<input id="<?php echo($permalinkId)?>EditButton" type="button" value="Edit">
-					  </div>
-					  <div id="<?php echo($permalinkId)?>Edit" style="display: none;" >
-						<?php echo $urlFactory->getBaseUrl()?>/
-						<input size="40"
-							type="text"
-							id="<?php echo($permalinkId)?>"
-							name="<?php echo($permalinkId)?>"
-							value="<?php echo $urlFactory->getListingsAdvancedSearchFormUrl(false)?>" />/
-						<input id="<?php echo($permalinkId)?>DoneButton" type="button" value="Done">
-					  </div>
-					</td>
-				</tr>
-				<tr>
-					<td><b>Title:</b></td>
-					<td>
-						<input type="text" name="<?php echo(IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_ADV_SEARCH)?>" value="<?php echo($virtualPage->getTitle())?>" />
-					</td>
-				</tr>
-				<tr>
-					<td><b>Theme Template*:</b></td>
-					<td>
-						<select name="<?php echo(IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_ADV_SEARCH)?>">
-							<option value='default'><?php _e('Default Template'); ?></option>
-							<?php page_template_dropdown($virtualPage->getPageTemplate()); ?>
-						</select>
-					</td>
-				</tr>
-			</table>
-		<?php
-			$this->permalinkJavascript( $permalinkId, $urlFactory );
+			$this->getPageSetup("Advanced Search Form", IHomefinderVirtualPageFactory::LISTING_ADVANCED_SEARCH_FORM, 
+				IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_ADV_SEARCH, 
+				$urlFactory->getListingsAdvancedSearchFormUrl(false), 
+				IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_ADV_SEARCH, 
+				IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_ADV_SEARCH);		
 		}
 
 		private function getOrganizerLoginPageSetup(){
 			$urlFactory = IHomefinderUrlFactory::getInstance() ;
-			$virtualPage = $this->virtualPageFactory->getVirtualPage( IHomefinderVirtualPageFactory::ORGANIZER_LOGIN );
-			$permalinkId=IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_ORG_LOGIN ;
-		?>
-			<h3>Organizer Login</h3>
-			<table>
-				<tr>
-					<td><b>Permalink:</b></td>
-					<td>
-					  <div id="<?php echo($permalinkId)?>Container">
-					  	<?php echo $urlFactory->getBaseUrl()?>/<span id="<?php echo($permalinkId)?>Text"><?php echo $urlFactory->getOrganizerLoginUrl(false)?></span>/
-					  	<input id="<?php echo($permalinkId)?>EditButton" type="button" value="Edit">
-					  </div>
-					  <div id="<?php echo($permalinkId)?>Edit" style="display: none;" >
-						<?php echo $urlFactory->getBaseUrl()?>/
-						<input size="40"
-							type="text"
-							id="<?php echo($permalinkId)?>"
-							name="<?php echo($permalinkId)?>"
-							value="<?php echo $urlFactory->getOrganizerLoginUrl(false)?>" />/
-						<input id="<?php echo($permalinkId)?>DoneButton" type="button" value="Done">
-					  </div>
-					</td>
-				</tr>
-				<tr>
-					<td><b>Title:</b></td>
-					<td>
-						<input type="text" name="<?php echo(IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_ORG_LOGIN)?>" value="<?php echo($virtualPage->getTitle())?>" />
-					</td>
-				</tr>
-				<tr>
-					<td><b>Theme Template*:</b></td>
-					<td>
-						<select name="<?php echo(IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_ORG_LOGIN)?>">
-							<option value='default'><?php _e('Default Template'); ?></option>
-							<?php page_template_dropdown($virtualPage->getPageTemplate()); ?>
-						</select>
-					</td>
-				</tr>
-			</table>
-		<?php
-			$this->permalinkJavascript( $permalinkId, $urlFactory );
+			$this->getPageSetup("Organizer Login", IHomefinderVirtualPageFactory::ORGANIZER_LOGIN, 
+				IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_ORG_LOGIN, 
+				$urlFactory->getOrganizerLoginUrl(false), 
+				IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_ORG_LOGIN, 
+				IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_ORG_LOGIN);						
 		}
 
 		private function getEmailAlertsPageSetup(){
 			$urlFactory = IHomefinderUrlFactory::getInstance() ;
-			$virtualPage = $this->virtualPageFactory->getVirtualPage( IHomefinderVirtualPageFactory::ORGANIZER_EDIT_SAVED_SEARCH );
-			$permalinkId=IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_EMAIL_UPDATES ;
-		?>
-			<h3>Email Alerts</h3>
-			<table>
-				<tr>
-					<td><b>Permalink:</b></td>
-					<td>
-					  <div id="<?php echo($permalinkId)?>Container">
-					  	<?php echo $urlFactory->getBaseUrl()?>/<span id="<?php echo($permalinkId)?>Text"><?php echo $urlFactory->getOrganizerEditSavedSearchUrl(false)?></span>/
-					  	<input id="<?php echo($permalinkId)?>EditButton" type="button" value="Edit">
-					  </div>
-					  <div id="<?php echo($permalinkId)?>Edit" style="display: none;" >
-						<?php echo $urlFactory->getBaseUrl()?>/
-						<input size="40"
-							type="text"
-							id="<?php echo($permalinkId)?>"
-							name="<?php echo($permalinkId)?>"
-							value="<?php echo $urlFactory->getOrganizerEditSavedSearchUrl(false)?>" />/
-						<input id="<?php echo($permalinkId)?>DoneButton" type="button" value="Done">
-					  </div>
-					</td>
-				</tr>
-				<tr>
-					<td><b>Title:</b></td>
-					<td>
-						<input type="text" name="<?php echo(IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_EMAIL_UPDATES)?>" value="<?php echo($virtualPage->getTitle())?>" />
-					</td>
-				</tr>
-				<tr>
-					<td><b>Theme Template*:</b></td>
-					<td>
-						<select name="<?php echo(IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_EMAIL_UPDATES)?>">
-							<option value='default'><?php _e('Default Template'); ?></option>
-							<?php page_template_dropdown($virtualPage->getPageTemplate()); ?>
-						</select>
-					</td>
-				</tr>
-			</table>
-		<?php
-			$this->permalinkJavascript( $permalinkId, $urlFactory );
+			$this->getPageSetup("Email Alerts", IHomefinderVirtualPageFactory::ORGANIZER_EDIT_SAVED_SEARCH, 
+				IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_EMAIL_UPDATES, 
+				$urlFactory->getOrganizerEditSavedSearchUrl(false), 
+				IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_EMAIL_UPDATES, 
+				IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_EMAIL_UPDATES);							
 		}
 
 		private function getFeaturedPageSetup(){
 			$urlFactory = IHomefinderUrlFactory::getInstance() ;
-			$virtualPage = $this->virtualPageFactory->getVirtualPage( IHomefinderVirtualPageFactory::FEATURED_SEARCH );
-			$permalinkId=IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_FEATURED ;
+			$this->getPageSetup("Featured Properties", IHomefinderVirtualPageFactory::FEATURED_SEARCH, 
+				IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_FEATURED, 
+				$urlFactory->getFeaturedSearchResultsUrl(false), 
+				IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_FEATURED, 
+				IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_FEATURED);
+		}		
+		
+		private function getContactFormPageSetup(){
+			$urlFactory = IHomefinderUrlFactory::getInstance() ;
+			$this->getPageSetup( "Contact Form",
+				IHomefinderVirtualPageFactory::CONTACT_FORM, 
+				IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_CONTACT_FORM, 
+				$urlFactory->getContactFormUrl(false),
+				IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_CONTACT_FORM,
+				IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_CONTACT_FORM	);		
+		}	
+		
+		private function getValuationFormPageSetup(){
+			$urlFactory = IHomefinderUrlFactory::getInstance() ;
+			$this->getPageSetup( "Valuation Request",
+				IHomefinderVirtualPageFactory::VALUATION_FORM, 
+				IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_VALUATION_FORM, 
+				$urlFactory->getValuationFormUrl(false),
+				IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_VALUATION_FORM,
+				IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_VALUATION_FORM	); 				
+		}
+		
+		private function getSupplementalListingPageSetup(){
+			$urlFactory = IHomefinderUrlFactory::getInstance() ;
+			$this->getPageSetup( "Supplemental Listing",
+				IHomefinderVirtualPageFactory::SUPPLEMENTAL_LISTING, 
+				IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_SUPPLEMENTAL_LISTING, 
+				$urlFactory->getSupplementalListingUrl(false),
+				IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_SUPPLEMENTAL_LISTING,
+				IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_SUPPLEMENTAL_LISTING	); 			
+		}
+		
+		private function getSoldFeaturedListingPageSetup(){
+			$urlFactory = IHomefinderUrlFactory::getInstance() ;
+			$this->getPageSetup( "Sold Featured Listing",
+				IHomefinderVirtualPageFactory::SOLD_FEATURED_LISTING, 
+				IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_SOLD_FEATURED, 
+				$urlFactory->getSoldFeaturedListingUrl(false),
+				IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_SOLD_FEATURED,
+				IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_SOLD_FEATURED	); 			
+		}
+		
+		private function getOpenHomeSearchFormPageSetup(){
+			$urlFactory = IHomefinderUrlFactory::getInstance() ;
+			$this->getPageSetup( "Open Home Search",
+				IHomefinderVirtualPageFactory::OPEN_HOME_SEARCH_FORM, 
+				IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_OPEN_HOME_SEARCH_FORM, 
+				$urlFactory->getOpenHomeSearchFormUrl(false),
+				IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_OPEN_HOME_SEARCH_FORM,
+				IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_OPEN_HOME_SEARCH_FORM	); 				
+		}
+		
+		
+
+		
+		/**
+		 * 
+		 * Function to setup form elements to allow customization of iHomefinder page title, urls and 
+		 * display templates.  iHomefinder pages are not true pages in the Wordpress database, so we 
+		 * need to remember the title, permalink and template as options.
+		 * 
+		 * @param unknown_type $pageTitle
+		 * @param unknown_type $virtualPageKey
+		 * @param unknown_type $permalLinkId
+		 * @param unknown_type $currentUrl
+		 * @param unknown_type $titleOption
+		 * @param unknown_type $templateOption
+		 */
+		private function getPageSetup($pageTitle, $virtualPageKey, $permalinkId, $currentUrl, $titleOption, $templateOption) {
+			$urlFactory = IHomefinderUrlFactory::getInstance() ;
+			$virtualPage = $this->virtualPageFactory->getVirtualPage( $virtualPageKey  );
 		?>
-			<h3>Featured Properties</h3>
+
+			<h3><?php echo($pageTitle)?></h3>
 			<table>
 				<tr>
 					<td><b>Permalink:</b></td>
 					<td>
 					  <div id="<?php echo($permalinkId)?>Container">
-					  	<?php echo $urlFactory->getBaseUrl()?>/<span id="<?php echo($permalinkId)?>Text"><?php echo $urlFactory->getFeaturedSearchResultsUrl(false)?></span>/
+					  	<?php echo $urlFactory->getBaseUrl()?>/<span id="<?php echo($permalinkId)?>Text"><?php echo $currentUrl?></span>/
 					  	<input id="<?php echo($permalinkId)?>EditButton" type="button" value="Edit">
 					  </div>
 					  <div id="<?php echo($permalinkId)?>Edit" style="display: none;" >
@@ -642,7 +661,7 @@ if( !class_exists('IHomefinderAdmin')) {
 							type="text"
 							id="<?php echo($permalinkId)?>"
 							name="<?php echo($permalinkId)?>"
-							value="<?php echo $urlFactory->getFeaturedSearchResultsUrl(false)?>" />/
+							value="<?php echo $currentUrl?>" />/
 						<input id="<?php echo($permalinkId)?>DoneButton" type="button" value="Done">
 					  </div>
 					</td>
@@ -650,25 +669,29 @@ if( !class_exists('IHomefinderAdmin')) {
 				<tr>
 					<td><b>Title:</b></td>
 					<td>
-						<input type="text" name="<?php echo(IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_FEATURED)?>" value="<?php echo($virtualPage->getTitle())?>" />
+						<input type="text" name="<?php echo($titleOption)?>" value="<?php echo($virtualPage->getTitle())?>" />
 					</td>
 				</tr>
 				<tr>
 					<td><b>Theme Template*:</b></td>
 					<td>
-						<select name="<?php echo(IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_FEATURED)?>">
+						<select name="<?php echo($templateOption)?>">
 							<option value='default'><?php _e('Default Template'); ?></option>
 							<?php page_template_dropdown($virtualPage->getPageTemplate()); ?>
 						</select>
 					</td>
 				</tr>
 			</table>
+
 		<?php
 			$this->permalinkJavascript( $permalinkId, $urlFactory );
-		}
-
+		}		
+			
+		
+		
 		private function getHotsheetPageSetup(){
 			$urlFactory = IHomefinderUrlFactory::getInstance() ;
+			
 			$virtualPage = $this->virtualPageFactory->getVirtualPage( IHomefinderVirtualPageFactory::HOTSHEET_SEARCH_RESULTS );
 			$permalinkId=IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_HOTSHEET ;
 			$hotsheetListVirtualPage = $this->virtualPageFactory->getVirtualPage( IHomefinderVirtualPageFactory::HOTSHEET_LIST );
@@ -732,6 +755,9 @@ if( !class_exists('IHomefinderAdmin')) {
 		<?php
 			$this->permalinkJavascript( $permalinkId, $urlFactory );
 		}
+
+
+
 
 	}
 }//end if class_exists('IHomefinderAdmin')

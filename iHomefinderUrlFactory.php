@@ -82,6 +82,13 @@ if( !class_exists('IHomefinderUrlFactory')) {
 			$value = $this->prependBaseUrl( $path, $includeBaseUrl );
 			return 	$value ;
 		}
+		
+		public function getListingSoldDetailUrl($includeBaseUrl=true){
+			$virtualPage = $this->virtualPageFactory->getVirtualPage( IHomefinderVirtualPageFactory::LISTING_SOLD_DETAIL );
+			$path=$virtualPage->getPath();				
+			$value = $this->prependBaseUrl( $path, $includeBaseUrl );
+			return 	$value ;
+		}		
 
 
 		public function getFeaturedSearchResultsUrl($includeBaseUrl=true){
@@ -201,6 +208,41 @@ if( !class_exists('IHomefinderUrlFactory')) {
 
 		public function getOrganizerEditSubscriberUrl($includeBaseUrl=true){
 			$virtualPage = $this->virtualPageFactory->getVirtualPage( IHomefinderVirtualPageFactory::ORGANIZER_EDIT_SUBSCRIBER );
+			$path=$virtualPage->getPath();				
+			$value = $this->prependBaseUrl( $path, $includeBaseUrl );
+			return 	$value ;			
+		}		
+
+		public function getContactFormUrl($includeBaseUrl=true){
+			$virtualPage = $this->virtualPageFactory->getVirtualPage( IHomefinderVirtualPageFactory::CONTACT_FORM );
+			$path=$virtualPage->getPath();				
+			$value = $this->prependBaseUrl( $path, $includeBaseUrl );
+			return 	$value ;			
+		}		
+
+		public function getValuationFormUrl($includeBaseUrl=true){
+			$virtualPage = $this->virtualPageFactory->getVirtualPage( IHomefinderVirtualPageFactory::VALUATION_FORM );
+			$path=$virtualPage->getPath();				
+			$value = $this->prependBaseUrl( $path, $includeBaseUrl );
+			return 	$value ;			
+		}		
+
+		public function getOpenHomeSearchFormUrl($includeBaseUrl=true){
+			$virtualPage = $this->virtualPageFactory->getVirtualPage( IHomefinderVirtualPageFactory::OPEN_HOME_SEARCH_FORM);
+			$path=$virtualPage->getPath();				
+			$value = $this->prependBaseUrl( $path, $includeBaseUrl );
+			return 	$value ;			
+		}		
+		
+		public function getSoldFeaturedListingUrl($includeBaseUrl=true){
+			$virtualPage = $this->virtualPageFactory->getVirtualPage( IHomefinderVirtualPageFactory::SOLD_FEATURED_LISTING );
+			$path=$virtualPage->getPath();				
+			$value = $this->prependBaseUrl( $path, $includeBaseUrl );
+			return 	$value ;			
+		}		
+		
+		public function getSupplementalListingUrl($includeBaseUrl=true){
+			$virtualPage = $this->virtualPageFactory->getVirtualPage( IHomefinderVirtualPageFactory::SUPPLEMENTAL_LISTING );
 			$path=$virtualPage->getPath();				
 			$value = $this->prependBaseUrl( $path, $includeBaseUrl );
 			return 	$value ;			

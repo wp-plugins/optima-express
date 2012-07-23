@@ -3,11 +3,12 @@
 Plugin Name: Optima Express IDX Plugin
 Plugin URI: http://wordpress.org/extend/plugins/optima-express/
 Description: This plugin integrates your Wordpress site with IDX search functionality.  This plugin requires an activation key.
-Version: 1.1.7
+Version: 1.2.0
 Author: ihomefinder
 Author URI: http://www.ihomefinder.com
 License: GPL
 */
+
 
 /**
  * Load core files
@@ -31,6 +32,7 @@ include_once 'iHomefinderUtility.php';
 include_once 'iHomefinderVirtualPageDispatcher.php';
 include_once 'iHomefinderVirtualPageFactory.php';
 include_once 'iHomefinderVirtualPageHelper.php';
+
 
 /**
  * Load  Widgets and Widget Context Utility

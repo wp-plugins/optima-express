@@ -52,7 +52,6 @@ if( !class_exists('IHomefinderStateManager')) {
 			if( array_key_exists($this->identifierCookieName, $_COOKIE )){
 				$this->uniqueId = $_COOKIE[$this->identifierCookieName];
 			}
-
 			//IHomefinderLogger::getInstance()->debug("uniqueId: " . $this->uniqueId);
 			$isWebCrawler=IHomefinderUtility::getInstance()->isWebCrawler();
 			if( empty($this->uniqueId) && !$this->isWebCrawler() ){

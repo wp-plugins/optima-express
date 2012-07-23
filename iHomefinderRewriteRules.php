@@ -114,6 +114,7 @@ if(!class_exists('IHomefinderRewriteRules')){
 			//The order of these search rules is important.
 			$this->setListingSearchResultsPageRewriteRules($matchRulePrefix);
 	  		$this->setFeaturedSearchPageRewriteRules($matchRulePrefix);
+	  		$this->setSoldDetailPageRewriteRules($matchRulePrefix);
 	  		$this->setDetailPageRewriteRules($matchRulePrefix);
 	  		$this->setAdvancedSearchRewriteRules($matchRulePrefix);
 			$this->setSearchRewriteRules($matchRulePrefix);
@@ -133,7 +134,13 @@ if(!class_exists('IHomefinderRewriteRules')){
 			$this->setOrganizerResendSubscriberPasswordRewriteRules($matchRulePrefix);
 			$this->setOrganizerEmailUpdatesConfirmationRewriteRules($matchRulePrefix);
 			$this->setOrganizerHelpRewriteRules($matchRulePrefix);
-			$this->setOrganizerEditSubscriberRewriteRules($matchRulePrefix);	
+			$this->setOrganizerEditSubscriberRewriteRules($matchRulePrefix);
+
+			$this->setContactFormRewriteRules($matchRulePrefix);
+			$this->setValuationFormRewriteRules($matchRulePrefix);
+			$this->setOpenHomeSearchFormRewriteRules($matchRulePrefix);
+			$this->setSoldFeaturedListingRewriteRules($matchRulePrefix);
+			$this->setSupplementalListingRewriteRules($matchRulePrefix);
 		}
 
 		private function setAdvancedSearchRewriteRules($matchRulePrefix){
@@ -153,6 +160,67 @@ if(!class_exists('IHomefinderRewriteRules')){
 	  			'top');
 	  			
 		}
+		
+		private function setContactFormRewriteRules($matchRulePrefix){
+			global $wp_rewrite;
+	  		$rewriteUrl=$this->rootPageName ;
+	  		$rewriteUrl .= '&' . iHomefinderConstants::IHF_TYPE_URL_VAR . '=' . IHomefinderVirtualPageFactory::CONTACT_FORM ;
+
+	  		//echo( 'rewriteUrl='.$rewriteUrl."<br>");
+	  		$wp_rewrite->add_rule( 
+	  			$matchRulePrefix . $this->urlFactory->getContactFormUrl(false), 
+	  			$rewriteUrl, 
+	  			'top');
+		}
+		
+		private function setValuationFormRewriteRules($matchRulePrefix){
+			global $wp_rewrite;
+	  		$rewriteUrl=$this->rootPageName ;
+	  		$rewriteUrl .= '&' . iHomefinderConstants::IHF_TYPE_URL_VAR . '=' . IHomefinderVirtualPageFactory::VALUATION_FORM ;
+
+	  		//echo( 'rewriteUrl='.$rewriteUrl."<br>");
+	  		$wp_rewrite->add_rule( 
+	  			$matchRulePrefix . $this->urlFactory->getValuationFormUrl(false), 
+	  			$rewriteUrl, 
+	  			'top');
+		}
+		
+		private function setOpenHomeSearchFormRewriteRules($matchRulePrefix){
+			global $wp_rewrite;
+	  		$rewriteUrl=$this->rootPageName ;
+	  		$rewriteUrl .= '&' . iHomefinderConstants::IHF_TYPE_URL_VAR . '=' . IHomefinderVirtualPageFactory::OPEN_HOME_SEARCH_FORM ;
+
+	  		//echo( 'rewriteUrl='.$rewriteUrl."<br>");
+	  		$wp_rewrite->add_rule( 
+	  			$matchRulePrefix . $this->urlFactory->getOpenHomeSearchFormUrl(false), 
+	  			$rewriteUrl, 
+	  			'top');
+		}		
+
+		private function setSoldFeaturedListingRewriteRules($matchRulePrefix){
+			global $wp_rewrite;
+	  		$rewriteUrl=$this->rootPageName ;
+	  		$rewriteUrl .= '&' . iHomefinderConstants::IHF_TYPE_URL_VAR . '=' . IHomefinderVirtualPageFactory::SOLD_FEATURED_LISTING ;
+
+	  		//echo( 'rewriteUrl='.$rewriteUrl."<br>");
+	  		$wp_rewrite->add_rule( 
+	  			$matchRulePrefix . $this->urlFactory->getSoldFeaturedListingUrl(false), 
+	  			$rewriteUrl, 
+	  			'top');
+		}		
+
+		private function setSupplementalListingRewriteRules($matchRulePrefix){
+			global $wp_rewrite;
+	  		$rewriteUrl=$this->rootPageName ;
+	  		$rewriteUrl .= '&' . iHomefinderConstants::IHF_TYPE_URL_VAR . '=' . IHomefinderVirtualPageFactory::SUPPLEMENTAL_LISTING ;
+
+	  		//echo( 'rewriteUrl='.$rewriteUrl."<br>");
+	  		$wp_rewrite->add_rule( 
+	  			$matchRulePrefix . $this->urlFactory->getSupplementalListingUrl(false), 
+	  			$rewriteUrl, 
+	  			'top');
+		}		
+		
 		private function setSearchRewriteRules($matchRulePrefix){
 			global $wp_rewrite;
 	  		// matches 'idx-search
@@ -328,7 +396,14 @@ if(!class_exists('IHomefinderRewriteRules')){
 	  		);
 	  		
 		}		
-		
+		private function setSoldDetailPageRewriteRules($matchRulePrefix ){
+			global $wp_rewrite;
+	  		// matches 'idx-detail/%address%/12345678/1234', where the listing number =12345678 and bid=1234
+	  		$wp_rewrite->add_rule(
+	  			$matchRulePrefix . $this->urlFactory->getListingSoldDetailUrl(false) . '/([^/]+)/([^/]+)/([^/]+)',
+	            $this->rootPageName . '&' . iHomefinderConstants::IHF_TYPE_URL_VAR . '=' . IHomefinderVirtualPageFactory::LISTING_SOLD_DETAIL . '&ln=$matches[2]&bid=$matches[3]', 'top'
+	  		);
+		}		
 		private function setDetailPageRewriteRules($matchRulePrefix ){
 			global $wp_rewrite;
 	  		// matches 'idx-detail/%address%/12345678/1234', where the listing number =12345678 and bid=1234

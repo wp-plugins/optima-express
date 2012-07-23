@@ -58,6 +58,7 @@ if( !class_exists('IHomefinderUtility')) {
 						$ihfUrl .= "&prevBoardId=" . $prevBoardAndListingNumber[0]; ;					
 						$ihfUrl .= "&prevListingNumber=" . $prevBoardAndListingNumber[1]; ;
 						$ihfUrl .= "&prevAddress=" . urlencode($searchSummaryPrevious->address) ;
+						$ihfUrl .= "&prevStatus=" . urlencode($searchSummaryPrevious->status) ;
 					}
 					
 					if( isset($searchSummaryObject->nextId)){
@@ -65,7 +66,8 @@ if( !class_exists('IHomefinderUtility')) {
 						$nextBoardAndListingNumber = explode("|", $searchSummaryObject->nextId );
 						$ihfUrl .= "&nextBoardId=" . $nextBoardAndListingNumber[0] ;					
 						$ihfUrl .= "&nextListingNumber=" . $nextBoardAndListingNumber[1] ;
-						$ihfUrl .= "&nextAddress=" . urlencode($searchSummaryNext->address) ;						
+						$ihfUrl .= "&nextAddress=" . urlencode($searchSummaryNext->address) ;
+						$ihfUrl .= "&nextStatus=" . urlencode($searchSummaryNext->status) ;
 					}
 				}	
 			}

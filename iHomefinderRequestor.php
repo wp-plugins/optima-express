@@ -1,10 +1,13 @@
 <?php
 if( !class_exists('IHomefinderRequestor')){
 	class IHomefinderRequestor{
-		public static function remoteRequest( $ihfUrl ){
+				
+		public static function remoteRequest( $ihfUrl, $ajaxRequest=false ){
 			IHomefinderLogger::getInstance()->debug("Begin IHomefinderRequestor.remoteRequest: " );
 				
-			if( !strpos(strtolower($ihfUrl), "subscriberid=")){
+			//We don't try to get subscriber information for ajax requests
+			//because of cookie related complications.
+			if( !strpos(strtolower($ihfUrl), "subscriberid=") && !$ajaxRequest ){
 				$subscriber = IHomefinderStateManager::getInstance()->getCurrentSubscriber();
 
 				if( !is_null($subscriber) && '' != $subscriber){
@@ -35,7 +38,7 @@ if( !class_exists('IHomefinderRequestor')){
 			IHomefinderLogger::getInstance()->debug("before request");
 			$response = wp_remote_get($ihfUrl, $requestArgs);
 			IHomefinderLogger::getInstance()->debug("after request");
-
+			
 			if( is_wp_error($response)){
 				$contentInfo=null;
 			}
