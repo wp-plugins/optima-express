@@ -141,13 +141,14 @@ if( !class_exists('IHomefinderShortcodeDispatcher')) {
 		}
 		
 		function getMapSearch($attr){
+			IHomefinderStateManager::getInstance()->saveLastSearch() ;
 			$authenticationToken=$this->ihfAdmin->getAuthenticationToken();
-	         $ihfUrl = iHomefinderConstants::EXTERNAL_URL . '?method=handleRequest&viewType=json&requestType=map-search-widget&authenticationToken=' . $authenticationToken
-	                                                      .'&width=' .$attr['width']
-	                                                      .'&height=' .$attr['height'];
-             $this->mapSearchContent = iHomefinderRequestor::remoteRequest($ihfUrl);
-             $content = IHomefinderRequestor::getContent( $this->mapSearchContent );
-             IHomefinderLogger::getInstance()->debug( $ihfUrl);
+	        $ihfUrl = iHomefinderConstants::EXTERNAL_URL . '?method=handleRequest&viewType=json&requestType=map-search-widget&authenticationToken=' . $authenticationToken
+	                                                     .'&width=' .$attr['width']
+	                                                     .'&height=' .$attr['height'];
+            $this->mapSearchContent = iHomefinderRequestor::remoteRequest($ihfUrl);
+            $content = IHomefinderRequestor::getContent( $this->mapSearchContent );
+            IHomefinderLogger::getInstance()->debug( $ihfUrl);
 			
 			return $content;
 		}				
