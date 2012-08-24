@@ -1,9 +1,27 @@
 tinyMCEPopup.requireLangPack();
 
-var IhfTopPicksDialog = {
+var IhfGalleryDialog = {
 	init : function() {
 	},
 
+	insertAgentListings : function(agentListingsShortCodeToken) {
+		// Insert the contents from the input into the document
+		var agentListingsShortCodeToken = "[" + agentListingsShortCodeToken + " agentId=";
+		agentListingsShortCodeToken += this.getFieldValue(document.forms[0].agentId);
+		agentListingsShortCodeToken += "]";
+		tinyMCEPopup.editor.execCommand('mceInsertContent', false,
+				agentListingsShortCodeToken);
+		tinyMCEPopup.close();
+	},
+	insertOfficeListings : function(officeListingsShortCodeToken) {
+		// Insert the contents from the input into the document
+		var officeListingsShortCodeToken = "[" + officeListingsShortCodeToken + " officeId=";
+		officeListingsShortCodeToken += this.getFieldValue(document.forms[0].officeId);
+		officeListingsShortCodeToken += "]";
+		tinyMCEPopup.editor.execCommand('mceInsertContent', false,
+				officeListingsShortCodeToken);
+		tinyMCEPopup.close();
+	},	
 	insertToppicks : function(toppicksShortCodeToken) {
 		// Insert the contents from the input into the document
 		var toppicksShortCode = "[" + toppicksShortCodeToken + " id=";
@@ -76,4 +94,4 @@ var IhfTopPicksDialog = {
 	}
 }
 
-tinyMCEPopup.onInit.add(IhfTopPicksDialog.init, IhfTopPicksDialog);
+tinyMCEPopup.onInit.add(IhfGalleryDialog.init, IhfGalleryDialog);

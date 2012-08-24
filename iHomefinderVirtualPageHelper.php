@@ -2,6 +2,13 @@
 if( !class_exists('IHomefinderVirtualPageHelper')) {
 	/**
 	 * @author ihomefinder
+	 * 
+	 * This class defines option names related to iHomefinder Virtual Pages. 
+	 * 
+	 * For most virtual pages, we store the following options:
+	 * - title - page title used by the theme
+	 * - template - used by the theme to display the virual page.
+	 * - permalink - used in the rewrite rules.  
 	 */
 	class IHomefinderVirtualPageHelper {
 
@@ -75,6 +82,27 @@ if( !class_exists('IHomefinderVirtualPageHelper')) {
 		const OPTION_VIRTUAL_PAGE_TITLE_SOLD_DETAIL="ihf-virtual-page-title-sold-detail";
 		const OPTION_VIRTUAL_PAGE_TEMPLATE_SOLD_DETAIL="ihf-virtual-page-template-sold-detail";
 		const OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_SOLD_DETAIL="ihf-virtual-page-permalink-text-sold-detail";		
+
+		//Listing OfficeListVirtualPage related options
+		const OPTION_VIRTUAL_PAGE_TITLE_OFFICE_LIST="ihf-virtual-page-title-office-list";
+		const OPTION_VIRTUAL_PAGE_TEMPLATE_OFFICE_LIST="ihf-virtual-page-template-office-list";
+		const OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_OFFICE_LIST="ihf-virtual-page-permalink-text-office-list";		
+
+		//Listing OfficeDetailVirtualPage related options
+		const OPTION_VIRTUAL_PAGE_TITLE_OFFICE_DETAIL="ihf-virtual-page-title-office-detail";
+		const OPTION_VIRTUAL_PAGE_TEMPLATE_OFFICE_DETAIL="ihf-virtual-page-template-office-detail";
+		const OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_OFFICE_DETAIL="ihf-virtual-page-permalink-text-office-detail";		
+
+		//Listing AgentListVirtualPage related options
+		const OPTION_VIRTUAL_PAGE_TITLE_AGENT_LIST="ihf-virtual-page-title-agent-list";
+		const OPTION_VIRTUAL_PAGE_TEMPLATE_AGENT_LIST="ihf-virtual-page-template-agent-list";
+		const OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_AGENT_LIST="ihf-virtual-page-permalink-text-agent-list";		
+
+		//Listing AgentDetailVirtualPage related options
+		const OPTION_VIRTUAL_PAGE_TITLE_AGENT_DETAIL="ihf-virtual-page-title-agent-detail";
+		const OPTION_VIRTUAL_PAGE_TEMPLATE_AGENT_DETAIL="ihf-virtual-page-template-agent-detail";
+		const OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_AGENT_DETAIL="ihf-virtual-page-permalink-text-agent-detail";		
+		
 		private static $instance ;
 
 		private function __construct(){
@@ -142,6 +170,22 @@ if( !class_exists('IHomefinderVirtualPageHelper')) {
 			register_setting( IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_SOLD_DETAIL );
 			register_setting( IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_SOLD_DETAIL );
 			register_setting( IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_SOLD_DETAIL );
+
+			register_setting( IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_OFFICE_LIST );
+			register_setting( IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_OFFICE_LIST );
+			register_setting( IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_OFFICE_LIST );
+			
+			register_setting( IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_OFFICE_DETAIL );
+			register_setting( IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_OFFICE_DETAIL );
+			register_setting( IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_OFFICE_DETAIL );
+
+			register_setting( IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_AGENT_LIST );
+			register_setting( IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_AGENT_LIST );
+			register_setting( IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_AGENT_LIST );
+			
+			register_setting( IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_AGENT_DETAIL );
+			register_setting( IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_AGENT_DETAIL );
+			register_setting( IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_AGENT_DETAIL );
 			
 		}
 		

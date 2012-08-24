@@ -15,9 +15,10 @@ if( !class_exists('IHomefinderTinyMceManager')) {
 			return self::$instance;		
 		}		
 		
-		function addButtons(){
+		function addButtons(){			
 			if ( !current_user_can('edit_posts') && !current_user_can('edit_pages') )
 				return;
+				
 				
 			if( !IHomefinderPermissions::getInstance()->isGalleryShortCodesEnabled())
 				return ;

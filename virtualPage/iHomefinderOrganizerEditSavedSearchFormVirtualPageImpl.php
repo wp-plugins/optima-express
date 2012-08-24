@@ -39,14 +39,17 @@ if( !class_exists('IHomefinderOrganizerEditSavedSearchFormVirtualPageImpl')) {
 			
 			$subscriberId=IHomefinderUtility::getInstance()->getQueryVar('subscriberID');
 			$searchProfileID=IHomefinderUtility::getInstance()->getQueryVar('searchProfileID');
+			$agentID=IHomefinderUtility::getInstance()->getQueryVar('agentID');
 						
 			$ihfUrl = IHomefinderConstants::EXTERNAL_URL . '?method=handleRequest&viewType=json&requestType=property-organizer-edit-saved-search-form' ;
 			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "authenticationToken", $authenticationToken);
 			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "subscriberId", $subscriberId);
 			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "searchProfileID", $searchProfileID);
+			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "agentID", $agentID);
 			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "phpStyle", "true");
 
 			$searchQueryArray=IHomefinderStateManager::getInstance()->getLastSearchQueryArray();
+			
 			if( count($searchQueryArray) > 0 ){
 				$cityID = trim(IHomefinderUtility::getInstance()->getVarFromArray("cityID", $searchQueryArray ));
 				$zip = trim(IHomefinderUtility::getInstance()->getVarFromArray("zip", $searchQueryArray ));

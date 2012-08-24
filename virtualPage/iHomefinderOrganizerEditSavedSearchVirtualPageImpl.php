@@ -32,15 +32,15 @@ if( !class_exists('IHomefinderOrganizerEditSavedSearchVirtualPageImpl')) {
 			$contentInfo = IHomefinderRequestor::remoteRequest($ihfUrl);
 			$content = IHomefinderRequestor::getContent( $contentInfo );
 
-			if(IHomefinderStateManager::getInstance()->isLoggedIn()){	
-				$redirectUrl=IHomefinderUrlFactory::getInstance()->getOrganizerViewSavedSearchListUrl(true) ; 
-				//redirect to the list of saved searches to avoid double posting the request
-				$content = '<meta http-equiv="refresh" content="0;url=' . $redirectUrl . '">';
-			} else {
-				$redirectUrl=IHomefinderUrlFactory::getInstance()->getOrganizerEmailUpdatesConfirmationUrl(true) ; 
-				//redirect to the list of saved searches to avoid double posting the request
-				$content = '<meta http-equiv="refresh" content="0;url=' . $redirectUrl . '">';
-			}
+//			if(IHomefinderStateManager::getInstance()->isLoggedIn()){	
+//				$redirectUrl=IHomefinderUrlFactory::getInstance()->getOrganizerViewSavedSearchListUrl(true) ; 
+//				//redirect to the list of saved searches to avoid double posting the request
+//				$content = '<meta http-equiv="refresh" content="0;url=' . $redirectUrl . '">';
+//			} else {
+//				$redirectUrl=IHomefinderUrlFactory::getInstance()->getOrganizerEmailUpdatesConfirmationUrl(true) ; 
+//				//redirect to the list of saved searches to avoid double posting the request
+//				$content = '<meta http-equiv="refresh" content="0;url=' . $redirectUrl . '">';
+//			}
 				
 			IHomefinderLogger::getInstance()->debug( '<br/><br/>' . $ihfUrl ) ;
 			IHomefinderLogger::getInstance()->debug('End IHomefinderOrganizerEditSavedSearchVirtualPageImpl');

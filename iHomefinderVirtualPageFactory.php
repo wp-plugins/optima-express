@@ -37,6 +37,12 @@ if( !class_exists('IHomefinderVirtualPageFactory')) {
 	include_once(   'virtualPage/iHomefinderSoldFeaturedListingVirtualPageImpl.php');
 	include_once(   'virtualPage/iHomefinderSupplementalListingVirtualPageImpl.php');
 
+	include_once(   'virtualPage/iHomefinderOfficeListVirtualPageImpl.php');
+	include_once(   'virtualPage/iHomefinderOfficeDetailVirtualPageImpl.php');
+	include_once(   'virtualPage/iHomefinderAgentListVirtualPageImpl.php');
+	include_once(   'virtualPage/iHomefinderAgentDetailVirtualPageImpl.php');
+	include_once(   'virtualPage/iHomefinderAgentOrOfficeListingsVirtualPageImpl.php');
+
 	/**
 	 * This singleton class creates instances of iHomefinder VirtualPages, based
 	 * on a type parameter.
@@ -90,6 +96,12 @@ if( !class_exists('IHomefinderVirtualPageFactory')) {
 		const OPEN_HOME_SEARCH_FORM="idx-open-home-search-form";
 		const SUPPLEMENTAL_LISTING="idx-supplemental-listing";
 		const SOLD_FEATURED_LISTING="idx-sold-featured-listing";
+		
+		const OFFICE_LIST="idx-office-list";
+		const OFFICE_DETAIL="idx-office-detail";
+		const AGENT_LIST="idx-agent-list";
+		const AGENT_DETAIL="idx-agent-detail";
+		const AGENT_OR_OFFICE_LISTINGS="idx-agent-or-office-listings";
 		///////////////////////////////////////////////////////
 
 		public function getVirtualPage( $type ){
@@ -185,7 +197,21 @@ if( !class_exists('IHomefinderVirtualPageFactory')) {
 			else if( $type == IHomefinderVirtualPageFactory::SOLD_FEATURED_LISTING ){
 				$virtualPage = new IHomefinderSoldFeaturedListingVirtualPageImpl();
 			}
-			
+			else if( $type == IHomefinderVirtualPageFactory::OFFICE_LIST ){
+				$virtualPage = new IHomefinderOfficeListVirtualPageImpl();
+			}			
+			else if( $type == IHomefinderVirtualPageFactory::OFFICE_DETAIL ){
+				$virtualPage = new IHomefinderOfficeDetailVirtualPageImpl();
+			}			
+			else if( $type == IHomefinderVirtualPageFactory::AGENT_LIST ){
+				$virtualPage = new IHomefinderAgentListVirtualPageImpl();
+			}			
+			else if( $type == IHomefinderVirtualPageFactory::AGENT_DETAIL ){
+				$virtualPage = new IHomefinderAgentDetailVirtualPageImpl();
+			}			
+			else if($type == IHomefinderVirtualPageFactory::AGENT_OR_OFFICE_LISTINGS ){
+				$virtualPage = new IHomefinderAgentOrOfficeListingsVirtualPageImpl() ;
+			}
 
 			IHomefinderLogger::getInstance()->debug('Complete IHomefinderVirtualPageFactory.getVirtualPage');
 			return $virtualPage ;

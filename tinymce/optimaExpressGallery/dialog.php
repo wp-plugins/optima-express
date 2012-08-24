@@ -5,13 +5,49 @@
 	
 	include_once '../../iHomefinderConstants.php';
 	include_once '../../iHomefinderAdmin.php';
+	include_once '../../iHomefinderPermissions.php';
 	include_once '../../iHomefinderRequestor.php';
 	include_once '../../iHomefinderShortcodeDispatcher.php';
 	
 
+	function createAgentSelect(){
+		$formData=IHomefinderShortcodeDispatcher::getInstance()->getGalleryFormData() ;
+		if( isset($formData) && isset($formData->agentList)){
+			$agentBioList=$formData->agentList ;
+			$selectText = "<SELECT id='agentId' name='agentId'>";
+			foreach ($agentBioList as $i => $value) {
+				$selectText .= "<option value='" . $agentBioList[$i]->agentId . "'>";
+				$selectText .=  $agentBioList[$i]->agentName ;
+				$selectText .=  "</option>" ;
+			}
+			$selectText .= "</SELECT>";
+			echo($selectText);			
+		}
+		else{
+			echo("No Agents are currently available.");
+		}		
+	}
+
+	function createOfficeSelect(){
+		$formData=IHomefinderShortcodeDispatcher::getInstance()->getGalleryFormData();
+		if( isset($formData) && isset($formData->officeList)){
+			$officeList=$formData->officeList ;
+			$selectText = "<SELECT id='officeId' name='officeId'>";
+			foreach ($officeList as $i => $value) {
+				$selectText .= "<option value='" . $officeList[$i]->officeId . "'>";
+				$selectText .=  $officeList[$i]->officeName ;
+				$selectText .=  "</option>" ;
+			}
+			$selectText .= "</SELECT>";
+			echo($selectText);			
+		}
+		else{
+			echo("No Agents are currently available.");
+		}				
+	}
 	
 	function createTopPicksSelect(){
-		$formData=IHomefinderShortcodeDispatcher::getInstance()->getTopPicksFormData();
+		$formData=IHomefinderShortcodeDispatcher::getInstance()->getGalleryFormData();
 		if( isset($formData) && isset($formData->hotsheetsList)){
 			$hotsheetsList=$formData->hotsheetsList ;
 			$selectText = "<SELECT id='toppickId' name='toppickId'>";
@@ -29,7 +65,7 @@
 	}
 	
 	function createCitySelect(){
-		$formData=IHomefinderShortcodeDispatcher::getInstance()->getSearchFormData();
+		$formData=IHomefinderShortcodeDispatcher::getInstance()->getGalleryFormData();
 		if( isset( $formData) && isset( $formData->citiesList)){
 			$citiesList=$formData->citiesList ;
 			$selectText = "<SELECT id='cityId' name='cityId' size='5'>";
@@ -43,7 +79,7 @@
 		}
 	}
 	function createPropertyTypeSelect(){
-		$formData=IHomefinderShortcodeDispatcher::getInstance()->getSearchFormData();
+		$formData=IHomefinderShortcodeDispatcher::getInstance()->getGalleryFormData();
 		if( isset( $formData) && isset( $formData->propertyTypesList)){
 			$propertyTypesList=$formData->propertyTypesList ;
 			$selectText = "<SELECT id='propertyType' name='propertyType'>";
@@ -73,18 +109,53 @@
 	</head>
 	<body>
 		<div style="margin:5px;">
-			<input name="shortcodeType" type="radio" checked="checked" onclick="jQuery('#featuredMenu').toggle(); jQuery('#toppicksMenu').hide();jQuery('#searchMenu').hide();"/>
+			<input name="shortcodeType" type="radio" checked="checked" onclick="jQuery('.ihfMenu').hide();jQuery('#featuredMenu').toggle();"/>
 			Featured Listings<br/>
-			<input name="shortcodeType" type="radio" onclick="jQuery('#toppicksMenu').toggle();jQuery('#featuredMenu').hide();jQuery('#searchMenu').hide();"/>
+			<input name="shortcodeType" type="radio" onclick="jQuery('.ihfMenu').hide();jQuery('#toppicksMenu').toggle();"/>
 			Top Picks</br>
-			<input name="shortcodeType" type="radio" onclick="jQuery('#searchMenu').toggle(); jQuery('#toppicksMenu').hide();jQuery('#featuredMenu').hide();"/>
+			<input name="shortcodeType" type="radio" onclick="jQuery('.ihfMenu').hide();jQuery('#searchMenu').toggle(); "/>
 			Search<br/>
+			
+			<?php if(IHomefinderPermissions::getInstance()->isAgentBioEnabled()){?>
+				<input name="shortcodeType" type="radio" onclick="jQuery('.ihfMenu').hide();jQuery('#agentMenu').toggle(); "/>
+				Agent Listings<br/>
+			<?php }?>
+			<?php if(IHomefinderPermissions::getInstance()->isOfficeEnabled()){?>
+				<input name="shortcodeType" type="radio" onclick="jQuery('.ihfMenu').hide();jQuery('#officeMenu').toggle();"/>
+				Office Listings<br/>
+			<?php }?>
 		</div>		
 		
 		<div style="margin: 25px 5px 25px 5px;">
 		<form onsubmit="return false;" action="#">
 
-			<div id="toppicksMenu" style="display: none;">
+			<div id="agentMenu" class="ihfMenu" style="display: none;">
+							
+				<div class="mceActionPanel">
+					<div><?php createAgentSelect(); ?></div>
+				</div>
+				
+				<div class="mceActionPanel">
+					<input type="button" class="button"
+					       name="insertAgentListings" value="Insert"
+					       onclick="IhfGalleryDialog.insertAgentListings('<?php echo(IHomefinderShortcodeDispatcher::getInstance()->getAgentListingsShortcode())?>');" />
+				</div>
+			</div>
+
+			<div id="officeMenu" class="ihfMenu" style="display: none;">
+							
+				<div class="mceActionPanel">
+					<div><?php createOfficeSelect(); ?></div>
+				</div>
+				
+				<div class="mceActionPanel">
+					<input type="button" class="button"
+					       name="insertOfficeListings" value="Insert"
+					       onclick="IhfGalleryDialog.insertOfficeListings('<?php echo(IHomefinderShortcodeDispatcher::getInstance()->getOfficeListingsShortcode())?>');" />
+				</div>
+			</div>
+			
+			<div id="toppicksMenu" class="ihfMenu" style="display: none;">
 							
 				<div class="mceActionPanel">
 					<div><?php createTopPicksSelect(); ?></div>
@@ -93,19 +164,19 @@
 				<div class="mceActionPanel">
 					<input type="button" class="button"
 					       name="insertToppicks" value="Insert"
-					       onclick="IhfTopPicksDialog.insertToppicks('<?php echo(IHomefinderShortcodeDispatcher::getInstance()->getToppicksShortCode())?>');" />
+					       onclick="IhfGalleryDialog.insertToppicks('<?php echo(IHomefinderShortcodeDispatcher::getInstance()->getToppicksShortCode())?>');" />
 				</div>
 			</div>
 
-			<div id="featuredMenu" >
+			<div id="featuredMenu"  class="ihfMenu">
 				<div class="mceActionPanel">
 					<input type="button" class="button"
 					       name="insertFeatured" value="Insert"
-					       onclick="IhfTopPicksDialog.insertFeaturedListings('<?php echo(IHomefinderShortcodeDispatcher::getInstance()->getFeaturedShortcode())	?>');" />
+					       onclick="IhfGalleryDialog.insertFeaturedListings('<?php echo(IHomefinderShortcodeDispatcher::getInstance()->getFeaturedShortcode())	?>');" />
 				</div>			
 			</div>
 			
-			<div id="searchMenu" style="display:none">
+			<div id="searchMenu" class="ihfMenu" style="display:none">
 				<div class="mceActionPanel">
 					<div id="searchMenuErrors"></div>
 					<div style="float:left; margin: 10px;">
@@ -131,7 +202,7 @@
 				<div class="mceActionPanel">
 					<input type="button" class="button"
 					       name="insertSearchResults" value="Insert"
-					       onclick="IhfTopPicksDialog.insertSearchResults('<?php echo(IHomefinderShortcodeDispatcher::getInstance()->getSearchResultsShortcode())?>');" />
+					       onclick="IhfGalleryDialog.insertSearchResults('<?php echo(IHomefinderShortcodeDispatcher::getInstance()->getSearchResultsShortcode())?>');" />
 				</div>						
 			</div>
 		</form>

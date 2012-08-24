@@ -21,9 +21,10 @@ if( !class_exists('IHomefinderShortcodeDispatcher')) {
 		private $searchResultsShortCode = "optima_express_search_results";
 		private $quickSearchShortCode = "optima_express_quick_search";
 		private $mapSearchShortCode = "optima_express_map_search";
-
-		private $searchFormData ;
-		private $toppicksFormData ;
+		private $agentListingsShortCode = "optima_express_agent_listings";
+		private $officeListingsShortCode = "optima_express_office_listings";
+		
+		private $galleryFormData ;
 		private $mapSearchContent ;
 
 		private function __construct(){
@@ -39,11 +40,13 @@ if( !class_exists('IHomefinderShortcodeDispatcher')) {
 
 		public function init(){
 			//
-			add_shortcode($this->getToppicksShortcode(),      array($this, "getToppicks"));
-			add_shortcode($this->getFeaturedShortcode(),      array($this, "getFeaturedListings"));
-			add_shortcode($this->getSearchResultsShortcode(), array($this, "getSearchResults"));
-			add_shortcode($this->getQuickSearchShortcode(),   array($this, "getQuickSearch"));
-			add_shortcode($this->getMapSearchShortcode(),     array($this, "getMapSearch"));
+			add_shortcode($this->getToppicksShortcode(),              array($this, "getToppicks"));
+			add_shortcode($this->getFeaturedShortcode(),              array($this, "getFeaturedListings"));
+			add_shortcode($this->getSearchResultsShortcode(),         array($this, "getSearchResults"));
+			add_shortcode($this->getQuickSearchShortcode(),           array($this, "getQuickSearch"));
+			add_shortcode($this->getMapSearchShortcode(),             array($this, "getMapSearch"));
+			add_shortcode($this->getAgentListingsShortcode(),         array($this, "getAgentListings"));
+			add_shortcode($this->getOfficeListingsShortcode(),        array($this, "getOfficeListings"));
 		}
 
 		public function getToppicksShortcode(){
@@ -65,7 +68,15 @@ if( !class_exists('IHomefinderShortcodeDispatcher')) {
 		public function getMapSearchShortcode(){
 			return $this->mapSearchShortCode ;
 		}		
-
+		
+		public function getAgentListingsShortcode(){
+			return $this->agentListingsShortCode ;
+		}
+		
+		public function getOfficeListingsShortcode(){
+			return $this->officeListingsShortCode ;
+		}
+		
 		/**
 		 * Get the content to replace the short code
 		 *
@@ -91,7 +102,32 @@ if( !class_exists('IHomefinderShortcodeDispatcher')) {
 			}
 			return $content;
 		}
+		
+		function getAgentListings( $attr ){
+			$virtualPage=IHomefinderVirtualPageFactory::getInstance()->getVirtualPage( IHomefinderVirtualPageFactory::AGENT_OR_OFFICE_LISTINGS );
+			$authenticationToken=$this->ihfAdmin->getAuthenticationToken();
+			$content='';
+			//All values in the $attr array are convered to lowercase.
+			if( $attr['agentid'] != null ){
+				$_REQUEST['agentId']=$attr['agentid'];
+			}
+			$content=$virtualPage->getContent($authenticationToken);
+			return $content;
+		}
 
+		function getOfficeListings( $attr ){
+			$virtualPage=IHomefinderVirtualPageFactory::getInstance()->getVirtualPage( IHomefinderVirtualPageFactory::AGENT_OR_OFFICE_LISTINGS );
+			$authenticationToken=$this->ihfAdmin->getAuthenticationToken();
+			$content='';
+
+			//All values in the $attr array are convered to lowercase.
+			if( $attr['officeid'] != null ){
+				$_REQUEST['officeId']=$attr['officeid'];
+			}
+			$content=$virtualPage->getContent($authenticationToken);
+			return $content;
+		}
+		
 		function getFeaturedListings( $attr ) {
 			$content='';
 			$featuredSearchVirtualPage=IHomefinderVirtualPageFactory::getInstance()->getVirtualPage( IHomefinderVirtualPageFactory::FEATURED_SEARCH );
@@ -153,22 +189,13 @@ if( !class_exists('IHomefinderShortcodeDispatcher')) {
 			return $content;
 		}				
 
-		function getTopPicksFormData(){
+		function getGalleryFormData(){
 			if( !isset( $this->toppicksFormData )){
 				$authenticationToken=IHomefinderAdmin::getInstance()->getAuthenticationToken();
 				$ihfUrl = iHomefinderConstants::EXTERNAL_URL . '?method=handleRequest&viewType=json&requestType=search-form-lists&authenticationToken=' .  $authenticationToken ;
-				$this->toppicksFormData = iHomefinderRequestor::remoteRequest($ihfUrl);
+				$this->galleryFormData = iHomefinderRequestor::remoteRequest($ihfUrl);
 			}
-			return $this->toppicksFormData;
-		}
-
-		function getSearchFormData(){
-			if( !isset( $this->searchFormData )){
-				$authenticationToken=IHomefinderAdmin::getInstance()->getAuthenticationToken();
-				$ihfUrl = iHomefinderConstants::EXTERNAL_URL . '?method=handleRequest&viewType=json&requestType=search-form-lists&authenticationToken=' .  $authenticationToken ;
-				$this->searchFormData = iHomefinderRequestor::remoteRequest($ihfUrl);
-			}
-			return $this->searchFormData;
+			return $this->galleryFormData;
 		}
 	}
 }//end if( !class_exists('IHomefinderShortcodeDispatcher'))

@@ -76,7 +76,8 @@ if(!class_exists('IHomefinderRewriteRules')){
 			$wp->add_query_var('message');
 
 			$wp->add_query_var('hotSheetId');
-			$wp->add_query_var('agentId');
+			$wp->add_query_var('agentID');
+			$wp->add_query_var('officeID');			
 			
 			$wp->add_query_var('subscriberName');
 			$wp->add_query_var('actionType');
@@ -141,6 +142,11 @@ if(!class_exists('IHomefinderRewriteRules')){
 			$this->setOpenHomeSearchFormRewriteRules($matchRulePrefix);
 			$this->setSoldFeaturedListingRewriteRules($matchRulePrefix);
 			$this->setSupplementalListingRewriteRules($matchRulePrefix);
+			
+			$this->setOfficeListRewriteRules($matchRulePrefix);
+			$this->setOfficeDetailRewriteRules($matchRulePrefix);
+			$this->setAgentListRewriteRules($matchRulePrefix);
+			$this->setAgentDetailRewriteRules($matchRulePrefix);
 		}
 
 		private function setAdvancedSearchRewriteRules($matchRulePrefix){
@@ -161,6 +167,54 @@ if(!class_exists('IHomefinderRewriteRules')){
 	  			
 		}
 		
+		private function setOfficeListRewriteRules($matchRulePrefix){
+			global $wp_rewrite;
+	  		$rewriteUrl=$this->rootPageName ;
+	  		$rewriteUrl .= '&' . iHomefinderConstants::IHF_TYPE_URL_VAR . '=' . IHomefinderVirtualPageFactory::OFFICE_LIST ;
+
+	  		$wp_rewrite->add_rule( 
+	  			$matchRulePrefix . $this->urlFactory->getOfficeListUrl(false), 
+	  			$rewriteUrl, 
+	  			'top');			
+		}
+		
+		private function setOfficeDetailRewriteRules($matchRulePrefix){
+			global $wp_rewrite;
+	  		$rewriteUrl=$this->rootPageName ;
+	  		$rewriteUrl .= '&' . iHomefinderConstants::IHF_TYPE_URL_VAR . '=' . IHomefinderVirtualPageFactory::OFFICE_DETAIL ;
+
+	  		$wp_rewrite->add_rule( 
+	  			$matchRulePrefix . $this->urlFactory->getOfficeDetailUrl(false) . '/([^/]+)' . '/([^/]+)', 
+	  			$rewriteUrl . '&officeID=$matches[2]',
+	  			'top');			
+		}		
+
+		private function setAgentListRewriteRules($matchRulePrefix){
+			global $wp_rewrite;
+	  		$rewriteUrl=$this->rootPageName ;
+	  		$rewriteUrl .= '&' . iHomefinderConstants::IHF_TYPE_URL_VAR . '=' . IHomefinderVirtualPageFactory::AGENT_LIST ;
+
+	  		$wp_rewrite->add_rule( 
+	  			$matchRulePrefix . $this->urlFactory->getAgentListUrl(false) . '/([^/]+)',
+	  			$rewriteUrl . '&officeID=$matches[1]',
+	  			'top');
+
+	  		$wp_rewrite->add_rule( 
+	  			$matchRulePrefix . $this->urlFactory->getAgentListUrl(false),
+	  			$rewriteUrl ,
+	  			'top');			  			
+		}
+		
+		private function setAgentDetailRewriteRules($matchRulePrefix){
+			global $wp_rewrite;
+	  		$rewriteUrl=$this->rootPageName ;
+	  		$rewriteUrl .= '&' . iHomefinderConstants::IHF_TYPE_URL_VAR . '=' . IHomefinderVirtualPageFactory::AGENT_DETAIL ;
+
+	  		$wp_rewrite->add_rule( 
+	  			$matchRulePrefix . $this->urlFactory->getAgentDetailUrl(false) . '/([^/]+)' . '/([^/]+)',
+	  			$rewriteUrl . '&agentID=$matches[2]',
+	  			'top');			
+		}				
 		private function setContactFormRewriteRules($matchRulePrefix){
 			global $wp_rewrite;
 	  		$rewriteUrl=$this->rootPageName ;
