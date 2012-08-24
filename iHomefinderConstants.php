@@ -9,7 +9,7 @@ if( !interface_exists('IHomefinderConstants')){
 	interface IHomefinderConstants{
 
 		const VERSION="1.3.0";
-		const EXTERNAL_URL="http://demo2.idxre.com/services/wordpress";
+		const EXTERNAL_URL="http://www.idxre.com/services/wordpress";
 
 		//Group for Activation related options
 		//Also used as menu slug for the Activate Menu
