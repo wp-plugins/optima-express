@@ -18,6 +18,8 @@ if( !class_exists('IHomefinderVirtualPageDispatcher')) {
 		private $content = null;
 		private $title = null;
 		private $initialized=false;
+		
+		private $genericErrorPageContent="Error 123: Unable to load content. Please visit the <a href='http://www.ihomefinder.com/support/optima-express/error-messages/' target='_blank'>support guide</a>, or contact customer support.";
 
 		private function __construct(){
 			$this->ihfAdmin = IHomefinderAdmin::getInstance();
@@ -82,7 +84,7 @@ if( !class_exists('IHomefinderVirtualPageDispatcher')) {
 				$_postArray['post_title'] = $this->getTitle() ;
 				//This value will get replaced with remote content.  If it is not replaced, then an error
 				//has occurred and we leave the following default text.
-				$_postArray['post_content'] = 'Error loading content.  Please contact customer support.' ;
+				$_postArray['post_content'] = $this->genericErrorPageContent ;
 				$_postArray['post_excerpt'] = ' ' ;
 				$_postArray['post_status'] = 'publish';
 				$_postArray['post_type'] = 'page';
