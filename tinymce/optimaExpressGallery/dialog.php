@@ -109,26 +109,29 @@
 	</head>
 	<body>
 		<div style="margin:5px;">
-			<input name="shortcodeType" type="radio" checked="checked" onclick="jQuery('.ihfMenu').hide();jQuery('#featuredMenu').toggle();"/>
+			<input name="shortcodeType" type="radio" checked="checked" onclick="jQuery('.ihfMenu').hide();jQuery('#featuredMenu').toggle();jQuery('#includeMap').show();"/>
 			Featured Listings<br/>
-			<input name="shortcodeType" type="radio" onclick="jQuery('.ihfMenu').hide();jQuery('#toppicksMenu').toggle();"/>
+			<input name="shortcodeType" type="radio" onclick="jQuery('.ihfMenu').hide();jQuery('#toppicksMenu').toggle();jQuery('#includeMap').show();"/>
 			Top Picks</br>
-			<input name="shortcodeType" type="radio" onclick="jQuery('.ihfMenu').hide();jQuery('#searchMenu').toggle(); "/>
+			<input name="shortcodeType" type="radio" onclick="jQuery('.ihfMenu').hide();jQuery('#searchMenu').toggle();jQuery('#includeMap').show();"/>
 			Search<br/>
 			
 			<?php if(IHomefinderPermissions::getInstance()->isAgentBioEnabled()){?>
-				<input name="shortcodeType" type="radio" onclick="jQuery('.ihfMenu').hide();jQuery('#agentMenu').toggle(); "/>
+				<input name="shortcodeType" type="radio" onclick="jQuery('.ihfMenu').hide();jQuery('#agentMenu').toggle();jQuery('#includeMap').hide();"/>
 				Agent Listings<br/>
 			<?php }?>
 			<?php if(IHomefinderPermissions::getInstance()->isOfficeEnabled()){?>
-				<input name="shortcodeType" type="radio" onclick="jQuery('.ihfMenu').hide();jQuery('#officeMenu').toggle();"/>
+				<input name="shortcodeType" type="radio" onclick="jQuery('.ihfMenu').hide();jQuery('#officeMenu').toggle();jQuery('#includeMap').hide();"/>
 				Office Listings<br/>
 			<?php }?>
 		</div>		
 		
-		<div style="margin: 25px 5px 25px 5px;">
+		<div style="margin: 5px 5px 5px 5px;">
 		<form onsubmit="return false;" action="#">
-
+			<div id="includeMap">
+				<input type="checkbox" value="true" name="includeMap"/>
+				Include Map
+			</div>
 			<div id="agentMenu" class="ihfMenu" style="display: none;">
 							
 				<div class="mceActionPanel">
@@ -198,8 +201,11 @@
 						<div><input type="text" name="maxPrice" /></div>
 					</div>
 					<div style="clear:both;"></div>
-				</div>				
+					
+				</div>	
+										
 				<div class="mceActionPanel">
+				
 					<input type="button" class="button"
 					       name="insertSearchResults" value="Insert"
 					       onclick="IhfGalleryDialog.insertSearchResults('<?php echo(IHomefinderShortcodeDispatcher::getInstance()->getSearchResultsShortcode())?>');" />

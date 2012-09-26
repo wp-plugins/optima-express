@@ -26,6 +26,8 @@ var IhfGalleryDialog = {
 		// Insert the contents from the input into the document
 		var toppicksShortCode = "[" + toppicksShortCodeToken + " id=";
 		toppicksShortCode += this.getFieldValue(document.forms[0].toppickId);
+		toppicksShortCode += this.includeMap(document.forms[0]);
+			
 		toppicksShortCode += "]";
 		tinyMCEPopup.editor.execCommand('mceInsertContent', false,
 				toppicksShortCode);
@@ -34,7 +36,10 @@ var IhfGalleryDialog = {
 
 	insertFeaturedListings : function(featuredShortCodeToken) {
 		// Insert the contents from the input into the document
-		var featuredShortCode = "[" + featuredShortCodeToken + "]";
+		var featuredShortCode = "[" + featuredShortCodeToken ;
+		featuredShortCode += this.includeMap(document.forms[0]);
+		featuredShortCode += "]";
+		
 		tinyMCEPopup.editor.execCommand('mceInsertContent', false,
 				featuredShortCode);
 		tinyMCEPopup.close();
@@ -61,6 +66,8 @@ var IhfGalleryDialog = {
 				+ this.getFieldValue(theForm.minPrice);
 		searchShortCode += " maxPrice="
 				+ this.getFieldValue(theForm.maxPrice);
+		searchShortCode += this.includeMap(document.forms[0]);
+		
 		searchShortCode += "]";
 		
 		
@@ -68,6 +75,14 @@ var IhfGalleryDialog = {
 		tinyMCEPopup.editor.execCommand('mceInsertContent', false,
 				searchShortCode);
 		tinyMCEPopup.close();
+	},
+	
+	includeMap: function( theForm ){
+		if( theForm.includeMap && theForm.includeMap.checked ){
+			return " includeMap=true";
+		}
+		
+		return " includeMap=false";
 	},
 
 	getFieldValue : function(formField) {

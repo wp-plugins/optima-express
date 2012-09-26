@@ -80,7 +80,9 @@ if( !class_exists('IHomefinderVirtualPageDispatcher')) {
 			if( $this->initialized ){
 				$title = $this->currentVirtualPage->getTitle();
 				$_postArray['post_title'] = $this->getTitle() ;
-				$_postArray['post_content'] = 'ihf' ;
+				//This value will get replaced with remote content.  If it is not replaced, then an error
+				//has occurred and we leave the following default text.
+				$_postArray['post_content'] = 'Error loading content.  Please contact customer support.' ;
 				$_postArray['post_excerpt'] = ' ' ;
 				$_postArray['post_status'] = 'publish';
 				$_postArray['post_type'] = 'page';

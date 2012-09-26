@@ -88,6 +88,7 @@ if( !class_exists('IHomefinderShortcodeDispatcher')) {
 				$topPicksVirtualPage=IHomefinderVirtualPageFactory::getInstance()->getVirtualPage( IHomefinderVirtualPageFactory::HOTSHEET_SEARCH_RESULTS );
 				$authenticationToken=$this->ihfAdmin->getAuthenticationToken();
 				$_REQUEST['hotSheetId']=$attr['id'];
+				$this->includeMap( $attr );
 
 				if( array_key_exists("includeDisplayName", $attr) && 'false' == $attr['includeDisplayName']){
 					$_REQUEST['includeDisplayName']='false';
@@ -96,11 +97,20 @@ if( !class_exists('IHomefinderShortcodeDispatcher')) {
 					$_REQUEST['includeDisplayName']='true';
 				}
 
-				$_REQUEST['includeMap']='false';
+				
 				$_REQUEST['gallery']='true';
 				$content=$topPicksVirtualPage->getContent( $authenticationToken);
 			}
 			return $content;
+		}
+		
+		function includeMap( $attr ){
+			if( array_key_exists("includemap", $attr) && 'true' == $attr['includemap']){
+				$_REQUEST['includeMap']="true";
+			}
+			else{
+				$_REQUEST['includeMap']="false";
+			}			
 		}
 		
 		function getAgentListings( $attr ){
@@ -132,7 +142,8 @@ if( !class_exists('IHomefinderShortcodeDispatcher')) {
 			$content='';
 			$featuredSearchVirtualPage=IHomefinderVirtualPageFactory::getInstance()->getVirtualPage( IHomefinderVirtualPageFactory::FEATURED_SEARCH );
 			$authenticationToken=$this->ihfAdmin->getAuthenticationToken();
-			$_REQUEST['includeMap']='false';
+			$this->includeMap( $attr );
+			
 			$_REQUEST['gallery']='true';
 			$content=$featuredSearchVirtualPage->getContent($authenticationToken);
 			return $content;
@@ -162,8 +173,9 @@ if( !class_exists('IHomefinderShortcodeDispatcher')) {
 			if( $attr['maxprice'] != null && strlen($attr['maxprice']) > 0){
 				$_REQUEST['maxListPrice']=$attr['maxprice'];
 			}
-
-			$_REQUEST['includeMap']='false';
+			
+			$this->includeMap( $attr );
+						
 			$_REQUEST['gallery']='true';
 			$content=$searchResultsVirtualPage->getContent( $authenticationToken);
 			return $content;
