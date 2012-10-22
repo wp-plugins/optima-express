@@ -10,7 +10,7 @@ Tags: MLS, IDX, Real Estate, Multiple Listing Service, Optima Express
 Requires at least: 3.0
 
 
-Tested up to: 3.2.1
+Tested up to: 3.4.2
 
 
 Stable tag: trunk
@@ -320,6 +320,13 @@ The Pro package includes a full mobile IDX site that will work on any browser-en
 
 == Changelog ==
 
+= 1.3.2 =
+
+* Added Broker & Sold/Supplemental pages to widget configuration
+
+* Fixed issues with Light & Ultra-Light User Registration
+
+
 = 1.3.1 =
 
 * Updated Listing Gallery shortcodes to optionally include a map.
@@ -450,6 +457,11 @@ The Pro package includes a full mobile IDX site that will work on any browser-en
 
 
 == Upgrade Notice ==
+
+= 1.3.2 =
+
+Added Broker & Sold/Supplemental pages to widget configuration and fixed User Registration issues.
+
 
 = 1.3.1 =
 

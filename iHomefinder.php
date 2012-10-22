@@ -3,7 +3,7 @@
 Plugin Name: Optima Express IDX Plugin
 Plugin URI: http://wordpress.org/extend/plugins/optima-express/
 Description: This plugin integrates your Wordpress site with IDX search functionality.  This plugin requires an activation key.
-Version: 1.3.1
+Version: 1.3.2
 Author: ihomefinder
 Author URI: http://www.ihomefinder.com
 License: GPL
@@ -98,6 +98,7 @@ add_action("wp_ajax_nopriv_ihf_photo_tour",        array(IHomefinderAjaxHandler:
 add_action("wp_ajax_nopriv_ihf_save_search",        array(IHomefinderAjaxHandler::getInstance(), "saveSearch")) ;
 add_action("wp_ajax_nopriv_ihf_advanced_search_multi_selects", array(IHomefinderAjaxHandler::getInstance(), "advancedSearchMultiSelects")) ;
 add_action("wp_ajax_nopriv_ihf_advanced_search_fields",        array(IHomefinderAjaxHandler::getInstance(), "getAdvancedSearchFormFields")) ;
+add_action("wp_ajax_nopriv_ihf_lead_capture_login",            array(IHomefinderAjaxHandler::getInstance(), "leadCaptureLogin")) ;
 
 add_action("wp_ajax_ihf_more_info_request",        array(IHomefinderAjaxHandler::getInstance(), "requestMoreInfo")) ;
 add_action("wp_ajax_ihf_schedule_showing",         array(IHomefinderAjaxHandler::getInstance(), "scheduleShowing"));
@@ -106,6 +107,7 @@ add_action("wp_ajax_ihf_photo_tour",               array(IHomefinderAjaxHandler:
 add_action("wp_ajax_ihf_save_search",              array(IHomefinderAjaxHandler::getInstance(), "saveSearch")) ;
 add_action("wp_ajax_ihf_advanced_search_multi_selects",       array(IHomefinderAjaxHandler::getInstance(), "advancedSearchMultiSelects")) ;
 add_action("wp_ajax_ihf_advanced_search_fields",              array(IHomefinderAjaxHandler::getInstance(), "getAdvancedSearchFormFields")) ;
+add_action("wp_ajax_ihf_lead_capture_login",                  array(IHomefinderAjaxHandler::getInstance(), "leadCaptureLogin")) ;
 
 //Disable canonical urls, because we use a single page to display all results
 //and Wordpress creates a single canonical url for all of the virtual urls

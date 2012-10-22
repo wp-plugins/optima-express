@@ -361,14 +361,20 @@ if( !class_exists('IHomefinderAdmin')) {
 						$this->getOpenHomeSearchFormPageSetup();				
 						echo('<p/>');							
 						
-						$this->getSupplementalListingPageSetup();
-						echo('<p/>');	
+						if( $permissions->isSupplementalListingsEnabled()){
+							$this->getSupplementalListingPageSetup();
+							echo('<p/>');	
+						}
 
-						$this->getSoldFeaturedListingPageSetup() ;					
-						echo('<p/>');
+						if( $permissions->isSoldPendingEnabled()){
+							$this->getSoldFeaturedListingPageSetup() ;					
+							echo('<p/>');
+							
+							$this->getSoldDetailPageSetup();
+							echo('<p/>');							
+						}
 						
-						$this->getSoldDetailPageSetup();
-						echo('<p/>');
+						
 						
 						if( $permissions->isOfficeEnabled()){
 							$this->getOfficeListPageSetup();

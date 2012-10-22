@@ -91,14 +91,30 @@ if( !class_exists('IHomefinderWidgetContextUtility')) {
 			array(
 			"Search Form" => IHomefinderVirtualPageFactory::LISTING_SEARCH_FORM,
 			"Advanced Search Form" => IHomefinderVirtualPageFactory::LISTING_ADVANCED_SEARCH_FORM,
+			"Open Home Search" => IHomefinderVirtualPageFactory::OPEN_HOME_SEARCH_FORM,
 			"Search Results" => IHomefinderVirtualPageFactory::LISTING_SEARCH_RESULTS,			
 			"Listing Details" => IHomefinderVirtualPageFactory::LISTING_DETAIL,
+			"Sold Property Details" => IHomefinderVirtualPageFactory::LISTING_SOLD_DETAIL,
+			"Sold Featured Listing" => 	IHomefinderVirtualPageFactory::SOLD_FEATURED_LISTING,
+			"Supplemental Listing" => IHomefinderVirtualPageFactory::SUPPLEMENTAL_LISTING,
 			"Featured Properties" => IHomefinderVirtualPageFactory::FEATURED_SEARCH,			
-			"Top Picks" => IHomefinderVirtualPageFactory::HOTSHEET_SEARCH_RESULTS,
+			"Top Picks" => IHomefinderVirtualPageFactory::HOTSHEET_SEARCH_RESULTS,			
 			"Email Alerts" => IHomefinderVirtualPageFactory::ORGANIZER_EDIT_SAVED_SEARCH,
-			"Organizer Pages" => IHomefinderVirtualPageFactory::ORGANIZER_LOGIN 		
+			"Organizer Pages" => IHomefinderVirtualPageFactory::ORGANIZER_LOGIN ,
+			"Valuation Request" => 	IHomefinderVirtualPageFactory::VALUATION_FORM ,
+			"Contact Form" => IHomefinderVirtualPageFactory::CONTACT_FORM
 			);
 			
+			if( IHomefinderPermissions::getInstance()->isAgentBioEnabled()){
+				$listOfPages['Agent Bio'] = IHomefinderVirtualPageFactory::AGENT_DETAIL ;
+				$listOfPages['Agent List'] = IHomefinderVirtualPageFactory::AGENT_LIST ;
+			}
+			
+			if( IHomefinderPermissions::getInstance()->isOfficeEnabled()){
+				$listOfPages['Office Detail'] = IHomefinderVirtualPageFactory::OFFICE_DETAIL ;
+				$listOfPages['Office List'] = IHomefinderVirtualPageFactory::OFFICE_LIST ;
+				
+			}
 			//Search pages are not valid for search widgets.
 			if( $widgetType == IHomefinderConstants::SEARCH_WIDGET_TYPE){
 				unset( $listOfPages["Search Form"]);

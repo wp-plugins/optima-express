@@ -254,6 +254,43 @@ if( !class_exists('IHomefinderAjaxHandler')) {
 			IHomefinderLogger::getInstance()->debug('End getAdvancedSearchFormFields');
 			die();
 		}		
+		
+		public function leadCaptureLogin(){
+			IHomefinderLogger::getInstance()->debug('Begin leadCaptureLogin');
+			$authenticationToken=$this->ihfAdmin->getAuthenticationToken() ;
+			
+			$leadCaptureId = IHomefinderUtility::getInstance()->getRequestVar('leadCaptureId');
+			$email = IHomefinderUtility::getInstance()->getRequestVar('ihfEmail');
+			$name = IHomefinderUtility::getInstance()->getRequestVar('ihfName');
+			$telephone = IHomefinderUtility::getInstance()->getRequestVar('ihfTelephone');
+			$password = IHomefinderUtility::getInstance()->getRequestVar('ihfPassword');
+			$agentId = IHomefinderUtility::getInstance()->getRequestVar('agentID');		
+
+			$type = IHomefinderUtility::getInstance()->getRequestVar('ihfType');
+			
+			$ihfUrl = iHomefinderConstants::EXTERNAL_URL . '?method=handleRequest&viewType=json&requestType=lead-capture-login' ;
+			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "authenticationToken", $authenticationToken );
+			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "phpStyle", "true" );
+			
+			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "loginType", $type );
+			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "email", $email);
+			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "name", $name);
+			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "telephone", $telephone);
+			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "password", $password);	
+			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "agentID", $agentId);
+			$ihfUrl = IHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "leadCaptureId", $leadCaptureId );		
+			
+			//echo $ihfUrl ;
+			//die();
+
+			
+			$contentInfo = IHomefinderRequestor::remoteRequest($ihfUrl, true);
+			//var_dump($contentInfo);
+			$content = IHomefinderRequestor::getContent( $contentInfo );
+			echo $content ;
+			IHomefinderLogger::getInstance()->debug('End getAdvancedSearchFormFields');
+			die();
+		}				
 	}//end class
 }//end ifclass_exists
 ?>

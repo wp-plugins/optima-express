@@ -169,6 +169,16 @@ if( !class_exists('IHomefinderStateManager')) {
 				set_transient($cacheKey, $leadCaptureId, $this->cache_timeout );
 			}
 		}
+		
+		public function getCurrentUrl(){
+			$currentUrl="";
+			if( !$this->isWebCrawler()){
+				$host=$_SERVER['HTTP_HOST'];
+				$requestUri=$_SERVER['REQUEST_URI'];	
+				$currentUrl = "http://" . $host . $requestUri  ;	
+			}
+			return $currentUrl ;	
+		}
 
 		/**
 		 * Save the search query for the listing search results page.
@@ -177,12 +187,8 @@ if( !class_exists('IHomefinderStateManager')) {
 		 */
 		public function saveLastSearch(){
 			if( !$this->isWebCrawler()){
-				$host=$_SERVER['HTTP_HOST'];
-				$requestUri=$_SERVER['REQUEST_URI'];
-
+				$lastSearch=$this->getCurrentUrl() ;
 				$cacheKey=$this->getLastSearchKey() ;
-				//IHomefinderLogger::getInstance()->debug("saveLastSearch cacheKey: " . $cacheKey);
-				$lastSearch = "http://" . $host . $requestUri  ;
 
 				$lastSearch = str_replace("newSearch=true&", "", $lastSearch);
 				//setcookie($this->lastSearchCookie, $searchUrl, time()+3600);  /* expire in 1 hour */
@@ -190,6 +196,7 @@ if( !class_exists('IHomefinderStateManager')) {
 				set_transient($cacheKey, $lastSearch, $this->cache_timeout);
 			}
 		}
+		
 
 		public function getLastSearch(){
 			$lastSearch="";

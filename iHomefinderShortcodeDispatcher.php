@@ -105,7 +105,7 @@ if( !class_exists('IHomefinderShortcodeDispatcher')) {
 		}
 		
 		function includeMap( $attr ){
-			if( array_key_exists("includemap", $attr) && 'true' == $attr['includemap']){
+			if( $attr != null && array_key_exists("includemap", $attr) && 'true' == $attr['includemap']){
 				$_REQUEST['includeMap']="true";
 			}
 			else{

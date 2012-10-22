@@ -16,11 +16,15 @@ if( !class_exists('IHomefinderRequestor')){
 					$ihfUrl = IHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "subscriberId", $subscriberId );
 				}
 			}
-				
-			$leadCaptureId = IHomefinderStateManager::getInstance()->getLeadCaptureId();
-			if( !is_null($leadCaptureId) && '' != $leadCaptureId){
-				IHomefinderLogger::getInstance()->debug('leadCaptureId: ' . $leadCaptureId );
-				$ihfUrl = IHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "leadCaptureId", $leadCaptureId );
+						
+			//If the url does not have the lead capture id then try to add it
+			$ihfUrlHasLeadCapture=strrpos($ihfUrl, "leadCaptureId=");
+			if($ihfUrlHasLeadCapture === false){
+				$leadCaptureId = IHomefinderStateManager::getInstance()->getLeadCaptureId();
+				if( !is_null($leadCaptureId) && '' != $leadCaptureId){
+					IHomefinderLogger::getInstance()->debug('leadCaptureId: ' . $leadCaptureId );
+					$ihfUrl = IHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "leadCaptureId", $leadCaptureId );
+				}
 			}
 				
 			$ihfUrl = IHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "version", IHomefinderConstants::VERSION );
@@ -31,6 +35,7 @@ if( !class_exists('IHomefinderRequestor')){
 			}
 			
 			$ihfUrl = IHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "loadJQuery", "false" ) ;
+			$ihfUrl = IHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "leadCaptureSupport", "true" ) ;
 			
 			IHomefinderLogger::getInstance()->debug("ihfUrl: " . $ihfUrl);
 			$ihfid=site_url() + ";" + "WordpressPlugin";
@@ -82,6 +87,7 @@ if( !class_exists('IHomefinderRequestor')){
 				
 			IHomefinderLogger::getInstance()->debug("IHomefinderRequestor.remoteRequest post data " );
 			IHomefinderLogger::getInstance()->debugDumpVar($postData);
+			IHomefinderLogger::getInstance()->debugDumpVar($response);
 
 			if( is_wp_error($response)){
 				$contentInfo=null;

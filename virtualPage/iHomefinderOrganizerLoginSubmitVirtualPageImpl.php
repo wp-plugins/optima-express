@@ -40,7 +40,7 @@ if( !class_exists('IHomefinderOrganizerLoginSubmitVirtualPageImpl')) {
 			$isLoggedIn = IHomefinderStateManager::getInstance()->isLoggedIn();
 			if( $isLoggedIn && $content == ""){
 				$redirectUrl=IHomefinderUrlFactory::getInstance()->getOrganizerViewSavedListingListUrl();
-				$content = '<meta http-equiv="refresh" content="0;url=' . $redirectUrl . '">';
+				//$content = '<meta http-equiv="refresh" content="0;url=' . $redirectUrl . '">';
 			}
 
 			IHomefinderLogger::getInstance()->debug( '<br/><br/>' . $ihfUrl ) ;
