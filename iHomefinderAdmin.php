@@ -141,6 +141,10 @@ if( !class_exists('IHomefinderAdmin')) {
 			$agentBioListUrl                      = urlencode($urlFactory->getAgentListUrl(true));
 			$agentBioDetailUrl                    = urlencode($urlFactory->getAgentDetailUrl(true));
 			
+			//Push CSS Override to iHomefinder
+			$cssOverride = get_option(IHomefinderConstants::CSS_OVERRIDE_OPTION);
+			$cssOverride = urlencode( $cssOverride);
+			
 			$ihfUrl = IHomefinderConstants::EXTERNAL_URL  ;
 			$postData= array(
 				'method'=>'handleRequest',
@@ -179,7 +183,8 @@ if( !class_exists('IHomefinderAdmin')) {
 				'officeListUrl'=> $officeListUrl,
 				'officeDetailUrl'=> $officeDetailUrl,
 				'agentBioListUrl'=> $agentBioListUrl,
-				'agentBioDetailUrl'=> $agentBioDetailUrl
+				'agentBioDetailUrl'=> $agentBioDetailUrl,
+				'cssOverride'=> $cssOverride 
 			);
 
 			IHomefinderLogger::getInstance()->debug( '$ihfUrl:::' . $ihfUrl ) ;
@@ -282,28 +287,37 @@ if( !class_exists('IHomefinderAdmin')) {
 			if (!current_user_can('manage_options'))  {
 				wp_die( __('You do not have sufficient permissions to access this page.') );
 			}
+			
+			//On Update, push the CSS_OVERRIDE_OPTION to iHomefinder
+			if($this->isUpdated()){
+				//call function here to pass the activation key to ihf and update the CSS Override value
+				$this->updateAuthenticationToken();
+			}				
 	?>
-				<div class="wrap">
-				<h2>Configuration</h2>
+							
+			<div class="wrap">
+			<h2>Configuration</h2>
+			
 
-				<form method="post" action="options.php">
-				    <?php settings_fields( IHomefinderConstants::OPTION_CONFIG_PAGE ); ?>
 
-				    <div><b>CSS Override</b></div>
-				    <div>
-				    To redefine an Optima Express style, paste the edited style below.
-				    </div>
-				    <div>
-				    	<textarea name="<?php echo IHomefinderConstants::CSS_OVERRIDE_OPTION ?>" rows="15" cols="100"><?php echo get_option(IHomefinderConstants::CSS_OVERRIDE_OPTION); ?></textarea>
-				    </div>
+			<form method="post" action="options.php">
+			    <?php settings_fields( IHomefinderConstants::OPTION_CONFIG_PAGE ); ?>
 
-				    <p class="submit">
-				    <input type="submit" class="button-primary" value="<?php _e('Save Changes') ?>" />
-				    </p>
+			    <div><b>CSS Override</b></div>
+			    <div>
+			    To redefine an Optima Express style, paste the edited style below.
+			    </div>
+			    <div>
+			    	<textarea name="<?php echo IHomefinderConstants::CSS_OVERRIDE_OPTION ?>" rows="15" cols="100"><?php echo get_option(IHomefinderConstants::CSS_OVERRIDE_OPTION); ?></textarea>
+			    </div>
 
-				</form>
-				</div>
-	<?php 	}
+			    <p class="submit">
+			    <input type="submit" class="button-primary" value="<?php _e('Save Changes') ?>" />
+			    </p>
+
+			</form>
+			</div>
+<?php 	}
 
 		public function adminOptionsPagesForm(){
 			$permissions=IHomefinderPermissions::getInstance();
