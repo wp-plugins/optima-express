@@ -320,6 +320,16 @@ The Pro package includes a full mobile IDX site that will work on any browser-en
 
 == Changelog ==
 
+= 1.3.3 =
+
+* Added ability to customize CSS for Property Gallery Slider
+
+* Added spam-blocking functionality to forms
+
+* Addressed some theme compatibility issues
+
+
+
 = 1.3.2 =
 
 * Added Broker & Sold/Supplemental pages to widget configuration
@@ -457,6 +467,11 @@ The Pro package includes a full mobile IDX site that will work on any browser-en
 
 
 == Upgrade Notice ==
+
+= 1.3.3 =
+
+Added CSS Override support, updated content loading priority and added spam detection.
+
 
 = 1.3.2 =
 
