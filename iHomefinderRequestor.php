@@ -49,6 +49,7 @@ if( !class_exists('IHomefinderRequestor')){
 			}
 			else{
 				$responseBody = wp_remote_retrieve_body( $response );
+				IHomefinderLogger::getInstance()->debug('responseBody: ' . $responseBody );
 				$contentInfo=json_decode($responseBody);
 			}
 			IHomefinderLogger::getInstance()->debug("after get body");

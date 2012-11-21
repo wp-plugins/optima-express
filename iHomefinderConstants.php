@@ -8,7 +8,7 @@
 if( !interface_exists('IHomefinderConstants')){
 	interface IHomefinderConstants{
 
-		const VERSION="1.3.3";
+		const VERSION="1.3.4";
 		const EXTERNAL_URL="http://www.idxre.com/services/wordpress";
 
 		//Group for Activation related options

@@ -320,6 +320,11 @@ The Pro package includes a full mobile IDX site that will work on any browser-en
 
 == Changelog ==
 
+= 1.3.4 =
+
+* Fixed issue related to Email Alerts when passwords are required.
+
+
 = 1.3.3 =
 
 * Added ability to customize CSS for Property Gallery Slider
@@ -467,6 +472,10 @@ The Pro package includes a full mobile IDX site that will work on any browser-en
 
 
 == Upgrade Notice ==
+
+= 1.3.4 =
+
+Update to fix Email Alerts bug.
 
 = 1.3.3 =
 
