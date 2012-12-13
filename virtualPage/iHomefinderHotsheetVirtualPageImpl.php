@@ -43,6 +43,7 @@ if( !class_exists('IHomefinderHotsheetVirtualPageImpl')) {
 			IHomefinderLogger::getInstance()->debug('Begin IHomefinderHotsheetVirtualPageImpl');
 			
 			$includeMap = IHomefinderUtility::getInstance()->getRequestVar('includeMap');
+			$optOut = IHomefinderUtility::getInstance()->getRequestVar('optout');
 			$gallery = IHomefinderUtility::getInstance()->getRequestVar('gallery');	
 			$hotSheetId=IHomefinderUtility::getInstance()->getQueryVar('hotSheetId');		
 			if( !isset($hotSheetId) ){
@@ -64,6 +65,7 @@ if( !class_exists('IHomefinderHotsheetVirtualPageImpl')) {
 			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "hotSheetId", $hotSheetId);
 			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "startRowNumber", $startRowNumber);
 			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "sortBy", $sortBy);
+			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "optOut", $optOut);
 			
 			if( $this->getTitle() == ""){
 				$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "includeDisplayName", "false");

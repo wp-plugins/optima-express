@@ -320,6 +320,10 @@ The Pro package includes a full mobile IDX site that will work on any browser-en
 
 == Changelog ==
 
+= 1.3.5 =
+
+* Fixed issue related to user registration on the top picks page.
+
 = 1.3.4 =
 
 * Fixed issue related to Email Alerts when passwords are required.
@@ -472,6 +476,10 @@ The Pro package includes a full mobile IDX site that will work on any browser-en
 
 
 == Upgrade Notice ==
+
+= 1.3.5 =
+
+* Update to fix user registration on the top picks page.
 
 = 1.3.4 =
 
