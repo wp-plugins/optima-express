@@ -1029,7 +1029,7 @@ if( !class_exists('IHomefinderAdmin')) {
 							$pageConfig->getSoldFeaturedListingPageSetup() ;
 							echo('<p/>');
 
-							$this->getSoldDetailPageSetup();
+							$pageConfig->getSoldDetailPageSetup();
 							echo('<p/>');
 						}
 
