@@ -28,7 +28,8 @@ if( !class_exists('IHomefinderQuickSearchFormVirtualPageImpl')) {
 				. '&requestType=listing-quick-search-form'
 				. '&authenticationToken=' . $authenticationToken
 				. '&phpStyle=true'
-				. '&includeJQuery=false';
+				. '&includeJQuery=false'
+				. '&includeJQueryUI=false';
 
 				
 			IHomefinderLogger::getInstance()->debug('ihfUrl: ' . $ihfUrl);	

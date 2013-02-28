@@ -215,7 +215,7 @@ if( !class_exists('IHomefinderAjaxHandler')) {
 			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "modal", "true");
 			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "authenticationToken", $authenticationToken);
 			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "subscriberId", $subscriberId);
-
+			
 			//we need to initialize here for Ajax requests, when trying to save a search
 			IHomefinderStateManager::getInstance()->initialize();
 			$lastSearchQueryString = IHomefinderStateManager::getInstance()->getLastSearchQueryString();

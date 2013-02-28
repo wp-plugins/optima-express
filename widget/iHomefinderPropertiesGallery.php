@@ -247,9 +247,7 @@ if( !class_exists('iHomefinderPropertiesGallery')) {
          }
 
          function getGalleryFormData(){
-            $authenticationToken=IHomefinderAdmin::getInstance()->getAuthenticationToken();
-            $ihfUrl = iHomefinderConstants::EXTERNAL_URL . '?method=handleRequest&viewType=json&requestType=search-form-lists&authenticationToken=' .  $authenticationToken ;
-            $galleryFormData = iHomefinderRequestor::remoteRequest($ihfUrl);
+            $galleryFormData = IHomefinderSearchFormFieldsUtility::getInstance()->getFormData() ;
             return $galleryFormData;
          }
 

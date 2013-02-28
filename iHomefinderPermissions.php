@@ -23,6 +23,10 @@ if( !class_exists('IHomefinderPermissions')) {
 		private $contactFormOptionName="ihf_contact_form_enabled";
 		private $supplementalListingsOptionName="ihf_supplemental_listings_enabled";
 		
+		private $mapSearchOptionName="ihf_map_search_enabled";
+		private $seoCityLinksOptionName="ihf_seo_city_links_enabled";
+		private $communityPagesOptionName="ihf_community_pages_enabled";
+		
 		private static $instance ;
 		
 		private $officeEnabled=false;
@@ -42,6 +46,10 @@ if( !class_exists('IHomefinderPermissions')) {
 		private $linkSearchEnabled= false;
 		private $namedSearchEnabled= false;
 		private $featuredPropertiesEnabled= false;
+		
+		private $mapSearchEnabled= false;
+		private $communityPagesEnabled= false;
+		private $seoCityLinksEnabled= false;
 		
 		//Gallery shortcodes
 		private $galleryShortCodesEnabled=false;
@@ -63,6 +71,11 @@ if( !class_exists('IHomefinderPermissions')) {
 			$this->valuationEnabled=get_option($this->valuationOptionName, false);
 			$this->contactFormEnabled=get_option($this->contactFormOptionName, false);
 			$this->supplementalListingsEnabled=get_option($this->supplementalListingsOptionName, false);
+			
+			$this->mapSearchEnabled=get_option($this->mapSearchOptionName, false);
+			$this->communityPagesEnabled=get_option($this->communityPagesOptionName, false);
+			$this->seoCityLinksEnabled=get_option($this->seoCityLinksOptionName, false);
+
 		}
 		
 		public static function getInstance(){
@@ -87,6 +100,10 @@ if( !class_exists('IHomefinderPermissions')) {
 			update_option($this->contactFormOptionName, strval($permissions->contactForm ));
 			update_option($this->supplementalListingsOptionName, strval($permissions->supplementalListings ));
 			
+			update_option($this->communityPagesOptionName, strval($permissions->communityPages ));
+			update_option($this->seoCityLinksOptionName, strval($permissions->seoCityLinks ));
+			update_option($this->mapSearchOptionName, strval($permissions->mapSearch ));
+			
 			$this->emailUpdatesEnabled=$permissions->emailUpdates;
 			$this->saveListingEnabled=$permissions->saveListing;
 			$this->hotSheetEnabled=$permissions->hotSheet;
@@ -104,8 +121,26 @@ if( !class_exists('IHomefinderPermissions')) {
 			$this->valuationEnabled=$permissions->valuation;
 			$this->contactFormEnabled=$permissions->contactForm;
 			$this->supplementalListingsEnabled=$permissions->supplementalListings;
+			
+			$this->mapSearchEnabled=$permissions->mapSearch;
+			$this->communityPagesEnabled=$permissions->communityPages;
+			$this->seoCityLinksEnabled=$permissions->seoCityLinks;		
 		}
-	
+
+		public function isMapSearchEnabled(){
+			//return (bool) $this->mapSearchEnabled;
+			return true;
+		}
+				
+		public function isCommunityPagesEnabled(){
+			//return (bool) $this->communityPagesEnabled;
+			return true;
+		}
+		
+		public function isSeoCityLinksEnabled(){
+			//return (bool) $this->seoCityLinksEnabled;
+			return true;
+		}
 		public function isEmailUpdatesEnabled(){
 			return (bool) $this->emailUpdatesEnabled;
 		}

@@ -119,6 +119,7 @@ if(!class_exists('IHomefinderRewriteRules')){
 	  		$this->setDetailPageRewriteRules($matchRulePrefix);
 	  		$this->setAdvancedSearchRewriteRules($matchRulePrefix);
 			$this->setSearchRewriteRules($matchRulePrefix);
+			$this->setMapSearchRewriteRules($matchRulePrefix);
 			$this->setHotsheetResultsRewriteRules($matchRulePrefix);								
 			$this->setOrganizerLoginSubmitRewriteRules($matchRulePrefix);
 			$this->setOrganizerLoginRewriteRules($matchRulePrefix);
@@ -287,6 +288,18 @@ if(!class_exists('IHomefinderRewriteRules')){
 	  			$rewriteUrl, 
 	  			'top');
 		}
+		
+		private function setMapSearchRewriteRules($matchRulePrefix){
+			global $wp_rewrite;
+	  		// matches 'idx-search
+	  		$rewriteUrl=$this->rootPageName ;
+	  		$rewriteUrl .= '&' . iHomefinderConstants::IHF_TYPE_URL_VAR . '=' . IHomefinderVirtualPageFactory::MAP_SEARCH_FORM ;
+
+	  		$wp_rewrite->add_rule( 
+	  			$matchRulePrefix . $this->urlFactory->getMapSearchFormUrl(false), 
+	  			$rewriteUrl, 
+	  			'top');
+		}		
 
 		private function setOrganizerLoginSubmitRewriteRules($matchRulePrefix ){
 			global $wp_rewrite;

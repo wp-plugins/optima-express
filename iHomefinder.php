@@ -3,7 +3,7 @@
 	Plugin Name: Optima Express IDX Plugin
 	Plugin URI: http://wordpress.org/extend/plugins/optima-express/
 	Description: This plugin integrates your Wordpress site with IDX search functionality.  This plugin requires an activation key.
-	Version: 1.3.5
+	Version: 1.4.0
 	Author: ihomefinder
 	Author URI: http://www.ihomefinder.com
 	License: GPL
@@ -14,14 +14,18 @@
  * Load core files
  */
 include_once 'iHomefinderAdmin.php';
+include_once 'iHomefinderAdminEmailDisplay.php';
+include_once 'iHomefinderAdminPageConfig.php';
 include_once 'iHomefinderAjaxHandler.php';
 include_once 'iHomefinderConstants.php';
 include_once 'iHomefinderCustomization.php';
 include_once 'iHomefinderInstaller.php';
 include_once 'iHomefinderLogger.php';
+include_once 'iHomefinderMenu.php';
 include_once 'iHomefinderPermissions.php';
 include_once 'iHomefinderRequestor.php';
 include_once 'iHomefinderRewriteRules.php';
+include_once 'iHomefinderSearchFormFieldsUtility.php';
 include_once 'iHomefinderShortcodeDispatcher.php';
 include_once 'iHomefinderStateManager.php';
 include_once 'iHomefinderCleaner.php';
@@ -40,9 +44,16 @@ include_once 'iHomefinderVirtualPageHelper.php';
 include("widget/iHomefinderWidgetContextUtility.php");
 include("widget/iHomefinderPropertiesGallery.php");
 include("widget/iHomefinderQuickSearchWidget.php");
+include("widget/iHomefinderLinkWidget.php");
+include("widget/iHomefinderAgentBioWidget.php");
+include("widget/iHomefinderSocialWidget.php");
 
 add_action('widgets_init', create_function('', 'return register_widget("iHomefinderPropertiesGallery");'));
 add_action('widgets_init', create_function('', 'return register_widget("iHomefinderQuickSearchWidget");'));
+add_action('widgets_init', create_function('', 'return register_widget("iHomefinderLinkWidget");'));
+add_action('widgets_init', create_function('', 'return register_widget("iHomefinderAgentBioWidget");'));
+add_action('widgets_init', create_function('', 'return register_widget("iHomefinderSocialWidget");'));
+
 
 /* Runs when plugin is activated */
 register_activation_hook(__FILE__,array(IHomefinderInstaller::getInstance(), 'install'));
@@ -63,6 +74,7 @@ add_action('init', array(IHomefinderRewriteRules::getInstance(), "initialize"), 
 //add_action('init',array(IHomefinderRewriteRules::getInstance(), "flushRules"));
 
 if( is_admin()){
+	add_action( 'admin_enqueue_scripts', array(IHomefinderAdmin::getInstance(), "addScripts") );	
 	add_action('admin_menu', array(IHomefinderAdmin::getInstance(), "createAdminMenu"));
 	add_action('admin_init', array(IHomefinderInstaller::getInstance(), 'upgrade'));
 	add_action('admin_init', array(IHomefinderAdmin::getInstance(), "registerSettings") );
@@ -73,6 +85,7 @@ if( is_admin()){
 	add_action('admin_init', array(IHomefinderTinyMceManager::getInstance(), "addButtons") );	
 } else {
 	add_action('init',array(IHomefinderVirtualPageDispatcher::getInstance(), "loadJavaScript")) ;
+	add_action( 'wp_enqueue_scripts', array(IHomefinderWidgetContextUtility::getInstance(), "loadWidgetStyle") );
 	
 	//Remember the users state in the application (subscriber info and last search)
 	add_action('plugins_loaded',array(IHomefinderStateManager::getInstance(), "initialize"), 5);

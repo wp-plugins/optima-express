@@ -8,7 +8,10 @@ if( !class_exists('IHomefinderVirtualPageHelper')) {
 	 * For most virtual pages, we store the following options:
 	 * - title - page title used by the theme
 	 * - template - used by the theme to display the virual page.
-	 * - permalink - used in the rewrite rules.  
+	 * - permalink - used in the rewrite rules.
+	 * 
+	 * This class defines and registers all the options required for
+	 * the Virtual Pages.
 	 */
 	class IHomefinderVirtualPageHelper {
 
@@ -27,6 +30,11 @@ if( !class_exists('IHomefinderVirtualPageHelper')) {
 		const OPTION_VIRTUAL_PAGE_TITLE_SEARCH="ihf-virtual-page-title-search";
 		const OPTION_VIRTUAL_PAGE_TEMPLATE_SEARCH="ihf-virtual-page-template-search";
 		const OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_SEARCH="ihf-virtual-page-permalink-text-search";	
+		
+		//Map Search VirtualPage Options
+		const OPTION_VIRTUAL_PAGE_TITLE_MAP_SEARCH="ihf-virtual-page-title-map-search";
+		const OPTION_VIRTUAL_PAGE_TEMPLATE_MAP_SEARCH="ihf-virtual-page-template-map-search";
+		const OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_MAP_SEARCH="ihf-virtual-page-permalink-text-map-search";			
 		
 		//Advanced Listing Search VirtualPage Options
 		const OPTION_VIRTUAL_PAGE_TITLE_ADV_SEARCH="ihf-virtual-page-title-adv-search";
@@ -126,6 +134,10 @@ if( !class_exists('IHomefinderVirtualPageHelper')) {
 			register_setting( IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_SEARCH );
 			register_setting( IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_SEARCH );
 			register_setting( IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_SEARCH );
+
+			register_setting( IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_MAP_SEARCH );
+			register_setting( IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_MAP_SEARCH );
+			register_setting( IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_MAP_SEARCH );
 			
 			register_setting( IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_ADV_SEARCH );
 			register_setting( IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_ADV_SEARCH );

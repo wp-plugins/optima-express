@@ -7,6 +7,7 @@ if( !class_exists('IHomefinderVirtualPageFactory')) {
 
 	include_once(   'virtualPage/iHomefinderAdvancedSearchFormVirtualPageImpl.php');
 	include_once(   'virtualPage/iHomefinderSearchFormVirtualPageImpl.php');
+	include_once(   'virtualPage/iHomefinderMapSearchVirtualPageImpl.php');
 	include_once(   'virtualPage/iHomefinderQuickSearchFormVirtualPageImpl.php');
 	include_once(   'virtualPage/iHomefinderSearchResultsVirtualPageImpl.php');
 	include_once(   'virtualPage/iHomefinderListingDetailVirtualPageImpl.php');
@@ -68,6 +69,7 @@ if( !class_exists('IHomefinderVirtualPageFactory')) {
 		const LISTING_DETAIL="idx-detail";
 		const LISTING_SOLD_DETAIL="idx-sold-detail";
 		const LISTING_SEARCH_FORM="idx-search";
+		const MAP_SEARCH_FORM="idx-map-search";
 		const LISTING_QUICK_SEARCH_FORM="idx-quick-search";
 		const LISTING_ADVANCED_SEARCH_FORM="idx-advanced-search";
 		const FEATURED_SEARCH="idx-featured-search";
@@ -125,6 +127,9 @@ if( !class_exists('IHomefinderVirtualPageFactory')) {
 	    	else if( $type == IHomefinderVirtualPageFactory::LISTING_SEARCH_FORM){
 				$virtualPage = new IHomefinderSearchFormVirtualPageImpl();
 			}
+			else if( $type == IHomefinderVirtualPageFactory::MAP_SEARCH_FORM){
+				$virtualPage = new IHomefinderMapSearchVirtualPageImpl();
+			}			
 			else if( $type == IHomefinderVirtualPageFactory::LISTING_QUICK_SEARCH_FORM){
 				$virtualPage = new IHomefinderQuickSearchFormVirtualPageImpl();
 			}

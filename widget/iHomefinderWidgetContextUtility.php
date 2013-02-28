@@ -31,7 +31,12 @@ if( !class_exists('IHomefinderWidgetContextUtility')) {
 			}
 			return self::$instance;
 		}
-		
+
+		public function loadWidgetStyle() {
+			wp_register_style( 'ihf-widget-style', plugins_url('css/style.css', __FILE__) );
+        	wp_enqueue_style( 'ihf-widget-style' );
+		}
+				
 		public function loadWidgetJavascript() {
 		   wp_enqueue_script('widgetSupport', plugins_url('/js/widgetSupport.js', __FILE__) );
 		}    		
@@ -92,6 +97,7 @@ if( !class_exists('IHomefinderWidgetContextUtility')) {
 			"Search Form" => IHomefinderVirtualPageFactory::LISTING_SEARCH_FORM,
 			"Advanced Search Form" => IHomefinderVirtualPageFactory::LISTING_ADVANCED_SEARCH_FORM,
 			"Open Home Search" => IHomefinderVirtualPageFactory::OPEN_HOME_SEARCH_FORM,
+			"Map Search" => IHomefinderVirtualPageFactory::MAP_SEARCH_FORM,
 			"Search Results" => IHomefinderVirtualPageFactory::LISTING_SEARCH_RESULTS,			
 			"Listing Details" => IHomefinderVirtualPageFactory::LISTING_DETAIL,
 			"Sold Property Details" => IHomefinderVirtualPageFactory::LISTING_SOLD_DETAIL,
@@ -120,6 +126,7 @@ if( !class_exists('IHomefinderWidgetContextUtility')) {
 				unset( $listOfPages["Search Form"]);
 				unset( $listOfPages["Advanced Search Form"]);
 				unset( $listOfPages["Email Alerts"]);
+				unset( $listOfPages["Map Search"]);
 			}
 				
 			return $listOfPages ;

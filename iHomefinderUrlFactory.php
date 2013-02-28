@@ -69,6 +69,13 @@ if( !class_exists('IHomefinderUrlFactory')) {
 			return 	$value ;
 		}
 		
+		public function getMapSearchFormUrl($includeBaseUrl=true){
+			$virtualPage = $this->virtualPageFactory->getVirtualPage( IHomefinderVirtualPageFactory::MAP_SEARCH_FORM );
+			$path=$virtualPage->getPath();
+			$value = $this->prependBaseUrl( $path, $includeBaseUrl );
+			return 	$value ;
+		}		
+		
 		public function getListingsAdvancedSearchFormUrl($includeBaseUrl=true){
 			$virtualPage = $this->virtualPageFactory->getVirtualPage( IHomefinderVirtualPageFactory::LISTING_ADVANCED_SEARCH_FORM );
 			$path=$virtualPage->getPath();	

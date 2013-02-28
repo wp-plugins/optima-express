@@ -23,9 +23,11 @@ if( !class_exists('IHomefinderShortcodeDispatcher')) {
 		private $mapSearchShortCode = "optima_express_map_search";
 		private $agentListingsShortCode = "optima_express_agent_listings";
 		private $officeListingsShortCode = "optima_express_office_listings";
+		private $listingGalleryShortCode = "optima_express_gallery_slider";
 		
 		private $galleryFormData ;
 		private $mapSearchContent ;
+		private $listingGalleryContent;
 
 		private function __construct(){
 			$this->ihfAdmin = IHomefinderAdmin::getInstance();
@@ -47,6 +49,8 @@ if( !class_exists('IHomefinderShortcodeDispatcher')) {
 			add_shortcode($this->getMapSearchShortcode(),             array($this, "getMapSearch"));
 			add_shortcode($this->getAgentListingsShortcode(),         array($this, "getAgentListings"));
 			add_shortcode($this->getOfficeListingsShortcode(),        array($this, "getOfficeListings"));
+			add_shortcode($this->getListingGalleryShortcode(),        array($this,"getListingGallery"));
+
 		}
 
 		public function getToppicksShortcode(){
@@ -76,6 +80,10 @@ if( !class_exists('IHomefinderShortcodeDispatcher')) {
 		public function getOfficeListingsShortcode(){
 			return $this->officeListingsShortCode ;
 		}
+		public function getListingGalleryShortcode(){
+			return $this->listingGalleryShortCode ;
+		}
+
 		
 		/**
 		 * Get the content to replace the short code
@@ -148,6 +156,32 @@ if( !class_exists('IHomefinderShortcodeDispatcher')) {
 			$content=$featuredSearchVirtualPage->getContent($authenticationToken);
 			return $content;
 		}
+		
+		function buildSearchResultsShortCode( $cityZip, $propertyType, $bed, $bath, $minPrice, $maxPrice){
+			$searchResultsShortcode = "[";
+			$searchResultsShortcode .= $this->searchResultsShortCode ;
+			if($cityZip != null && strlen($cityZip) > 0){
+				
+				$searchResultsShortcode .=" cityZip='" . $cityZip ."'" ;
+			}
+			if($propertyType != null && strlen($propertyType) > 0){
+				$searchResultsShortcode .=" propertyType=" . $propertyType ;
+			}
+			if($bed != null && strlen($bed) > 0){
+				$searchResultsShortcode .=" bed=" . $bed ;
+			}
+			if($bath != null && strlen($bath) > 0){
+				$searchResultsShortcode .=" bath=" . $bath ;
+			}
+			if($minPrice != null && strlen($minPrice) > 0){
+				$searchResultsShortcode .=" minPrice=" . $minPrice ;
+			}
+			if($maxPrice != null && strlen($maxPrice) > 0){
+				$searchResultsShortcode .=" maxPrice=" . $maxPrice ;
+			}
+			$searchResultsShortcode .="]" ;
+			return $searchResultsShortcode ;
+		}
 
 		function getSearchResults( $attr ){
 			$content='';
@@ -158,6 +192,9 @@ if( !class_exists('IHomefinderShortcodeDispatcher')) {
 			if( $attr['cityid'] != null && strlen($attr['cityid']) > 0){
 				$_REQUEST['cityId']=$attr['cityid'];
 			}
+			if( $attr['cityzip'] != null && strlen($attr['cityzip']) > 0){
+				$_REQUEST['cityZip']=$attr['cityzip'];
+			}			
 			if( $attr['propertytype'] != null && strlen($attr['propertytype']) > 0){
 				$_REQUEST['propertyType']=$attr['propertytype'];
 			}
@@ -202,13 +239,30 @@ if( !class_exists('IHomefinderShortcodeDispatcher')) {
 		}				
 
 		function getGalleryFormData(){
-			if( !isset( $this->toppicksFormData )){
-				$authenticationToken=IHomefinderAdmin::getInstance()->getAuthenticationToken();
-				$ihfUrl = iHomefinderConstants::EXTERNAL_URL . '?method=handleRequest&viewType=json&requestType=search-form-lists&authenticationToken=' .  $authenticationToken ;
-				$this->galleryFormData = iHomefinderRequestor::remoteRequest($ihfUrl);
+			if( !isset( $this->toppicksFormData )){				
+				$this->galleryFormData = IHomefinderSearchFormFieldsUtility::getInstance()->getFormData() ;
 			}
 			return $this->galleryFormData;
 		}
+
+		function getListingGallery($attr){
+			$authenticationToken=$this->ihfAdmin->getAuthenticationToken();
+			$ihfUrl = iHomefinderConstants::EXTERNAL_URL . '?method=handleRequest&viewType=json&requestType=listing-gallery-slider&authenticationToken=' . $authenticationToken
+															.'&width=' .$attr['width']
+															.'&rows=' .$attr['rows']
+															.'&columns=' .$attr['columns']
+														        .'&effect=' .$attr['effect']
+														        .'&auto='   .$attr['auto']
+			                                                                                                .'&hid='    .$attr['hotsheetid'];
+			                    
+			
+			$this->listingGalleryContent = iHomefinderRequestor::remoteRequest($ihfUrl);
+			$content = IHomefinderRequestor::getContent( $this->listingGalleryContent );
+			IHomefinderLogger::getInstance()->debug( $ihfUrl);
+			
+			return $content;
+		}
+
 	}
 }//end if( !class_exists('IHomefinderShortcodeDispatcher'))
 ?>

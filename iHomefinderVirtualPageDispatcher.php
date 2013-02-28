@@ -64,6 +64,9 @@ if( !class_exists('IHomefinderVirtualPageDispatcher')) {
 		 */
 		function loadJavaScript(){
 			wp_enqueue_script('jquery');
+			
+			wp_enqueue_script('jquery-ui-core');
+			wp_enqueue_script('jquery-ui-autocomplete', '', array('jquery-ui-widget', 'jquery-ui-position'), '1.8.6'); 			
 		}
 
 		/**

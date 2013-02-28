@@ -1,0 +1,28 @@
+.ihf-about-bio-title {
+  margin-bottom:10px;
+  float:left;
+  width:60%;
+}
+
+.ihf-about-social-icons {
+  margin-bottom:10px;float:right;width:35%;text-align:right;
+}
+
+.ihf-about-photo {
+  float:left;width:120px;margin-right:10px;
+}
+
+.ihf-about-bio-text {
+  font-size:12px;line-height:1.6em;
+  font-family: Helvetica, Arial, sans-serif;
+  margin-bottom:10px;
+}
+
+.ihf-seo-link {
+  font-size:11px;line-height:1.6em;
+  font-family: Helvetica, Arial, sans-serif;
+  margin-bottom:10px;
+  float: left;
+  width: 75px;
+  padding: 5px;
+}
