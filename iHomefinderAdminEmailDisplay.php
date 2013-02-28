@@ -41,14 +41,10 @@ if( !class_exists('IHomefinderAdminEmailDisplay')) {
 		}
 
 		private function basicEmailHeader( $agentPhoto, $logo, $name, $company, $address1, $address2, $phone ){
-			
 
-			
 			$logoSize=getimagesize($logo);
-			var_dump($logoSize);
-			
 			$logoHeight=$logoSize[1];
-			
+
 			$emailHeader="<table width='650' border='0' cellpadding='2' cellspacing='0' bgcolor='#9b9b9b'><tr><td>";
 			$emailHeader.="<table width='100%' border='0' cellpadding='0' cellspacing='0' bgcolor='#ffffff'><tr>";
 
@@ -57,22 +53,22 @@ if( !class_exists('IHomefinderAdminEmailDisplay')) {
 				$agentPhotoSize=getimagesize($agentPhoto);
 				$agentPhotoHeight=$agentPhotoSize[1];
 				if( $agentPhotoHeight > 142 ){
-					$emailHeader .= "<img src='" . $agentPhoto . "' height='142px'/>";	
+					$emailHeader .= "<img src='" . $agentPhoto . "' height='142px'/>";
 				}
 				else{
-					$emailHeader .= "<img src='" . $agentPhoto . "'/>";	
+					$emailHeader .= "<img src='" . $agentPhoto . "'/>";
 				}
-				
+
 			}
 			$emailHeader .=	"</td>";
 			$emailHeader .="<td>";
 			$emailHeader .="<font  face='Arial, Helvetica, sans-serif'>";
 			if($name ){
 				$emailHeader .= "<b>" . $name . "</b><br/>";
-			}			
+			}
 			if($company ){
 				$emailHeader .= "<b>" . $company . "</b><br/><br/>";
-			}			
+			}
 			if( $address1 ){
 				$emailHeader .= $address1 . "<br/>";
 			}
@@ -82,9 +78,9 @@ if( !class_exists('IHomefinderAdminEmailDisplay')) {
 			if( $phone ){
 				$emailHeader .= $phone . "<br/>";
 			}
-			
+
 			$emailHeader .="</font>";
-			$emailHeader .="</td>";	
+			$emailHeader .="</td>";
 			$emailHeader .="<td align='right'>";
 			if($logo ){
 				$logoSize=getimagesize($logo);
@@ -96,7 +92,7 @@ if( !class_exists('IHomefinderAdminEmailDisplay')) {
 					$emailHeader .= "<img src='" . $logo . "'/>";
 				}
 			}
-			$emailHeader .=	"</td>";					
+			$emailHeader .=	"</td>";
 			$emailHeader .="</tr></table>";
 			$emailHeader .="</td></tr>";
 			$emailHeader .="<tr><td>";
@@ -104,7 +100,7 @@ if( !class_exists('IHomefinderAdminEmailDisplay')) {
 			return $emailHeader;
 		}
 
-		
+
 		private function basicEmailFooter( $agentPhoto, $logo, $name, $company, $address1, $address2, $phone ){
 			$emailFooter="</td></tr></table>";
 			$emailFooter .="</td></tr><tr><td>";
@@ -113,10 +109,10 @@ if( !class_exists('IHomefinderAdminEmailDisplay')) {
 			$emailFooter .="<font  face='Arial, Helvetica, sans-serif'>";
 			if($name ){
 				$emailFooter .= "<b>" . $name . "</b><br/>";
-			}			
+			}
 			if($company ){
 				$emailFooter .= "<b>" . $company . "</b><br/><br/>";
-			}			
+			}
 			if( $address1 ){
 				$emailFooter .= $address1 . "<br/>";
 			}
@@ -126,9 +122,9 @@ if( !class_exists('IHomefinderAdminEmailDisplay')) {
 			if( $phone ){
 				$emailFooter .= $phone . "<br/>";
 			}
-			
+
 			$emailFooter .="</font>";
-			$emailFooter .="</td>";				
+			$emailFooter .="</td>";
 			$emailFooter .="</tr></table>";
 			$emailFooter .="</td></tr></table>";
 			return $emailFooter;
@@ -141,12 +137,12 @@ if( !class_exists('IHomefinderAdminEmailDisplay')) {
 			update_option( IHomefinderConstants::EMAIL_HEADER_OPTION, $emailHeader );
 			update_option( IHomefinderConstants::EMAIL_FOOTER_OPTION, $emailFooter ) ;
 		}
-		
+
 		public function getHeader(){
 			$emailHeader=get_option(IHomefinderConstants::EMAIL_HEADER_OPTION);
 			return $emailHeader ;
 		}
-		
+
 		public function getFooter(){
 			$emailFooter=get_option(IHomefinderConstants::EMAIL_FOOTER_OPTION);
 			return $emailFooter;
@@ -202,7 +198,7 @@ if( !class_exists('IHomefinderAdminEmailDisplay')) {
 					$company=get_option(IHomefinderConstants::EMAIL_COMPANY_OPTION);
 					$address1=get_option(IHomefinderConstants::EMAIL_ADDRESS_LINE1_OPTION);
 					$address2=get_option(IHomefinderConstants::EMAIL_ADDRESS_LINE2_OPTION);
-					$phone=get_option(IHomefinderConstants::EMAIL_PHONE_OPTION);					
+					$phone=get_option(IHomefinderConstants::EMAIL_PHONE_OPTION);
 					$footer=$this->basicEmailFooter($agentPhoto, $logo, $name, $company, $address1, $address2, $phone);
 					break;
 				case IHomefinderAdminEmailDisplay::EMAIL_DISPLAY_TYPE_CUSTOM_HTML_VALUE:
