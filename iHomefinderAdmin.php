@@ -366,7 +366,7 @@ if( !class_exists('IHomefinderAdmin')) {
 			//Used for the Bio Page for image uploads
 			if (isset($_GET['page']) && ($_GET['page'] == IHomefinderConstants::BIO_PAGE || $_GET['page'] == IHomefinderConstants::EMAIL_BRANDING_PAGE ) ){
 	     		wp_enqueue_script('jquery'); // include jQuery
-    	 		wp_register_script('bioInformation', plugins_url("/optimaExpress/js/bioInformation.js"), array('jquery','editor','media-upload','thickbox'));
+    	 		wp_register_script('bioInformation', plugins_url("/optima-express/js/bioInformation.js"), array('jquery','editor','media-upload','thickbox'));
     	 		wp_enqueue_style('thickbox');
      			wp_enqueue_script('bioInformation');  // include script.js
 			}
@@ -423,7 +423,7 @@ if( !class_exists('IHomefinderAdmin')) {
 				<div style="float:left;width:100px;">License Info:</div>
 			    <input type="text" size="36" name="<?php echo(IHomefinderConstants::AGENT_LICENSE_INFO_OPTION)?>" value="<?php echo(get_option(IHomefinderConstants::AGENT_LICENSE_INFO_OPTION))?>" />
 			    <div style="clear:both;"></div>
-			    
+
 			    <br/><br/>
 
 				<h3>Agent Bio Text</h3>
@@ -686,7 +686,7 @@ if( !class_exists('IHomefinderAdmin')) {
 				<input type="radio" name="<?php echo(IHomefinderConstants::EMAIL_DISPLAY_TYPE_OPTION)?>"
 					<?php if( IHomefinderAdminEmailDisplay::EMAIL_DISPLAY_TYPE_CUSTOM_IMAGES_VALUE == $emailDisplayType ){echo(" checked ");}?>
 					value="<?php echo(IHomefinderAdminEmailDisplay::EMAIL_DISPLAY_TYPE_CUSTOM_IMAGES_VALUE)?>"/>&nbsp;Basic Branding<br/>
-					
+
 				<p/>
 				Add the logo, photo and business information you would like displayed in your email branding.
 
@@ -717,7 +717,7 @@ if( !class_exists('IHomefinderAdmin')) {
 			    <br/>
 			    Enter an image URL or use an image from the Media Library
 			    <br/><br/>
-			    
+
 			    <h3>Business Information</h3>
 			    <div style="float:left;width:320px;">
 				    <div style="float:left;width:90px;font-family: sans-serif;font-size: 12px;">Name:</div>
@@ -727,7 +727,7 @@ if( !class_exists('IHomefinderAdmin')) {
 		    		<div style="float:left;width:90px;font-family: sans-serif;font-size: 12px;"">Company:</div>
 		    		<input type="text" size="36" name="<?php echo(IHomefinderConstants::EMAIL_COMPANY_OPTION)?>" value="<?php echo(get_option(IHomefinderConstants::EMAIL_COMPANY_OPTION))?>" />
 		    	</div>
-		    	<div style="clear:both"></div>	
+		    	<div style="clear:both"></div>
 
 		    	<div style="float:left;width:320px;">
 		    		<div style="float:left;width:90px;font-family: sans-serif;font-size: 12px;"">Address Line 1:</div>
@@ -736,31 +736,31 @@ if( !class_exists('IHomefinderAdmin')) {
 		    	<div style="float:left;width:320px;">
 		    		<div style="float:left;width:90px;font-family: sans-serif;font-size: 12px;"">Address Line 2:</div>
 		    		<input type="text" size="36" name="<?php echo(IHomefinderConstants::EMAIL_ADDRESS_LINE2_OPTION)?>" value="<?php echo(get_option(IHomefinderConstants::EMAIL_ADDRESS_LINE2_OPTION))?>" />
-		    	</div>		    	
-		    	
-		    	<div style="clear:both"></div>	
-		    	
+		    	</div>
+
+		    	<div style="clear:both"></div>
+
 		    	<div style="float:left;width:320px;">
 		    		<div style="float:left;width:90px;font-family: sans-serif;font-size: 12px;"">Phone:</div>
 		    		<input type="text" size="36" name="<?php echo(IHomefinderConstants::EMAIL_PHONE_OPTION)?>" value="<?php echo(get_option(IHomefinderConstants::EMAIL_PHONE_OPTION))?>" />
 		    	</div>
 
-		    	
-		    	<div style="clear:both"></div>	 	
-		    		
+
+		    	<div style="clear:both"></div>
+
 			    <p class="submit">
 			    <input type="submit" class="button-primary" value="<?php _e('Save Changes') ?>" />
 			    </p>
-			    			    		    
+
 			    <br/>
 			    <input type="radio" name="<?php echo(IHomefinderConstants::EMAIL_DISPLAY_TYPE_OPTION)?>"
 					<?php if( IHomefinderAdminEmailDisplay::EMAIL_DISPLAY_TYPE_CUSTOM_HTML_VALUE == $emailDisplayType ){echo(" checked ");}?>
 			    	value="<?php echo(IHomefinderAdminEmailDisplay::EMAIL_DISPLAY_TYPE_CUSTOM_HTML_VALUE)?>">&nbsp;Custom HTML
 			    <br/>
-			    
+
 				<p/>
 				Insert custom HTML for your email header and footer.
-			    
+
 			    <h3>Email Header</h3>
 				<?php
 					$email_header_editor_settings =  array (
