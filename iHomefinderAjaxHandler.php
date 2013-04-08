@@ -305,7 +305,7 @@ if( !class_exists('IHomefinderAjaxHandler')) {
 			//var_dump($contentInfo);
 			$content = IHomefinderRequestor::getContent( $contentInfo );
 			echo $content ;
-			IHomefinderLogger::getInstance()->debug('End getAdvancedSearchFormFields');
+			IHomefinderLogger::getInstance()->debug('End leadCaptureLogin');
 			die();
 		}				
 	}//end class

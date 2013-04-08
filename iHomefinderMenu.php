@@ -136,23 +136,33 @@ if( !class_exists('IHomefinderMenu')) {
 			$featuredMenuItemId=$this->addOneOptimaExpressMenuItem($optimaExpressMenuId, 'Featured Listings', IHomefinderUrlFactory::getInstance()->getFeaturedSearchResultsUrl(true));
 			
 			//Property Search secion
-			$findHomeMenuItemId=$this->addOneOptimaExpressMenuItem($optimaExpressMenuId, 'MLS Search', "#" );
+			$findHomeMenuItemId=$this->addOneOptimaExpressMenuItem($optimaExpressMenuId, 'Property Search', "#" );
 			$searchMenuItemId=$this->addOneOptimaExpressMenuItem($optimaExpressMenuId, 'Search', IHomefinderUrlFactory::getInstance()->getListingsSearchFormUrl(true), $findHomeMenuItemId);
-			$mapSearchMenuItemId=$this->addOneOptimaExpressMenuItem($optimaExpressMenuId, 'Map Search',  IHomefinderUrlFactory::getInstance()->getMapSearchFormUrl(true), $findHomeMenuItemId );
-			$advancedSearchMenuItemId=$this->addOneOptimaExpressMenuItem($optimaExpressMenuId, 'Advanced Search', IHomefinderUrlFactory::getInstance()->getListingsAdvancedSearchFormUrl(true), $findHomeMenuItemId );
+
+			if( IHomefinderPermissions::getInstance()->isMapSearchEnabled() ){	
+				$mapSearchMenuItemId=$this->addOneOptimaExpressMenuItem($optimaExpressMenuId, 'Map Search',  IHomefinderUrlFactory::getInstance()->getMapSearchFormUrl(true), $findHomeMenuItemId );
+			}
+				
 			
-			//Open Homes search
-			$openHomesMenuItemId=$this->addOneOptimaExpressMenuItem($optimaExpressMenuId, 'Open Homes', IHomefinderUrlFactory::getInstance()->getOpenHomeSearchFormUrl(true));
+			$openHomesMenuItemId=$this->addOneOptimaExpressMenuItem($optimaExpressMenuId, 'Open Homes', IHomefinderUrlFactory::getInstance()->getOpenHomeSearchFormUrl(true), $findHomeMenuItemId);
+			$advancedSearchMenuItemId=$this->addOneOptimaExpressMenuItem($optimaExpressMenuId, 'Advanced Search', IHomefinderUrlFactory::getInstance()->getListingsAdvancedSearchFormUrl(true), $findHomeMenuItemId );			
+			
+			//Email Alerts
+			if( IHomefinderPermissions::getInstance()->isEmailUpdatesEnabled()){		
+				$advancedSearchMenuItemId=$this->addOneOptimaExpressMenuItem($optimaExpressMenuId, 'Email Alerts', IHomefinderUrlFactory::getInstance()->getOrganizerEditSavedSearchUrl(true) );
+			}
 			
 			//Parent for Community Pages
-			$communityPagesMenuItemId=$this->addOneOptimaExpressMenuItem($optimaExpressMenuId, $this->communityPagesMenuItemName, "#" );
-			
+			if( IHomefinderPermissions::getInstance()->isCommunityPagesEnabled()){		
+				$communityPagesMenuItemId=$this->addOneOptimaExpressMenuItem($optimaExpressMenuId, $this->communityPagesMenuItemName, "#" );
+			}
 			
 			//Buyers and Sellers section
 			$buyersAndSellersMenuItemId=$this->addOneOptimaExpressMenuItem($optimaExpressMenuId, 'Buyers & Sellers', "#");
 			if( IHomefinderPermissions::getInstance()->isOrganizerEnabled() ){
 				$valuationMenuItemId=$this->addOneOptimaExpressMenuItem($optimaExpressMenuId, 'Property Organizer', IHomefinderUrlFactory::getInstance()->getOrganizerLoginUrl(true), $buyersAndSellersMenuItemId);
 			}
+			
 			$valuationMenuItemId=$this->addOneOptimaExpressMenuItem($optimaExpressMenuId, 'Valuation Request', IHomefinderUrlFactory::getInstance()->getValuationFormUrl(true), $buyersAndSellersMenuItemId);
 			
 			//Contact Page
@@ -163,9 +173,11 @@ if( !class_exists('IHomefinderMenu')) {
 
 		private function addOneOptimaExpressMenuItem( $menuId, $name, $url, $parentId=0 ){
 			global $wpdb ;
+			//We build relative URLs that start with a slash.
+			$url=IHomefinderUrlFactory::getInstance()->makeRelativeUrl($url);
 			$menuItem=$this->buildOptimaExpressMenuItem( $name, $url, $parentId ) ;
 			$menuItemId=wp_update_nav_menu_item($menuId,0,$menuItem);
-			$wpdb->insert($wpdb->term_relationships, array("object_id" => $menuItemId, "term_taxonomy_id" => $menuId ), array("%d", "%d"));
+			//$wpdb->insert($wpdb->term_relationships, array("object_id" => $menuItemId, "term_taxonomy_id" => $menuId ), array("%d", "%d"));
 			return $menuItemId ;
 		}
 

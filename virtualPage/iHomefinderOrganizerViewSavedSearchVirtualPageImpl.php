@@ -25,10 +25,14 @@ if( !class_exists('iHomefinderOrganizerViewSavedSearchVirtualPageImpl')) {
 
 			$searchProfileId=IHomefinderUtility::getInstance()->getQueryVar('searchProfileID');
 			$startRowNumber=IHomefinderUtility::getInstance()->getQueryVar('startRowNumber');
+			$sortBy=IHomefinderUtility::getInstance()->getQueryVar('sortBy');
+			
+			IHomefinderStateManager::getInstance()->saveLastSearch() ;
 				
 			$ihfUrl = IHomefinderConstants::EXTERNAL_URL . '?method=handleRequest&viewType=json&requestType=property-organizer-view-saved-search' ;
 			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "searchProfileId", $searchProfileId);
 			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "startRowNumber", $startRowNumber);
+			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "sortBy", $sortBy);
 			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "authenticationToken", $authenticationToken);
 
 			$contentInfo = IHomefinderRequestor::remoteRequest($ihfUrl);

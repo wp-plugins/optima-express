@@ -634,6 +634,14 @@ The Pro package includes a full mobile IDX site that will work on any browser-en
 
 == Changelog ==
 
+= 1.4.1 = 
+* Text updates
+* Fix for sorting on Saved Searches
+* Update to Optima Express menu setup
+* Updates for Agent Bio and Social widgets
+* Fix for office setup 
+
+
 = 1.4.0 =
 * Added Agent Bio and Social Media widgets
 * Added Optima Express default navigation menu
@@ -958,6 +966,22 @@ The Pro package includes a full mobile IDX site that will work on any browser-en
 
 == Upgrade Notice ==
 
+= 1.4.1 = 
+* Text updates
+* Fix for sorting on Saved Searches
+* Update to Optima Express menu setup
+* Updates for Agent Bio and Social widgets
+* Fix for office setup 
+
+
+= 1.4.0 =
+* Added Agent Bio and Social Media widgets
+* Added Optima Express default navigation menu
+* Added Email Branding options directly from WP Admn
+* Added Map Search page for Power and Broker clients
+* Added Community Pages wizard for Broker and Power clients
+* Added SEO City Links for Broker and Power clients
+* Added short code for Gallery Slider
 
 
 = 1.3.5 =

@@ -4,7 +4,7 @@ if( !class_exists('IHomefinderContactFormVirtualPageImpl')) {
 	class IHomefinderContactFormVirtualPageImpl implements IHomefinderVirtualPage {
 	
 		private $path="contact-form";
-		private $title="Contact Form";
+		private $title="Contact";
 	
 		public function __construct(){
 			

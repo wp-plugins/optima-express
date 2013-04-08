@@ -249,11 +249,12 @@ if( !class_exists('IHomefinderShortcodeDispatcher')) {
 			$authenticationToken=$this->ihfAdmin->getAuthenticationToken();
 			$ihfUrl = iHomefinderConstants::EXTERNAL_URL . '?method=handleRequest&viewType=json&requestType=listing-gallery-slider&authenticationToken=' . $authenticationToken
 															.'&width=' .$attr['width']
+															.'&height=' .$attr['height']
 															.'&rows=' .$attr['rows']
 															.'&columns=' .$attr['columns']
-														        .'&effect=' .$attr['effect']
-														        .'&auto='   .$attr['auto']
-			                                                                                                .'&hid='    .$attr['hotsheetid'];
+														    .'&effect=' .$attr['effect']
+														    .'&auto='   .$attr['auto']
+			                                                .'&hid='    .$attr['hotsheetid'];
 			                    
 			
 			$this->listingGalleryContent = iHomefinderRequestor::remoteRequest($ihfUrl);

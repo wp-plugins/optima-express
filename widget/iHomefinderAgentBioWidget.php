@@ -33,19 +33,19 @@ if( !class_exists('iHomefinderAgentBioWidget')) {
 	    	$agentDesignations=get_option(IHomefinderConstants::AGENT_DESIGNATIONS_OPTION);
 	    	$agentLicenseInfo=get_option(IHomefinderConstants::AGENT_LICENSE_INFO_OPTION);
 
-
-		    echo $before_widget;
+			$before_title='<div class="widget-title">';
+			$after_title='</div>';
 
 			if(!empty( $displayTitle )) {
-				echo $before_title . $displayTitle . $after_title;
-			}
-
+                echo $before_title . $displayTitle . $after_title;
+			} 
+	    	
 		    // WIDGET CODE GOES HERE
 			echo "<table><tr>" ;
 			
 			if( $agentPhotoUrl ){
 				echo "<td style='vertical-align:top;'>";
-				echo "<img src='" . $agentPhotoUrl .  "' alt='Image of " . $agentDisplayName . "' " . "width='90' hspace='0' style='width:90px;margin-top:3px;margin-right:10px;' id='ihf-bio-img' />";
+				echo "<img src='" . $agentPhotoUrl .  "' alt='" . $displayTitle . "' " . "width='90' hspace='0' style='width:90px;margin-top:3px;margin-right:10px;' id='ihf-bio-img' />";
 				echo "</td>";
 			}
 			
