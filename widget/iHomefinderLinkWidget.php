@@ -36,13 +36,15 @@ if( !class_exists('iHomefinderLinkWidget')) {
 		    	$minPrice=$link[IHomefinderConstants::SE0_CITY_LINKS_MIN_PRICE];
 		    	$maxPrice=$link[IHomefinderConstants::SE0_CITY_LINKS_MAX_PRICE];
 		    	
-		    	$searchLinkInfo=new iHomefinderSearchLinkInfo($linkText, $cityZip, $propertyType, $minPrice, $maxPrice);
-		    	$linkUrl= $this->createLinkUrl($searchLinkInfo);		
-				?>
-				<div class="ihf-seo-link" style="width: <?php echo($linkWidth)?>px;">
-					<a href="<?php echo($linkUrl)?>"><?php echo($searchLinkInfo->getLinkText())?></a>
-				</div>              
-		    	<?php 
+		    	if( !empty($linkText)){
+			    	$searchLinkInfo=new iHomefinderSearchLinkInfo($linkText, $cityZip, $propertyType, $minPrice, $maxPrice);
+			    	$linkUrl= $this->createLinkUrl($searchLinkInfo);		
+					?>
+					<div class="ihf-seo-link" style="width: <?php echo($linkWidth)?>px;">
+						<a href="<?php echo($linkUrl)?>"><?php echo($searchLinkInfo->getLinkText())?></a>
+					</div>              
+		    		<?php 		    		
+		    	}
 		    	
 		    }//foreach loop  
 			

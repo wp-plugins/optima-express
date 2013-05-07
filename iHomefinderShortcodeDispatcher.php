@@ -228,9 +228,19 @@ if( !class_exists('IHomefinderShortcodeDispatcher')) {
 		function getMapSearch($attr){
 			IHomefinderStateManager::getInstance()->saveLastSearch() ;
 			$authenticationToken=$this->ihfAdmin->getAuthenticationToken();
-	        $ihfUrl = iHomefinderConstants::EXTERNAL_URL . '?method=handleRequest&viewType=json&requestType=map-search-widget&authenticationToken=' . $authenticationToken
-	                                                     .'&width=' .$attr['width']
-	                                                     .'&height=' .$attr['height'];
+	        $ihfUrl = iHomefinderConstants::EXTERNAL_URL . '?method=handleRequest&viewType=json&requestType=map-search-widget&authenticationToken=' . $authenticationToken;
+	        if(isset($attr['width'])){
+	        	$ihfUrl = $ihfUrl .'&width=' .$attr['width'];
+	        }
+	        if(isset($attr['height'])){
+	        	$ihfUrl = $ihfUrl .'&height=' .$attr['height'];
+	        }
+	        if(isset($attr['centerlat'])){
+	        	$ihfUrl = $ihfUrl  .'&centerlat='.$attr['centerlat'];
+	        }
+	        if(isset($attr['centerlong'])){
+	        	$ihfUrl = $ihfUrl .'&centerlong='.$attr['centerlong'];
+	        }
             $this->mapSearchContent = iHomefinderRequestor::remoteRequest($ihfUrl);
             $content = IHomefinderRequestor::getContent( $this->mapSearchContent );
             IHomefinderLogger::getInstance()->debug( $ihfUrl);
@@ -247,15 +257,29 @@ if( !class_exists('IHomefinderShortcodeDispatcher')) {
 
 		function getListingGallery($attr){
 			$authenticationToken=$this->ihfAdmin->getAuthenticationToken();
-			$ihfUrl = iHomefinderConstants::EXTERNAL_URL . '?method=handleRequest&viewType=json&requestType=listing-gallery-slider&authenticationToken=' . $authenticationToken
-															.'&width=' .$attr['width']
-															.'&height=' .$attr['height']
-															.'&rows=' .$attr['rows']
-															.'&columns=' .$attr['columns']
-														    .'&effect=' .$attr['effect']
-														    .'&auto='   .$attr['auto']
-			                                                .'&hid='    .$attr['hotsheetid'];
-			                    
+			$ihfUrl = iHomefinderConstants::EXTERNAL_URL . '?method=handleRequest&viewType=json&requestType=listing-gallery-slider&authenticationToken=' . $authenticationToken;
+			if(isset($attr['width'])){
+				$ihfUrl = $ihfUrl .'&width=' .$attr['width'];
+			}
+			if(isset($attr['height'])){
+				$ihfUrl = $ihfUrl .'&height=' .$attr['height'];
+			}
+			if(isset($attr['rows'])){
+				$ihfUrl = $ihfUrl  .'&rows=' .$attr['rows'];
+			}
+			if(isset($attr['columns'])){
+				$ihfUrl = $ihfUrl .'&columns=' .$attr['columns'];
+			}
+			if(isset($attr['effect'])){
+				$ihfUrl = $ihfUrl .'&effect=' .$attr['effect'];
+			}
+			if(isset($attr['auto'])){
+				$ihfUrl = $ihfUrl .'&auto='   .$attr['auto'];
+			}
+			if(isset($attr['hotsheetid'])){
+				$ihfUrl = $ihfUrl  .'&hid='    .$attr['hotsheetid'];
+			}
+			
 			
 			$this->listingGalleryContent = iHomefinderRequestor::remoteRequest($ihfUrl);
 			$content = IHomefinderRequestor::getContent( $this->listingGalleryContent );

@@ -8,8 +8,9 @@
 if( !interface_exists('IHomefinderConstants')){
 	interface IHomefinderConstants{
 
-		const VERSION="1.4.1";
+		const VERSION="1.4.2";
 		const EXTERNAL_URL= "http://www.idxre.com/services/wordpress";
+
 		//const EXTERNAL_URL= "http://local.idx.com/services/wordpress";
 
 		//Group for Activation related options
@@ -114,7 +115,7 @@ if( !interface_exists('IHomefinderConstants')){
 		//Transient Values
 		const PROPERTY_GALLERY_CACHE = "ihf_property_gallery_cache";
 		//Number of seconds for transient to timeout 60*60*24= 86400 = 1 day
-		//Number of seconds for transient to timeout 60*30= 1800 = 30 minutes
+		//Number of seconds for transient to timeout 60*30= 86400 = 30 minutes
 		const PROPERTY_GALLERY_CACHE_TIMEOUT = 1800 ;
 		///////////////////////////////////////////////////////
 

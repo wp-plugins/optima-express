@@ -58,14 +58,22 @@ if( !class_exists('IHomefinderVirtualPageDispatcher')) {
 			$this->initialized=false;
 		}
 		
+		public function clearComments($comments){
+			//If this is a virtual page, clear out any comments
+			if( get_query_var(IHomefinderConstants::IHF_TYPE_URL_VAR) ) {
+				$comments=array();
+			}
+			return $comments;
+		}
+		
 		/**
 		 * Load JavaScript using Wordpress script queues
 		 * 
 		 */
 		function loadJavaScript(){
-			wp_enqueue_script('jquery');
-			
+			wp_enqueue_script('jquery');			
 			wp_enqueue_script('jquery-ui-core');
+			wp_enqueue_script('jquery-ui-dialog');
 			wp_enqueue_script('jquery-ui-autocomplete', '', array('jquery-ui-widget', 'jquery-ui-position'), '1.8.6'); 			
 		}
 
@@ -88,12 +96,13 @@ if( !class_exists('IHomefinderVirtualPageDispatcher')) {
 				//This value will get replaced with remote content.  If it is not replaced, then an error
 				//has occurred and we leave the following default text.
 				$_postArray['post_content'] = $this->genericErrorPageContent ;
-				$_postArray['post_excerpt'] = ' ' ;
+				$_postArray['post_excerpt'] = $this->content ;
 				$_postArray['post_status'] = 'publish';
 				$_postArray['post_type'] = 'page';
 				$_postArray['is_page'] = 1;
 				$_postArray['is_single'] = 1;
 				$_postArray['comment_status'] = 'closed';
+				$_postArray['comment_count'] = 0;
 				$_postArray['ping_status'] = 'closed';
 				$_postArray['post_category'] = array(1); // the default 'Uncategorized'
 				$_postArray['post_parent'] = 0;

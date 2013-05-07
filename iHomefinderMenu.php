@@ -147,9 +147,15 @@ if( !class_exists('IHomefinderMenu')) {
 			$openHomesMenuItemId=$this->addOneOptimaExpressMenuItem($optimaExpressMenuId, 'Open Homes', IHomefinderUrlFactory::getInstance()->getOpenHomeSearchFormUrl(true), $findHomeMenuItemId);
 			$advancedSearchMenuItemId=$this->addOneOptimaExpressMenuItem($optimaExpressMenuId, 'Advanced Search', IHomefinderUrlFactory::getInstance()->getListingsAdvancedSearchFormUrl(true), $findHomeMenuItemId );			
 			
-			//Email Alerts
+			//Email Alerts			
 			if( IHomefinderPermissions::getInstance()->isEmailUpdatesEnabled()){		
-				$advancedSearchMenuItemId=$this->addOneOptimaExpressMenuItem($optimaExpressMenuId, 'Email Alerts', IHomefinderUrlFactory::getInstance()->getOrganizerEditSavedSearchUrl(true) );
+				if( IHomefinderPermissions::getInstance()->isOfficeEnabled()){
+					//If office enabled, then add email alerts to the search menu.
+					$mapSearchMenuItemId=$this->addOneOptimaExpressMenuItem($optimaExpressMenuId, 'Email Alerts',  IHomefinderUrlFactory::getInstance()->getOrganizerEditSavedSearchUrl(true), $findHomeMenuItemId );
+				}
+				else{
+					$advancedSearchMenuItemId=$this->addOneOptimaExpressMenuItem($optimaExpressMenuId, 'Email Alerts', IHomefinderUrlFactory::getInstance()->getOrganizerEditSavedSearchUrl(true) );
+				}
 			}
 			
 			//Parent for Community Pages
@@ -168,7 +174,10 @@ if( !class_exists('IHomefinderMenu')) {
 			//Contact Page
 			$contactMenuItemId=$this->addOneOptimaExpressMenuItem($optimaExpressMenuId, 'Contact', IHomefinderUrlFactory::getInstance()->getContactFormUrl(true));
 			
-			
+			if( IHomefinderPermissions::getInstance()->isOfficeEnabled()){
+				//Add top level office linkg
+				$officeListMenuItemId=$this->addOneOptimaExpressMenuItem($optimaExpressMenuId, 'Our Team', IHomefinderUrlFactory::getInstance()->getOfficeListUrl(true));
+			}			
 		}
 
 		private function addOneOptimaExpressMenuItem( $menuId, $name, $url, $parentId=0 ){

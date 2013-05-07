@@ -507,6 +507,7 @@ if( !class_exists('IHomefinderAdmin')) {
 			jQuery(document).ready(function() {
 				jQuery("input#ihfSeoLinksAutoComplete").focus(function(){jQuery("input#ihfSeoLinksAutoComplete").val("");});
 				jQuery("input#ihfSeoLinksAutoComplete").autocomplete({
+					autoFocus: true,
 					source: function(request,response){
 						var data=<?php echo($cityZipListJson);?>;
 						var searchTerm=request.term ;
@@ -707,13 +708,13 @@ if( !class_exists('IHomefinderAdmin')) {
 				<h3>Logo</h3>
 			    <?php if( get_option( IHomefinderConstants::EMAIL_LOGO_OPTION)){
 			    	?>
-			    	<img id="ihf_upload_office_logo_image" src="<?php echo(get_option(IHomefinderConstants::EMAIL_LOGO_OPTION))?>"
+			    	<img id="ihf_upload_email_logo_image" src="<?php echo(get_option(IHomefinderConstants::EMAIL_LOGO_OPTION))?>"
 			    		<?php if( !get_option( IHomefinderConstants::EMAIL_LOGO_OPTION)){echo(" style='display:none'");}?>/><br/>
 			    	<?php
 			    }
 			    ?>
-				<input id="ihf_upload_office_logo" type="text" size="36" name="<?php echo(IHomefinderConstants::EMAIL_LOGO_OPTION)?>" value="<?php echo(get_option(IHomefinderConstants::EMAIL_LOGO_OPTION))?>" />
-          		<input id="ihf_upload_office_logo_button" type="button" value="Upload Logo" class="button-secondary"/>
+				<input id="ihf_upload_email_logo" type="text" size="36" name="<?php echo(IHomefinderConstants::EMAIL_LOGO_OPTION)?>" value="<?php echo(get_option(IHomefinderConstants::EMAIL_LOGO_OPTION))?>" />
+          		<input id="ihf_upload_email_logo_button" type="button" value="Upload Logo" class="button-secondary"/>
 			    <br/>
 			    Enter an image URL or use an image from the Media Library
 			    <br/><br/>
@@ -1079,6 +1080,7 @@ if( !class_exists('IHomefinderAdmin')) {
 				jQuery(document).ready(function() {
 					jQuery("input#ihfCommunityPagesAutoComplete").focus(function(){jQuery("input#ihfCommunityPagesAutoComplete").val("");});
 					jQuery("input#ihfCommunityPagesAutoComplete").autocomplete({
+						autoFocus: true,
 						source: function(request,response){
 							var data=<?php echo($cityZipListJson);?>;
 							var searchTerm=request.term ;
@@ -1098,7 +1100,8 @@ if( !class_exists('IHomefinderAdmin')) {
 						select: function(event, ui){
 							//When an item is selected, set the text value for the link
 							jQuery('#ihfPageTitle').val(ui.item.label);
-						}
+						},
+						selectFirst: true
 					});
 				});
 			</script>
