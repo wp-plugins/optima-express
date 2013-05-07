@@ -634,6 +634,12 @@ The Pro package includes a full mobile IDX site that will work on any browser-en
 
 == Changelog ==
 
+= 1.4.2 =
+* Update to hide comments for Virtual pages 
+* Set auto focus for Autocomplete when creating community pages and seo links
+* Menu updates
+* Map Search shortcode updates
+
 = 1.4.1 = 
 * Text updates
 * Fix for sorting on Saved Searches
@@ -965,6 +971,12 @@ The Pro package includes a full mobile IDX site that will work on any browser-en
 
 
 == Upgrade Notice ==
+
+= 1.4.2 = 
+* Update to hide comments for Virtual pages 
+* Set auto focus for Autocomplete when creating community pages and seo links
+* Menu updates
+* Map Search shortcode updates
 
 = 1.4.1 = 
 * Text updates
