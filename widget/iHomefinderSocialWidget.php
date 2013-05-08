@@ -35,10 +35,10 @@ if( !class_exists('iHomefinderSocialWidget')) {
 	       		echo '<a href="http://www.facebook.com/' . $facebookUrl . '"><img src="' . $baseUrl . '/images/fbicon.png" width="24" height="24" style="width:24px;" /></a> ';
 			}
 			if($twitterUrl) {
-    	   		echo '<a href=http://www.twitter.com/"' . $twitterUrl. '"><img src="' . $baseUrl . '/images/twittericon.png" width="24" height="24" style="width:24px;" /></a> ';
+    	   		echo '<a href="http://www.twitter.com/' . $twitterUrl . '"><img src="' . $baseUrl . '/images/twittericon.png" width="24" height="24" style="width:24px;" /></a> ';
 			}
 			if($linkedinUrl) {
-       			echo '<a href=http://www.linkedin.com/"' . $linkedinUrl. '"><img src="' . $baseUrl . '/images/linkedinicon.png" width="24" height="24" style="width:24px;" /></a> ';
+       			echo '<a href="http://www.linkedin.com/' . $linkedinUrl . '"><img src="' . $baseUrl . '/images/linkedinicon.png" width="24" height="24" style="width:24px;" /></a> ';
 			}
       		echo("</div>");
     		echo $after_widget;	    	
