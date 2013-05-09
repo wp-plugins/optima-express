@@ -241,6 +241,9 @@ if( !class_exists('IHomefinderShortcodeDispatcher')) {
 	        if(isset($attr['centerlong'])){
 	        	$ihfUrl = $ihfUrl .'&centerlong='.$attr['centerlong'];
 	        }
+	        if(isset($attr['zoom'])){
+	        	$ihfUrl = $ihfUrl .'&zoom='.$attr['zoom'];
+	        }
             $this->mapSearchContent = iHomefinderRequestor::remoteRequest($ihfUrl);
             $content = IHomefinderRequestor::getContent( $this->mapSearchContent );
             IHomefinderLogger::getInstance()->debug( $ihfUrl);
