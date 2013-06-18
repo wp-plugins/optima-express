@@ -674,8 +674,9 @@ if( !class_exists('IHomefinderAdmin')) {
 			    	//Check if we support default display which uses the logo and photo
 			    	//previously uploaded.
 			    	if(IHomefinderAdminEmailDisplay::getInstance()->includeDefaultDisplay() ){
+			    		echo('Default Logo ' . IHomefinderAdminEmailDisplay::getInstance()->getDefaultLogo() );
 			    	?>
-			    	echo('Default Logo ' . IHomefinderAdminEmailDisplay::getInstance()->getDefaultLogo() );
+			    	
 			    	<input type="radio" name="<?php echo(IHomefinderConstants::EMAIL_DISPLAY_TYPE_OPTION)?>"
 			    	    <?php if( IHomefinderAdminEmailDisplay::EMAIL_DISPLAY_TYPE_DEFAULT_VALUE == $emailDisplayType ){echo(" checked ");}?>
 			    		value="<?php echo(IHomefinderAdminEmailDisplay::EMAIL_DISPLAY_TYPE_DEFAULT_VALUE)?>"/>Use Agent Bio photo & Header logo<br/>

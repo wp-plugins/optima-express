@@ -68,12 +68,14 @@ if( !class_exists('IHomefinderVirtualPageDispatcher')) {
 		
 		/**
 		 * Load JavaScript using Wordpress script queues
-		 * 
+		 * jquery-ui-tabs is included so that the srep plugin functions properly
 		 */
 		function loadJavaScript(){
 			wp_enqueue_script('jquery');			
 			wp_enqueue_script('jquery-ui-core');
+			wp_enqueue_script('jquery-ui-tabs');
 			wp_enqueue_script('jquery-ui-dialog');
+			wp_enqueue_script('jquery-ui-datepicker');
 			wp_enqueue_script('jquery-ui-autocomplete', '', array('jquery-ui-widget', 'jquery-ui-position'), '1.8.6'); 			
 		}
 
@@ -95,7 +97,7 @@ if( !class_exists('IHomefinderVirtualPageDispatcher')) {
 				$_postArray['post_title'] = $this->getTitle() ;
 				//This value will get replaced with remote content.  If it is not replaced, then an error
 				//has occurred and we leave the following default text.
-				$_postArray['post_content'] = $this->genericErrorPageContent ;
+				$_postArray['post_content'] = $this->content ;
 				$_postArray['post_excerpt'] = $this->content ;
 				$_postArray['post_status'] = 'publish';
 				$_postArray['post_type'] = 'page';
@@ -171,6 +173,24 @@ if( !class_exists('IHomefinderVirtualPageDispatcher')) {
 			return $content;
 		}
 
+		/**
+		 * For the ihf plugin page, we replace the excerpt, with data retrieved from
+		 * the iHomefinder servers.
+		 *
+		 * This function uses a Factory to get the correct VirtualPage implementation.
+		 *
+		 * @param $content
+		 */
+		function getExcerpt( $excerpt ) {
+			$this->init();
+			if( $this->initialized ){
+				$excerpt = $this->content;
+			}
+			//reset init params
+			$this->afterFilter() ;
+			return $excerpt;
+		}		
+		
 		function getContentByType( $content, $type ) {
 			IHomefinderLogger::getInstance()->debug('Begin IHomefinderVirtualPageDispatcher.getContentByType');
 

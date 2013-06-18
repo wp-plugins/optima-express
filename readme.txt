@@ -634,6 +634,11 @@ The Pro package includes a full mobile IDX site that will work on any browser-en
 
 == Changelog ==
 
+= 1.4.3 =
+* Set the excerpt to the content of Virtual Pages.
+* Load jQuery UI libs with wp_enqueue_script
+* Fixed issue with email logo uploads
+
 = 1.4.2 =
 * Update to hide comments for Virtual pages 
 * Set auto focus for Autocomplete when creating community pages and seo links
@@ -662,69 +667,34 @@ The Pro package includes a full mobile IDX site that will work on any browser-en
 
 = 1.3.5 =
 
-
-
 * Fixed issue related to user registration on the top picks page.
-
-
 
 = 1.3.4 =
 
-
-
 * Fixed issue related to Email Alerts when passwords are required.
-
-
-
 
 
 = 1.3.3 =
 
 
-
 * Added ability to customize CSS for Property Gallery Slider
-
-
-
 * Added spam-blocking functionality to forms
-
-
-
 * Addressed some theme compatibility issues
-
-
-
-
-
 
 
 = 1.3.2 =
 
 
-
 * Added Broker & Sold/Supplemental pages to widget configuration
-
-
-
 * Fixed issues with Light & Ultra-Light User Registration
-
-
-
 
 
 = 1.3.1 =
 
-
-
 * Updated Listing Gallery shortcodes to optionally include a map.
 
 
-
-
-
 = 1.3.0 =
-
-
 
 * Added Broker Features
 
@@ -732,24 +702,10 @@ The Pro package includes a full mobile IDX site that will work on any browser-en
 
 = 1.2.0 =
 
-
-
 * Added new pages: Contact Form, Home Valuation Request, Open Homes Search, Supplemental Listings, Sold Listings
-
-
-
 * Added support for display of Sold and Supplemental listings on Featured Properties page
-
-
-
 * Added option to use full-size photo in results (requires custom CSS to display on page)
-
-
-
 * Search form price fields clear on click
-
-
-
 * Improved error messaging for client log-in with accounts flagged for deletion
 
 
@@ -757,23 +713,10 @@ The Pro package includes a full mobile IDX site that will work on any browser-en
 = 1.1.7 =
 
 
-
 * Added navigation bar for Property Organizer
-
-
-
 * Added link to view matches from Saved Searches within Property Organizer
-
-
-
 * Added Help page to Property Organizer, to be used as default home when no saved properties or searches exist
-
-
-
 * Improved error handling on Property Organizer signup
-
-
-
 * Interactive Map Search Beta
 
 
@@ -781,188 +724,71 @@ The Pro package includes a full mobile IDX site that will work on any browser-en
 = 1.1.6 =
 
 
-
 * Added Free Text field in Search, Advanced Search and Email Alert sign-up
-
-
-
 * Support for Chicago neighborhoods in Midwest Real Estate Data MLS
-
-
-
 * Default search prices changed to No Min/No Max
-
-
-
 * Improved Unsubscribe process from email updates
-
-
-
 * Added support for template change for all IDX pages
-
-
-
 * Overall performance improvements & decreased page load time on property details pages
-
-
-
 * Fixed modal positioning for certain themes
-
-
-
 * Allowed for Featured listings to appear first in search results
-
-
-
 * Reconfigured search widget to allow customization of spacing through CSS
-
-
-
 * Added full support for template changes in Twenty Eleven theme
-
-
-
 * Improved error handling on property gallery wizard
-
-
-
 * Added address to GreatSchools widget to improve widget map position
 
 
 
 = 1.1.5 =
 
-
-
 * Updated authentication synchronization code to fix periodic authentication issues.
-
-
-
 
 
 = 1.1.4 =
 
-
-
 * Added ability to modify IDX Page Permalinks
-
-
-
 * Added ability to edit IDX Page Titles
-
-
-
 * Added ability to select IDX Page Template
-
-
-
 * Saved properties can be deleted from Property Organizer
-
-
-
 * Fixed pagination and Next/Previous navigation issues on Advanced Search results and Top Picks pages
-
-
-
 
 
 = 1.1.3 =
 
 
-
 * Added Advanced Search criteria to email updates
-
-
-
 * Added paging to Next/Previous from property details results
-
-
-
 * Fixed Multiple Agent ID issue in Advanced Search
-
-
-
 * Fixed paging problem in Advanced Search results
-
-
-
 * Fixed widget display issue on Advanced Search page
-
-
-
 * Fixed disclosure & map links in Advanced Search
-
-
-
 * Advanced Search option is now hidden for property types that do not offer advanced search
-
-
-
-
-
 * Bed/Bath search fields are deactivated for Commercial property searches
-
-
-
 * Removed 'New Search' link from Top Picks pages
-
-
-
 * Fixed display problem with Genesis ǃ?Featured Postsǃ? widget
 
 
 
 = 1.1.2 =
 
-
-
 * Added Listing Gallery display through shortcode on Pages and Posts
-
-
-
 * Added IDX page display selection to Widgets 
-
-
-
 * Added CSS override ability
-
-
-
 * Fixed open home display bug
-
-
-
 * Fixed Advanced Search multi-select bug
-
 
 
 = 1.1.0 =
 
-
-
 * Added User Registration prompts to collect user information at customizable trigger points (Ultra-light, Light & Heavy options available)
-
-
-
 * Added Advanced Search as well as link to Advanced Search from standard Search page
-
-
-
 * Added click-through login from email notifications
-
-
-
 * Improved subscriber activity tracking 
-
-
-
 * Fixed text display bugs on Top Picks pages
 
 
 
 = 1.0.0 =
-
-
 
 * Initial release.
 
@@ -971,6 +797,11 @@ The Pro package includes a full mobile IDX site that will work on any browser-en
 
 
 == Upgrade Notice ==
+
+= 1.4.3 =
+* Set the excerpt to the content of Virtual Pages.
+* Load jQuery UI libs with wp_enqueue_script
+* Fixed issue with email logo uploads
 
 = 1.4.2 = 
 * Update to hide comments for Virtual pages 

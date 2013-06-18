@@ -13,7 +13,7 @@ jQuery(document).ready(function() {
     	return false;
     });
 
-    jQuery('#ihf_upload_office_logo_button').click(function() {
+    jQuery('#ihf_upload_email_logo_button').click(function() {
     	//debugger;
     	jQuery('html').addClass('Image');
     	formFieldId='ihf_upload_office_logo';
