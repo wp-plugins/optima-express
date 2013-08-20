@@ -10,7 +10,7 @@ Tags: MLS, IDX, Real Estate, Multiple Listing Service, Optima Express
 Requires at least: 3.0
 
 
-Tested up to: 3.5.1
+Tested up to: 3.6
 
 
 Stable tag: trunk
