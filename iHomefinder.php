@@ -89,7 +89,6 @@ if( is_admin()){
 	
 	//Remember the users state in the application (subscriber info and last search)
 	add_action('plugins_loaded',array(IHomefinderStateManager::getInstance(), "initialize"), 5);
-	add_action('plugins_loaded',array(IHomefinderVirtualPageDispatcher::getInstance(), "init", 10)) ;
 
 	add_filter( 'page_template', array(IHomefinderVirtualPageDispatcher::getInstance(), "getPageTemplate") );
 	add_filter( 'the_content', array(IHomefinderVirtualPageDispatcher::getInstance(), "getContent"), 20 );
