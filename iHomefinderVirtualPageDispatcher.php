@@ -32,13 +32,10 @@ if( !class_exists('IHomefinderVirtualPageDispatcher')) {
 			return self::$instance;
 		}
 
-		private function init(){
+		public function init(){
 			global $wp_query ;
 			
-			$postsCount = $wp_query->post_count ;
-			//we only try to initialize, if we are accessing a virtual page
-			//which does not have any true posts in the global posts array	
-			if( !$this->initialized && $postsCount == 0 ){
+			if( !$this->initialized ){
 				if( $type = get_query_var(IHomefinderConstants::IHF_TYPE_URL_VAR) ) {
 					$this->currentVirtualPage= IHomefinderVirtualPageFactory::getInstance()->getVirtualPage($type);
 					$authenticationToken=$this->ihfAdmin->getAuthenticationToken();

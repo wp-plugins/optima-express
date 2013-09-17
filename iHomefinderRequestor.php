@@ -42,7 +42,9 @@ if( !class_exists('IHomefinderRequestor')){
 			$requestArgs = array("timeout"=>"20", "ihfid"=> $ihfid );
 			IHomefinderLogger::getInstance()->debug("before request");
 			$response = wp_remote_get($ihfUrl, $requestArgs);
+
 			IHomefinderLogger::getInstance()->debug("after request");
+			
 			
 			if( is_wp_error($response)){
 				$contentInfo=null;
@@ -50,9 +52,21 @@ if( !class_exists('IHomefinderRequestor')){
 			else{
 				$responseBody = wp_remote_retrieve_body( $response );
 				IHomefinderLogger::getInstance()->debug('responseBody: ' . $responseBody );
-				$contentInfo=json_decode($responseBody);
+				try{
+					$contentType=wp_remote_retrieve_header($response, "content-type");
+					if( $contentType != null && $contentType == "text/xml;charset=UTF-8"){
+						$contentInfo=simplexml_load_string($responseBody);	
+					}
+					else{
+						$contentInfo=json_decode($responseBody);
+					}
+				}catch (Exception $e){
+					var_dump($e);
+				}
 			}
 			IHomefinderLogger::getInstance()->debug("after get body");
+			
+			
 				
 			//Save the leadCaptureId, if we get it back.
 			if( isset( $contentInfo->leadCaptureId ) ){
@@ -73,12 +87,45 @@ if( !class_exists('IHomefinderRequestor')){
 				$searchSummary=$contentInfo->searchSummary ;
 				IHomefinderStateManager::getInstance()->saveSearchSummary($searchSummary);
 			}
-				
+
+			IHomefinderRequestor::loadJavaScriptAndCss($contentInfo);
+			
 			IHomefinderLogger::getInstance()->debug("End IHomefinderRequestor.remoteRequest: " );
 				
 			return $contentInfo ;
 		}
-
+		
+		/**
+		 * 
+		 * Enqueue CSS and JavaScript if included in the contentInfo
+		 * @param unknown_type $contentInfo
+		 */
+		private static function loadJavaScriptAndCss( $contentInfo ){
+			if( isset($contentInfo->css )){
+				$cssList=$contentInfo->css;				
+				foreach ($cssList->item as $item) {
+					wp_enqueue_style($item->name, $item->url );
+				}
+			}
+				
+			if( isset($contentInfo->javascript )){
+				$javascriptList=$contentInfo->javascript;				
+				foreach ($javascriptList->item as $item) {
+					$name=$item->name;
+					$url=$item->url;
+					$depends=false;
+					if( isset($item->depends)){
+						$depends=array();
+						foreach( $item->depends as $oneDependency ){
+							array_push($depends, $oneDependency);
+						}
+					}
+					wp_enqueue_script($name, $url, $depends);
+				}
+			}			
+			return;			
+		}
+		
 		public static function remotePostRequest( $ihfUrl, $postData ){
 			IHomefinderLogger::getInstance()->debug("Begin IHomefinderRequestor.remoteRequest: " );
 
@@ -171,6 +218,8 @@ if( !class_exists('IHomefinderRequestor')){
 				
 			return $url ;
 		}
+		
+		
 	}
 }
 ?>

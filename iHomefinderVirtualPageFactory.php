@@ -108,7 +108,7 @@ if( !class_exists('IHomefinderVirtualPageFactory')) {
 
 		public function getVirtualPage( $type ){
 			$virtualPage ;
-			IHomefinderLogger::getInstance()->debug('Begin IHomefinderVirtualPageFactory.getVirtualPage type=' . $type);
+			//IHomefinderLogger::getInstance()->debug('Begin IHomefinderVirtualPageFactory.getVirtualPage type=' . $type);
 			if($type == IHomefinderVirtualPageFactory::LISTING_SEARCH_RESULTS ){
 				$virtualPage = new IHomefinderSearchResultsVirtualPageImpl();
 			}
@@ -218,7 +218,7 @@ if( !class_exists('IHomefinderVirtualPageFactory')) {
 				$virtualPage = new IHomefinderAgentOrOfficeListingsVirtualPageImpl() ;
 			}
 
-			IHomefinderLogger::getInstance()->debug('Complete IHomefinderVirtualPageFactory.getVirtualPage');
+			//IHomefinderLogger::getInstance()->debug('Complete IHomefinderVirtualPageFactory.getVirtualPage');
 			return $virtualPage ;
 		}
 	}

@@ -8,7 +8,7 @@
 if( !interface_exists('IHomefinderConstants')){
 	interface IHomefinderConstants{
 
-		const VERSION="1.4.3";
+		const VERSION="1.4.4";
 		const EXTERNAL_URL= "http://www.idxre.com/services/wordpress";
 
 		//Group for Activation related options
@@ -19,36 +19,35 @@ if( !interface_exists('IHomefinderConstants')){
 		//Menu slug for the option pages
 		const OPTION_PAGES="ihf-option-pages";
 		//Group for Bio related options
-		const OPTION_GROUP_BIO="ihf-option-bio";		
+		const OPTION_GROUP_BIO="ihf-option-bio";
 		//Group for Social related options
 		const OPTION_GROUP_SOCIAL="ihf-option-social";
-		//Group for Email Display related options		
+		//Group for Email Display related options
 		const OPTION_GROUP_EMAIL_DISPLAY="ihf-option-email-display";
-		//Group for SEO City Links related options		
+		//Group for SEO City Links related options
 		const OPTION_GROUP_SEO_CITY_LINKS="ihf-option-seo-city-links";
 
-		
 		//Community Pages setup
 		const COMMUNITY_PAGES="ihf-community-pages";
-				
+
 		//Bio Information setup
-		const AGENT_PHOTO_OPTION="ihf-bio-agent-photo-option";		
+		const AGENT_PHOTO_OPTION="ihf-bio-agent-photo-option";
 		const AGENT_TEXT_OPTION="ihf-bio-agent-text-option";
 		const AGENT_DESIGNATIONS_OPTION="ihf-bio-agent-designations-option";
 		const AGENT_DISPLAY_TITLE_OPTION="ihf-agent-display-title-option";
 		const AGENT_LICENSE_INFO_OPTION="ihf-agent-license-info-option";
 
-		const CONTACT_PHONE_OPTION="ihf-bio-contact-phone";		
-		const CONTACT_EMAIL_OPTION="ihf-bio-contact-email";	
-		
+		const CONTACT_PHONE_OPTION="ihf-bio-contact-phone";
+		const CONTACT_EMAIL_OPTION="ihf-bio-contact-email";
+
 		const OFFICE_LOGO_OPTION="ihf-bio-office-logo";
-		
-		
+
+
 		//Social related settings
 		const FACEBOOK_URL_OPTION="ihf-social-facebook-url-option";
-		const LINKEDIN_URL_OPTION="ihf-social-linkedin-url-option"; 		
+		const LINKEDIN_URL_OPTION="ihf-social-linkedin-url-option";
 		const TWITTER_URL_OPTION="ihf-social-twitter-url-option";
-		
+
 		//Email Display related settings
 		const EMAIL_HEADER_OPTION="ihf-email-display-header-option";
 		const EMAIL_FOOTER_OPTION="ihf-email-display-footer-option";
@@ -59,9 +58,9 @@ if( !interface_exists('IHomefinderConstants')){
 		const EMAIL_ADDRESS_LINE1_OPTION="ihf-email-address-line1-option";
 		const EMAIL_ADDRESS_LINE2_OPTION="ihf-email-address-line2-option";
 		const EMAIL_PHONE_OPTION="ihf-email-phone-option";
-		
+
 		const EMAIL_DISPLAY_TYPE_OPTION="ihf-email-display-type-option";
-		
+
 		//SEO City Links settings
 		const SE0_CITY_LINKS_SETTINGS="ihf-seo-city-links-settings";
 		const SE0_CITY_LINKS_CITY_ZIP="ihf-seo-city-links-city-zip";
@@ -70,9 +69,9 @@ if( !interface_exists('IHomefinderConstants')){
 		const SE0_CITY_LINKS_MAX_PRICE="ihf-seo-city-links-max-price";
 		const SE0_CITY_LINKS_PROPERTY_TYPE="ihf-seo-city-links-property-type";
 		const SE0_CITY_LINK_WIDTH = "ihf-seo-city-link-width";
-		
-		
-		
+
+
+
 		//Activation related options EMAIL_DISPLAY_TYPE_OPTION
 		const ACTIVATION_TOKEN_OPTION="ihf_activation_token";
 		const ACTIVATION_DATE_OPTION="ihf_activation_date";
@@ -82,18 +81,18 @@ if( !interface_exists('IHomefinderConstants')){
 		const OPTION_CONFIG_PAGE="ihf-config-page";
 		//Configuration realted option
 		const CSS_OVERRIDE_OPTION="ihf-css-override";
-		
+
 		//Bio related options page
 		const BIO_PAGE="ihf-bio-page";
 
 		//Social related options page
 		const SOCIAL_PAGE="ihf-social-page";
-		
+
 		//Email Display related options page
 		const EMAIL_BRANDING_PAGE="ihf-email-branding-page";
-		
+
 		const SEO_CITY_LINKS_PAGE="ihf-seo-city-links-page";
-		
+
         const VERSION_OPTION="ihf_version_option";
 
 		//Transient value - cached authentication token

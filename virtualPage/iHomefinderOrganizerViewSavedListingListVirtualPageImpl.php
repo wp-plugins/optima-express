@@ -22,6 +22,7 @@ if( !class_exists('IHomefinderOrganizerViewSavedListingListVirtualPageImpl')) {
 				
 		public function getContent( $authenticationToken ){
 			IHomefinderLogger::getInstance()->debug('Begin IHomefinderOrganizerViewSavedListingListFilterImpl');
+			IHomefinderStateManager::getInstance()->saveLastSearch() ;
 			
 			$isLoggedIn = IHomefinderStateManager::getInstance()->isLoggedIn();
 			if($isLoggedIn){
@@ -32,6 +33,7 @@ if( !class_exists('IHomefinderOrganizerViewSavedListingListVirtualPageImpl')) {
 			$ihfUrl = IHomefinderConstants::EXTERNAL_URL . '?method=handleRequest&viewType=json&requestType=property-organizer-view-saved-listing-list' ;
 			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "authenticationToken", $authenticationToken);
 			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "subscriberId", $subscriberId );
+			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "includeSearchSummary", "true" );
 			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "phpStyle", "true");
 			
 			$contentInfo = IHomefinderRequestor::remoteRequest($ihfUrl);

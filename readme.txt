@@ -10,7 +10,7 @@ Tags: MLS, IDX, Real Estate, Multiple Listing Service, Optima Express
 Requires at least: 3.0
 
 
-Tested up to: 3.6
+Tested up to: 3.6.1
 
 
 Stable tag: trunk
@@ -634,6 +634,9 @@ The Pro package includes a full mobile IDX site that will work on any browser-en
 
 == Changelog ==
 
+= 1.4.4 =
+* Fixed issue that caused large options table
+
 = 1.4.3 =
 * Set the excerpt to the content of Virtual Pages.
 * Load jQuery UI libs with wp_enqueue_script
@@ -797,6 +800,9 @@ The Pro package includes a full mobile IDX site that will work on any browser-en
 
 
 == Upgrade Notice ==
+
+= 1.4.4 =
+* Fixed issue that caused large options table
 
 = 1.4.3 =
 * Set the excerpt to the content of Virtual Pages.
