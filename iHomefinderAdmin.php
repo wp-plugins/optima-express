@@ -60,7 +60,7 @@ if( !class_exists('IHomefinderAdmin')) {
                             This page provides customization features including the ability to override default styles for Optima Express.
 
                             <h3>Bio Widget</h3>
-                            Setup your Bio informmation.  Upload a photo and insert contact information.
+                            Setup your bio information.  Upload a photo and insert contact information.
 
                             <h3>Social Widget</h3>
                             Enter your social network information.

@@ -56,9 +56,7 @@ if( !class_exists('IHomefinderStateManager')) {
 
 		public function initialize(){
 			
-			if( $this->isSessionsEnabled() ){
-				session_start();
-			}
+			session_start();
 			
 			if( array_key_exists($this->identifierCookieName, $_COOKIE )){
 				$this->uniqueId = $_COOKIE[$this->identifierCookieName];
@@ -94,7 +92,7 @@ if( !class_exists('IHomefinderStateManager')) {
 		}
 		
 		private function isSessionsEnabled(){
-			return $this->sessionsEnabled;			
+			return isset( $_SESSION ) && $this->sessionsEnabled  ;			
 		}
 		
 		private function isWebCrawler(){
@@ -326,7 +324,7 @@ if( !class_exists('IHomefinderStateManager')) {
 			$result=array();
 			$cacheKey=$this->getSearchSummaryKey() ;
 			if( $this->isSessionsEnabled() ){
-				if( array_key_exists($cacheKey, $_SESSION )){
+				if( array_key_exists($cacheKey, $_SESSION ) ){
 					$result=$_SESSION[$cacheKey];
 				}	
 			}else{
