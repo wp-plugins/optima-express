@@ -319,7 +319,7 @@ if( !class_exists('IHomefinderAdminPageConfig')) {
 			$permalinkId=IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_HOTSHEET . "-list";
 			$hotsheetListVirtualPage = $this->virtualPageFactory->getVirtualPage( IHomefinderVirtualPageFactory::HOTSHEET_LIST );
 		?>
-			<h3>Top Picks Index</h3>
+			<h3>List of Saved Search Pages</h3>
 			<table>
 				<tr>
 					<td><b>Permalink:</b></td>
@@ -338,14 +338,14 @@ if( !class_exists('IHomefinderAdminPageConfig')) {
 			</table>
 			
 		<?php
-			$this->getPageSetup( "Top Picks",
+			$this->getPageSetup( "Saved Search Page",
 				IHomefinderVirtualPageFactory::HOTSHEET_SEARCH_RESULTS, 
 				IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_HOTSHEET, 
 				$urlFactory->getHotsheetSearchResultsUrl(false),
 				IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_HOTSHEET,
 				IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_HOTSHEET,
-				"(If empty, the name of the Top Picks list will be the title)",
-				"%TOPPICKS_NAME%/%TOPPICKS_ID%"	);	
+				"(If empty, the name of the Saved Search Page will be the title)",
+				"%SAVED_SEARCH_PAGE_NAME%/%SAVED_SEARCH_ID%"	);	
 		}
 	}
 }

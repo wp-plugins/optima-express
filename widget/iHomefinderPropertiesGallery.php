@@ -370,13 +370,13 @@ if( !class_exists('iHomefinderPropertiesGallery')) {
                 	<label><input onclick="togglePropertyFormFields(this.value);" <?php if( $galleryType == 'featuredListing' ) echo 'checked="checked"'; ?> class="galtype" type="radio" class="galtype" value="featuredListing" name="<?php echo $this->get_field_name( 'galleryType' ); ?>" /> Featured Properties Gallery</label><br/>
                 <?php }?>
                 <?php if( IHomefinderPermissions::getInstance()->isHotSheetEnabled()){ ?>
-                	<label><input onclick="togglePropertyFormFields(this.value);" <?php if( $galleryType == 'hotSheet' ) echo 'checked="checked"'; ?> class="galtype" type="radio" class="galtype" value="hotSheet" name="<?php echo $this->get_field_name( 'galleryType' ); ?>" /> Top Picks Gallery</label><br />
+                	<label><input onclick="togglePropertyFormFields(this.value);" <?php if( $galleryType == 'hotSheet' ) echo 'checked="checked"'; ?> class="galtype" type="radio" class="galtype" value="hotSheet" name="<?php echo $this->get_field_name( 'galleryType' ); ?>" /> Saved Search Page Gallery</label><br />
                 <?php }?>
                 <?php if( IHomefinderPermissions::getInstance()->isNamedSearchEnabled()){ ?>
-                	<label><input onclick="togglePropertyFormFields(this.value);" <?php if( $galleryType == 'namedSearch' ) echo 'checked="checked"'; ?> class="galtype" type="radio" class="galtype" value="namedSearch" name="<?php echo $this->get_field_name( 'galleryType' ); ?>" /> Saved Search Gallery</label><br />
+                	<label><input onclick="togglePropertyFormFields(this.value);" <?php if( $galleryType == 'namedSearch' ) echo 'checked="checked"'; ?> class="galtype" type="radio" class="galtype" value="namedSearch" name="<?php echo $this->get_field_name( 'galleryType' ); ?>" /> Dynamic Search Gallery</label><br />
                 <?php }?>
                 <?php if( IHomefinderPermissions::getInstance()->isLinkSearchEnabled()){ ?>
-                	<label><input onclick="togglePropertyFormFields(this.value);" <?php if( $galleryType == 'linkSearch' ) echo 'checked="checked"'; ?> class="galtype" type="radio" class="galtype" value="linkSearch" name="<?php echo $this->get_field_name( 'galleryType' ); ?>" /> Saved Search Link</label>
+                	<label><input onclick="togglePropertyFormFields(this.value);" <?php if( $galleryType == 'linkSearch' ) echo 'checked="checked"'; ?> class="galtype" type="radio" class="galtype" value="linkSearch" name="<?php echo $this->get_field_name( 'galleryType' ); ?>" /> Dynamic Search Link</label>
                 <?php }?>
             </div>
 
@@ -405,7 +405,7 @@ if( !class_exists('iHomefinderPropertiesGallery')) {
 			</div>
 
             <div id="hotSheet" class="hotSheet" <?php if( $galleryType != 'hotSheet' ) echo 'style="display:none;"'; ?>>
-                <label>Top Picks:</label>
+                <label>Saved Search Pages:</label>
                 <select name="<?php echo $this->get_field_name('hotSheetId'); ?>">
                 <?php
 	    			foreach ($hotsheetsList as $i => $value) {

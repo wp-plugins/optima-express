@@ -15,6 +15,80 @@ if( !class_exists('IHomefinderAdmin')) {
 			}
 			return self::$instance;
 		}
+		
+		public function checkError(){
+			$errors = array();
+			$pageName=$_REQUEST["page"];
+			//Get current wordpress plugins as array
+			$plugins = get_plugins();
+			
+			//Check for valid plugin registration
+			//Do not check for registration on the registration page.
+			if ($pageName != "ihf-option-activate" && !get_option(IHomefinderConstants::AUTHENTICATION_TOKEN_CACHE) ) {
+				$errors[] = "<p><a href='admin.php?page=ihf-option-activate'>Optima Express is not registered (Error 101 / 130)</a></p>";
+			}
+				
+			//check if wordpress address and site address match
+			if (get_home_url() != get_site_url()) {					
+				$errors[] = "<p><a href='options-general.php'>WordPress Address and Site Address do not match (Error 404)</a></p>";
+			}
+				
+			//check if permalink structure is set
+			if (get_option('permalink_structure') == "") {
+				$errors[] = "<p><a href='options-permalink.php'>WordPress permalink settings are set as default (Error 404)</a></p>";					
+			}
+	
+			//check if both OE plugins are active
+			if (array_key_exists("optima-express/iHomefinder.php",$plugins) == true && array_key_exists("wordpress-idx/WordpressIDX.php",$plugins) == true) {
+				$errors[] = "<p><a href='plugins.php?s=idx'>Multiple IDX plugins are installed</a></p>";					
+			}
+				
+			//Get compatibility JSON as array
+			$compatibilityUrl = iHomefinderConstants::EXTERNAL_URL . '?method=handleRequest&viewType=json&requestType=compatibility-check' ;
+			$requestArgs = array("timeout"=>"20" );
+			$response = wp_remote_get($compatibilityUrl, $requestArgs);
+			if( !is_wp_error($response)){
+				$responseBody = wp_remote_retrieve_body( $response );
+				$compatibility = json_decode($responseBody, true);
+				$compatibilityPluginArray=$compatibility["Plugin"];
+												
+				//loop through plugin array
+				foreach ($plugins as $pluginPath => $plugin) {
+					//check if plugin is active
+					if (is_plugin_active($pluginPath) == true) {
+						//get plugin name
+						$pluginName = $plugin["Name"];	
+						$message=$compatibilityPluginArray[$pluginName];
+						if( $message != null ){
+							$errors[] = "<p><a href='plugins.php?s=" .  urlencode($pluginName) . "'>" . $pluginName . " (" . $message . ")</a></p>";	
+						}		
+					}
+				}
+					
+				if ( function_exists('wp_get_theme')){
+					//get current wordpress theme as string
+					$theme = wp_get_theme();	
+					$themeName=$theme["Name"];
+					$compatibilityThemeArray=$compatibility["Theme"];	
+					$message=$compatibilityThemeArray[$themeName];
+					if($message != null ){
+						$errors[] = "<p><a href='themes.php'>" . $themeName . " (" . $message . ")</a></p>";
+					}
+				}
+			}
+				
+
+				
+			//check error count
+			if (count($errors) > 0) {
+				echo "<div class='error'>";
+				echo "<h3>" . count($errors) . " compatibility issue(s):</h3>";
+				foreach ($errors as $Error) {
+					echo $Error;
+				}
+				echo "</div>";
+			}
+		}
 
 		public function createAdminMenu(){
 			$permissions=IHomefinderPermissions::getInstance() ;

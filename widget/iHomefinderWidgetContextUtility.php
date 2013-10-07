@@ -104,7 +104,7 @@ if( !class_exists('IHomefinderWidgetContextUtility')) {
 			"Sold Featured Listing" => 	IHomefinderVirtualPageFactory::SOLD_FEATURED_LISTING,
 			"Supplemental Listing" => IHomefinderVirtualPageFactory::SUPPLEMENTAL_LISTING,
 			"Featured Properties" => IHomefinderVirtualPageFactory::FEATURED_SEARCH,			
-			"Top Picks" => IHomefinderVirtualPageFactory::HOTSHEET_SEARCH_RESULTS,			
+			"Saved Search Pages" => IHomefinderVirtualPageFactory::HOTSHEET_SEARCH_RESULTS,			
 			"Email Alerts" => IHomefinderVirtualPageFactory::ORGANIZER_EDIT_SAVED_SEARCH,
 			"Organizer Pages" => IHomefinderVirtualPageFactory::ORGANIZER_LOGIN ,
 			"Valuation Request" => 	IHomefinderVirtualPageFactory::VALUATION_FORM ,

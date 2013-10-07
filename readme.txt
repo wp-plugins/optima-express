@@ -1,14 +1,10 @@
 === Optima Express IDX Plugin===
 
-
 Contributors: ihomefinder
-
 
 Tags: MLS, IDX, Real Estate, Multiple Listing Service, Optima Express
 
-
-Requires at least: 3.0
-
+Requires at least: 3.4.0
 
 Tested up to: 3.6.1
 
@@ -634,6 +630,11 @@ The Pro package includes a full mobile IDX site that will work on any browser-en
 
 == Changelog ==
 
+= 1.4.5 =
+* Added admin checks for known issues
+* Update to allow captcha in contact forms
+* Changed text from Top Picks to Saved Search 
+
 = 1.4.4 =
 * Fixed issue that caused large options table
 
@@ -800,6 +801,10 @@ The Pro package includes a full mobile IDX site that will work on any browser-en
 
 
 == Upgrade Notice ==
+
+= 1.4.5 =
+* Added admin error checking.
+* Update to allow captcha in contact forms.
 
 = 1.4.4 =
 * Fixed issue that caused large options table

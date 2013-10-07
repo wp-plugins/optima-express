@@ -9,7 +9,7 @@ if( !class_exists('IHomefinderHotsheetListVirtualPageImpl')) {
 			
 		}
 		public function getTitle(){
-			return "Top Picks";
+			return "Saved Search Pages";
 		}
 				
 		public function getPageTemplate(){

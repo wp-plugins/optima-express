@@ -38,29 +38,14 @@ if( !class_exists('IHomefinderAjaxHandler')) {
 			
 			$isSpam=$this->isSpam() ;			
 			if( $isSpam == false ){
-				$action = IHomefinderUtility::getInstance()->getRequestVar('action');
-				$listingNumber = IHomefinderUtility::getInstance()->getRequestVar('listingNumber');
-				$boardID = IHomefinderUtility::getInstance()->getRequestVar('boardID');
-				$interestLevel = IHomefinderUtility::getInstance()->getRequestVar('interestLevel');
-				$name = IHomefinderUtility::getInstance()->getRequestVar('name');
-				$phone = IHomefinderUtility::getInstance()->getRequestVar('phone');
-				$email = IHomefinderUtility::getInstance()->getRequestVar('email');
-				$password = IHomefinderUtility::getInstance()->getRequestVar('password');
-				$message = IHomefinderUtility::getInstance()->getRequestVar('message');
+				$ihfUrl = iHomefinderConstants::EXTERNAL_URL ;
+				$ihfUrl .= '?method=handleRequest&viewType=json&requestType=request-more-info';
+				$ihfUrl .= '&authenticationToken=' . $authenticationToken ;	
 				
-				$ihfUrl = iHomefinderConstants::EXTERNAL_URL . '?method=handleRequest&viewType=json&requestType=request-more-info' ;
-				$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "action", $action);
-				$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "listingNumber", $listingNumber);
-				$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "boardID", $boardID);
-				$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "interestLevel", $interestLevel);
-				$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "name", $name);
-				$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "phone", $phone);
-				$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "email", $email);
-				$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "password", $password);
-				$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "message", $message);
-				$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "authenticationToken", $authenticationToken);
-	
-				$contentInfo = IHomefinderRequestor::remoteRequest($ihfUrl, true);
+				$ihfUrl = iHomefinderRequestor::addVarsToUrl($ihfUrl, $_REQUEST );
+				
+				$contentInfo = IHomefinderRequestor::remoteRequest($ihfUrl,true);
+				
 				$content = IHomefinderRequestor::getContent( $contentInfo );
 				IHomefinderLogger::getInstance()->debug( '<br/><br/>' . $ihfUrl ) ;
 				IHomefinderLogger::getInstance()->debug('End IHomefinderAjaxHandler.requestMoreInfo');
@@ -76,38 +61,13 @@ if( !class_exists('IHomefinderAjaxHandler')) {
 			
 			$isSpam=$this->isSpam() ;
 			if( $isSpam == false  ){
-				$action = IHomefinderUtility::getInstance()->getRequestVar('action');
-				$listingNumber = IHomefinderUtility::getInstance()->getRequestVar('listingNumber');
-				$boardID = IHomefinderUtility::getInstance()->getRequestVar('boardID');
-	
-				$name = IHomefinderUtility::getInstance()->getRequestVar('name');
-				$phone = IHomefinderUtility::getInstance()->getRequestVar('phone');
-				$phoneAlt = IHomefinderUtility::getInstance()->getRequestVar('phone_alt');
-				$email = IHomefinderUtility::getInstance()->getRequestVar('email');
-				$password = IHomefinderUtility::getInstance()->getRequestVar('password');
-				$comments = IHomefinderUtility::getInstance()->getRequestVar('comments');
-				$prefDate = IHomefinderUtility::getInstance()->getRequestVar('prefDate');
-				$prefTime = IHomefinderUtility::getInstance()->getRequestVar('prefTime');
-				$altDate = IHomefinderUtility::getInstance()->getRequestVar('altDate');
-				$altTime = IHomefinderUtility::getInstance()->getRequestVar('altTime');
-	
-				$ihfUrl = iHomefinderConstants::EXTERNAL_URL . '?method=handleRequest&viewType=json&requestType=schedule-showing' ;
-	
-				$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "listingNumber", $listingNumber);
-				$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "boardID", $boardID);
-				$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "name", $name);
-				$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "phone", $phone);
-				$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "phone_alt", $phoneAlt);
-				$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "email", $email);
-				$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "password", $password);
-				$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "comments", $comments);
-				$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "prefDate", $prefDate);
-				$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "prefTime", $prefTime);
-				$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "altDate", $altDate);
-				$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "altTime", $altTime);
-				$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "authenticationToken", $authenticationToken);
-	
-				$contentInfo = IHomefinderRequestor::remoteRequest($ihfUrl, true);
+				
+				$ihfUrl = iHomefinderConstants::EXTERNAL_URL ;
+				$ihfUrl .= '?method=handleRequest&viewType=json&requestType=schedule-showing';
+				$ihfUrl .= '&authenticationToken=' . $authenticationToken ;	
+				
+				$ihfUrl = iHomefinderRequestor::addVarsToUrl($ihfUrl, $_REQUEST );				
+				$contentInfo = IHomefinderRequestor::remoteRequest($ihfUrl,true);				
 				$content = IHomefinderRequestor::getContent( $contentInfo );
 	
 				IHomefinderLogger::getInstance()->debug( '<br/><br/>' . $ihfUrl ) ;
@@ -133,6 +93,8 @@ if( !class_exists('IHomefinderAjaxHandler')) {
 			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "boardID", $boardID);
 			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "authenticationToken", $authenticationToken);
 
+			//echo($ihfUrl);
+			//die();
 			$contentInfo = IHomefinderRequestor::remoteRequest($ihfUrl, true);
 			$content = IHomefinderRequestor::getContent( $contentInfo );
 
@@ -157,6 +119,9 @@ if( !class_exists('IHomefinderAjaxHandler')) {
 			$password = IHomefinderUtility::getInstance()->getRequestVar('password');
 			$actionType = IHomefinderUtility::getInstance()->getRequestVar('actionType');
 			$subscriberId = IHomefinderUtility::getInstance()->getRequestVar('subscriberID');
+			$captchaKey = IHomefinderUtility::getInstance()->getRequestVar('key');
+			$captchaToken = IHomefinderUtility::getInstance()->getRequestVar('token');
+			
 
 			$ihfUrl = iHomefinderConstants::EXTERNAL_URL . '?method=handleRequest&viewType=json&requestType=save-property' ;
 			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "action", $action);
@@ -170,6 +135,8 @@ if( !class_exists('IHomefinderAjaxHandler')) {
 			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "email", $email);
 			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "password", $password);
 			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "authenticationToken", $authenticationToken);
+			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "key", $captchaKey);
+			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "token", $captchaToken);
 			
 			$contentInfo = IHomefinderRequestor::remoteRequest($ihfUrl, true);
 			IHomefinderLogger::getInstance()->debugDumpVar($contentInfo);
@@ -184,9 +151,11 @@ if( !class_exists('IHomefinderAjaxHandler')) {
 			IHomefinderLogger::getInstance()->debug('Begin IHomefinderAjaxHandler.saveSearch');
 			$authenticationToken=$this->ihfAdmin->getAuthenticationToken();
 
+			$ihfUrl = iHomefinderRequestor::addVarsToUrl($ihfUrl, $_REQUEST );	
+			
 			$action = IHomefinderUtility::getInstance()->getRequestVar('action');
-			$boardID = IHomefinderUtility::getInstance()->getRequestVar('boardID');
-			$interestLevel = IHomefinderUtility::getInstance()->getRequestVar('interestLevel');
+			$captchaKey = IHomefinderUtility::getInstance()->getRequestVar('key');
+			$captchaToken = IHomefinderUtility::getInstance()->getRequestVar('token');
 			$name = IHomefinderUtility::getInstance()->getRequestVar('name');
 			$phone = IHomefinderUtility::getInstance()->getRequestVar('phone');
 			$email = IHomefinderUtility::getInstance()->getRequestVar('email');
@@ -206,8 +175,8 @@ if( !class_exists('IHomefinderAjaxHandler')) {
 			$ihfUrl = iHomefinderConstants::EXTERNAL_URL . '?method=handleRequest&viewType=json&requestType=save-search' ;
 			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "action", $action);
 			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "actionType", $actionType);
-			//$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "boardID", $boardID);
-			//$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "interestLevel", $interestLevel);
+			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "key", $captchaKey);
+			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "token", $captchaToken);
 			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "subscriberName", $name);
 			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "phone", $phone);
 			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "email", $email);
@@ -276,33 +245,13 @@ if( !class_exists('IHomefinderAjaxHandler')) {
 			IHomefinderLogger::getInstance()->debug('Begin leadCaptureLogin');
 			$authenticationToken=$this->ihfAdmin->getAuthenticationToken() ;
 			
-			$leadCaptureId = IHomefinderUtility::getInstance()->getRequestVar('leadCaptureId');
-			$email = IHomefinderUtility::getInstance()->getRequestVar('ihfEmail');
-			$name = IHomefinderUtility::getInstance()->getRequestVar('ihfName');
-			$telephone = IHomefinderUtility::getInstance()->getRequestVar('ihfTelephone');
-			$password = IHomefinderUtility::getInstance()->getRequestVar('ihfPassword');
-			$agentId = IHomefinderUtility::getInstance()->getRequestVar('agentID');		
-
-			$type = IHomefinderUtility::getInstance()->getRequestVar('ihfType');
-			
 			$ihfUrl = iHomefinderConstants::EXTERNAL_URL . '?method=handleRequest&viewType=json&requestType=lead-capture-login' ;
 			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "authenticationToken", $authenticationToken );
 			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "phpStyle", "true" );
 			
-			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "loginType", $type );
-			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "email", $email);
-			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "name", $name);
-			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "telephone", $telephone);
-			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "password", $password);	
-			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "agentID", $agentId);
-			$ihfUrl = IHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "leadCaptureId", $leadCaptureId );		
-			
-			//echo $ihfUrl ;
-			//die();
-
+			$ihfUrl = iHomefinderRequestor::addVarsToUrl($ihfUrl, $_REQUEST );	
 			
 			$contentInfo = IHomefinderRequestor::remoteRequest($ihfUrl, true);
-			//var_dump($contentInfo);
 			$content = IHomefinderRequestor::getContent( $contentInfo );
 			echo $content ;
 			IHomefinderLogger::getInstance()->debug('End leadCaptureLogin');

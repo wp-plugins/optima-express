@@ -60,7 +60,7 @@
 			echo($selectText);			
 		}
 		else{
-			echo("No Top Picks are currently available.");
+			echo("No Saved Search Pages are currently available.");
 		}
 	}
 	
@@ -112,7 +112,7 @@
 			<input name="shortcodeType" type="radio" checked="checked" onclick="jQuery('.ihfMenu').hide();jQuery('#featuredMenu').toggle();jQuery('#includeMap').show();"/>
 			Featured Listings<br/>
 			<input name="shortcodeType" type="radio" onclick="jQuery('.ihfMenu').hide();jQuery('#toppicksMenu').toggle();jQuery('#includeMap').show();"/>
-			Top Picks</br>
+			Saved Search Pages</br>
 			<input name="shortcodeType" type="radio" onclick="jQuery('.ihfMenu').hide();jQuery('#searchMenu').toggle();jQuery('#includeMap').show();"/>
 			Search<br/>
 			
