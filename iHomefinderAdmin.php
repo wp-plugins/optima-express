@@ -24,8 +24,30 @@ if( !class_exists('IHomefinderAdmin')) {
 			
 			//Check for valid plugin registration
 			//Do not check for registration on the registration page.
-			if ($pageName != "ihf-option-activate" && !get_option(IHomefinderConstants::AUTHENTICATION_TOKEN_CACHE) ) {
-				$errors[] = "<p><a href='admin.php?page=ihf-option-activate'>Optima Express is not registered (Error 101 / 130)</a></p>";
+			if ($pageName != IHomefinderConstants::OPTION_ACTIVATE && !get_option(IHomefinderConstants::AUTHENTICATION_TOKEN_CACHE) ) {
+				
+				?>
+				
+				<style type="text/css">
+				.green-bar {
+					border-radius: 3px 3px 3px 3px;
+					border-style: solid;
+					border-width: 1px;
+					color: #FFFFFF;
+					width: 95%;
+					padding: 0.4em 1em;
+					text-align: left;
+					font:12px arial;
+					background-color: #4F800D;
+				}
+				</style>
+				 
+				<p class="green-bar">
+				<a href="admin.php?page=<?php echo IHomefinderConstants::OPTION_ACTIVATE ?>" class="button button-primary">Activate Your Optima Express Account</a>
+				&nbsp;&nbsp;&nbsp;Get an unlimited free trial or paid subscription for your MLS</p>
+
+				<?php
+
 			}
 				
 			//check if wordpress address and site address match
@@ -93,10 +115,11 @@ if( !class_exists('IHomefinderAdmin')) {
 		public function createAdminMenu(){
 			$permissions=IHomefinderPermissions::getInstance() ;
 			add_menu_page('Optima Express', 'Optima Express', 'manage_options', 'ihf_idx', array( $this, 'adminOptionsForm' ));
-            add_submenu_page( 'ihf_idx', 'Information', 'Information', 'manage_options', 'ihf_idx', array( &$this, 'adminOptionsForm'));
-            add_submenu_page( 'ihf_idx', 'Register', 'Register', 'manage_options', IHomefinderConstants::OPTION_ACTIVATE, array( &$this, 'adminOptionsActivateForm'));
-            add_submenu_page( 'ihf_idx', 'IDX Pages', 'IDX Pages', 'manage_options', IHomefinderConstants::OPTION_PAGES, array( &$this, 'adminOptionsPagesForm'));
-            add_submenu_page( 'ihf_idx', 'Configuration', 'Configuration', 'manage_options', IHomefinderConstants::OPTION_CONFIG_PAGE, array( &$this, 'adminConfigurationForm'));
+			add_submenu_page( 'ihf_idx', 'Information', 'Information', 'manage_options', 'ihf_idx', array( &$this, 'adminOptionsForm'));
+			add_submenu_page( 'ihf_idx', 'Register', 'Register', 'manage_options', IHomefinderConstants::OPTION_ACTIVATE, array( &$this, 'adminOptionsActivateForm'));
+			add_submenu_page( 'ihf_idx', 'IDX Control Panel', 'IDX Control Panel', 'manage_options', IHomefinderConstants::OPTION_IDX_CONTROL_PANEL, array( &$this, 'adminIdxControlPanelForm'));
+			add_submenu_page( 'ihf_idx', 'IDX Pages', 'IDX Pages', 'manage_options', IHomefinderConstants::OPTION_PAGES, array( &$this, 'adminOptionsPagesForm'));
+			add_submenu_page( 'ihf_idx', 'Configuration', 'Configuration', 'manage_options', IHomefinderConstants::OPTION_CONFIG_PAGE, array( &$this, 'adminConfigurationForm'));
 
 			add_submenu_page( 'ihf_idx', 'Bio Widget', 'Bio Widget', 'manage_options', IHomefinderConstants::BIO_PAGE, array( &$this, 'bioInformationForm'));
 			add_submenu_page( 'ihf_idx', 'Social Widget', 'Social Widget', 'manage_options', IHomefinderConstants::SOCIAL_PAGE, array( &$this, 'socialInformationForm'));
@@ -178,6 +201,8 @@ if( !class_exists('IHomefinderAdmin')) {
 					}
 				}
 				update_option(IHomefinderConstants::AUTHENTICATION_TOKEN_CACHE, $authenticationToken);
+			} else {
+				update_option(IHomefinderConstants::AUTHENTICATION_TOKEN_CACHE, '');
 			}
 			IHomefinderMenu::getInstance()->updateOptimaExpressMenu() ;
 		}
@@ -380,62 +405,306 @@ if( !class_exists('IHomefinderAdmin')) {
 			}
 			return $isUpdated ;
 		}
-
+		
 		public function adminOptionsActivateForm(){
+			
+			?>		
+						
+			<div class="wrap">
+			
+			<?php
 			if (!current_user_can('manage_options'))  {
 				wp_die( __('You do not have sufficient permissions to access this page.') );
 			}
-
-			if($this->isUpdated()){
+			
+			if( $_GET['reg'] ) {
+				$regKey = $_GET['reg'];
+				update_option( IHomefinderConstants::ACTIVATION_TOKEN_OPTION, $regKey );
+				//update_option( IHomefinderConstants::ACTIVATION_DATE_OPTION, time() );
+				$this->updateAuthenticationToken();
+				?>
+				<h2>Thanks For Signing Up</h2>
+				<div class="updated">
+					<p>Your Optima Express plugin has been registered.</p>
+				</div>
+				<p>You will receive an email from us with IDX paperwork for your MLS. Please complete the paperwork and return it to iHomefinder promptly. Listings from your MLS will appear in Optima Express as soon as your MLS approves your IDX paperwork.</p>
+				<?php
+			} elseif($this->isUpdated()){
 				//call function here to pass the activation key to ihf and get
 				//an authentication token
 				$this->updateAuthenticationToken();
 			}
-			$now = time();
-			//expire the authentication token after a week.
-			//Then we need to request a new authentication token, using the same activation token
-			$expireTime = $now + (7 * 24 * 60 * 60);
-	?>
-				<div class="wrap">
-				<h2>Register</h2>
-
+			
+			if( $_GET['section'] == 'enter-reg-key' ) {
+				
+				?>
+				
+				<h2>Add Registration Key</h2>
+				
+				<?php
+				if( get_option( IHomefinderConstants::ACTIVATION_TOKEN_OPTION ) == '' ) {
+					?>
+					<div class="error">
+						<p>Add your Registration Key and click "Save Changes" to get started with Optima Express.</p>
+					</div>
+					<?php
+				} elseif( get_option( IHomefinderConstants::AUTHENTICATION_TOKEN_CACHE ) != '' ){
+					?>
+					<div class="updated">
+						<p>Your Optima Express plugin has been registered.</p>
+					</div>
+					<?php
+				} else {
+					?>
+					<div class="error">
+						<p>Incorrect Registration Key.</p>
+					</div>
+					<?php
+				}
+				?>
+				
 				<form method="post" action="options.php">
-				    <?php settings_fields( IHomefinderConstants::OPTION_ACTIVATE ); ?>
-
-				    <table class="form-table">
-				        <tr valign="top">
-				        <th scope="row">Registration Key</th>
-				        <td>
-				        	<input type="text" name="<?php echo IHomefinderConstants::ACTIVATION_TOKEN_OPTION ?>" value="<?php echo get_option(IHomefinderConstants::ACTIVATION_TOKEN_OPTION); ?>" />
-				        	<input type="hidden" name="<?php echo IHomefinderConstants::ACTIVATION_DATE_OPTION ?>" value="<?php echo $now?>" />
-				        </td>
-				        </tr>
-
-				        <tr valign="top">
-				            <td></td>
-				        	<td>
-				        		<?php if( false !== $this->getAuthenticationToken() ){   ?>
-				        			<?php if( $this->isUpdated() ){?>
-				        				Your Optima Express plugin has been updated.
-				        			<?php } else  {?>
-				        				Your Optima Express plugin has been registered.
-				        			<?php } ?>
-				        		<?php } else  {?>
-				        			Add your Registration Key and click "Save Changes" to get started with Optima Express.
-				        		<?php } ?>
-				        	</td>
-				        </tr>
-
-				    </table>
-
-				    <p class="submit">
-				    <input type="submit" class="button-primary" value="<?php _e('Save Changes') ?>" />
-				    </p>
-
+				<?php settings_fields( IHomefinderConstants::OPTION_ACTIVATE ); ?>
+				<table class="form-table">
+					<tr valign="top">
+						<th scope="row">
+							<b>Registration Key:</b>
+						</th>
+						<td>
+							<input type="text" size="45" name="<?php echo IHomefinderConstants::ACTIVATION_TOKEN_OPTION ?>" value="<?php echo get_option(IHomefinderConstants::ACTIVATION_TOKEN_OPTION); ?>" />
+						</td>
+					</tr>
+				</table>
+				<p class="submit">
+					<input type="submit" class="button-primary" value="<?php _e('Save Changes') ?>" />
+				</p>
 				</form>
-				</div>
-	<?php 	}
+				
+			<?php
+				
+			} elseif( $_GET['section'] == 'free-trial' ) {
+				?>
+			
+				<h2>Free Trial Sign-Up</h2>
+				
+				<?php
+					
+				$Email = $_POST['Email'];
+				$Password = $_POST['Password'];
+				$AccountType = $_POST['AccountType'];
+				
+				$errors = array();
+				
+				if( filter_var( $Email, FILTER_VALIDATE_EMAIL ) == FALSE ) {
+					$errors[] = '<p>Email address is not valid.</p>';
+				}
+				
+				if( strlen( $Password ) < 5 ) {
+					$errors[] = '<p>Password must be at least 5 characters.</p>';
+				}
+				
+				if( $AccountType == '' ) {
+					$errors[] = '<p>Select type of trial account.</p>';
+				}
+				
+				if( count($errors) == 0 ) {
+					
+					$params = array();
+					$params['plugin'] = 'true';
+					$params['clientfirstname'] = 'Trial User';
+					$params['clientlastname'] = 'Account';
+					if( $AccountType == 'Broker' ) {
+						$params['companyname'] = 'Many Homes Realty';
+					} else {
+						$params['companyname'] = 'Jamie Agent';
+					}
+					$params['companyemail'] = $Email;
+					$params['password'] = $Password;
+					$params['companyphone'] = '800-555-1212';
+					$params['companyaddress'] = '123 Main St.';
+					$params['companycity'] = 'Anytown';
+					$params['companystate'] = 'CA';
+					$params['companyzip'] = '12345';
+					$params['account_type'] = $AccountType;
+					$params['product'] = 'Optima Express';
+					$params['lead_source'] = 'Plugin';
+					$params['lead_source_description'] = 'Optima Express Trial Form';
+					$params['ad_code'] = '';
+					
+					$requestUrl = 'http://www.ihomefinder.com/store/optima-express-trial.php';
+					
+					set_time_limit(90);
+					$requestArgs = array( 'timeout' => '90', 'body' => $params );
+					$response = wp_remote_post($requestUrl, $requestArgs);
+					if( !is_wp_error($response)){
+						$responseBody = wp_remote_retrieve_body( $response );
+						$responseBody = json_decode($responseBody, true);
+						
+						$clientID = $responseBody['clientID'];
+						$regKey = $responseBody['regKey'];
+						$username = $responseBody['username'];
+						$password = $responseBody['password'];
+						
+						update_option( IHomefinderConstants::ACTIVATION_TOKEN_OPTION, $regKey );
+						//update_option( IHomefinderConstants::ACTIVATION_DATE_OPTION, time() );
+						$this->updateAuthenticationToken();
+						
+						?>
+						<div class="updated">
+							<p>Your Optima Express plugin has been registered.</p>
+						</div>
+						<p>Thank you for evaluating Optima Express!</p>
+						<p>Your trial account uses sample listing data from Northern California. For search and listings in your MLS, <a href="http://www.ihomefinder.com/store/convert.php?cid=<?php echo $clientID ?>" target="_blank">upgrade to a paid account</a>.</p>
+						<p>Visit our <a href="http://www.ihomefinder.com/support/optima-express-kb/" target="_blank">knowledge base</a> for assistance setting up IDX on your site.</p>
+						<div>To login to your iHomefinder IDX Control Panel go to: <a href="http://www.idxre.com/idx/admin/" target="_blank">www.idxre.com/idx/admin/</a></div>
+						<br />
+						<div style="text-indent: 20px;">
+							<div>Username: <?php echo $username ?></div>
+							<div>Password: <?php echo $password ?></div>
+							<div>Client ID: <?php echo $clientID ?></div>
+						</div>
+						<p>You'll also receive this information in an email from us. Don't hesitate to <a href="http://www.ihomefinder.com/forms/contact-us/" target="_blank">contact us</a> if you have any questions.</p>
+						
+						<?php
+						
+					} else {
+						?>
+						<div class="error">
+							<p>Error creating your account.</p>
+						</div>
+						<?php
+					}
+					
+				} else {
+				
+					if( $_POST ) {
+						echo "<div class='error'>";
+						foreach ($errors as $Error) {
+							echo $Error;
+						}
+						echo "</div>";
+					}
+					
+					?>
+					
+					<form method="post">
+					<table class="form-table" style="width: 300px">
+					<tr>
+						<td>
+							<b>
+								<label for="Email">Email:</label>
+							</b>
+						</td>
+						<td>
+							<input id="Email" style="width: 250px;" name="Email" type="text" value="<?php echo $Email ?>" />
+							<small>This will be your username.</small>
+						</td>
+					  </tr>
+					  <tr>
+						<td>
+							<b>
+								<label for="Password">Password:</label>
+							</b>
+						</td>
+						<td>
+							<input id="Password" style="width: 250px;" name="Password" type="password" />
+							<small>Create a password for your account.</small>
+						</td>
+					  </tr>
+					  <tr>
+						<td colspan="2">
+							<p>
+								<b>Account Type:</b>
+							</p>
+							<input id="AccountType_Agent" name="AccountType" type="radio" value="Agent" <?php if($AccountType == 'Agent') {echo 'checked';} ?>>
+							<label for="AccountType_Agent">Individual Agent</label>
+							<br />
+							<input id="AccountType_Broker" name="AccountType" type="radio" value="Broker" <?php if($AccountType == 'Broker') {echo 'checked';} ?>>
+							<label for="AccountType_Broker">Office with Multiple Agents</label>
+						</td>
+					  </tr>
+					</table>
+					<p class="submit">
+						<input type="submit" class="button-primary" value="Start Trial" />
+						<span>&nbsp;&nbsp;&nbsp;Creating your trial account can take up to 60 seconds to complete. Please do not refresh the page or press the back button.</span>
+					</p>
+					</form>
 
+					<?php
+				
+				}
+				
+			} else {
+			
+				if( get_option( IHomefinderConstants::ACTIVATION_TOKEN_OPTION ) == '' ) {
+					
+					?>
+					<style type="text/css">
+					.button-large-ihf {
+						height: 54px !important;
+						text-align: center;
+						font: 14px arial !important;
+						padding-top: 10px !important;
+						margin-right: 15px !important;
+					}
+					</style>
+					<h2>Register Optima Express</h2>
+					<br />
+					<a href="admin.php?page=<?php echo IHomefinderConstants::OPTION_ACTIVATE ?>&section=enter-reg-key">I already have a registration key</a>
+					<br />
+					<br />
+					<a href="admin.php?page=<?php echo IHomefinderConstants::OPTION_ACTIVATE ?>&section=free-trial" class="button button-primary button-large-ihf" >Get a Free Trial<br />IDX Account</a>
+					<a href="http://www.ihomefinder.com/product/optima-express/optima-express-agent-pricing/?plugin=true&redirectURL=<?php echo urlencode ( 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] ); ?>" class="button button-primary button-large-ihf">Sign Up for IDX<br />in Your MLS</a>
+					<br />
+					<br />
+					<p>Optima Express from iHomefinder adds MLS/IDX search and listings directly into your WordPress site.</p>
+					<p>A free trial account uses sample IDX listings from Northern California.</p>
+					<p>Signing up for IDX in your MLS provides access to all listings in your MLS and full support from iHomefinder. Plans start at $39.95 per month. You must be a member of an MLS to qualify for IDX service. <a target="_blank" href="http://www.ihomefinder.com/mls-coverage/">Learn More</a></p>
+					<?php
+					
+				} elseif( $_GET['reg'] == FALSE ) {
+					?>
+					<h2>Unregister Optima Express</h2>
+					<p>Optima Express is currently registered. Clicking the below button will unregister the IDX plugin.<p>
+					<form method="post" action="options.php">
+						<?php settings_fields( IHomefinderConstants::OPTION_ACTIVATE ); ?>
+						<input type="hidden" name="<?php echo IHomefinderConstants::ACTIVATION_TOKEN_OPTION ?>" value="" />
+						<p class="submit">
+							<input type="submit" class="button-primary" value="<?php _e('Unregister') ?>" onclick="return confirm('Are you sure you want to unregister Optima Express?');" />
+						</p>
+					</form>
+					<?php
+					
+				}
+			}
+			
+			?>
+			
+			</div>			
+		
+			<?php			
+			
+		}
+		
+		public function adminIdxControlPanelForm(){
+			?>
+			<style type="text/css">
+				#contentFrame {
+					width: 100%;
+					height: 800px;
+					border: none;
+				}
+			</style>
+
+			<?php
+			if( get_option( IHomefinderConstants::ACTIVATION_TOKEN_OPTION ) != '' ) {
+				?>
+				<iframe id="contentFrame" src="http://go.idxre.com/z.cfm?w=<?php echo get_option( IHomefinderConstants::ACTIVATION_TOKEN_OPTION ) ?>"></iframe>
+				<?php
+			}
+				
+		}
+	
 		public function addScripts(){
 			//Used for the Bio Page for image uploads
 			if (isset($_GET['page']) && ($_GET['page'] == IHomefinderConstants::BIO_PAGE || $_GET['page'] == IHomefinderConstants::EMAIL_BRANDING_PAGE ) ){

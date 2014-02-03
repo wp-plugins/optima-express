@@ -8,7 +8,7 @@
 if( !interface_exists('IHomefinderConstants')){
 	interface IHomefinderConstants{
 
-		const VERSION="1.4.5";
+		const VERSION="1.4.6";
 		const EXTERNAL_URL= "http://www.idxre.com/services/wordpress";
 
 		//Group for Activation related options
@@ -16,6 +16,8 @@ if( !interface_exists('IHomefinderConstants')){
 		const OPTION_ACTIVATE="ihf-option-activate";
 		//menu slug for information page
 		const INFORMATION="ihf-information" ;
+		//menu slug for control panel page
+		const OPTION_IDX_CONTROL_PANEL="ihf-idx-control-panel" ;
 		//Menu slug for the option pages
 		const OPTION_PAGES="ihf-option-pages";
 		//Group for Bio related options
