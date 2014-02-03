@@ -1,10 +1,12 @@
 === Optima Express IDX Plugin===
 Contributors: iHomefinder
 Tags: MLS, IDX, IDX Plugin, IDX Solutions, WordPress IDX, Real Estate, Multiple Listing Service, Optima Express
+Author URI: http://www.ihomefinder.com
+Plugin URI: http://www.ihomefinder.com/product/optima-express/
 Requires at least: 3.4.0
 Tested up to: 3.8.1
 Stable tag: trunk
-Use this IDX plugin to embed real estate property listings & data directly from the MLS on your WordPress site. Elegant interface, great SEO, and proven lead capture.
+Embed real estate property listings & data directly from the MLS on your WordPress site. Elegant interface, great SEO, and proven lead capture.
 
 
 == Description ==
