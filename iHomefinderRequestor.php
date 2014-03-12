@@ -7,7 +7,7 @@ if( !class_exists('IHomefinderRequestor')){
 				
 			//We don't try to get subscriber information for ajax requests
 			//because of cookie related complications.
-			if( !strpos(strtolower($ihfUrl), "subscriberid=") && !$ajaxRequest ){
+			if( !strpos(strtolower($ihfUrl), "subscriberid=")  ){
 				$subscriber = IHomefinderStateManager::getInstance()->getCurrentSubscriber();
 
 				if( !is_null($subscriber) && '' != $subscriber){
@@ -16,11 +16,17 @@ if( !class_exists('IHomefinderRequestor')){
 					$ihfUrl = IHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "subscriberId", $subscriberId );
 				}
 			}
+			
+			if( !strpos(strtolower($ihfUrl), "jsessionid=") ){
+				$ihfSessionId=IHomefinderStateManager::getInstance()->getIhfSessionId();
+				$ihfUrl=str_replace( IHomefinderLayoutManager::getInstance()->getExternalUrl(), IHomefinderLayoutManager::getInstance()->getExternalUrl() . ";jsessionid=" . $ihfSessionId, $ihfUrl );				
+			}
 						
 			//If the url does not have the lead capture id then try to add it
 			$ihfUrlHasLeadCapture=strrpos($ihfUrl, "leadCaptureId=");
 			if($ihfUrlHasLeadCapture === false){
 				$leadCaptureId = IHomefinderStateManager::getInstance()->getLeadCaptureId();
+				IHomefinderLogger::getInstance()->debug("leadCaptureId=" . $leadCaptureId );
 				if( !is_null($leadCaptureId) && '' != $leadCaptureId){
 					IHomefinderLogger::getInstance()->debug('leadCaptureId: ' . $leadCaptureId );
 					$ihfUrl = IHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "leadCaptureId", $leadCaptureId );
@@ -38,8 +44,10 @@ if( !class_exists('IHomefinderRequestor')){
 			$ihfUrl = IHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "leadCaptureSupport", "true" ) ;
 			
 			IHomefinderLogger::getInstance()->debug("ihfUrl: " . $ihfUrl);
+			//if( $ajaxRequest ){echo( $ihfUrl );die();}
+			//echo( $ihfUrl ); die();
 			$ihfid=site_url() + ";" + "WordpressPlugin";
-			$requestArgs = array("timeout"=>"20", "ihfid"=> $ihfid );
+			$requestArgs = array("timeout"=>"200", "ihfid"=> $ihfid );
 			IHomefinderLogger::getInstance()->debug("before request");
 			$response = wp_remote_get($ihfUrl, $requestArgs);
 
@@ -54,6 +62,7 @@ if( !class_exists('IHomefinderRequestor')){
 				IHomefinderLogger::getInstance()->debug('responseBody: ' . $responseBody );
 				try{
 					$contentType=wp_remote_retrieve_header($response, "content-type");
+					//$ihfSessionId=wp_remote_retrieve_header($response, "ihfSessionId");		
 					if( $contentType != null && $contentType == "text/xml;charset=UTF-8"){
 						$contentInfo=simplexml_load_string($responseBody);	
 					}
@@ -64,18 +73,53 @@ if( !class_exists('IHomefinderRequestor')){
 					var_dump($e);
 				}
 			}
-			IHomefinderLogger::getInstance()->debug("after get body");
 			
+			//if( $ajaxRequest ){var_dump($contentInfo);die();}
+			
+			IHomefinderLogger::getInstance()->debug("after get body");
 			
 				
 			//Save the leadCaptureId, if we get it back.
 			if( isset( $contentInfo->leadCaptureId ) ){
+				IHomefinderLogger::getInstance()->debug("calling saveLeadCaptureId with leadCaptureId=" . $contentInfo->leadCaptureId);
 				IHomefinderStateManager::getInstance()->saveLeadCaptureId($contentInfo->leadCaptureId);
 			}
 			
+			if( isset( $contentInfo->ihfSessionId ) ){
+				IHomefinderStateManager::getInstance()->saveIhfSessionId($contentInfo->ihfSessionId);
+			}		
+			
 			if( isset( $contentInfo->searchContext ) ){
 				IHomefinderStateManager::getInstance()->setSearchContext($contentInfo->searchContext);
-			}			
+			}	
+
+			if( isset( $contentInfo->listingInfo ) ){
+				$listingInfo=$contentInfo->listingInfo;
+				$listingNumber="";
+				$listingAddress="";
+				$boardId="";
+				$clientPropertyId="";
+				$sold="false";
+				
+				$hasListingInfo=false;
+				if( isset( $listingInfo->listingNumber ) && isset( $listingInfo->boardId ) ){
+					$listingNumber=$listingInfo->listingNumber ;
+					$boardId=$listingInfo->boardId ;
+					$hasListingInfo=true;
+					if( isset( $listingInfo->clientPropertyId ) ){
+						$clientPropertyId=$listingInfo->clientPropertyId ;
+					}
+					if( isset( $listingInfo->listingAddress ) ){
+						$listingAddress=$listingInfo->listingAddress ;
+					}
+					if( isset( $listingInfo->sold ) ){
+						$sold=$listingInfo->sold ;
+					}
+					$listingInfo=
+						new iHomefinderListingInfo($listingNumber, $boardId, $listingAddress, $clientPropertyId, $sold );
+						IHomefinderStateManager::getInstance()->setCurrentListingInfo($listingInfo);					
+				}
+			}	
 				
 			if( !IHomefinderRequestor::isError($contentInfo) && isset( $contentInfo->subscriberInfo )){
 				$subscriberData=$contentInfo->subscriberInfo ;
@@ -130,9 +174,9 @@ if( !class_exists('IHomefinderRequestor')){
 			IHomefinderLogger::getInstance()->debug("Begin IHomefinderRequestor.remoteRequest: " );
 
 			IHomefinderLogger::getInstance()->debug("ihfUrl: " . $ihfUrl);
-			$requestArgs = array('timeout'=>'20', 'body'=>$postData );
+			$requestArgs = array('timeout'=>'200', 'body'=>$postData );
 			$response = wp_remote_post($ihfUrl, $requestArgs);
-				
+			
 			IHomefinderLogger::getInstance()->debug("IHomefinderRequestor.remoteRequest post data " );
 			IHomefinderLogger::getInstance()->debugDumpVar($postData);
 			IHomefinderLogger::getInstance()->debugDumpVar($response);
@@ -142,7 +186,15 @@ if( !class_exists('IHomefinderRequestor')){
 			}
 			else{
 				$responseBody = wp_remote_retrieve_body( $response );
-				$contentInfo=json_decode($responseBody);
+				
+				$contentType=wp_remote_retrieve_header($response, "content-type");
+				if( $contentType != null && $contentType == "text/xml;charset=UTF-8"){
+					$contentInfo=simplexml_load_string($responseBody);	
+				}
+				else{
+					$contentInfo=json_decode($responseBody);
+				}
+								
 				IHomefinderLogger::getInstance()->debugDumpVar($responseBody);
 			}
 				
@@ -183,6 +235,7 @@ if( !class_exists('IHomefinderRequestor')){
 		 */
 		public static function getContent($contentInfo){
 			$content='';
+			
 			if(is_null($contentInfo)){
 				//We could reach this code, if the iHomefinder services are down.
 				$content = "<br/>Sorry we are experiencing system issues.  Please try again.<br/>";
@@ -195,9 +248,25 @@ if( !class_exists('IHomefinderRequestor')){
 				//success, display the view
 				$content = $contentInfo->view ;
 			}
+			
 			return $content ;
 		}
 		
+			/**
+		 *
+		 * Extract JSON from the response for ajax requests.
+		 * @param $contentInfo
+		 */
+		public static function getJson($contentInfo){
+			$json='';
+			
+			if( property_exists($contentInfo, "json")){
+				//success, return the json
+				$json = $contentInfo->json ;
+			}
+			
+			return $json ;
+		}		
 		
 		
 		public static function addVarsToUrl($url, $arrayOfVars){

@@ -11,7 +11,7 @@ if( !class_exists('iHomefinderPropertiesGallery')) {
 	    function iHomefinderPropertiesGallery() {
 	    	$options=array('description'=>'Display a list of properties.');
 	        parent::WP_Widget( false,
-	                           $name = 'Optima Express Property Gallery',
+	                           $name = 'IDX: Property Gallery',
 	                           $widget_options=$options  );
 			$this->contextUtility=IHomefinderWidgetContextUtility::getInstance() ; 	                           
 	    }
@@ -38,10 +38,8 @@ if( !class_exists('iHomefinderPropertiesGallery')) {
 	    			case 'linkSearch':
 	    				$this->linkSearch($args, $instance);
 	    				break;
-
 	    		}
 	    	}
-
 	    }
 
 
@@ -93,7 +91,7 @@ if( !class_exists('iHomefinderPropertiesGallery')) {
          		$propertyGalleryContent = $this->getCachedVersion($instance);
          		if( empty($propertyGalleryContent)){
          			$authenticationToken=IHomefinderAdmin::getInstance()->getAuthenticationToken();
-         			$ihfUrl = iHomefinderConstants::EXTERNAL_URL . '?method=handleRequest&viewType=json&requestType=hotsheet-results' ;
+         			$ihfUrl = IHomefinderLayoutManager::getInstance()->getExternalUrl() . '?method=handleRequest&viewType=json&requestType=hotsheet-results' ;
          			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "startRowNumber", 1);
          			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "authenticationToken", $authenticationToken);
          			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "numListingsLimit", $numberOfListingsToDisplay );
@@ -101,16 +99,23 @@ if( !class_exists('iHomefinderPropertiesGallery')) {
          			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "smallView", "true" );
          			iHomefinderLogger::getInstance()->debug("hotsheet url: " . $ihfUrl);
          			$contentInfo = iHomefinderRequestor::remoteRequest($ihfUrl);
-         			$propertyGalleryContent = $contentInfo->view;
+         			$propertyGalleryContent = (string) $contentInfo->view;
 
          			$this->updateCache($propertyGalleryContent);
          		}
+         		
          		echo $before_widget;
          		if ( $title ){
          			echo $before_title . $title . $after_title;
-
          		}
-         		echo "<br/>" . $propertyGalleryContent . "<br/>";
+	         	if( IHomefinderLayoutManager::getInstance()->hasExtraLineBreaksInWidget()){
+		    		echo "<br/>" ;	
+		    		echo $propertyGalleryContent ;
+		    		echo "<br/>" ;
+		    	}
+		    	else{
+		    		echo $propertyGalleryContent ;
+		    	}
          		echo "<a href='" . $linkUrl. "'>" . $linkText . "</a>";
          		echo $after_widget;
          	}
@@ -135,13 +140,13 @@ if( !class_exists('iHomefinderPropertiesGallery')) {
              	if( empty($propertyGalleryContent)){
              		IHomefinderLogger::getInstance()->debug( ' Featured Listings Widget NOT CACHED' );
              		$authenticationToken=IHomefinderAdmin::getInstance()->getAuthenticationToken();
-             		$ihfUrl = iHomefinderConstants::EXTERNAL_URL . '?method=handleRequest&viewType=json&requestType=featured-search' ;
+             		$ihfUrl = IHomefinderLayoutManager::getInstance()->getExternalUrl() . '?method=handleRequest&viewType=json&requestType=featured-search' ;
              		$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "startRowNumber", 1);
              		$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "authenticationToken", $authenticationToken);
              		$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "numListingsLimit", $numberOfListingsToDisplay );
              		$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "smallView", "true" );
              		$contentInfo = iHomefinderRequestor::remoteRequest($ihfUrl);
-             		$propertyGalleryContent = $contentInfo->view;
+             		$propertyGalleryContent = (string) $contentInfo->view;
              		$this->updateCache($propertyGalleryContent);
              	}
              	echo $before_widget;
@@ -208,7 +213,7 @@ if( !class_exists('iHomefinderPropertiesGallery')) {
 
            	//link to all featured listings
            	$linkUrl = IHomefinderUrlFactory::getInstance()->getListingsSearchResultsUrl(true) ;
-           	$linkUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($linkUrl, "cityID", $cityId);
+           	$linkUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($linkUrl, "cityId", $cityId);
            	$linkUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($linkUrl, "propertyType", $propertyType);
            	$linkUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($linkUrl, "bedrooms", $bed);
            	$linkUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($linkUrl, "bathcount", $bath);
@@ -219,8 +224,8 @@ if( !class_exists('iHomefinderPropertiesGallery')) {
            	if( empty($propertyGalleryContent)){
            		$authenticationToken=IHomefinderAdmin::getInstance()->getAuthenticationToken();
 
-           		$ihfUrl = IHomefinderConstants::EXTERNAL_URL . '?method=handleRequest&viewType=json&requestType=listing-search-results' ;
-           		$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "cityID", $cityId);
+           		$ihfUrl = IHomefinderLayoutManager::getInstance()->getExternalUrl() . '?method=handleRequest&viewType=json&requestType=listing-search-results' ;
+           		$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "cityId", $cityId);
            		$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "bedrooms", $bed);
            		$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "bathcount", $bath);
            		$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "minListPrice", $minPrice);
@@ -228,10 +233,10 @@ if( !class_exists('iHomefinderPropertiesGallery')) {
            		$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "propertyType", $propertyType);
            		$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "authenticationToken", $authenticationToken);
            		$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "numListingsLimit", $numberOfListingsToDisplay );
-           		$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "smallView", true);
+           		$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "smallView", "true");
 
            		$contentInfo = iHomefinderRequestor::remoteRequest($ihfUrl);
-           		$propertyGalleryContent = $contentInfo->view;
+           		$propertyGalleryContent = (string) $contentInfo->view;
            		$this->updateCache($propertyGalleryContent);
            	}
 
@@ -301,9 +306,11 @@ if( !class_exists('iHomefinderPropertiesGallery')) {
                 $linkText = ($instance) ? esc_attr($instance['linkText']) : 'View all';
 
                 $galleryFormData = $this->getGalleryFormData();
-                $hotsheetsList=$galleryFormData->hotsheetsList ;
-                $citiesList=$galleryFormData->citiesList ;
-                $propertyTypesList=$galleryFormData->propertyTypesList ;
+                $hotsheetsList=$galleryFormData->getHotsheetList() ;
+                $citiesList=$galleryFormData->getCitiesList() ;
+                $propertyTypesList=$galleryFormData->getPropertyTypesList();
+                
+        
 	        ?>
 	        
 
@@ -406,14 +413,16 @@ if( !class_exists('iHomefinderPropertiesGallery')) {
 
             <div id="hotSheet" class="hotSheet" <?php if( $galleryType != 'hotSheet' ) echo 'style="display:none;"'; ?>>
                 <label>Saved Search Pages:</label>
+                
                 <select name="<?php echo $this->get_field_name('hotSheetId'); ?>">
                 <?php
-	    			foreach ($hotsheetsList as $i => $value) {
-    					echo "<option value='" . $hotsheetsList[$i]->hotsheetId . "'";
-    					if( $hotsheetsList[$i]->hotsheetId == $hotSheetId ){
-    						echo " selected='true'";
-    					}
-    					echo ">" . $hotsheetsList[$i]->displayName . "</option>" ;
+                	
+                foreach ($hotsheetsList as $i => $value) {
+    							echo "<option value='" . (string) $hotsheetsList[$i]->hotsheetId . "'";
+    							if( $hotsheetsList[$i]->hotsheetId == $hotSheetId ){
+    								echo " selected='true'";
+    							}
+    						echo ">" . (string) $hotsheetsList[$i]->displayName . "</option>" ;
 				}
 				?>
                 </select>
@@ -436,12 +445,13 @@ if( !class_exists('iHomefinderPropertiesGallery')) {
                 <label>Property Type:</label><br/>
                 <select name="<?php echo $this->get_field_name('propertyType'); ?>" >
                 <?php
+                
 	    			foreach ($propertyTypesList as $i => $value) {
-    					echo"<option value='" . $propertyTypesList[$i]->propertyTypeCode . "'";
+    					echo"<option value='" . (string) $propertyTypesList[$i]->propertyTypeCode . "'";
 	    			    if( $propertyTypesList[$i]->propertyTypeCode == $propertyType ){
     						echo " selected='true'";
     					}
-    					echo ">" . $propertyTypesList[$i]->displayName . "</option>";
+    					echo ">" . (string) $propertyTypesList[$i]->displayName . "</option>";
 				}
 				?>
                 </select>

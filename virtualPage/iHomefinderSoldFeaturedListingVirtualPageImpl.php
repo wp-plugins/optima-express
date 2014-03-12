@@ -35,7 +35,7 @@ if( !class_exists('IHomefinderSoldFeaturedListingVirtualPageImpl')) {
 		public function getContent( $authenticationToken ){
 			IHomefinderStateManager::getInstance()->saveLastSearch() ;
 			IHomefinderLogger::getInstance()->debug('Begin IHomefinderSoldFeaturedPageImpl');
-			$ihfUrl = IHomefinderConstants::EXTERNAL_URL 
+			$ihfUrl = IHomefinderLayoutManager::getInstance()->getExternalUrl() 
 				. '?method=handleRequest'
 				. '&viewType=json'
 				. '&requestType=sold-featured-listing'

@@ -22,7 +22,7 @@ if( !class_exists('IHomefinderOrganizerEmailUpdatesConfirmationVirtualPageImpl')
 		public function getContent( $authenticationToken ){
 			IHomefinderLogger::getInstance()->debug('Begin IHomefinderOrganizerEmailUpdatesConfirmationVirtualPageImpl');
 			$message=IHomefinderUtility::getInstance()->getQueryVar('message');		
-			$ihfUrl = IHomefinderConstants::EXTERNAL_URL . '?method=handleRequest&viewType=json&requestType=property-organizer-email-updates-confirmation' ;
+			$ihfUrl = IHomefinderLayoutManager::getInstance()->getExternalUrl() . '?method=handleRequest&viewType=json&requestType=property-organizer-email-updates-confirmation' ;
 			$ihfUrl = IHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "authenticationToken", $authenticationToken);
 			$ihfUrl = IHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "message", $message);
 						

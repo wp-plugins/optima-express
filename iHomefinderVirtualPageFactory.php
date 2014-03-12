@@ -12,6 +12,9 @@ if( !class_exists('IHomefinderVirtualPageFactory')) {
 	include_once(   'virtualPage/iHomefinderSearchResultsVirtualPageImpl.php');
 	include_once(   'virtualPage/iHomefinderListingDetailVirtualPageImpl.php');
 	include_once(   'virtualPage/iHomefinderListingSoldDetailVirtualPageImpl.php');
+  
+  include_once(   'virtualPage/iHomefinderSearchByAddressResultsVirtualPageImpl.php');
+  include_once(   'virtualPage/iHomefinderSearchByListingIdResultsVirtualPageImpl.php');
 
 	include_once(   'virtualPage/iHomefinderOrganizerLoginFormVirtualPageImpl.php');
 	include_once(   'virtualPage/iHomefinderOrganizerLogoutVirtualPageImpl.php');
@@ -35,6 +38,7 @@ if( !class_exists('IHomefinderVirtualPageFactory')) {
 	include_once(   'virtualPage/iHomefinderContactFormVirtualPageImpl.php');
 	include_once(   'virtualPage/iHomefinderValuationFormVirtualPageImpl.php');
 	include_once(   'virtualPage/iHomefinderOpenHomeSearchFormVirtualPageImpl.php');
+  
 	include_once(   'virtualPage/iHomefinderSoldFeaturedListingVirtualPageImpl.php');
 	include_once(   'virtualPage/iHomefinderSupplementalListingVirtualPageImpl.php');
 
@@ -92,7 +96,8 @@ if( !class_exists('IHomefinderVirtualPageFactory')) {
 		const ORGANIZER_SEND_SUBSCRIBER_PASSWORD="idx-property-organizer-send-login";
 		const ORGANIZER_HELP="idx-property-organizer-help";
 		const ORGANIZER_EDIT_SUBSCRIBER="idx-property-organizer-edit-subscriber";
-
+    const LISTING_SEARCH_BY_ADDRESS_RESULTS="idx-results-by-address";
+    const LISTING_SEARCH_BY_LISTING_ID_RESULTS="idx-results-by-listing-id";
 		const CONTACT_FORM="idx-contact-form";
 		const VALUATION_FORM="idx-valuation-form";
 		const OPEN_HOME_SEARCH_FORM="idx-open-home-search-form";
@@ -124,10 +129,16 @@ if( !class_exists('IHomefinderVirtualPageFactory')) {
 			else if( $type == IHomefinderVirtualPageFactory::LISTING_ADVANCED_SEARCH_FORM){
 				$virtualPage = new IHomefinderAdvancedSearchFormVirtualPageImpl();
 			}
-	    	else if( $type == IHomefinderVirtualPageFactory::LISTING_SEARCH_FORM){
+	    else if( $type == IHomefinderVirtualPageFactory::LISTING_SEARCH_FORM){
 				$virtualPage = new IHomefinderSearchFormVirtualPageImpl();
 			}
-			else if( $type == IHomefinderVirtualPageFactory::MAP_SEARCH_FORM){
+      else if( $type == IHomefinderVirtualPageFactory::LISTING_SEARCH_BY_ADDRESS_RESULTS){
+				$virtualPage = new IHomefinderSearchByAddressResultsVirtualPageImpl();
+			}
+      else if( $type == IHomefinderVirtualPageFactory::LISTING_SEARCH_BY_LISTING_ID_RESULTS){
+				$virtualPage = new IHomefinderSearchByListingIdResultsVirtualPageImpl();
+			}
+      else if( $type == IHomefinderVirtualPageFactory::MAP_SEARCH_FORM){
 				$virtualPage = new IHomefinderMapSearchVirtualPageImpl();
 			}			
 			else if( $type == IHomefinderVirtualPageFactory::LISTING_QUICK_SEARCH_FORM){

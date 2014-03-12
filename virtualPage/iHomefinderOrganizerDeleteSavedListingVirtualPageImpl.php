@@ -25,7 +25,7 @@ if( !class_exists('IHomefinderOrganizerDeleteSavedListingVirtualPageImpl')) {
 
 			$savedListingId=IHomefinderUtility::getInstance()->getQueryVar('savedListingID');		
 	
-			$ihfUrl = IHomefinderConstants::EXTERNAL_URL . '?method=handleRequest&viewType=json&requestType=property-organizer-delete-saved-listing-submit' ;
+			$ihfUrl = IHomefinderLayoutManager::getInstance()->getExternalUrl() . '?method=handleRequest&viewType=json&requestType=property-organizer-delete-saved-listing-submit' ;
 			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "savedListingId", $savedListingId);
 			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "authenticationToken", $authenticationToken);
 			//IHomefinderRequestor will append the subscriber id to this request.			

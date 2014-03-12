@@ -22,7 +22,7 @@ if( !class_exists('IHomefinderOrganizerHelpVirtualPageImpl')) {
 		public function getContent( $authenticationToken ){
 			IHomefinderLogger::getInstance()->debug('Begin IHomefinderOrganizerHelpFilterImpl');
 			
-			$ihfUrl = IHomefinderConstants::EXTERNAL_URL . '?method=handleRequest&viewType=json&requestType=property-organizer-help' ;
+			$ihfUrl = IHomefinderLayoutManager::getInstance()->getExternalUrl() . '?method=handleRequest&viewType=json&requestType=property-organizer-help' ;
 			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "authenticationToken", $authenticationToken);
 			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "phpStyle", "true");
 			

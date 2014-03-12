@@ -36,7 +36,7 @@ if( !class_exists('IHomefinderSupplementalListingVirtualPageImpl')) {
 			IHomefinderLogger::getInstance()->debug('Begin IHomefinderSupplementalListingPageImpl');
 			IHomefinderStateManager::getInstance()->saveLastSearch() ;
 			//used to remember search results
-			$ihfUrl = IHomefinderConstants::EXTERNAL_URL 
+			$ihfUrl = IHomefinderLayoutManager::getInstance()->getExternalUrl() 
 				. '?method=handleRequest'
 				. '&viewType=json'
 				. '&requestType=supplemental-listing'

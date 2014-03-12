@@ -277,7 +277,21 @@ if( !class_exists('IHomefinderUrlFactory')) {
 			$path=$virtualPage->getPath();				
 			$value = $this->prependBaseUrl( $path, $includeBaseUrl );
 			return 	$value ;			
-		}	
+		}
+        
+    public function getListingSearchByAddressResultsUrl($includeBaseUrl=true) {
+			$virtualPage = $this->virtualPageFactory->getVirtualPage( IHomefinderVirtualPageFactory::LISTING_SEARCH_BY_ADDRESS_RESULTS );
+			$path = $virtualPage->getPath();
+			$value = $this->prependBaseUrl( $path, $includeBaseUrl );
+			return $value;
+		}
+        
+    public function getListingSearchByListingIdResultsUrl($includeBaseUrl=true) {
+			$virtualPage = $this->virtualPageFactory->getVirtualPage( IHomefinderVirtualPageFactory::LISTING_SEARCH_BY_LISTING_ID_RESULTS );
+			$path = $virtualPage->getPath();
+			$value = $this->prependBaseUrl( $path, $includeBaseUrl );
+			return $value;
+		}
 
 		public function getOfficeListUrl($includeBaseUrl=true){
 			$virtualPage = $this->virtualPageFactory->getVirtualPage( IHomefinderVirtualPageFactory::OFFICE_LIST );

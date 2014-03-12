@@ -34,7 +34,7 @@ if( !class_exists('IHomefinderOpenHomeSearchFormVirtualPageImpl')) {
 				
 		public function getContent( $authenticationToken ){
 			IHomefinderLogger::getInstance()->debug('Begin IHomefinderOpenHomeSearchFormPageImpl');
-			$ihfUrl = IHomefinderConstants::EXTERNAL_URL 
+			$ihfUrl = IHomefinderLayoutManager::getInstance()->getExternalUrl()
 				. '?method=handleRequest'
 				. '&viewType=json'
 				. '&requestType=open-home-search-form'

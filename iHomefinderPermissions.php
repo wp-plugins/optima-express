@@ -136,75 +136,134 @@ if( !class_exists('IHomefinderPermissions')) {
 			
 			$this->pendingAccount=$permissions->pendingAccount ; 
 		}
-
+		
+		public function isMoreInfoEnabled(){
+			if( IHomefinderLayoutManager::getInstance()->isResponsive() ) {
+				return TRUE;
+			} else {
+				return FALSE;
+			}
+		}
+		
+		public function isSearchByAddressEnabled(){
+			if( IHomefinderLayoutManager::getInstance()->isResponsive() ) {
+				return TRUE;
+			} else {
+				return FALSE;
+			}
+		}
+		
+		public function isSearchByListingIdEnabled(){
+			if( IHomefinderLayoutManager::getInstance()->isResponsive() ) {
+				return TRUE;
+			} else {
+				return FALSE;
+			}
+		}
+		
+		public function isContactFormWidgetEnabled(){
+			if( IHomefinderLayoutManager::getInstance()->isResponsive() ) {
+				return TRUE;
+			} else {
+				return FALSE;
+			}
+		}
+		
 		public function isMapSearchEnabled(){
-			return (bool) $this->mapSearchEnabled;
+			$Return = filter_var( $this->mapSearchEnabled, FILTER_VALIDATE_BOOLEAN );			
+			return $Return;
 		}
 				
 		public function isCommunityPagesEnabled(){
-			return (bool) $this->communityPagesEnabled;
+			$Return = filter_var( $this->communityPagesEnabled, FILTER_VALIDATE_BOOLEAN );			
+			return $Return;
 		}
 		
 		public function isSeoCityLinksEnabled(){
-			return (bool) $this->seoCityLinksEnabled;
+			$Return = filter_var( $this->seoCityLinksEnabled, FILTER_VALIDATE_BOOLEAN );			
+			return $Return;
 		}
 		public function isEmailUpdatesEnabled(){
-			return (bool) $this->emailUpdatesEnabled;
+			$Return = filter_var( $this->emailUpdatesEnabled, FILTER_VALIDATE_BOOLEAN );			
+			return $Return;
 		}
 			
 		public function isSaveListingEnabled(){
-			return (bool) $this->saveListingEnabled;
+			$Return = filter_var( $this->saveListingEnabled, FILTER_VALIDATE_BOOLEAN );			
+			return $Return;
 		}		
 		
 		public function isHotSheetEnabled(){
-			return (bool) $this->hotSheetEnabled;
+			$Return = filter_var( $this->hotSheetEnabled, FILTER_VALIDATE_BOOLEAN );			
+			return $Return;
 		}				
 
 		public function isLinkSearchEnabled(){
-			return (bool) $this->linkSearchEnabled;
+			$Return = filter_var( $this->linkSearchEnabled, FILTER_VALIDATE_BOOLEAN );			
+			return $Return;
 		}	
 		
 		public function isNamedSearchEnabled(){
-			return (bool) $this->namedSearchEnabled;
+			$Return = filter_var( $this->namedSearchEnabled, FILTER_VALIDATE_BOOLEAN );			
+			return $Return;
 		}
 
 		public function isOrganizerEnabled(){
-			return (bool) $this->organizerEnabled;
+			$Return = filter_var( $this->organizerEnabled, FILTER_VALIDATE_BOOLEAN );			
+			return $Return;
 		}	
 		public function isFeaturedPropertiesEnabled(){
-			return (bool) $this->featuredPropertiesEnabled;
+			$Return = filter_var( $this->featuredPropertiesEnabled, FILTER_VALIDATE_BOOLEAN );			
+			return $Return;
 		}	
 			
 		public function isGalleryShortCodesEnabled(){
-			return (bool) $this->galleryShortCodesEnabled ;
+			$Return = filter_var( $this->galleryShortCodesEnabled, FILTER_VALIDATE_BOOLEAN );			
+			return $Return;
 		}
 		
 		public function isOfficeEnabled(){
-			return (bool) $this->officeEnabled ;
+			$Return = filter_var( $this->officeEnabled, FILTER_VALIDATE_BOOLEAN );			
+			return $Return;
 		}
 		
 		public function isAgentBioEnabled(){
-			return (bool) $this->agentBioEnabled ;
+			$Return = filter_var( $this->agentBioEnabled, FILTER_VALIDATE_BOOLEAN );			
+			return $Return;
 		}
 		
 		public function isSoldPendingEnabled(){
-			return (bool) $this->soldPendingEnabled ;
+			$Return = filter_var( $this->soldPendingEnabled, FILTER_VALIDATE_BOOLEAN );			
+			return $Return;
 		}
 		
 		public function isValuationEnabled(){
-			return (bool) $this->valuationEnabled ;
+			$Return = filter_var( $this->valuationEnabled, FILTER_VALIDATE_BOOLEAN );			
+			return $Return;
 		}		
 		
 		public function isContactFormEnabled(){
-			return (bool) $this->contactFormEnabled ;
+			$Return = filter_var( $this->contactFormEnabled, FILTER_VALIDATE_BOOLEAN );			
+			return $Return;
 		}		
 		
 		public function isSupplementalListingsEnabled(){
-			return (bool) $this->supplementalListingsEnabled ;
+			$Return = filter_var( $this->supplementalListingsEnabled, FILTER_VALIDATE_BOOLEAN );			
+			return $Return;
 		}		
 
 		public function isPendingAccount(){
-			return (bool) $this->pendingAccount ;
-		}			
+			$Return = filter_var( $this->pendingAccount, FILTER_VALIDATE_BOOLEAN );			
+			return $Return;
+		}
+		
+		public function isOmnipressSite(){
+			$Return = FALSE;
+			if( get_option('clientId') ) {
+				$Return = TRUE;
+			}
+			return $Return;
+		}
+		
 	}
 }

@@ -42,7 +42,7 @@ if( !class_exists('IHomefinderOfficeDetailVirtualPageImpl')) {
 
 			$officeID=IHomefinderUtility::getInstance()->getQueryVar('officeID');
 			//used to remember search results
-			$ihfUrl = IHomefinderConstants::EXTERNAL_URL 
+			$ihfUrl = IHomefinderLayoutManager::getInstance()->getExternalUrl()
 				. '?method=handleRequest'
 				. '&viewType=json'
 				. '&requestType=office-detail'

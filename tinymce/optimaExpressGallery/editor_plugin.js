@@ -21,9 +21,9 @@
         // debugger;
         ed.windowManager.open( {
           file : url + '/dialog.php',
-          width : 450 + ed.getLang(
+          width : 675 + ed.getLang(
               'optimaExpressGallery.delta_width', 0),
-          height : 300 + ed.getLang(
+          height : 500 + ed.getLang(
               'optimaExpressGallery.delta_height', 0),
           inline : 1
         }, {
@@ -34,9 +34,9 @@
 
       // Register optimaExpressGallery button
       ed.addButton('optimaExpressGallery', {
-        title : 'Optima Express Property Gallery',
+        title : 'Optima Express Shortcode',
         cmd : 'mceOptimaExpressGallery',
-        image : url + '/img/optimaExpressGallery.gif'
+        image : url + '/img/optimaExpressGallery.png'
       });
 
       // Add a node change handler, selects the button in the UI when a

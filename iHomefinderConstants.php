@@ -8,9 +8,12 @@
 if( !interface_exists('IHomefinderConstants')){
 	interface IHomefinderConstants{
 
-		const VERSION="1.4.6";
-		const EXTERNAL_URL= "http://www.idxre.com/services/wordpress";
+		const VERSION="2.0.0";
 
+		const LEGACY_EXTERNAL_URL= "http://www.idxre.com/services/wordpress";
+   		const RESPONSIVE_EXTERNAL_URL= "http://www.idxhome.com/service/wordpress";
+   		const CONTROL_PANEL_EXTERNAL_URL= "http://www.idxre.com/idx/guid";
+   		
 		//Group for Activation related options
 		//Also used as menu slug for the Activate Menu
 		const OPTION_ACTIVATE="ihf-option-activate";
@@ -28,6 +31,14 @@ if( !interface_exists('IHomefinderConstants')){
 		const OPTION_GROUP_EMAIL_DISPLAY="ihf-option-email-display";
 		//Group for SEO City Links related options
 		const OPTION_GROUP_SEO_CITY_LINKS="ihf-option-seo-city-links";
+		//Group for compatibility check related options
+		const OPTION_GROUP_COMPATIBILITY_CHECK="ihf-option-compatibility-check";
+
+		//Select type of virtual pages
+		//Possible vlaues are RESPONSIVE OR LEGACY
+		const OPTION_LAYOUT_TYPE="ihf-option-layout-type";
+		const OPTION_LAYOUT_TYPE_RESPONSIVE="responsive";
+		const OPTION_LAYOUT_TYPE_LEGACY="legacy";
 
 		//Community Pages setup
 		const COMMUNITY_PAGES="ihf-community-pages";
@@ -83,6 +94,8 @@ if( !interface_exists('IHomefinderConstants')){
 		const OPTION_CONFIG_PAGE="ihf-config-page";
 		//Configuration realted option
 		const CSS_OVERRIDE_OPTION="ihf-css-override";
+		//Configuration realted option
+		const COLOR_SCHEME_OPTION="ihf-color-scheme";
 
 		//Bio related options page
 		const BIO_PAGE="ihf-bio-page";
@@ -94,6 +107,8 @@ if( !interface_exists('IHomefinderConstants')){
 		const EMAIL_BRANDING_PAGE="ihf-email-branding-page";
 
 		const SEO_CITY_LINKS_PAGE="ihf-seo-city-links-page";
+
+		const COMPATIBILITY_CHECK_ENABLED="ihf-compatibility-check-enabled";
 
         const VERSION_OPTION="ihf_version_option";
 
@@ -119,11 +134,14 @@ if( !interface_exists('IHomefinderConstants')){
 		///////////////////////////////////////////////////////
 
 
-		//Used to set the widget context.
-		//A search widget should not display on a
-		//search related virtual page
+		// Used to set the widget context.
+		// A search widget should not display on a
+		// search related virtual page
 		const SEARCH_WIDGET_TYPE="searchWidget";
 		const GALLERY_WIDGET_TYPE="galleryWidget";
+
+    // Search widgets that can display on search pages
+    const SEARCH_OTHER_WIDGET_TYPE="searchOtherWidget";
 
 		const DEBUG = false;
 	}

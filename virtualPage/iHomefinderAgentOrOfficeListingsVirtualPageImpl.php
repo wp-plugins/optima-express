@@ -43,7 +43,7 @@ if( !class_exists('IHomefinderAgentOrOfficeListingsVirtualPageImpl')) {
 			$agentId  = IHomefinderUtility::getInstance()->getRequestVar('agentId');
 			$officeId = IHomefinderUtility::getInstance()->getRequestVar('officeId');	
 
-			$ihfUrl = IHomefinderConstants::EXTERNAL_URL 
+			$ihfUrl = IHomefinderLayoutManager::getInstance()->getExternalUrl() 
 				. '?method=handleRequest'
 				. '&viewType=json'
 				. '&requestType=agent-or-office-listings'

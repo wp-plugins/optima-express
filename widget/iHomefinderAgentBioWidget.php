@@ -12,7 +12,7 @@ if( !class_exists('iHomefinderAgentBioWidget')) {
 	    function iHomefinderAgentBioWidget() {
 	    	$options=array('description'=>'Displays an agent bio.');
 	        parent::WP_Widget( false,
-	                           $name = 'Optima Express Agent Bio',
+	                           $name = 'IDX: Agent Bio',
 	                           $widget_options=$options );
 	    }
 
@@ -22,6 +22,9 @@ if( !class_exists('iHomefinderAgentBioWidget')) {
 	     * @see WP_Widget::widget
 	     */
 	    function widget($args, $instance) {
+	    	
+	    	//sets vars like $before_widget from $args
+	    	extract( $args );
 	    	
 	    	$displayType=$instance['displayType'];
 
@@ -33,9 +36,9 @@ if( !class_exists('iHomefinderAgentBioWidget')) {
 	    	$agentDesignations=get_option(IHomefinderConstants::AGENT_DESIGNATIONS_OPTION);
 	    	$agentLicenseInfo=get_option(IHomefinderConstants::AGENT_LICENSE_INFO_OPTION);
 
-			$before_title='<div class="widget-title">';
-			$after_title='</div>';
-
+	    	
+			echo $before_widget;
+			
 			if(!empty( $displayTitle )) {
                 echo $before_title . $displayTitle . $after_title;
 			} 

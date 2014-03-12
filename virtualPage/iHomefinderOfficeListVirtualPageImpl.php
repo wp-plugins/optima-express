@@ -36,7 +36,7 @@ if( !class_exists('IHomefinderOfficeListVirtualPageImpl')) {
 			IHomefinderLogger::getInstance()->debug('Begin IHomefinderOfficeListPageImpl');
 
 			//used to remember search results
-			$ihfUrl = IHomefinderConstants::EXTERNAL_URL 
+			$ihfUrl = IHomefinderLayoutManager::getInstance()->getExternalUrl()
 				. '?method=handleRequest'
 				. '&viewType=json'
 				. '&requestType=office-list'

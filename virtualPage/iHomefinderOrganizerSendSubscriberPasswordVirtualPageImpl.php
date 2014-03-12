@@ -26,7 +26,7 @@ if( !class_exists('iHomefinderOrganizerSendSubscriberPasswordVirtualPageImpl')) 
 			
 			$email=IHomefinderUtility::getInstance()->getQueryVar('email');
 						
-			$ihfUrl = IHomefinderConstants::EXTERNAL_URL . '?method=handleRequest&viewType=json&requestType=property-organizer-password-email' ;
+			$ihfUrl = IHomefinderLayoutManager::getInstance()->getExternalUrl() . '?method=handleRequest&viewType=json&requestType=property-organizer-password-email' ;
 			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "authenticationToken", $authenticationToken);
 			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "email", $email);
 			

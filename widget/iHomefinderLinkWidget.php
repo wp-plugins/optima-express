@@ -9,7 +9,7 @@ if( !class_exists('iHomefinderLinkWidget')) {
 	    function iHomefinderLinkWidget() {
 	    	$options=array('description'=>'Displays a list of Homes For Sale links in the choosen cities from Themes Options - SEO indexing tool.');
 	        parent::WP_Widget( false,
-	                           $name = 'Optima Express SEO City Links',
+	                           $name = 'IDX: SEO City Links',
 	                           $widget_options=$options );
 	    }
 
@@ -20,6 +20,9 @@ if( !class_exists('iHomefinderLinkWidget')) {
 	     */
 	    function widget($args, $instance) {
 	        $linkWidth=get_option(IHomefinderConstants::SE0_CITY_LINK_WIDTH,'80');
+	        //sets vars like $before_widget from $args
+	    	extract( $args );
+	    	
 	    	echo $before_widget;
            	echo $before_title;
 
@@ -79,60 +82,24 @@ if( !class_exists('iHomefinderLinkWidget')) {
 	    private function createLinkUrl($searchLinkInfo ){
 	    	//link to all featured listings
            	$linkUrl = IHomefinderUrlFactory::getInstance()->getListingsSearchResultsUrl(true);
-           	$linkUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($linkUrl, "cityZip", $searchLinkInfo->getCityZip() );
+           	//$linkUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($linkUrl, "cityZip", $searchLinkInfo->getCityZip() );
+           	
+           	if( $searchLinkInfo->hasPostalCode()){
+           		$linkUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($linkUrl, "zip", $searchLinkInfo->getPostalCode() );
+           	}
+           	else{
+           		$linkUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($linkUrl, "city", $searchLinkInfo->getCity() );
+           	}  	
+	    	if( $searchLinkInfo->hasState()){
+           		$linkUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($linkUrl, "state", $searchLinkInfo->getState() );
+           	}
            	$linkUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($linkUrl, "propertyType", $searchLinkInfo->getPropertyType() );
            	$linkUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($linkUrl, "minListPrice", $searchLinkInfo->getMinPrice() );
            	$linkUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($linkUrl, "maxListPrice", $searchLinkInfo->getMaxPrice() );
+           	           	
            	return $linkUrl;
-	    }
-	    
-
-         
+	    }  
 	} // class iHomefinderQuickSearchWidget
 }//end if( !class_exists('iHomefinderQuickSearchWidget'))
 
-if( !class_exists('iHomefinderSearchLinkInfo')) {
-	class iHomefinderSearchLinkInfo {
-		private $linkText;
-		private $cityZip;
-		private $propertyTyp;
-		private $minPrice;
-		private $maxPrice;
-		private $zip;
-
-		public function __construct($linkText,$cityZip, $propertyType, $minPrice, $maxPrice ){
-			$this->linkText=$linkText;
-			$this->cityZip=$cityZip;
-			$this->propertyType=$propertyType ;
-			$this->minPrice=$minPrice;
-			$this->maxPrice=$maxPrice;
-		}
-		
-		public function getLinkText(){
-			return $this->linkText ;
-		}
-		public function getCityZip(){
-			return $this->cityZip ;
-		}
-		public function getPropertyType(){
-			return $this->propertyType;
-		}
-		public function getMinPrice(){
-			return $this->minPrice;
-		}
-		public function getMaxPrice(){
-			return $this->maxPrice;
-		}
-		
-   		public static function compare($a, $b){
-        	$al = strtolower($a->linkText);
-        	$bl = strtolower($b->linkText);
-        	if ($al == $bl) {
-            	return 0;
-        	}
-        	return ($al > $bl) ? +1 : -1;
-    	}		
-		
-	}
-}
 ?>

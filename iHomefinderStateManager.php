@@ -27,6 +27,10 @@ if( !class_exists('IHomefinderStateManager')) {
 		//stored as an option
 		private $leadCaptureIdName = "ihf_lead_capture_id";
 		private $leadCaptureId = null ;
+		
+		//ihf session id
+		private $ihfSessionIdName = "ihf_session_id";
+		private $ihfSessionId = null;
 
 		//summary of search results
 		//stored in the session
@@ -36,6 +40,11 @@ if( !class_exists('IHomefinderStateManager')) {
 		private $searchContext = false;
 		
 		private $webCrawler=false;
+		
+		
+		//Save the current listing information
+		//May be used in a widget like More Info Widget
+		private $listingInfo=null;
 		
 		//We have this variable here in case a client cannot
 		//use sessions.  If we set this to false, we can save
@@ -98,6 +107,26 @@ if( !class_exists('IHomefinderStateManager')) {
 		private function isWebCrawler(){
 			return $this->webCrawler ;
 		}
+		
+		private function getStateValue( $cacheKey ){
+			$value='';
+			if( $this->isSessionsEnabled() ){
+				if( array_key_exists($cacheKey, $_SESSION )){
+					$value=$_SESSION[$cacheKey];
+				}	
+			}else{
+				$value=get_transient($cacheKey);
+			}
+			return $value ;
+		}
+		
+		private function saveStateValue( $cacheKey, $value ){
+			if( $this->isSessionsEnabled() ){
+				$_SESSION[$cacheKey]=$value;
+			}else{
+				set_transient($cacheKey, $value ,$this->transientTimeout );
+			}
+		}		
 
 		/**
 		 * The uniqueKey is used to help identify any transients / options for the
@@ -151,7 +180,14 @@ if( !class_exists('IHomefinderStateManager')) {
 			return $cacheKey ;
 		}
 
-		
+			/**
+		 * The lead capture id is used to synchronize lead capture status with
+		 * iHomefinder server side lead status.
+		 */
+		private function getIhfSessionKey(){
+			$cacheKey = $this->ihfSessionIdName . "_" . $this->getUniqueKey() ;
+			return $cacheKey ;
+		}		
 		/**
 		 * If leadCaptureId is set, then we have retrieved it from a cookie
 		 * value in the initialize method.  If it is not set, try to get it
@@ -175,19 +211,36 @@ if( !class_exists('IHomefinderStateManager')) {
 		}
 
 		/**
-		 * Temporarily store the lead capture id as a session var.  The next time
-		 * initialize is called, we read this session var, store it as a cookie, and
-		 * delete the transient.
+		 * Store as a session variable or transient.
+		 * 
 		 * @param unknown_type $leadCaptureId
 		 */
 		public function saveLeadCaptureId( $leadCaptureId ){
 			if( !$this->isWebCrawler()){
 				$cacheKey=$this->getLeadCaptureKey();
-				if( $this->isSessionsEnabled() ){
-					$_SESSION[$cacheKey]=$leadCaptureId;
-				}else{
-					set_transient($cacheKey, $leadCaptureId ,$this->transientTimeout );
+				$this->saveStateValue($cacheKey, (string) $leadCaptureId );
+			}
+		}
+		
+		public function getIhfSessionId( ){
+			if($this->ihfSessionId == null ){				
+				if( !$this->isWebCrawler() ){
+					$cacheKey=$this->getIhfSessionKey();
+					$this->ihfSessionId=$this->getStateValue( $cacheKey );
 				}
+			}
+			return $this->ihfSessionId ;
+		}	
+			
+		/**
+		 * Store as a session variable or transient.
+		 * 
+		 * @param unknown_type $ihfSessionId
+		 */		
+		public function saveIhfSessionId( $ihfSessionId ){
+			if( !$this->isWebCrawler()){
+				$cacheKey=$this->getIhfSessionKey();
+				$this->saveStateValue($cacheKey, (string)  $ihfSessionId );
 			}
 		}
 		
@@ -211,11 +264,7 @@ if( !class_exists('IHomefinderStateManager')) {
 				$lastSearch=$this->getCurrentUrl() ;
 				$lastSearch = str_replace("newSearch=true&", "", $lastSearch);
 				$cacheKey=$this->getLastSearchKey();
-				if( $this->isSessionsEnabled() ){
-					$_SESSION[$cacheKey]=$lastSearch ;
-				}else{
-					set_transient($cacheKey, $lastSearch, $this->transientTimeout );
-				}
+				$this->saveStateValue($cacheKey, $lastSearch);
 			}
 			return ;
 		}
@@ -225,13 +274,7 @@ if( !class_exists('IHomefinderStateManager')) {
 			$lastSearch="";
 			if( !$this->isWebCrawler()){
 				$cacheKey=$this->getLastSearchKey() ;
-				if( $this->isSessionsEnabled() ){
-					if( array_key_exists($cacheKey, $_SESSION )){
-						$lastSearch = $_SESSION[$cacheKey];
-					}
-				}else{
-					$lastSearch=get_transient($cacheKey);
-				}				
+				$lastSearch = $this->getStateValue($cacheKey);
 			}
 			return $lastSearch;
 		}
@@ -283,24 +326,14 @@ if( !class_exists('IHomefinderStateManager')) {
 				IHomefinderLogger::getInstance()->debugDumpVar($subscriberInfo);
 				
 				$cacheKey=$this->getSubscriberInfoKey();
-				if( $this->isSessionsEnabled() ){
-					$_SESSION[$cacheKey]=$subscriberInfo;
-				}else{
-					set_transient($cacheKey, $subscriberInfo, $this->transientTimeout );
-				}
+				$this->saveStateValue($cacheKey, $subscriberInfo);
 			}
 		}
 
 		public function getCurrentSubscriber(){
 			$cacheKey=$this->getSubscriberInfoKey();
 			if( !$this->isWebCrawler()){
-				if( $this->isSessionsEnabled() ){
-					if( array_key_exists($cacheKey, $_SESSION )){
-						$subscriberInfo = $_SESSION[$cacheKey];
-					}
-				} else{
-					$subscriberInfo=get_transient($cacheKey);
-				}
+				$subscriberInfo=$this->getStateValue($cacheKey);
 
 				if( !is_null($subscriberInfo) && $subscriberInfo != false ){
 					if($subscriberInfo->getId() == null || "" == trim($subscriberInfo->getId())){
@@ -323,13 +356,7 @@ if( !class_exists('IHomefinderStateManager')) {
 		public function getSearchSummary(){
 			$result=array();
 			$cacheKey=$this->getSearchSummaryKey() ;
-			if( $this->isSessionsEnabled() ){
-				if( array_key_exists($cacheKey, $_SESSION ) ){
-					$result=$_SESSION[$cacheKey];
-				}	
-			}else{
-				$result=get_transient($cacheKey);
-			}
+			$result=$this->getStateValue($cacheKey);
 			return $result ;
 		}
 
@@ -338,14 +365,25 @@ if( !class_exists('IHomefinderStateManager')) {
 			if( !$this->isWebCrawler() ){
 				$searchSummaryArray=(array) $searchSummary ;				
 				$cacheKey=$this->getSearchSummaryKey() ;
-				if( $this->isSessionsEnabled() ){
-					$_SESSION[$cacheKey]=$searchSummaryArray ;
-				}else{
-					set_transient($cacheKey, $searchSummaryArray, $this->transientTimeout );
-				}
+				$this->saveStateValue($cacheKey, $searchSummaryArray);
 			}
 		}
+		
+		public function setCurrentListingInfo($listingInfo ){
+			$this->listingInfo=$listingInfo ;
+		}
 
+		public function getCurrentListingInfo(){
+			return $this->listingInfo ;
+		}
+		
+		public function hasListingInfo(){
+			if( $this->listingInfo != null ){
+				return true;
+			}
+			return false ;
+		}
+		
 	}//end class
 }// end if class_exists
 

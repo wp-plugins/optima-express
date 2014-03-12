@@ -34,7 +34,7 @@ if( !class_exists('IHomefinderValuationFormVirtualPageImpl')) {
 				
 		public function getContent( $authenticationToken ){
 			IHomefinderLogger::getInstance()->debug('Begin IHomefinderContactFormVirtualPageImpl');
-			$ihfUrl = IHomefinderConstants::EXTERNAL_URL 
+			$ihfUrl = IHomefinderLayoutManager::getInstance()->getExternalUrl() 
 				. '?method=handleRequest'
 				. '&viewType=json'
 				. '&requestType=valuation-form'

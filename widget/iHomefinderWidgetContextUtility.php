@@ -208,5 +208,5 @@ if( !class_exists('IHomefinderWidgetContextUtility')) {
 	    }
 
 	} // class IHomefinderWidgetUtility
-}//end if( !class_exists('iHomefinderQuickSearchWidget'))
+}//end if( !class_exists('IHomefinderWidgetContextUtility'))
 ?>

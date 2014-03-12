@@ -31,7 +31,7 @@ if( !class_exists('IHomefinderOrganizerResendConfirmationVirtualPageImpl')) {
 			$agentId=IHomefinderUtility::getInstance()->getQueryVar('agentId');
 			$afterLoginUrl=IHomefinderUtility::getInstance()->getRequestVar('afterLoginUrl');
 			
-			$ihfUrl = IHomefinderConstants::EXTERNAL_URL . '?method=handleRequest&viewType=json&requestType=property-organizer-resend-confirm-email' ;
+			$ihfUrl = IHomefinderLayoutManager::getInstance()->getExternalUrl() . '?method=handleRequest&viewType=json&requestType=property-organizer-resend-confirm-email' ;
 			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "authenticationToken", $authenticationToken);
 			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "email", $email);
 			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "afterLoginUrl", $afterLoginUrl);

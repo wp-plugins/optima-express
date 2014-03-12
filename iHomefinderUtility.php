@@ -32,10 +32,22 @@ if( !class_exists('IHomefinderUtility')) {
 
 		public function getVarFromArray($name, $arrayVar){
 			$result=null ;
+			$name=strtolower($name);
+			$arrayVar=$this->arrayKeysToLowerCase($arrayVar);
+			
 			if( array_key_exists($name, $arrayVar)){
 				$result = $arrayVar[$name];
 			}
 			return $result ;
+		}
+		
+		private function arrayKeysToLowerCase( $arrayVar ){
+			$lowerCaseKeysArray=array();
+			foreach($arrayVar as $key => $value){
+				$key=strtolower($key);
+				$lowerCaseKeysArray[$key]=$value;
+			}
+			return $lowerCaseKeysArray ;
 		}
 		
 		/**

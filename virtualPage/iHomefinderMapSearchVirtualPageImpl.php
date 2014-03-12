@@ -33,14 +33,21 @@ if( !class_exists('IHomefinderMapSearchVirtualPageImpl')) {
 				
 		public function getContent( $authenticationToken ){
 			IHomefinderLogger::getInstance()->debug('Begin IHomefinderMapSearchVirtualPageImpl->getContent');
-			
-			$ihfUrl = iHomefinderConstants::EXTERNAL_URL 
+			//save url to get back from listing details page
+			IHomefinderStateManager::getInstance()->saveLastSearch() ;
+			$ihfUrl = IHomefinderLayoutManager::getInstance()->getExternalUrl()
 			    . '?method=handleRequest&viewType=json'
 			    . '&requestType=map-search-widget'
 			    . '&authenticationToken=' 
 				. $authenticationToken
-	            . '&width=595'
 	            . '&height=500';
+			if(!IHomefinderLayoutManager::getInstance()->supportsMapSearchWithMultipleWidths()){
+				$ihfUrl = $ihfUrl.'&width=595';
+			}
+			// adds restart= true if available to start over map session
+			$ihfUrl = iHomefinderRequestor::addVarsToUrl($ihfUrl, $_REQUEST);
+			//echo($ihfUrl);
+			//die();
             $contentInfo = iHomefinderRequestor::remoteRequest($ihfUrl);
             $content = IHomefinderRequestor::getContent( $contentInfo );
 			

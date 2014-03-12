@@ -9,7 +9,7 @@ if( !class_exists('iHomefinderSocialWidget')) {
 	    function iHomefinderSocialWidget() {
 	    	$options=array('description'=>'Displays an social links.');
 	        parent::WP_Widget( false,
-	                           $name = 'Optima Express Social',
+	                           $name = 'IDX: Social',
 	                           $widget_options=$options );
 	    }
 
@@ -26,7 +26,9 @@ if( !class_exists('iHomefinderSocialWidget')) {
 	    	
 	    	$baseUrl=plugins_url("/optima-express");
 	    	
-
+			//sets vars like $before_widget from $args
+	    	extract( $args );
+	    		
 		    echo $before_widget;			
 		
 		    // WIDGET CODE GOES HERE

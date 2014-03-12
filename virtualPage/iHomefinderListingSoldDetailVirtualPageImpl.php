@@ -44,7 +44,7 @@ if( !class_exists('IHomefinderListingSoldDetailVirtualPageImpl')) {
 
 			$listingNumber=IHomefinderUtility::getInstance()->getQueryVar('ln');
 			$boardId=IHomefinderUtility::getInstance()->getQueryVar('bid');
-			$ihfUrl = IHomefinderConstants::EXTERNAL_URL
+			$ihfUrl = IHomefinderLayoutManager::getInstance()->getExternalUrl()
 				. '?ln=' . $listingNumber
 				. '&bid=' . $boardId
 				. '&method=handleRequest'

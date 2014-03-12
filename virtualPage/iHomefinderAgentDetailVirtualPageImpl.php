@@ -43,7 +43,7 @@ if( !class_exists('IHomefinderAgentDetailVirtualPageImpl')) {
 			
 			$agentID=IHomefinderUtility::getInstance()->getQueryVar('agentID');
 			//used to remember search results
-			$ihfUrl = IHomefinderConstants::EXTERNAL_URL 
+			$ihfUrl = IHomefinderLayoutManager::getInstance()->getExternalUrl()
 				. '?method=handleRequest'
 				. '&viewType=json'
 				. '&requestType=agent-detail'
@@ -60,7 +60,7 @@ if( !class_exists('IHomefinderAgentDetailVirtualPageImpl')) {
 			
 			$content=$idxContent;
 			
-			if( property_exists($contentInfo, "title")){
+			if( property_exists( $contentInfo, "title")){
 				//success, display the view
 				$this->defaultTitle = $contentInfo->title ;
 			}			

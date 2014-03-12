@@ -22,7 +22,7 @@ if( !class_exists('IHomefinderHotsheetListVirtualPageImpl')) {
 				
 		public function getContent( $authenticationToken ){
 			IHomefinderLogger::getInstance()->debug('Begin IHomefinderHotsheetListVirtualPageImpl');
-			$ihfUrl = IHomefinderConstants::EXTERNAL_URL 
+			$ihfUrl = IHomefinderLayoutManager::getInstance()->getExternalUrl()
 				. '?method=handleRequest'
 				. '&viewType=json'
 				. '&requestType=hotsheet-list'

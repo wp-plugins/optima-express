@@ -37,17 +37,32 @@ if( !class_exists('IHomefinderOrganizerEditSavedSearchFormVirtualPageImpl')) {
 		public function getContent( $authenticationToken ){
 			IHomefinderLogger::getInstance()->debug('Begin IHomefinderOrganizerViewSavedSearchListVirtualPageImpl');
 			
-			$subscriberId=IHomefinderUtility::getInstance()->getQueryVar('subscriberID');
-			$searchProfileID=IHomefinderUtility::getInstance()->getQueryVar('searchProfileID');
-			$agentID=IHomefinderUtility::getInstance()->getQueryVar('agentID');
+// 			$subscriberId=IHomefinderUtility::getInstance()->getQueryVar('subscriberID');
+// 			$searchProfileID=IHomefinderUtility::getInstance()->getQueryVar('searchProfileID');
+// 			$agentID=IHomefinderUtility::getInstance()->getQueryVar('agentID');
+			
+			
 						
-			$ihfUrl = IHomefinderConstants::EXTERNAL_URL . '?method=handleRequest&viewType=json&requestType=property-organizer-edit-saved-search-form' ;
+			$ihfUrl = IHomefinderLayoutManager::getInstance()->getExternalUrl() . '?method=handleRequest&viewType=json&requestType=property-organizer-edit-saved-search-form' ;
 			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "authenticationToken", $authenticationToken);
-			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "subscriberId", $subscriberId);
-			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "searchProfileID", $searchProfileID);
-			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "agentID", $agentID);
+			
+			$ihfUrl = iHomefinderRequestor::addVarsToUrl($ihfUrl, $_REQUEST) ;
+			$boardId=IHomefinderUtility::getInstance()->getQueryVar('boardId');
+			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "boardId", $boardId);
+			
+			
+		//	var_dump( $_REQUEST );
+		//	var_dump( $ihfUrl );
+		//	die();
+			
+// 			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "subscriberId", $subscriberId);
+// 			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "searchProfileID", $searchProfileID);
+// 			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "agentID", $agentID);
 			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "phpStyle", "true");
-
+// 			if( is_numeric($boardId)){
+// 				$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "boardId", $boardId);
+// 			}
+			
 			$searchQueryArray=IHomefinderStateManager::getInstance()->getLastSearchQueryArray();
 			
 			if( count($searchQueryArray) > 0 ){

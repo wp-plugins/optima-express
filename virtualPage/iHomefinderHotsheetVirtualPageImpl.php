@@ -42,30 +42,23 @@ if( !class_exists('IHomefinderHotsheetVirtualPageImpl')) {
 			IHomefinderStateManager::getInstance()->saveLastSearch() ;
 			IHomefinderLogger::getInstance()->debug('Begin IHomefinderHotsheetVirtualPageImpl');
 			
-			$includeMap = IHomefinderUtility::getInstance()->getRequestVar('includeMap');
-			$optOut = IHomefinderUtility::getInstance()->getRequestVar('optout');
-			$gallery = IHomefinderUtility::getInstance()->getRequestVar('gallery');	
-			$hotSheetId=IHomefinderUtility::getInstance()->getQueryVar('hotSheetId');		
-			if( !isset($hotSheetId) ){
-				//IHomefinderShortCodeDispatcher sets vars in $_REQUEST
-				$hotSheetId=IHomefinderUtility::getInstance()->getRequestVar('hotSheetId');
-			}
-			$startRowNumber=IHomefinderUtility::getInstance()->getQueryVar('startRowNumber');
-			$sortBy=IHomefinderUtility::getInstance()->getQueryVar('sortBy');
-						
-			IHomefinderLogger::getInstance()->debug('hotSheetId: ' . $hotSheetId );
-			$ihfUrl = IHomefinderConstants::EXTERNAL_URL 
+			$ihfUrl = IHomefinderLayoutManager::getInstance()->getExternalUrl()
 				. '?method=handleRequest'
 				. '&viewType=json'
 				. '&requestType=hotsheet-results'
 				. '&authenticationToken=' . $authenticationToken;
 				
-			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "includeMap", $includeMap);	
-			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "gallery", $gallery);
-			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "hotSheetId", $hotSheetId);
-			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "startRowNumber", $startRowNumber);
-			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "sortBy", $sortBy);
-			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "optOut", $optOut);
+      		$ihfUrl = iHomefinderRequestor::addVarsToUrl($ihfUrl, $_REQUEST);
+      		
+			$hotSheetId=IHomefinderUtility::getInstance()->getRequestVar('hotSheetId');
+			if( !isset($hotSheetId) ){
+				//IHomefinderShortCodeDispatcher sets vars in $_REQUEST
+				//URL rewriting can set vars in the URL
+				$hotSheetId=IHomefinderUtility::getInstance()->getQueryVar('hotSheetId');
+				if( isset($hotSheetId)){
+					$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "hotSheetId", $hotSheetId);
+				}
+			}
 			
 			if( $this->getTitle() == ""){
 				$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "includeDisplayName", "false");

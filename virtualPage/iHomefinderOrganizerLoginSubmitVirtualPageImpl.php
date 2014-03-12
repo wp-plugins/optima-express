@@ -24,7 +24,7 @@ if( !class_exists('IHomefinderOrganizerLoginSubmitVirtualPageImpl')) {
 			
 			$subscriberId=IHomefinderUtility::getInstance()->getQueryVar('subscriberID');
 
-			$ihfUrl = IHomefinderConstants::EXTERNAL_URL . '?method=handleRequest&viewType=json&requestType=property-organizer-login-submit' ;
+			$ihfUrl = IHomefinderLayoutManager::getInstance()->getExternalUrl() . '?method=handleRequest&viewType=json&requestType=property-organizer-login-submit' ;
 			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "authenticationToken", $authenticationToken);
 
 			if( $subscriberId == null || trim($subscriberId) == ""){

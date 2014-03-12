@@ -45,7 +45,8 @@ if( !class_exists('IHomefinderLogger')) {
 			if( $this->isDebug() ){	
 				echo '<hr/>';			
 				echo $message . '<br/>';
-				echo 'time: ' . date(DATE_ATOM) . '<br/>';
+				echo 'time: ' . date(DATE_ATOM) . ' - ';
+				echo 'microtime: ' . microtime(true) . '<br/>';
 				echo '<hr/>';
 			}				
 		}				

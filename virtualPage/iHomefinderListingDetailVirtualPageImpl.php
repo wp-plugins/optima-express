@@ -44,7 +44,7 @@ if( !class_exists('IHomefinderListingDetailVirtualPageImpl')) {
 
 			$listingNumber=IHomefinderUtility::getInstance()->getQueryVar('ln');
 			$boardId=IHomefinderUtility::getInstance()->getQueryVar('bid');
-			$ihfUrl = IHomefinderConstants::EXTERNAL_URL
+			$ihfUrl = IHomefinderLayoutManager::getInstance()->getExternalUrl()
 				. '?ln=' . $listingNumber
 				. '&bid=' . $boardId
 				. '&method=handleRequest'
@@ -69,13 +69,19 @@ if( !class_exists('IHomefinderListingDetailVirtualPageImpl')) {
 			IHomefinderLogger::getInstance()->debug('End IHomefinderListingDetailVirtualPageImpl');
 			IHomefinderLogger::getInstance()->debug('<br/><br/>' . $ihfUrl);
 			
-			if( property_exists($contentInfo, "title")){
+			if( $contentInfo != null && property_exists($contentInfo, "title")){
 				//success, display the view
 				$this->defaultTitle = $contentInfo->title ;
 			}
 
 			$previousSearchLink = $this->getPreviousSearchLink();
-			$content = $previousSearchLink . '<br/><br/>' . $content ;
+			
+			if( strpos($content, "<!-- INSERT RETURN TO RESULTS LINK HERE -->") !== false ){
+				$content = str_replace("<!-- INSERT RETURN TO RESULTS LINK HERE -->", $previousSearchLink, $content);
+			}
+			else{
+				$content = $previousSearchLink . '<br/><br/>' . $content ;
+			}
 
 			return $content ;
 		}
@@ -89,11 +95,16 @@ if( !class_exists('IHomefinderListingDetailVirtualPageImpl')) {
 		private function getPreviousSearchLink(){
 
 			$previousSearchUrl=IHomefinderStateManager::getInstance()->getLastSearch();
+			$findme = "map-search";
+			$isMapSearch = strpos($previousSearchUrl, $findme);
 
 			//If previous search does not exist, then use an empty search form
 			if( $previousSearchUrl == null || trim( $previousSearchUrl) == ''){
 				$previousSearchUrl= IHomefinderUrlFactory::getInstance()->getListingsSearchFormUrl(true);
 				$previousSearchUrl="<a href='" . $previousSearchUrl . "'>&lt;&nbsp;New Search</a>";
+			}
+			else if($isMapSearch !== false){
+				$previousSearchUrl="<a href='" . $previousSearchUrl . "'>&lt;&nbsp;Return To Map Search</a>";
 			}
 			else{
 				$previousSearchUrl="<a href='" . $previousSearchUrl . "'>&lt;&nbsp;Return To Results</a>";

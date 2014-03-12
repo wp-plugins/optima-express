@@ -17,10 +17,7 @@ if( !class_exists('IHomefinderAdmin')) {
 		}
 		
 		public function checkError(){
-			$errors = array();
 			$pageName=$_REQUEST["page"];
-			//Get current wordpress plugins as array
-			$plugins = get_plugins();
 			
 			//Check for valid plugin registration
 			//Do not check for registration on the registration page.
@@ -47,79 +44,111 @@ if( !class_exists('IHomefinderAdmin')) {
 				&nbsp;&nbsp;&nbsp;Get an unlimited free trial or paid subscription for your MLS</p>
 
 				<?php
-
-			}
 				
-			//check if wordpress address and site address match
-			if (get_home_url() != get_site_url()) {					
-				$errors[] = "<p><a href='options-general.php'>WordPress Address and Site Address do not match (Error 404)</a></p>";
 			}
-				
-			//check if permalink structure is set
-			if (get_option('permalink_structure') == "") {
-				$errors[] = "<p><a href='options-permalink.php'>WordPress permalink settings are set as default (Error 404)</a></p>";					
+			
+			if( $_REQUEST[iHomefinderConstants::COMPATIBILITY_CHECK_ENABLED] == 'false' ) {
+				update_option( iHomefinderConstants::COMPATIBILITY_CHECK_ENABLED, 'false' );
 			}
-	
-			//check if both OE plugins are active
-			if (array_key_exists("optima-express/iHomefinder.php",$plugins) == true && array_key_exists("wordpress-idx/WordpressIDX.php",$plugins) == true) {
-				$errors[] = "<p><a href='plugins.php?s=idx'>Multiple IDX plugins are installed</a></p>";					
-			}
-				
-			//Get compatibility JSON as array
-			$compatibilityUrl = iHomefinderConstants::EXTERNAL_URL . '?method=handleRequest&viewType=json&requestType=compatibility-check' ;
-			$requestArgs = array("timeout"=>"20" );
-			$response = wp_remote_get($compatibilityUrl, $requestArgs);
-			if( !is_wp_error($response)){
-				$responseBody = wp_remote_retrieve_body( $response );
-				$compatibility = json_decode($responseBody, true);
-				$compatibilityPluginArray=$compatibility["Plugin"];
-												
-				//loop through plugin array
-				foreach ($plugins as $pluginPath => $plugin) {
-					//check if plugin is active
-					if (is_plugin_active($pluginPath) == true) {
-						//get plugin name
-						$pluginName = $plugin["Name"];	
-						$message=$compatibilityPluginArray[$pluginName];
-						if( $message != null ){
-							$errors[] = "<p><a href='plugins.php?s=" .  urlencode($pluginName) . "'>" . $pluginName . " (" . $message . ")</a></p>";	
-						}		
+			
+			if( get_option( iHomefinderConstants::COMPATIBILITY_CHECK_ENABLED ) != 'false' ) {
+			
+				$errors = array();
+				//Get current wordpress plugins as array
+				$plugins = get_plugins();
+					
+				//check if wordpress address and site address match
+				if (get_home_url() != get_site_url()) {					
+					$errors[] = "<p><a href='options-general.php'>WordPress Address and Site Address do not match (Error 404)</a></p>";
+				}
+					
+				//check if permalink structure is set
+				if (get_option('permalink_structure') == "") {
+					$errors[] = "<p><a href='options-permalink.php'>WordPress permalink settings are set as default (Error 404)</a></p>";					
+				}
+		
+				//check if both OE plugins are active
+				if (array_key_exists("optima-express/iHomefinder.php",$plugins) == true && array_key_exists("wordpress-idx/WordpressIDX.php",$plugins) == true) {
+					$errors[] = "<p><a href='plugins.php?s=idx'>Multiple IDX plugins are installed</a></p>";					
+				}
+					
+				//Get compatibility JSON as array
+				$compatibilityUrl = iHomefinderConstants::LEGACY_EXTERNAL_URL . '?method=handleRequest&viewType=json&requestType=compatibility-check' ;
+				$requestArgs = array("timeout"=>"20" );
+				$response = wp_remote_get($compatibilityUrl, $requestArgs);
+				if( !is_wp_error($response)){
+					$responseBody = wp_remote_retrieve_body( $response );
+					$compatibility = json_decode($responseBody, true);
+					$compatibilityPluginArray=$compatibility["Plugin"];
+													
+					//loop through plugin array
+					foreach ($plugins as $pluginPath => $plugin) {
+						//check if plugin is active
+						if (is_plugin_active($pluginPath) == true) {
+							//get plugin name
+							$pluginName = $plugin["Name"];	
+							$message=$compatibilityPluginArray[$pluginName];
+							if( $message != null ){
+								$errors[] = "<p><a href='plugins.php?s=" .  urlencode($pluginName) . "'>" . $pluginName . " (" . $message . ")</a></p>";	
+							}		
+						}
+					}
+						
+					if ( function_exists('wp_get_theme')){
+						//get current wordpress theme as string
+						$theme = wp_get_theme();	
+						$themeName=$theme["Name"];
+						$compatibilityThemeArray=$compatibility["Theme"];	
+						$message=$compatibilityThemeArray[$themeName];
+						if($message != null ){
+							$errors[] = "<p><a href='themes.php'>" . $themeName . " (" . $message . ")</a></p>";
+						}
 					}
 				}
 					
-				if ( function_exists('wp_get_theme')){
-					//get current wordpress theme as string
-					$theme = wp_get_theme();	
-					$themeName=$theme["Name"];
-					$compatibilityThemeArray=$compatibility["Theme"];	
-					$message=$compatibilityThemeArray[$themeName];
-					if($message != null ){
-						$errors[] = "<p><a href='themes.php'>" . $themeName . " (" . $message . ")</a></p>";
-					}
+				//check error count
+				if (count($errors) > 0) {
+					?>
+					<div class='error'>
+						<div style="">
+							<h3 style="float: left;"><?php echo count($errors) ?> compatibility issue(s):</h3>
+							<form id="<?php echo IHomefinderConstants::COMPATIBILITY_CHECK_ENABLED ?>" style="float: right; margin-top: 5px;" method="post" action="options.php">
+								<?php settings_fields( IHomefinderConstants::OPTION_GROUP_COMPATIBILITY_CHECK ); ?>
+								<input type="hidden" value="false" name="<?php echo IHomefinderConstants::COMPATIBILITY_CHECK_ENABLED ?>" />
+								<input class="button-secondary" type="submit" value="Dismiss compatibility warnings" />
+							</form>
+						</div>
+						<div style="clear: both;">
+							<?php
+							foreach ($errors as $error) {
+								echo $error;
+							}
+							?>
+						</div>
+					</div>
+					<?php
 				}
-			}
 				
-
-				
-			//check error count
-			if (count($errors) > 0) {
-				echo "<div class='error'>";
-				echo "<h3>" . count($errors) . " compatibility issue(s):</h3>";
-				foreach ($errors as $Error) {
-					echo $Error;
+				$CurrentUrl = 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+				if(IHomefinderLayoutManager::getInstance()->isResponsive() && ( $CurrentUrl == get_bloginfo('wpurl') . '/wp-admin/' || $CurrentUrl == get_bloginfo('wpurl') . '/wp-admin/index.php' ) ) {
+					?>
+					<div class="error">
+						<p><a href="http://www.ihomefinder.com/support/optima-express-kb/optima-express-beta/">Learn more</a> about this beta version of Optima Express. Report errors or bugs to <a href="mailto:support@ihomefinder.com">support@ihomefinder.com</a></p>
+					</div>
+					<?php
 				}
-				echo "</div>";
+				
 			}
 		}
 
 		public function createAdminMenu(){
 			$permissions=IHomefinderPermissions::getInstance() ;
 			add_menu_page('Optima Express', 'Optima Express', 'manage_options', 'ihf_idx', array( $this, 'adminOptionsForm' ));
-			add_submenu_page( 'ihf_idx', 'Information', 'Information', 'manage_options', 'ihf_idx', array( &$this, 'adminOptionsForm'));
-			add_submenu_page( 'ihf_idx', 'Register', 'Register', 'manage_options', IHomefinderConstants::OPTION_ACTIVATE, array( &$this, 'adminOptionsActivateForm'));
+            add_submenu_page( 'ihf_idx', 'Information', 'Information', 'manage_options', 'ihf_idx', array( &$this, 'adminOptionsForm'));
+            add_submenu_page( 'ihf_idx', 'Register', 'Register', 'manage_options', IHomefinderConstants::OPTION_ACTIVATE, array( &$this, 'adminOptionsActivateForm'));
 			add_submenu_page( 'ihf_idx', 'IDX Control Panel', 'IDX Control Panel', 'manage_options', IHomefinderConstants::OPTION_IDX_CONTROL_PANEL, array( &$this, 'adminIdxControlPanelForm'));
-			add_submenu_page( 'ihf_idx', 'IDX Pages', 'IDX Pages', 'manage_options', IHomefinderConstants::OPTION_PAGES, array( &$this, 'adminOptionsPagesForm'));
-			add_submenu_page( 'ihf_idx', 'Configuration', 'Configuration', 'manage_options', IHomefinderConstants::OPTION_CONFIG_PAGE, array( &$this, 'adminConfigurationForm'));
+            add_submenu_page( 'ihf_idx', 'IDX Pages', 'IDX Pages', 'manage_options', IHomefinderConstants::OPTION_PAGES, array( &$this, 'adminOptionsPagesForm'));
+            add_submenu_page( 'ihf_idx', 'Configuration', 'Configuration', 'manage_options', IHomefinderConstants::OPTION_CONFIG_PAGE, array( &$this, 'adminConfigurationForm'));
 
 			add_submenu_page( 'ihf_idx', 'Bio Widget', 'Bio Widget', 'manage_options', IHomefinderConstants::BIO_PAGE, array( &$this, 'bioInformationForm'));
 			add_submenu_page( 'ihf_idx', 'Social Widget', 'Social Widget', 'manage_options', IHomefinderConstants::SOCIAL_PAGE, array( &$this, 'socialInformationForm'));
@@ -148,7 +177,7 @@ if( !class_exists('IHomefinderAdmin')) {
                             <h3>Version <?php echo IHomefinderConstants::VERSION ?></h3>
 
                             <h3>Register</h3>
-                            Enter your Registration Key to register your plugin on this page. You must obtain a Registration Key through iHomefinder.
+                            The Optima Express plugin needs to be registered with iHomefinder. Registration is automatic if you signup for a trial account or purchase a live account from this page. Or, you can enter a registration key that you've received separately.
 
                             <h3>IDX Pages</h3>
                             View and configure your Optima Express IDX pages here. Change permalinks, page titles and templates.
@@ -180,6 +209,7 @@ if( !class_exists('IHomefinderAdmin')) {
 		public function updateAuthenticationToken(){
 			$activationToken=get_option(IHomefinderConstants::ACTIVATION_TOKEN_OPTION);
 			$this->activateAuthenticationToken( $activationToken ) ;
+			
 		}
 
 		public function activateAuthenticationToken( $activationToken, $updateActivationTokenOption = false ){
@@ -188,21 +218,27 @@ if( !class_exists('IHomefinderAdmin')) {
 			}
 
 			if($activationToken != null && "" != $activationToken){
-				$authenticationInfo=$this->activate($activationToken);
-
-				$authenticationToken = '';
+				
+        IHomefinderLogger::getInstance()->debug('Begin IHomefinderAdmin.activate');
+        
+        $authenticationInfo=$this->activate($activationToken);
+        
+        IHomefinderLogger::getInstance()->debugDumpVar($authenticationInfo);
+        
+        IHomefinderLogger::getInstance()->debug('Begin set authentication token');
+        
+        $authenticationToken = '';
 				if( $authenticationInfo->authenticationToken ){
-					$authenticationToken = $authenticationInfo->authenticationToken;
+					$authenticationToken = (string) $authenticationInfo->authenticationToken;
+					
 					$permissions = $authenticationInfo->permissions;
 					IHomefinderPermissions::getInstance()->initialize( $permissions );
 
 					if( !$this->previouslyActivated()){
 						update_option(IHomefinderConstants::IS_ACTIVATED_OPTION,'true');
 					}
-				}
-				update_option(IHomefinderConstants::AUTHENTICATION_TOKEN_CACHE, $authenticationToken);
-			} else {
-				update_option(IHomefinderConstants::AUTHENTICATION_TOKEN_CACHE, '');
+				}				
+				update_option(IHomefinderConstants::AUTHENTICATION_TOKEN_CACHE, $authenticationToken);				
 			}
 			IHomefinderMenu::getInstance()->updateOptimaExpressMenu() ;
 		}
@@ -272,15 +308,25 @@ if( !class_exists('IHomefinderAdmin')) {
 			$openHomeSearchFormUrl                = urlencode($urlFactory->getOpenHomeSearchFormUrl(true));
 			$soldFeaturedListingUrl               = urlencode($urlFactory->getSoldFeaturedListingUrl(true));
 			$supplementalListingUrl               = urlencode($urlFactory->getSupplementalListingUrl(true));
-
+      		$listingSearchByAddressResultsUrl     = urlencode($urlFactory->getListingSearchByAddressResultsUrl(true));
+      		$listingSearchByListingIdResultsUrl   = urlencode($urlFactory->getListingSearchByListingIdResultsUrl(true));
 			$officeListUrl                        = urlencode($urlFactory->getOfficeListUrl(true));
 			$officeDetailUrl                      = urlencode($urlFactory->getOfficeDetailUrl(true));
 			$agentBioListUrl                      = urlencode($urlFactory->getAgentListUrl(true));
 			$agentBioDetailUrl                    = urlencode($urlFactory->getAgentDetailUrl(true));
-
+			$mapSearchUrl                    	  = urlencode($urlFactory->getMapSearchFormUrl(true));
+			
 			//Push CSS Override to iHomefinder
 			$cssOverride = get_option(IHomefinderConstants::CSS_OVERRIDE_OPTION);
 			$cssOverride = urlencode( $cssOverride);
+			
+			//Push layout style to iHomefinder
+			$layoutType = IHomefinderLayoutManager::getInstance()->getLayoutType();
+			$layoutType = urlencode( $layoutType);
+			
+			//Push color scheme to iHomefinder
+			$colorScheme = get_option(IHomefinderConstants::COLOR_SCHEME_OPTION);
+			$colorScheme = urlencode( $colorScheme);
 
 			$emailHeader=IHomefinderAdminEmailDisplay::getInstance()->getHeader() ;
 			$emailHeader = urlencode( $emailHeader);
@@ -288,11 +334,11 @@ if( !class_exists('IHomefinderAdmin')) {
 			$emailFooter=IHomefinderAdminEmailDisplay::getInstance()->getFooter() ;
 			$emailFooter = urlencode( $emailFooter);
 
-			$ihfUrl = IHomefinderConstants::EXTERNAL_URL  ;
+			$ihfUrl = IHomefinderLayoutManager::getInstance()->getExternalUrl()  ;
 			$postData= array(
 				'method'=>'handleRequest',
-			    'requestType'=>'activate',
-			    'viewType'=>'json',
+			  'requestType'=>'activate',
+			  'viewType'=>'json',
 				'activationToken'=>$activationToken,
 				'ajaxBaseUrl'=> $ajaxBaseUrl,
 				'type'=> "wordpress",
@@ -323,16 +369,21 @@ if( !class_exists('IHomefinderAdmin')) {
 				'openHomeSearchFormUrl'=> $openHomeSearchFormUrl,
 				'soldFeaturedListingUrl'=> $soldFeaturedListingUrl,
 				'supplementalListingUrl'=> $supplementalListingUrl,
+        		'listingSearchByAddressResultsUrl' => $listingSearchByAddressResultsUrl,
+        		'listingSearchByListingIdResultsUrl' => $listingSearchByListingIdResultsUrl,
 				'officeListUrl'=> $officeListUrl,
 				'officeDetailUrl'=> $officeDetailUrl,
 				'agentBioListUrl'=> $agentBioListUrl,
 				'agentBioDetailUrl'=> $agentBioDetailUrl,
+				'mapSearchUrl' => $mapSearchUrl,
 				'cssOverride'=> $cssOverride,
 				'emailHeader'=> $emailHeader,
-				'emailFooter'=> $emailFooter
+				'emailFooter'=> $emailFooter,
+				'layoutType'=> $layoutType,
+				'colorScheme'=> $colorScheme
 			);
-
-			IHomefinderLogger::getInstance()->debug( '$ihfUrl:::' . $ihfUrl ) ;
+      
+      IHomefinderLogger::getInstance()->debug( '$ihfUrl:::' . $ihfUrl.http_build_query($postData) ) ;
 			$authenticationInfo = IHomefinderRequestor::remotePostRequest( $ihfUrl, $postData ) ;
 
 			//We need to flush the rewrite rules, if any permalinks have been updated.
@@ -353,9 +404,12 @@ if( !class_exists('IHomefinderAdmin')) {
 		public function registerSettings(){
 			//Activation settings
 			register_setting( IHomefinderConstants::OPTION_ACTIVATE, IHomefinderConstants::ACTIVATION_TOKEN_OPTION );
-			register_setting( IHomefinderConstants::OPTION_ACTIVATE, IHomefinderConstants::ACTIVATION_DATE_OPTION );
+			register_setting( IHomefinderConstants::OPTION_ACTIVATE, IHomefinderConstants::ACTIVATION_DATE_OPTION );			
+			
 			//Configuration Settings
+			register_setting( IHomefinderConstants::OPTION_CONFIG_PAGE, IHomefinderConstants::OPTION_LAYOUT_TYPE );
 			register_setting( IHomefinderConstants::OPTION_CONFIG_PAGE, IHomefinderConstants::CSS_OVERRIDE_OPTION );
+			register_setting( IHomefinderConstants::OPTION_CONFIG_PAGE, IHomefinderConstants::COLOR_SCHEME_OPTION );
 
 			//Bio Options
 			register_setting( IHomefinderConstants::OPTION_GROUP_BIO, IHomefinderConstants::AGENT_PHOTO_OPTION );
@@ -389,6 +443,8 @@ if( !class_exists('IHomefinderAdmin')) {
 		 	register_setting(IHomefinderConstants::OPTION_GROUP_SEO_CITY_LINKS, IHomefinderConstants::SE0_CITY_LINKS_SETTINGS);
 		 	register_setting(IHomefinderConstants::OPTION_GROUP_SEO_CITY_LINKS, IHomefinderConstants::SE0_CITY_LINK_WIDTH);
 
+			//Compatibility Check Options
+		 	register_setting(IHomefinderConstants::OPTION_GROUP_COMPATIBILITY_CHECK, IHomefinderConstants::COMPATIBILITY_CHECK_ENABLED);
 
 			//Register Virtual Page related groups and options
 			IHomefinderVirtualPageHelper::getInstance()->registerOptions() ;
@@ -405,7 +461,7 @@ if( !class_exists('IHomefinderAdmin')) {
 			}
 			return $isUpdated ;
 		}
-		
+
 		public function adminOptionsActivateForm(){
 			
 			?>		
@@ -420,7 +476,6 @@ if( !class_exists('IHomefinderAdmin')) {
 			if( $_GET['reg'] ) {
 				$regKey = $_GET['reg'];
 				update_option( IHomefinderConstants::ACTIVATION_TOKEN_OPTION, $regKey );
-				//update_option( IHomefinderConstants::ACTIVATION_DATE_OPTION, time() );
 				$this->updateAuthenticationToken();
 				?>
 				<h2>Thanks For Signing Up</h2>
@@ -429,6 +484,7 @@ if( !class_exists('IHomefinderAdmin')) {
 				</div>
 				<p>You will receive an email from us with IDX paperwork for your MLS. Please complete the paperwork and return it to iHomefinder promptly. Listings from your MLS will appear in Optima Express as soon as your MLS approves your IDX paperwork.</p>
 				<?php
+
 			} elseif($this->isUpdated()){
 				//call function here to pass the activation key to ihf and get
 				//an authentication token
@@ -488,9 +544,8 @@ if( !class_exists('IHomefinderAdmin')) {
 				<h2>Free Trial Sign-Up</h2>
 				
 				<?php
-					
+				
 				$Email = $_POST['Email'];
-				$Password = $_POST['Password'];
 				$AccountType = $_POST['AccountType'];
 				
 				$errors = array();
@@ -498,16 +553,12 @@ if( !class_exists('IHomefinderAdmin')) {
 				if( filter_var( $Email, FILTER_VALIDATE_EMAIL ) == FALSE ) {
 					$errors[] = '<p>Email address is not valid.</p>';
 				}
-				
-				if( strlen( $Password ) < 5 ) {
-					$errors[] = '<p>Password must be at least 5 characters.</p>';
-				}
-				
+								
 				if( $AccountType == '' ) {
 					$errors[] = '<p>Select type of trial account.</p>';
 				}
 				
-				if( count($errors) == 0 ) {
+				if( count( $errors ) == 0 ) {
 					
 					$params = array();
 					$params['plugin'] = 'true';
@@ -519,7 +570,7 @@ if( !class_exists('IHomefinderAdmin')) {
 						$params['companyname'] = 'Jamie Agent';
 					}
 					$params['companyemail'] = $Email;
-					$params['password'] = $Password;
+					$params['password'] = substr( str_shuffle( 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890' ), 0, 6 );
 					$params['companyphone'] = '800-555-1212';
 					$params['companyaddress'] = '123 Main St.';
 					$params['companycity'] = 'Anytown';
@@ -530,6 +581,7 @@ if( !class_exists('IHomefinderAdmin')) {
 					$params['lead_source'] = 'Plugin';
 					$params['lead_source_description'] = 'Optima Express Trial Form';
 					$params['ad_code'] = '';
+					$params['ip_address'] = $_SERVER['REMOTE_ADDR'];
 					
 					$requestUrl = 'http://www.ihomefinder.com/store/optima-express-trial.php';
 					
@@ -546,7 +598,6 @@ if( !class_exists('IHomefinderAdmin')) {
 						$password = $responseBody['password'];
 						
 						update_option( IHomefinderConstants::ACTIVATION_TOKEN_OPTION, $regKey );
-						//update_option( IHomefinderConstants::ACTIVATION_DATE_OPTION, time() );
 						$this->updateAuthenticationToken();
 						
 						?>
@@ -556,14 +607,7 @@ if( !class_exists('IHomefinderAdmin')) {
 						<p>Thank you for evaluating Optima Express!</p>
 						<p>Your trial account uses sample listing data from Northern California. For search and listings in your MLS, <a href="http://www.ihomefinder.com/store/convert.php?cid=<?php echo $clientID ?>" target="_blank">upgrade to a paid account</a>.</p>
 						<p>Visit our <a href="http://www.ihomefinder.com/support/optima-express-kb/" target="_blank">knowledge base</a> for assistance setting up IDX on your site.</p>
-						<div>To login to your iHomefinder IDX Control Panel go to: <a href="http://www.idxre.com/idx/admin/" target="_blank">www.idxre.com/idx/admin/</a></div>
-						<br />
-						<div style="text-indent: 20px;">
-							<div>Username: <?php echo $username ?></div>
-							<div>Password: <?php echo $password ?></div>
-							<div>Client ID: <?php echo $clientID ?></div>
-						</div>
-						<p>You'll also receive this information in an email from us. Don't hesitate to <a href="http://www.ihomefinder.com/forms/contact-us/" target="_blank">contact us</a> if you have any questions.</p>
+						<p>Don't hesitate to <a href="http://www.ihomefinder.com/forms/contact-us/" target="_blank">contact us</a> if you have any questions.</p>
 						
 						<?php
 						
@@ -588,48 +632,37 @@ if( !class_exists('IHomefinderAdmin')) {
 					?>
 					
 					<form method="post">
-					<table class="form-table" style="width: 300px">
-					<tr>
-						<td>
-							<b>
-								<label for="Email">Email:</label>
-							</b>
-						</td>
-						<td>
-							<input id="Email" style="width: 250px;" name="Email" type="text" value="<?php echo $Email ?>" />
-							<small>This will be your username.</small>
-						</td>
-					  </tr>
-					  <tr>
-						<td>
-							<b>
-								<label for="Password">Password:</label>
-							</b>
-						</td>
-						<td>
-							<input id="Password" style="width: 250px;" name="Password" type="password" />
-							<small>Create a password for your account.</small>
-						</td>
-					  </tr>
-					  <tr>
-						<td colspan="2">
-							<p>
-								<b>Account Type:</b>
-							</p>
-							<input id="AccountType_Agent" name="AccountType" type="radio" value="Agent" <?php if($AccountType == 'Agent') {echo 'checked';} ?>>
-							<label for="AccountType_Agent">Individual Agent</label>
-							<br />
-							<input id="AccountType_Broker" name="AccountType" type="radio" value="Broker" <?php if($AccountType == 'Broker') {echo 'checked';} ?>>
-							<label for="AccountType_Broker">Office with Multiple Agents</label>
-						</td>
-					  </tr>
-					</table>
-					<p class="submit">
-						<input type="submit" class="button-primary" value="Start Trial" />
-						<span>&nbsp;&nbsp;&nbsp;Creating your trial account can take up to 60 seconds to complete. Please do not refresh the page or press the back button.</span>
-					</p>
+						<table class="form-table" style="width: 300px">
+							<tr>
+								<td>
+									<b>
+										<label for="Email">Email:</label>
+									</b>
+								</td>
+								<td>
+									<br />
+									<input id="Email" style="width: 250px;" name="Email" type="text" value="<?php echo $Email ?>" />
+									<small>This will be your username.</small>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="2">
+									<p>
+										<b>Account Type:</b>
+									</p>
+									<input id="AccountType_Agent" name="AccountType" type="radio" value="Agent" <?php if($AccountType == 'Agent') {echo 'checked';} ?>>
+									<label for="AccountType_Agent">Individual Agent</label>
+									<br />
+									<input id="AccountType_Broker" name="AccountType" type="radio" value="Broker" <?php if($AccountType == 'Broker') {echo 'checked';} ?>>
+									<label for="AccountType_Broker">Office with Multiple Agents</label>
+								</td>
+							</tr>
+						</table>
+						<p class="submit">
+							<input type="submit" class="button-primary" value="Start Trial" />
+							<span>&nbsp;&nbsp;&nbsp;Creating your trial account can take up to 60 seconds to complete. Please do not refresh the page or press the back button.</span>
+						</p>
 					</form>
-
 					<?php
 				
 				}
@@ -673,6 +706,11 @@ if( !class_exists('IHomefinderAdmin')) {
 							<input type="submit" class="button-primary" value="<?php _e('Unregister') ?>" onclick="return confirm('Are you sure you want to unregister Optima Express?');" />
 						</p>
 					</form>
+					<form method="post" action="options.php" name="refreshRegistration">
+						<?php settings_fields( IHomefinderConstants::OPTION_ACTIVATE ); ?>
+						<input type="hidden" name="<?php echo IHomefinderConstants::ACTIVATION_TOKEN_OPTION ?>" value="<?php echo get_option(IHomefinderConstants::ACTIVATION_TOKEN_OPTION); ?>" />
+						<a href="#" onclick="document.refreshRegistration.submit();">Refresh Registration</a>
+					</form>
 					<?php
 					
 				}
@@ -695,11 +733,10 @@ if( !class_exists('IHomefinderAdmin')) {
 					border: none;
 				}
 			</style>
-
 			<?php
 			if( get_option( IHomefinderConstants::ACTIVATION_TOKEN_OPTION ) != '' ) {
 				?>
-				<iframe id="contentFrame" src="http://go.idxre.com/z.cfm?w=<?php echo get_option( IHomefinderConstants::ACTIVATION_TOKEN_OPTION ) ?>"></iframe>
+				<iframe id="contentFrame" src="<?php echo IHomefinderConstants::CONTROL_PANEL_EXTERNAL_URL; ?>/z.cfm?w=<?php echo get_option( IHomefinderConstants::ACTIVATION_TOKEN_OPTION ) ?>"></iframe>
 				<?php
 			}
 				
@@ -830,8 +867,8 @@ if( !class_exists('IHomefinderAdmin')) {
 
 		public function seoCityLinksForm(){
 			$galleryFormData = IHomefinderSearchFormFieldsUtility::getInstance()->getFormData() ;
-            $propertyTypesList=$galleryFormData->propertyTypesList ;
-            $cityZipList=$galleryFormData->cityZipList;
+            $propertyTypesList=$galleryFormData->getPropertyTypesList() ;
+            $cityZipList=$galleryFormData->getCityZipList();
             $cityZipListJson=json_encode($cityZipList);
 
   			wp_enqueue_script('jquery');
@@ -891,7 +928,7 @@ if( !class_exists('IHomefinderAdmin')) {
 	            </div>
             	<input type="text" id="ihfSeoLinksAutoComplete"
             		name="<?php echo IHomefinderConstants::SE0_CITY_LINKS_SETTINGS . '[0][' . IHomefinderConstants::SE0_CITY_LINKS_CITY_ZIP . ']'?>"
-            		value="Enter City - OR - Zipcode"
+            		value="Enter City - OR - Postal Code"
             		size="30"/>
 
 				</div>
@@ -1159,28 +1196,61 @@ if( !class_exists('IHomefinderAdmin')) {
 				//call function here to pass the activation key to ihf and update the CSS Override value
 				$this->updateAuthenticationToken();
 			}
-	?>
+			?>
 
 			<div class="wrap">
-			<h2>Configuration</h2>
-			<form method="post" action="options.php">
-			    <?php settings_fields( IHomefinderConstants::OPTION_CONFIG_PAGE ); ?>
-
-			    <div><b>CSS Override</b></div>
-			    <div>
-			    To redefine an Optima Express style, paste the edited style below.
-			    </div>
-			    <div>
-			    	<textarea name="<?php echo IHomefinderConstants::CSS_OVERRIDE_OPTION ?>" rows="15" cols="100"><?php echo get_option(IHomefinderConstants::CSS_OVERRIDE_OPTION); ?></textarea>
-			    </div>
-
-			    <p class="submit">
-			    <input type="submit" class="button-primary" value="<?php _e('Save Changes') ?>" />
-			    </p>
-
-			</form>
+				<?php $responsive=IHomefinderLayoutManager::getInstance()->isResponsive(); ?>
+				<h2>Configuration</h2>
+				<form method="post" action="options.php">
+					<?php settings_fields( IHomefinderConstants::OPTION_CONFIG_PAGE ); ?>
+					<table class="form-table">
+						<?php if(!IHomefinderPermissions::getInstance()->isOfficeEnabled() && !IHomefinderPermissions::getInstance()->isOmnipressSite()){?>
+						<tr valign="top">
+							<th scope="row">Layout Style</th>
+							<td>
+								<select name="<?php echo IHomefinderConstants::OPTION_LAYOUT_TYPE ?>" onchange="if(this.value == '<?php echo IHomefinderConstants::OPTION_LAYOUT_TYPE_RESPONSIVE ?>'){alert('Please note that this is a beta version of Optima Express which is still undergoing final testing before its official release. You may encounter errors or bugs - if you do, feel free to email us at support@ihomefinder.com')}">
+									<option value="<?php echo IHomefinderConstants::OPTION_LAYOUT_TYPE_LEGACY ?>" <?php if(!$responsive){?>selected <?php }?>>Legacy</option>
+									<option value="<?php echo IHomefinderConstants::OPTION_LAYOUT_TYPE_RESPONSIVE ?>" <?php if($responsive){?>selected <?php }?>>Beta - Responsive</option>
+								</select>
+							</td>
+						</tr>
+						<?php }?>
+						<?php
+						if( IHomefinderLayoutManager::getInstance()->supportsColorScheme() ) {
+						?>
+						<tr valign="top">
+							<th scope="row">Button Color</th>
+							<td>
+								<?php $colorScheme=get_option(IHomefinderConstants::COLOR_SCHEME_OPTION) ?>
+								<select name="<?php echo IHomefinderConstants::COLOR_SCHEME_OPTION ?>">
+									<option value="gray" <?php if($colorScheme=='gray'){?>selected <?php }?>>Gray</option>
+									<option value="red" <?php if($colorScheme=='red'){?>selected <?php }?>>Red</option>
+									<option value="green" <?php if($colorScheme=='green'){?>selected <?php }?>>Green</option>
+                  <option value="orange" <?php if($colorScheme=='orange'){?>selected <?php }?>>Orange</option>
+									<option value="blue" <?php if($colorScheme=='blue'){?>selected <?php }?>>Blue</option>
+									<option value="light_blue" <?php if($colorScheme=='light_blue'){?>selected <?php }?>>Light Blue</option>
+									<option value="blue_gradient" <?php if($colorScheme=='blue_gradient'){?>selected <?php }?>>Blue Gradient</option>
+								</select>
+							</td>
+						</tr>
+						<?php
+						}
+						?>
+						<tr valign="top">
+							<th scope="row">CSS Override</th>
+							<td>
+								<p>To redefine an Optima Express style, paste the edited style below.</p>
+								<textarea name="<?php echo IHomefinderConstants::CSS_OVERRIDE_OPTION ?>" style="width: 100%; height: 300px; "><?php echo get_option(IHomefinderConstants::CSS_OVERRIDE_OPTION); ?></textarea>
+							</td>
+						</tr>
+					</table>
+					<p class="submit">
+						<input type="submit" class="button-primary" value="<?php _e('Save Changes') ?>" />
+					</p>
+				</form>
 			</div>
-<?php 	}
+			<?php
+		}
 
 		private function updateCommunityPages($title, $cityZip, $propertyType, $bed, $bath, $minPrice, $maxPrice ){
 			$errorMessage="";
@@ -1301,7 +1371,8 @@ if( !class_exists('IHomefinderAdmin')) {
 
 			</div>
 			</div>
-<?php 	}
+			<?php
+		}
 
 		public function adminOptionsPagesForm(){
 			$permissions=IHomefinderPermissions::getInstance();
@@ -1310,7 +1381,7 @@ if( !class_exists('IHomefinderAdmin')) {
 				$this->updateAuthenticationToken();
 			}
 			$pageConfig=IHomefinderAdminPageConfig::getInstance() ;
-        ?>
+			?>
 			<div class="wrap">
 				<h2>IDX Pages</h2>
 				<br/>
@@ -1325,9 +1396,9 @@ if( !class_exists('IHomefinderAdmin')) {
 						$pageConfig->getDetailPageSetup();
 						echo('<p/>');
 
-						$pageConfig->getSearchPageSetup() ;
+						$pageConfig->getSearchPageSetup();
 						echo('<p/>');
-
+            
 						if( $permissions->isMapSearchEnabled()){
 							$pageConfig->getMapSearchPageSetup() ;
 							echo('<p/>');
@@ -1405,13 +1476,13 @@ if( !class_exists('IHomefinderAdmin')) {
 				</form>
 				</div>
 			</div>
-        <?php
+			<?php
 		}
 
 
 		private function createCityZipAutoComplete(){
 			$galleryFormData=IHomefinderShortcodeDispatcher::getInstance()->getGalleryFormData();
-			$cityZipList=$galleryFormData->cityZipList;
+			$cityZipList=$galleryFormData->getCityZipList();
             $cityZipListJson=json_encode($cityZipList);
 
   			wp_enqueue_script('jquery');
@@ -1431,7 +1502,6 @@ if( !class_exists('IHomefinderAdmin')) {
 							searchTerm=searchTerm.toLowerCase();
 							var results=new Array();
 							for(var i=0; i<data.length;i++){
-								//debugger;
 								var oneTerm=data[i];
 								var value=oneTerm.value + '';
 								value=value.toLowerCase();

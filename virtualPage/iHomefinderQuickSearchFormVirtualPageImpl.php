@@ -22,7 +22,7 @@ if( !class_exists('IHomefinderQuickSearchFormVirtualPageImpl')) {
 				
 		public function getContent( $authenticationToken ){
 			IHomefinderLogger::getInstance()->debug('Begin IHomefinderQuickSearchFormFilterImpl.filter');
-			$ihfUrl = IHomefinderConstants::EXTERNAL_URL 
+			$ihfUrl = IHomefinderLayoutManager::getInstance()->getExternalUrl() 
 				. '?method=handleRequest'
 				. '&viewType=json'
 				. '&requestType=listing-quick-search-form'

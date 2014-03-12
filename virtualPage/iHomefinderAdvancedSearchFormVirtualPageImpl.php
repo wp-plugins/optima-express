@@ -35,13 +35,15 @@ if( !class_exists('IHomefinderAdvancedSearchFormVirtualPageImpl')) {
 		public function getContent( $authenticationToken ){
 			IHomefinderLogger::getInstance()->debug('Begin IHomefinderAdvancedSearchFormVirtualPageImpl');
 			$boardId=IHomefinderUtility::getInstance()->getQueryVar('bid');
-			$ihfUrl = IHomefinderConstants::EXTERNAL_URL 
+			$ihfUrl = IHomefinderLayoutManager::getInstance()->getExternalUrl() 
 				. '?method=handleRequest'
 				. '&viewType=json'
 				. '&requestType=listing-advanced-search-form'
 				. '&authenticationToken=' . $authenticationToken
 				. '&phpStyle=true';
 				
+			$ihfUrl = iHomefinderRequestor::addVarsToUrl($ihfUrl, $_REQUEST) ;	
+		
 			if( is_numeric($boardId)){
 				$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "boardId", $boardId);		
 			}

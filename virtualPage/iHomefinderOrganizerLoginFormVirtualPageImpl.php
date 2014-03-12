@@ -45,7 +45,7 @@ if( !class_exists('IHomefinderOrganizerLoginFormVirtualPageImpl')) {
 
 			$message=IHomefinderUtility::getInstance()->getQueryVar('message');
 			$afterLoginUrl=IHomefinderUtility::getInstance()->getRequestVar('afterLoginUrl');		
-			$ihfUrl = IHomefinderConstants::EXTERNAL_URL . '?method=handleRequest&viewType=json&requestType=property-organizer-login-form' ;
+			$ihfUrl = IHomefinderLayoutManager::getInstance()->getExternalUrl() . '?method=handleRequest&viewType=json&requestType=property-organizer-login-form' ;
 			$ihfUrl = IHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "authenticationToken", $authenticationToken);
 			$ihfUrl = IHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "message", $message);
 			$ihfUrl = IHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "afterLoginUrl", $afterLoginUrl);
