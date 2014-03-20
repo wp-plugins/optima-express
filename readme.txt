@@ -114,6 +114,10 @@ Yes, your Optima Express account includes a full mobile IDX site that will work 
 
 == Changelog ==
 
+= 2.0.1 =
+
+* Fixed issue related with Quick Search shortcode
+
 = 2.0.0 =
 * Added selector to insert all shortcodes
 * Added additional IDX page shortcodes
@@ -246,9 +250,11 @@ Yes, your Optima Express account includes a full mobile IDX site that will work 
 
 = 1.0.0 =
 * Initial release.
-
-
+
 == Upgrade Notice ==
+= 2.0.1 =
+
+* Fixed issue related with Quick Search shortcode
 
 = 2.0.0 =
 * Added selector to insert all shortcodes

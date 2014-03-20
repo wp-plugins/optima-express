@@ -3,7 +3,7 @@
 	Plugin Name: Optima Express IDX Plugin
 	Plugin URI: http://wordpress.org/extend/plugins/optima-express/
 	Description: Adds MLS / IDX property search and listings to your site. Includes search and listing pages, widgets and shortcodes. Requires an IDX account from iHomefinder. Get a free trial account with sample IDX data, or a paid account with data from your MLS.
-	Version: 2.0.0
+	Version: 2.0.1
 	Author: ihomefinder
 	Author URI: http://www.ihomefinder.com
 	License: GPL
@@ -90,19 +90,19 @@ add_action('init', array(IHomefinderRewriteRules::getInstance(), "initialize"), 
 //add_action('init',array(IHomefinderRewriteRules::getInstance(), "flushRules"));
 
 if( is_admin()){
-	add_action( 'admin_enqueue_scripts', array(IHomefinderAdmin::getInstance(), "addScripts") );	
+	add_action( 'admin_enqueue_scripts', array(IHomefinderAdmin::getInstance(), "addScripts") );
 	add_action('admin_menu', array(IHomefinderAdmin::getInstance(), "createAdminMenu"));
 	add_action('admin_init', array(IHomefinderInstaller::getInstance(), 'upgrade'));
 	add_action('admin_init', array(IHomefinderAdmin::getInstance(), "registerSettings") );
-		
+
 	add_action('admin_init', array(IHomefinderWidgetContextUtility::getInstance(), "loadWidgetJavascript") );
 	//Adds functionality to the text editor for pages and posts
 	//Add buttons to text editor and initialize short codes
-	add_action('admin_init', array(IHomefinderTinyMceManager::getInstance(), "addButtons") );	
-	
+	add_action('admin_init', array(IHomefinderTinyMceManager::getInstance(), "addButtons") );
+
 	//Remember the users state in the application (subscriber info and last search)
 	add_action('admin_init',array(IHomefinderStateManager::getInstance(), "initialize"), 5);
-	
+
 	//add error check
 	add_action('admin_notices', array(IHomefinderAdmin::getInstance(), "checkError"));
 } else {
@@ -111,21 +111,21 @@ if( is_admin()){
 
 	//Remember the users state in the application (subscriber info and last search)
 	add_action('plugins_loaded',array(IHomefinderStateManager::getInstance(), "initialize"), 5);
-	
+
 	add_filter( 'page_template', array(IHomefinderVirtualPageDispatcher::getInstance(), "getPageTemplate") );
 	add_filter( 'the_content', array(IHomefinderVirtualPageDispatcher::getInstance(), "getContent"), 20 );
 	add_filter( 'the_excerpt', array(IHomefinderVirtualPageDispatcher::getInstance(), "getExcerpt"), 20 );
 	add_filter( 'the_posts', array(IHomefinderVirtualPageDispatcher::getInstance(), "postCleanUp") );
 	//add_filter( 'the_title', array(IHomefinderVirtualPageDispatcher::getInstance(), "getTitle") );
-	
-	add_action('wp_footer', array(IHomefinderCustomization::getInstance(), "addCustomCSS"));	
-	
+
+	add_action('wp_footer', array(IHomefinderCustomization::getInstance(), "addCustomCSS"));
+
 	add_action('ihf_expired_transients_cleanup', array(IHomefinderCleaner::getInstance(), "removeExpiredIhfTransients"));
 	add_filter('comments_array', array(IHomefinderVirtualPageDispatcher::getInstance(), "clearComments"));
 }
-		
 
-		
+
+
 add_action('init', array(IHomefinderShortcodeDispatcher::getInstance(), "init"));
 
 //AJAX Request handling.
