@@ -132,6 +132,19 @@ if( !class_exists('IHomefinderLayoutManager')) {
 			}
 			return $result;
 		}
+		
+		/**
+		 * The QuickSearch short code is handled differently for responsive
+		 * 
+		 * The legacy version uses the QuickSearchVirtualPage
+		 */
+		public function supportsQuickSearchVirtualPage(){
+			$result=true;
+			if( $this->isResponsive()){
+				$result=false;
+			}
+			return $result;			
+		}
 	}
 }
 ?>

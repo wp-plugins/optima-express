@@ -336,8 +336,26 @@ if( !class_exists('IHomefinderShortcodeDispatcher')) {
 			$content=$searchResultsVirtualPage->getContent( $authenticationToken);
 			return $content;
 		}
-
+		
 		function getQuickSearch($attr){
+			$content="";
+			if( IHomefinderLayoutManager::getInstance()->supportsQuickSearchVirtualPage()){
+				$content=$this->getQuickSearchWithVirtualPage();
+			}
+			else{
+				$content=$this->getQuickSearchContent($attr);
+			}
+			return $content ;
+		}
+		
+		function getQuickSearchWithVirtualPage(){
+			$quickSearchVirtualPage=IHomefinderVirtualPageFactory::getInstance()->getVirtualPage( IHomefinderVirtualPageFactory::LISTING_QUICK_SEARCH_FORM);
+			$authenticationToken=$this->ihfAdmin->getAuthenticationToken();
+			$content=$quickSearchVirtualPage->getContent( $authenticationToken);
+			return $content ;
+		}
+
+		function getQuickSearchContent($attr){
 			$authenticationToken=IHomefinderAdmin::getInstance()->getAuthenticationToken();
 	    	$ihfUrl = IHomefinderLayoutManager::getInstance()->getExternalUrl() . '?method=handleRequest&viewType=json&requestType=listing-search-form' ;
 	    	$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "authenticationToken", $authenticationToken);
