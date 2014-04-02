@@ -20,8 +20,8 @@ if( !class_exists('IHomefinderShortcodeDispatcher')) {
 		private $featuredShortCode          = "optima_express_featured";
 		private $searchResultsShortCode     = "optima_express_search_results";
 		private $quickSearchShortCode       = "optima_express_quick_search";
-    private $searchByAddressShortCode   = "optima_express_address_search";
-    private $searchByListingIdShortCode = "optima_express_listing_search";
+    	private $searchByAddressShortCode   = "optima_express_address_search";
+    	private $searchByListingIdShortCode = "optima_express_listing_search";
 		private $mapSearchShortCode         = "optima_express_map_search";
 		private $agentListingsShortCode     = "optima_express_agent_listings";
 		private $officeListingsShortCode    = "optima_express_office_listings";
@@ -80,11 +80,11 @@ if( !class_exists('IHomefinderShortcodeDispatcher')) {
 			return $this->quickSearchShortCode;
 		}
     
-    public function getSearchByAddressShortcode(){
+   		public function getSearchByAddressShortcode(){
 			return $this->searchByAddressShortCode;
 		}
     
-    public function getSearchByListingIdShortcode(){
+    	public function getSearchByListingIdShortcode(){
 			return $this->searchByListingIdShortCode;
 		}
 		
@@ -441,6 +441,7 @@ if( !class_exists('IHomefinderShortcodeDispatcher')) {
 		}
 
 		function getListingGallery($attr){
+			IHomefinderStateManager::getInstance()->saveLastSearch();
 			$authenticationToken=$this->ihfAdmin->getAuthenticationToken();
 			$ihfUrl = IHomefinderLayoutManager::getInstance()->getExternalUrl() . '?method=handleRequest&viewType=json&requestType=listing-gallery-slider&authenticationToken=' . $authenticationToken;
 			if(isset($attr['width'])){
@@ -461,7 +462,9 @@ if( !class_exists('IHomefinderShortcodeDispatcher')) {
 			if(isset($attr['auto'])){
 				$ihfUrl = $ihfUrl .'&auto='   .$attr['auto'];
 			}
-			if(isset($attr['hotsheetid'])){
+			if(isset($attr['id'])){
+				$ihfUrl = $ihfUrl  .'&hid='    .$attr['id'];
+			}else if(isset($attr['hotsheetid'])){
 				$ihfUrl = $ihfUrl  .'&hid='    .$attr['hotsheetid'];
 			}
 			

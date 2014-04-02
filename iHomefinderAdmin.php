@@ -1204,7 +1204,7 @@ if( !class_exists('IHomefinderAdmin')) {
 				<form method="post" action="options.php">
 					<?php settings_fields( IHomefinderConstants::OPTION_CONFIG_PAGE ); ?>
 					<table class="form-table">
-						<?php if(!IHomefinderPermissions::getInstance()->isOfficeEnabled() && !IHomefinderPermissions::getInstance()->isOmnipressSite()){?>
+						<?php if( !IHomefinderPermissions::getInstance()->isOmnipressSite()){?>
 						<tr valign="top">
 							<th scope="row">Layout Style</th>
 							<td>

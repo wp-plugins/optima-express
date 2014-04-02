@@ -394,17 +394,33 @@ $IHomefinderShortcodeDialog = new IHomefinderShortcodeDialog();
 									<div id="TopPicksSelect" class="form-group" style="display: none;">
 											<?php $IHomefinderShortcodeDialog->createTopPicksSelect(); ?>
 									</div>
-									<div class="form-group">
-										<label class="control-label">Width</label>
-										<div class="input-group">
-											<input class="form-control" type="number" name="width" required="required" />
-											<span class="input-group-addon">px</span>
+									<?php if(IHomefinderLayoutManager::getInstance()->supportsListingGalleryResponsiveness()){?>
+										<div class="form-group">
+											<label class="control-label">Width</label>
+												<div class="checkbox">
+													<label class="control-label">
+														<input type="checkbox" name="fitToWidth" checked onchange="jQuery('#listingGalleryWidth').toggle();">
+														Fit to column
+													</label>
+												</div>
+												<div class="input-group" style="display: none;" id="listingGalleryWidth">
+													<input class="form-control" type="text" name="width" />
+													<span class="input-group-addon">px</span>
+												</div>
 										</div>
-									</div>
+									<?php } else {?>
+										<div class="form-group">
+											<label class="control-label">Width</label>
+											<div class="input-group">
+												<input class="form-control" type="number" name="width" required="required" />
+												<span class="input-group-addon">px</span>
+											</div>
+										</div>
+									<?php }?>
 									<div class="form-group">
 										<label class="control-label">Height</label>
 										<div class="input-group">
-											<input class="form-control" type="number" name="height" required="required" />
+											<input class="form-control" type="number" name="height" required="required" placeholder="Default" />
 											<span class="input-group-addon">px</span>
 										</div>
 									</div>
@@ -529,7 +545,7 @@ $IHomefinderShortcodeDialog = new IHomefinderShortcodeDialog();
 								<div class="form-group">
 									<label class="control-label">Height</label>
 									<div class="input-group">
-										<input class="form-control" type="number" name="height" required="required" />
+										<input class="form-control" type="number" name="height" />
 										<span class="input-group-addon">px</span>
 									</div>
 								</div>

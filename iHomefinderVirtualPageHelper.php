@@ -75,7 +75,7 @@ if( !class_exists('IHomefinderVirtualPageHelper')) {
 		const OPTION_VIRTUAL_PAGE_TITLE_OPEN_HOME_SEARCH_FORM="ihf-virtual-page-title-open-home-search-form";
 		const OPTION_VIRTUAL_PAGE_TEMPLATE_OPEN_HOME_SEARCH_FORM="ihf-virtual-page-template-open-home-search-form";
 		const OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_OPEN_HOME_SEARCH_FORM="ihf-virtual-page-open-home-search-form";
-		
+    
 		//Featured Sold Listings Virtual Page Options
 		const OPTION_VIRTUAL_PAGE_TITLE_SOLD_FEATURED="ihf-virtual-page-title-sold-featured";
 		const OPTION_VIRTUAL_PAGE_TEMPLATE_SOLD_FEATURED="ihf-virtual-page-template-sold-featured";

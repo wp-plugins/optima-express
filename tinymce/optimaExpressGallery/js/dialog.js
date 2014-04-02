@@ -51,9 +51,11 @@ var IhfGalleryDialog = {
 		// Insert the contents from the input into the document
 		var listingGalleryShortCode = "[" + listingGalleryShortCodeToken;
 		if(theForm.toppickId.value != '') {
-			listingGalleryShortCode += ' hotsheetid=' + this.getFieldValue(theForm.toppickId);
+			listingGalleryShortCode += ' id=' + this.getFieldValue(theForm.toppickId);
 		}
-		listingGalleryShortCode += ' width=' + this.getFieldValue(theForm.width);
+		if(typeof theForm.fitToWidth == 'undefined' || theForm.fitToWidth.checked == false) {
+			listingGalleryShortCode += ' width=' + this.getFieldValue(theForm.width);
+		}
 		listingGalleryShortCode += ' height=' + this.getFieldValue(theForm.height);
 		listingGalleryShortCode += ' rows=' + this.getFieldValue(theForm.rows);
 		listingGalleryShortCode += ' columns=' + this.getFieldValue(theForm.columns);

@@ -47,7 +47,15 @@ if( !class_exists('IHomefinderRequestor')){
 			//if( $ajaxRequest ){echo( $ihfUrl );die();}
 			//echo( $ihfUrl ); die();
 			$ihfid=site_url() + ";" + "WordpressPlugin";
-			$requestArgs = array("timeout"=>"200", "ihfid"=> $ihfid );
+			$ihfUserInfo= 'WordPress/' . $wp_version . '; ' . get_bloginfo( 'url' );
+			//modified user-agent in the request header to pass original user-agent
+			//This information is used by spring-mobile library to determine 
+			//if request came from mobile devices
+			//This can also be acheived by using is_mobile wordpress function
+			//user-agent information that wordpress provides is now added to 
+			//ihfuserinfo variable
+		
+			$requestArgs = array("timeout"=>"200", "ihfid"=> $ihfid,"ihfUserInfo"=> $ihfUserInfo,"user-agent"=> $userAgent);		
 			IHomefinderLogger::getInstance()->debug("before request");
 			$response = wp_remote_get($ihfUrl, $requestArgs);
 
@@ -174,7 +182,16 @@ if( !class_exists('IHomefinderRequestor')){
 			IHomefinderLogger::getInstance()->debug("Begin IHomefinderRequestor.remoteRequest: " );
 
 			IHomefinderLogger::getInstance()->debug("ihfUrl: " . $ihfUrl);
-			$requestArgs = array('timeout'=>'200', 'body'=>$postData );
+			$ihfid=site_url() + ";" + "WordpressPlugin";
+			$ihfUserInfo= 'WordPress/' . $wp_version . '; ' . get_bloginfo( 'url' );
+			//modified user-agent in the request header to pass original user-agent
+			//This information is used by spring-mobile library to determine
+			//if request came from mobile devices
+			//This can also be acheived by using is_mobile wordpress function
+			//user-agent information that wordpress provides is now added to
+			//ihfuserinfo variable
+			
+			$requestArgs = array('timeout'=>'200', 'body'=>$postData, "ihfid"=> $ihfid,"ihfUserInfo"=> $ihfUserInfo,"user-agent"=> $userAgent );
 			$response = wp_remote_post($ihfUrl, $requestArgs);
 			
 			IHomefinderLogger::getInstance()->debug("IHomefinderRequestor.remoteRequest post data " );

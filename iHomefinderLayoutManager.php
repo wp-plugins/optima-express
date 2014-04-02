@@ -91,8 +91,13 @@ if( !class_exists('IHomefinderLayoutManager')) {
 		
 		public function supportsListingGallery(){
 			$result=true;
+			return $result;
+		}
+		
+		public function supportsListingGalleryResponsiveness(){
+			$result=false;
 			if( $this->isResponsive()){
-				$result=false;
+				$result=true;
 			}
 			return $result;
 		}
