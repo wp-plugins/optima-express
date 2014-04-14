@@ -150,6 +150,21 @@ if( !class_exists('IHomefinderLayoutManager')) {
 			}
 			return $result;			
 		}
+		
+		/**
+		 * Logout is handled differently for responsive layout
+		 * We need to kill the session on java servers for subscriber logout
+		 */
+		public function isSubscriberSessionOnJavaServers(){
+			$result=false;
+			if($this->isResponsive()){
+				$result=true;
+			}
+			return $result;
+		}
+		
+		
 	}
+	
 }
 ?>

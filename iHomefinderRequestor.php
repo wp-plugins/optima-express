@@ -64,21 +64,26 @@ if( !class_exists('IHomefinderRequestor')){
 			
 			if( is_wp_error($response)){
 				$contentInfo=null;
-			}
-			else{
-				$responseBody = wp_remote_retrieve_body( $response );
-				IHomefinderLogger::getInstance()->debug('responseBody: ' . $responseBody );
-				try{
-					$contentType=wp_remote_retrieve_header($response, "content-type");
-					//$ihfSessionId=wp_remote_retrieve_header($response, "ihfSessionId");		
-					if( $contentType != null && $contentType == "text/xml;charset=UTF-8"){
-						$contentInfo=simplexml_load_string($responseBody);	
+			} else {
+				if( $response['response']['code'] >= 400 ) {
+					$responseBody = wp_remote_retrieve_body( $response );
+					$contentInfo = new stdClass();
+					$contentInfo->view = $responseBody;
+				} else {
+					$responseBody = wp_remote_retrieve_body( $response );
+					IHomefinderLogger::getInstance()->debug('responseBody: ' . $responseBody );
+					try{
+						$contentType=wp_remote_retrieve_header($response, "content-type");
+						//$ihfSessionId=wp_remote_retrieve_header($response, "ihfSessionId");		
+						if( $contentType != null && $contentType == "text/xml;charset=UTF-8"){
+							$contentInfo=simplexml_load_string($responseBody);	
+						}
+						else{
+							$contentInfo=json_decode($responseBody);
+						}
+					}catch (Exception $e){
+						var_dump($e);
 					}
-					else{
-						$contentInfo=json_decode($responseBody);
-					}
-				}catch (Exception $e){
-					var_dump($e);
 				}
 			}
 			
@@ -200,16 +205,21 @@ if( !class_exists('IHomefinderRequestor')){
 
 			if( is_wp_error($response)){
 				$contentInfo=null;
-			}
-			else{
-				$responseBody = wp_remote_retrieve_body( $response );
-				
-				$contentType=wp_remote_retrieve_header($response, "content-type");
-				if( $contentType != null && $contentType == "text/xml;charset=UTF-8"){
-					$contentInfo=simplexml_load_string($responseBody);	
-				}
-				else{
-					$contentInfo=json_decode($responseBody);
+			} else {
+				if( $response['response']['code'] >= 400 ) {
+					$responseBody = wp_remote_retrieve_body( $response );
+					$contentInfo = new stdClass();
+					$contentInfo->view = $responseBody;
+				} else {
+					$responseBody = wp_remote_retrieve_body( $response );
+					
+					$contentType=wp_remote_retrieve_header($response, "content-type");
+					if( $contentType != null && $contentType == "text/xml;charset=UTF-8"){
+						$contentInfo=simplexml_load_string($responseBody);	
+					}
+					else{
+						$contentInfo=json_decode($responseBody);
+					}
 				}
 								
 				IHomefinderLogger::getInstance()->debugDumpVar($responseBody);

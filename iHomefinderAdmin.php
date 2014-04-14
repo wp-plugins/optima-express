@@ -129,15 +129,6 @@ if( !class_exists('IHomefinderAdmin')) {
 					<?php
 				}
 				
-				$CurrentUrl = 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-				if(IHomefinderLayoutManager::getInstance()->isResponsive() && ( $CurrentUrl == get_bloginfo('wpurl') . '/wp-admin/' || $CurrentUrl == get_bloginfo('wpurl') . '/wp-admin/index.php' ) ) {
-					?>
-					<div class="error">
-						<p><a href="http://www.ihomefinder.com/support/optima-express-kb/optima-express-beta/">Learn more</a> about this beta version of Optima Express. Report errors or bugs to <a href="mailto:support@ihomefinder.com">support@ihomefinder.com</a></p>
-					</div>
-					<?php
-				}
-				
 			}
 		}
 
@@ -606,7 +597,7 @@ if( !class_exists('IHomefinderAdmin')) {
 						</div>
 						<p>Thank you for evaluating Optima Express!</p>
 						<p>Your trial account uses sample listing data from Northern California. For search and listings in your MLS, <a href="http://www.ihomefinder.com/store/convert.php?cid=<?php echo $clientID ?>" target="_blank">upgrade to a paid account</a>.</p>
-						<p>Visit our <a href="http://www.ihomefinder.com/support/optima-express-kb/" target="_blank">knowledge base</a> for assistance setting up IDX on your site.</p>
+						<p>Visit our <a href="http://support.ihomefinder.com/index.php?/Knowledgebase/List/Index/23/optima-express-responsive/" target="_blank">knowledge base</a> for assistance setting up IDX on your site.</p>
 						<p>Don't hesitate to <a href="http://www.ihomefinder.com/forms/contact-us/" target="_blank">contact us</a> if you have any questions.</p>
 						
 						<?php
@@ -687,7 +678,7 @@ if( !class_exists('IHomefinderAdmin')) {
 					<br />
 					<br />
 					<a href="admin.php?page=<?php echo IHomefinderConstants::OPTION_ACTIVATE ?>&section=free-trial" class="button button-primary button-large-ihf" >Get a Free Trial<br />IDX Account</a>
-					<a href="http://www.ihomefinder.com/product/optima-express/optima-express-agent-pricing/?plugin=true&redirectURL=<?php echo urlencode ( 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] ); ?>" class="button button-primary button-large-ihf">Sign Up for IDX<br />in Your MLS</a>
+					<a href="http://www.ihomefinder.com/products/optima-express/optima-express-agent-pricing/?plugin=true&redirectURL=<?php echo urlencode ( 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] ); ?>" class="button button-primary button-large-ihf">Sign Up for IDX<br />in Your MLS</a>
 					<br />
 					<br />
 					<p>Optima Express from iHomefinder adds MLS/IDX search and listings directly into your WordPress site.</p>
@@ -1208,9 +1199,9 @@ if( !class_exists('IHomefinderAdmin')) {
 						<tr valign="top">
 							<th scope="row">Layout Style</th>
 							<td>
-								<select name="<?php echo IHomefinderConstants::OPTION_LAYOUT_TYPE ?>" onchange="if(this.value == '<?php echo IHomefinderConstants::OPTION_LAYOUT_TYPE_RESPONSIVE ?>'){alert('Please note that this is a beta version of Optima Express which is still undergoing final testing before its official release. You may encounter errors or bugs - if you do, feel free to email us at support@ihomefinder.com')}">
-									<option value="<?php echo IHomefinderConstants::OPTION_LAYOUT_TYPE_LEGACY ?>" <?php if(!$responsive){?>selected <?php }?>>Legacy</option>
-									<option value="<?php echo IHomefinderConstants::OPTION_LAYOUT_TYPE_RESPONSIVE ?>" <?php if($responsive){?>selected <?php }?>>Beta - Responsive</option>
+								<select name="<?php echo IHomefinderConstants::OPTION_LAYOUT_TYPE ?>">
+									<option value="<?php echo IHomefinderConstants::OPTION_LAYOUT_TYPE_RESPONSIVE ?>" <?php if($responsive){?>selected <?php }?>>Responsive</option>
+									<option value="<?php echo IHomefinderConstants::OPTION_LAYOUT_TYPE_LEGACY ?>" <?php if(!$responsive){?>selected <?php }?>>Fixed-width</option>
 								</select>
 							</td>
 						</tr>
@@ -1226,7 +1217,7 @@ if( !class_exists('IHomefinderAdmin')) {
 									<option value="gray" <?php if($colorScheme=='gray'){?>selected <?php }?>>Gray</option>
 									<option value="red" <?php if($colorScheme=='red'){?>selected <?php }?>>Red</option>
 									<option value="green" <?php if($colorScheme=='green'){?>selected <?php }?>>Green</option>
-                  <option value="orange" <?php if($colorScheme=='orange'){?>selected <?php }?>>Orange</option>
+									<option value="orange" <?php if($colorScheme=='orange'){?>selected <?php }?>>Orange</option>
 									<option value="blue" <?php if($colorScheme=='blue'){?>selected <?php }?>>Blue</option>
 									<option value="light_blue" <?php if($colorScheme=='light_blue'){?>selected <?php }?>>Light Blue</option>
 									<option value="blue_gradient" <?php if($colorScheme=='blue_gradient'){?>selected <?php }?>>Blue Gradient</option>
@@ -1528,16 +1519,18 @@ if( !class_exists('IHomefinderAdmin')) {
 
 		private function createPropertyTypeSelect(){
 			$formData=IHomefinderShortcodeDispatcher::getInstance()->getGalleryFormData();
-			if( isset( $formData) && isset( $formData->propertyTypesList)){
-				$propertyTypesList=$formData->propertyTypesList ;
-				$selectText = "<SELECT id='propertyType' name='propertyType'>";
-				foreach ($propertyTypesList as $i => $value) {
-					$selectText .= "<option value='" . $propertyTypesList[$i]->propertyTypeCode . "'>";
-					$selectText .=  $propertyTypesList[$i]->displayName ;
-					$selectText .=  "</option>" ;
+			if( isset( $formData) ) {
+				$propertyTypesList=$formData->getPropertyTypesList() ;
+				if( isset($propertyTypesList) ) {
+					$selectText = "<SELECT id='propertyType' name='propertyType'>";
+					foreach ($propertyTypesList as $i => $value) {
+						$selectText .= "<option value='" . $propertyTypesList[$i]->propertyTypeCode . "'>";
+						$selectText .=  $propertyTypesList[$i]->displayName ;
+						$selectText .=  "</option>" ;
+					}
+					$selectText .= "</SELECT>";
+					echo($selectText);
 				}
-				$selectText .= "</SELECT>";
-				echo($selectText);
 			}
 		}
 	}

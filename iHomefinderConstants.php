@@ -8,7 +8,7 @@
 if( !interface_exists('IHomefinderConstants')){
 	interface IHomefinderConstants{
 
-		const VERSION="2.0.2";
+		const VERSION="2.1.0";
 
 		const LEGACY_EXTERNAL_URL= "http://www.idxre.com/services/wordpress";
    		const RESPONSIVE_EXTERNAL_URL= "http://www.idxhome.com/service/wordpress";

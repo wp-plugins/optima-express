@@ -36,6 +36,11 @@ if(!class_exists('IHomefinderInstaller')){
 		    $this->ihfRewriteRules->flushRules();
 		    
 		    wp_schedule_event( current_time( 'timestamp' ), 'hourly', 'ihf_expired_transients_cleanup');
+			
+			if(!$this->ihfAdmin->previouslyActivated() && !IHomefinderPermissions::getInstance()->isOmnipressSite()) {
+				update_option( IHomefinderConstants::OPTION_LAYOUT_TYPE, IHomefinderConstants::OPTION_LAYOUT_TYPE_RESPONSIVE );
+			}
+			
 		}
 
 		/**
