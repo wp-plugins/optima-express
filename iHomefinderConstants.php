@@ -8,7 +8,8 @@
 if( !interface_exists('IHomefinderConstants')){
 	interface IHomefinderConstants{
 
-		const VERSION="2.1.0";
+		const VERSION="2.1.1";
+		const VERSION_NAME="Optima Express";
 
 		const LEGACY_EXTERNAL_URL= "http://www.idxre.com/services/wordpress";
    		const RESPONSIVE_EXTERNAL_URL= "http://www.idxhome.com/service/wordpress";

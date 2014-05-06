@@ -35,7 +35,7 @@ if( !class_exists('IHomefinderOrganizerViewSavedListingListVirtualPageImpl')) {
 			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "subscriberId", $subscriberId );
 			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "includeSearchSummary", "true" );
 			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "phpStyle", "true");
-			
+			$ihfUrl = iHomefinderRequestor::addVarsToUrl($ihfUrl, $_REQUEST);
 			$contentInfo = IHomefinderRequestor::remoteRequest($ihfUrl);
 			$idxContent = IHomefinderRequestor::getContent( $contentInfo );
 	

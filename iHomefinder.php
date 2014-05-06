@@ -3,7 +3,7 @@
 	Plugin Name: Optima Express IDX Plugin
 	Plugin URI: http://wordpress.org/extend/plugins/optima-express/
 	Description: Adds MLS / IDX property search and listings to your site. Includes search and listing pages, widgets and shortcodes. Requires an IDX account from iHomefinder. Get a free trial account with sample IDX data, or a paid account with data from your MLS.
-	Version: 2.1.0
+	Version: 2.1.1
 	Author: ihomefinder
 	Author URI: http://www.ihomefinder.com
 	License: GPL
@@ -55,11 +55,21 @@ include("widget/iHomefinderMoreInfoWidget.php");
 include("widget/iHomefinderAgentBioWidget.php");
 include("widget/iHomefinderSocialWidget.php");
 
-add_action('widgets_init', create_function('', 'return register_widget("iHomefinderPropertiesGallery");'));
-add_action('widgets_init', create_function('', 'return register_widget("iHomefinderQuickSearchWidget");'));
-add_action('widgets_init', create_function('', 'return register_widget("iHomefinderLinkWidget");'));
-add_action('widgets_init', create_function('', 'return register_widget("iHomefinderAgentBioWidget");'));
-add_action('widgets_init', create_function('', 'return register_widget("iHomefinderSocialWidget");'));
+if( IHomefinderPermissions::getInstance()->isPropertiesGalleryEnabled() == TRUE ) {
+	add_action('widgets_init', create_function('', 'return register_widget("iHomefinderPropertiesGallery");'));
+}	
+if( IHomefinderPermissions::getInstance()->isQuickSearchEnabled() == TRUE ) {
+	add_action('widgets_init', create_function('', 'return register_widget("iHomefinderQuickSearchWidget");'));
+}
+if( IHomefinderPermissions::getInstance()->isSeoCityLinksEnabled() == TRUE ) {
+	add_action('widgets_init', create_function('', 'return register_widget("iHomefinderLinkWidget");'));
+}
+if( IHomefinderPermissions::getInstance()->isAgentBioWidgetEnabled() == TRUE ) {
+	add_action('widgets_init', create_function('', 'return register_widget("iHomefinderAgentBioWidget");'));
+}
+if( IHomefinderPermissions::getInstance()->isSocialEnabled() == TRUE ) {
+	add_action('widgets_init', create_function('', 'return register_widget("iHomefinderSocialWidget");'));
+}
 if( IHomefinderPermissions::getInstance()->isMoreInfoEnabled() == TRUE ) {
 	add_action('widgets_init', create_function('', 'return register_widget("iHomefinderMoreInfoWidget");'));
 }
@@ -106,6 +116,13 @@ if( is_admin()){
 	//add error check
 	add_action('admin_notices', array(IHomefinderAdmin::getInstance(), "checkError"));
 } else {
+	
+	/*
+	Call upgrade method on every non-admin page load. This is for the case that the plugin is updated through
+	multisite network admin	or if the plugin files were manually copied into wordpress.
+	*/
+	add_action('setup_theme', array(IHomefinderInstaller::getInstance(), 'upgrade')) ;
+	
 	add_action('init',array(IHomefinderVirtualPageDispatcher::getInstance(), "loadJavaScript")) ;
 	add_action( 'wp_enqueue_scripts', array(IHomefinderWidgetContextUtility::getInstance(), "loadWidgetStyle") );
 

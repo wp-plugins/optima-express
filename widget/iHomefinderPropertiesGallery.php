@@ -178,10 +178,10 @@ if( !class_exists('iHomefinderPropertiesGallery')) {
 
            	//link to all featured listings
            	$linkUrl = IHomefinderUrlFactory::getInstance()->getListingsSearchResultsUrl(true);
-           	$linkUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($linkUrl, "cityID", $cityId);
+           	$linkUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($linkUrl, "cityId", $cityId);
            	$linkUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($linkUrl, "propertyType", $propertyType);
            	$linkUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($linkUrl, "bedrooms", $bed);
-           	$linkUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($linkUrl, "bathcount", $bath);
+           	$linkUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($linkUrl, "bathCount", $bath);
            	$linkUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($linkUrl, "minListPrice", $minPrice);
            	$linkUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($linkUrl, "maxListPrice", $maxPrice);
 

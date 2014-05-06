@@ -46,6 +46,15 @@ if( !class_exists('IHomefinderAdmin')) {
 				<?php
 				
 			}
+			if( get_option( 'ihf-wpidx-oe-migrated' ) == 'error' ) {
+				?>
+					<div class='error'>
+						<h3>
+							There was an error updating WordPress IDX. Please contact iHomefinder at <a href="mailto:support@ihomefinder.com">support@ihomefinder.com</a>.
+						</h3>
+					</div>
+				<?php
+			}
 			
 			if( $_REQUEST[iHomefinderConstants::COMPATIBILITY_CHECK_ENABLED] == 'false' ) {
 				update_option( iHomefinderConstants::COMPATIBILITY_CHECK_ENABLED, 'false' );
@@ -71,64 +80,75 @@ if( !class_exists('IHomefinderAdmin')) {
 				if (array_key_exists("optima-express/iHomefinder.php",$plugins) == true && array_key_exists("wordpress-idx/WordpressIDX.php",$plugins) == true) {
 					$errors[] = "<p><a href='plugins.php?s=idx'>Multiple IDX plugins are installed</a></p>";					
 				}
+				
+				$authenticationToken=IHomefinderAdmin::getInstance()->getAuthenticationToken();
+				$ihfUrl = IHomefinderLayoutManager::getInstance()->getExternalUrl() . '?method=handleRequest&viewType=json&requestType=compatibility-check' ;
+				$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "authenticationToken", $authenticationToken);
+				$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "smallView", "true" );
+				$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "phpStyle", "true" );
+
+				$contentInfo = iHomefinderRequestor::remoteRequest($ihfUrl);
+				
+				if( empty( $contentInfo ) === FALSE ) {
 					
-				//Get compatibility JSON as array
-				$compatibilityUrl = iHomefinderConstants::LEGACY_EXTERNAL_URL . '?method=handleRequest&viewType=json&requestType=compatibility-check' ;
-				$requestArgs = array("timeout"=>"20" );
-				$response = wp_remote_get($compatibilityUrl, $requestArgs);
-				if( !is_wp_error($response)){
-					$responseBody = wp_remote_retrieve_body( $response );
-					$compatibility = json_decode($responseBody, true);
-					$compatibilityPluginArray=$compatibility["Plugin"];
-													
-					//loop through plugin array
-					foreach ($plugins as $pluginPath => $plugin) {
-						//check if plugin is active
-						if (is_plugin_active($pluginPath) == true) {
-							//get plugin name
-							$pluginName = $plugin["Name"];	
-							$message=$compatibilityPluginArray[$pluginName];
-							if( $message != null ){
-								$errors[] = "<p><a href='plugins.php?s=" .  urlencode($pluginName) . "'>" . $pluginName . " (" . $message . ")</a></p>";	
-							}		
+					if( IHomefinderLayoutManager::getInstance()->isResponsive() === TRUE ) {
+						$content = (string) iHomefinderRequestor::getJson( $contentInfo );
+					} else {
+						$content = json_encode( $contentInfo );
+					}
+					
+					if( isset( $content ) === TRUE && $content != '' ){
+						$compatibility = json_decode($content, true);
+						$compatibilityPluginArray=$compatibility["Plugin"];
+														
+						//loop through plugin array
+						foreach ($plugins as $pluginPath => $plugin) {
+							//check if plugin is active
+							if (is_plugin_active($pluginPath) == true) {
+								//get plugin name
+								$pluginName = $plugin["Name"];	
+								$message=$compatibilityPluginArray[$pluginName];
+								if( $message != null ){
+									$errors[] = "<p><a href='plugins.php?s=" .  urlencode($pluginName) . "'>" . $pluginName . "</a> (" . $message . ")</p>";	
+								}		
+							}
+						}
+							
+						if ( function_exists('wp_get_theme')){
+							//get current wordpress theme as string
+							$theme = wp_get_theme();	
+							$themeName=$theme["Name"];
+							$compatibilityThemeArray=$compatibility["Theme"];	
+							$message=$compatibilityThemeArray[$themeName];
+							if($message != null ){
+								$errors[] = "<p><a href='themes.php'>" . $themeName . "</a> (" . $message . ")</p>";
+							}
 						}
 					}
 						
-					if ( function_exists('wp_get_theme')){
-						//get current wordpress theme as string
-						$theme = wp_get_theme();	
-						$themeName=$theme["Name"];
-						$compatibilityThemeArray=$compatibility["Theme"];	
-						$message=$compatibilityThemeArray[$themeName];
-						if($message != null ){
-							$errors[] = "<p><a href='themes.php'>" . $themeName . " (" . $message . ")</a></p>";
-						}
+					//check error count
+					if (count($errors) > 0) {
+						?>
+						<div class='error'>
+							<div style="">
+								<h3 style="float: left;"><?php echo count($errors) ?> compatibility issue(s):</h3>
+								<form id="<?php echo IHomefinderConstants::COMPATIBILITY_CHECK_ENABLED ?>" style="float: right; margin-top: 5px;" method="post" action="options.php">
+									<?php settings_fields( IHomefinderConstants::OPTION_GROUP_COMPATIBILITY_CHECK ); ?>
+									<input type="hidden" value="false" name="<?php echo IHomefinderConstants::COMPATIBILITY_CHECK_ENABLED ?>" />
+									<input class="button-secondary" type="submit" value="Dismiss compatibility warnings" />
+								</form>
+							</div>
+							<div style="clear: both;">
+								<?php
+								foreach ($errors as $error) {
+									echo $error;
+								}
+								?>
+							</div>
+						</div>
+						<?php
 					}
 				}
-					
-				//check error count
-				if (count($errors) > 0) {
-					?>
-					<div class='error'>
-						<div style="">
-							<h3 style="float: left;"><?php echo count($errors) ?> compatibility issue(s):</h3>
-							<form id="<?php echo IHomefinderConstants::COMPATIBILITY_CHECK_ENABLED ?>" style="float: right; margin-top: 5px;" method="post" action="options.php">
-								<?php settings_fields( IHomefinderConstants::OPTION_GROUP_COMPATIBILITY_CHECK ); ?>
-								<input type="hidden" value="false" name="<?php echo IHomefinderConstants::COMPATIBILITY_CHECK_ENABLED ?>" />
-								<input class="button-secondary" type="submit" value="Dismiss compatibility warnings" />
-							</form>
-						</div>
-						<div style="clear: both;">
-							<?php
-							foreach ($errors as $error) {
-								echo $error;
-							}
-							?>
-						</div>
-					</div>
-					<?php
-				}
-				
 			}
 		}
 

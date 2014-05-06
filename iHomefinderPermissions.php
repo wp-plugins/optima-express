@@ -265,5 +265,25 @@ if( !class_exists('IHomefinderPermissions')) {
 			return $Return;
 		}
 		
+		public function isPropertiesGalleryEnabled(){
+			$Return = TRUE;
+			return $Return;
+		}
+		
+		public function isQuickSearchEnabled(){
+			$Return = TRUE;
+			return $Return;
+		}
+				
+		public function isSocialEnabled(){
+			$Return = TRUE;
+			return $Return;
+		}
+		
+		public function isAgentBioWidgetEnabled(){
+			$Return = TRUE;
+			return $Return;
+		}
+		
 	}
 }

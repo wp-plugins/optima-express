@@ -24,7 +24,7 @@ if( !class_exists('IHomefinderRequestor')){
 						
 			//If the url does not have the lead capture id then try to add it
 			$ihfUrlHasLeadCapture=strrpos($ihfUrl, "leadCaptureId=");
-			if($ihfUrlHasLeadCapture === false){
+			if($ihfUrlHasLeadCapture == false){
 				$leadCaptureId = IHomefinderStateManager::getInstance()->getLeadCaptureId();
 				IHomefinderLogger::getInstance()->debug("leadCaptureId=" . $leadCaptureId );
 				if( !is_null($leadCaptureId) && '' != $leadCaptureId){
@@ -93,7 +93,7 @@ if( !class_exists('IHomefinderRequestor')){
 			
 				
 			//Save the leadCaptureId, if we get it back.
-			if( isset( $contentInfo->leadCaptureId ) ){
+			if( isset( $contentInfo->leadCaptureId ) && !empty( $contentInfo->leadCaptureId  )){
 				IHomefinderLogger::getInstance()->debug("calling saveLeadCaptureId with leadCaptureId=" . $contentInfo->leadCaptureId);
 				IHomefinderStateManager::getInstance()->saveLeadCaptureId($contentInfo->leadCaptureId);
 			}

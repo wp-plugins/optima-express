@@ -5,7 +5,7 @@ if( !class_exists('IHomefinderAgentDetailVirtualPageImpl')) {
 	
 		private $path="agent-detail";
 		private $title="";
-		private $defaultTitle="Agent Bio";
+		private $defaultTitle="";
 	
 		public function __construct(){
 		}

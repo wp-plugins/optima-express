@@ -152,15 +152,8 @@ if( !class_exists('IHomefinderAjaxHandler')) {
 			$authenticationToken=$this->ihfAdmin->getAuthenticationToken();				
 			
 			$name = IHomefinderUtility::getInstance()->getRequestVar('name');
-			$actionType = ""  ;
-			$method=IHomefinderUtility::getInstance()->getRequestVar('method');
-
-			if( $method == "createNewAccountAndSaveSearch"){
-				$actionType="newaccount";
-			}
 
 			$ihfUrl = IHomefinderLayoutManager::getInstance()->getExternalUrl() . '?method=handleRequest&viewType=json&requestType=save-search' ;
-			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "actionType", $actionType);
 			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "subscriberName", $name);
 			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "modal", "true");
 			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "authenticationToken", $authenticationToken);

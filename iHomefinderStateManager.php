@@ -196,15 +196,11 @@ if( !class_exists('IHomefinderStateManager')) {
 		 * longer set the value a a cookie.
 		 */
 		public function getLeadCaptureId(){
+			
 			if( $this->leadCaptureId == null ){
 				if( !$this->isWebCrawler() ){
 					$cacheKey=$this->getLeadCaptureKey();
-					if( $this->isSessionsEnabled() ){
-						$this->leadCaptureId=$_SESSION[$cacheKey];	
-					}else{
-						$this->leadCaptureId=get_transient($cacheKey);
-					}
-					
+					$this->leadCaptureId=$this->getStateValue($cacheKey);					
 				}
 			}
 			return $this->leadCaptureId ;
@@ -215,7 +211,7 @@ if( !class_exists('IHomefinderStateManager')) {
 		 * 
 		 * @param unknown_type $leadCaptureId
 		 */
-		public function saveLeadCaptureId( $leadCaptureId ){
+		public function saveLeadCaptureId( $leadCaptureId ){			
 			if( !$this->isWebCrawler()){
 				$cacheKey=$this->getLeadCaptureKey();
 				$this->saveStateValue($cacheKey, (string) $leadCaptureId );

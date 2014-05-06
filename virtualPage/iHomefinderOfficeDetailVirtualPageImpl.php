@@ -5,7 +5,7 @@ if( !class_exists('IHomefinderOfficeDetailVirtualPageImpl')) {
 	
 		private $path="office-detail";
 		private $title="";
-		private $defaultTitle="Office Detail";
+		private $defaultTitle="";
 	
 		public function __construct(){
 		}
