@@ -338,7 +338,10 @@ if( !class_exists('IHomefinderAdmin')) {
 			//Push color scheme to iHomefinder
 			$colorScheme = get_option(IHomefinderConstants::COLOR_SCHEME_OPTION);
 			$colorScheme = urlencode( $colorScheme);
-
+			
+			//Push mobile site setting to iHomefinder
+			$mobileSiteYn = get_option(IHomefinderConstants::OPTION_MOBILE_SITE_YN);
+			
 			$emailHeader=IHomefinderAdminEmailDisplay::getInstance()->getHeader() ;
 			$emailHeader = urlencode( $emailHeader);
 
@@ -348,8 +351,8 @@ if( !class_exists('IHomefinderAdmin')) {
 			$ihfUrl = IHomefinderLayoutManager::getInstance()->getExternalUrl()  ;
 			$postData= array(
 				'method'=>'handleRequest',
-			  'requestType'=>'activate',
-			  'viewType'=>'json',
+				'requestType'=>'activate',
+				'viewType'=>'json',
 				'activationToken'=>$activationToken,
 				'ajaxBaseUrl'=> $ajaxBaseUrl,
 				'type'=> "wordpress",
@@ -391,7 +394,8 @@ if( !class_exists('IHomefinderAdmin')) {
 				'emailHeader'=> $emailHeader,
 				'emailFooter'=> $emailFooter,
 				'layoutType'=> $layoutType,
-				'colorScheme'=> $colorScheme
+				'colorScheme'=> $colorScheme,
+				'mobileSiteYn'=> $mobileSiteYn
 			);
       
       IHomefinderLogger::getInstance()->debug( '$ihfUrl:::' . $ihfUrl.http_build_query($postData) ) ;
@@ -1225,10 +1229,10 @@ if( !class_exists('IHomefinderAdmin')) {
 								</select>
 							</td>
 						</tr>
-						<?php }?>
-						<?php
-						if( IHomefinderLayoutManager::getInstance()->supportsColorScheme() ) {
-						?>
+						<?php } else { ?>
+							<input type="hidden" name="<?php echo IHomefinderConstants::OPTION_LAYOUT_TYPE ?>" value="<?php echo get_option(IHomefinderConstants::OPTION_LAYOUT_TYPE) ?>" />
+						<?php } ?>
+						<?php if( IHomefinderLayoutManager::getInstance()->supportsColorScheme() ) { ?>
 						<tr valign="top">
 							<th scope="row">Button Color</th>
 							<td>
@@ -1244,9 +1248,7 @@ if( !class_exists('IHomefinderAdmin')) {
 								</select>
 							</td>
 						</tr>
-						<?php
-						}
-						?>
+						<?php } ?>
 						<tr valign="top">
 							<th scope="row">CSS Override</th>
 							<td>

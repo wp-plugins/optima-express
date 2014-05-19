@@ -8,7 +8,7 @@
 if( !interface_exists('IHomefinderConstants')){
 	interface IHomefinderConstants{
 
-		const VERSION="2.1.1";
+		const VERSION="2.2.0";
 		const VERSION_NAME="Optima Express";
 
 		const LEGACY_EXTERNAL_URL= "http://www.idxre.com/services/wordpress";
@@ -97,6 +97,8 @@ if( !interface_exists('IHomefinderConstants')){
 		const CSS_OVERRIDE_OPTION="ihf-css-override";
 		//Configuration realted option
 		const COLOR_SCHEME_OPTION="ihf-color-scheme";
+		
+		const OPTION_MOBILE_SITE_YN="ihf-mobile-site-yn";
 
 		//Bio related options page
 		const BIO_PAGE="ihf-bio-page";

@@ -41,7 +41,11 @@ if( !class_exists('IHomefinderAgentDetailVirtualPageImpl')) {
 			IHomefinderLogger::getInstance()->debug('Begin IHomefinderAgentDetailPageImpl');
 			IHomefinderStateManager::getInstance()->saveLastSearch() ;
 			
-			$agentID=IHomefinderUtility::getInstance()->getQueryVar('agentID');
+			if(IHomefinderUtility::getInstance()->getQueryVar('agentID')) {
+				$_REQUEST['agentID']=IHomefinderUtility::getInstance()->getQueryVar('agentID');
+			}
+			
+			$agentID=IHomefinderUtility::getInstance()->getRequestVar('agentID');
 			//used to remember search results
 			$ihfUrl = IHomefinderLayoutManager::getInstance()->getExternalUrl()
 				. '?method=handleRequest'

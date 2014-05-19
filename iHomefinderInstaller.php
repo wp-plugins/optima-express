@@ -69,7 +69,7 @@ if(!class_exists('IHomefinderInstaller')){
 
 			if( $currentVersion != IHomefinderConstants::VERSION ){
 				
-				//$this->migrateWpidxToOe();
+				$this->migrateWpidxToOe();
 				
 				if( $this->ihfAdmin->previouslyActivated() ){
 					$this->ihfAdmin->updateAuthenticationToken() ;
@@ -115,7 +115,6 @@ if(!class_exists('IHomefinderInstaller')){
 					"UPDATE " . $optionsTableName . " SET option_name = REPLACE(option_name, 'wpidx', 'ihf') WHERE option_name LIKE '%wpidx%';",
 					"UPDATE " . $optionsTableName . " SET option_name = REPLACE(option_name, 'wordpressidx', 'ihomefinder') WHERE option_name LIKE '%wordpressidx%';",
 					"UPDATE " . $optionsTableName . " SET option_value = REPLACE(option_value, 'wpidx', 'ihf') WHERE option_value LIKE '%wpidx%';",
-					//"UPDATE " . $optionsTableName . " SET option_value = REPLACE(option_value, 'wordpressidx', 'ihomefinder') WHERE option_value LIKE '%wordpressidx%';",
 					"UPDATE " . $postsTableName . " SET post_content = REPLACE(post_content, '[wordpress_idx', '[optima_express') WHERE post_content LIKE '%[wordpress_idx%';",
 				);
 				
