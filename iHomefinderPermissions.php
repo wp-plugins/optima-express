@@ -27,7 +27,8 @@ if( !class_exists('IHomefinderPermissions')) {
 		private $seoCityLinksOptionName="ihf_seo_city_links_enabled";
 		private $communityPagesOptionName="ihf_community_pages_enabled";
 		
-		private $pendingAccountOptionName="ihf_pending_account";
+		private $pendingAccountOptionName = "ihf_pending_account";
+    private $activeTrialAccountOptionName = "ihf_active_trial_account";
 		
 		private static $instance ;
 		
@@ -49,18 +50,19 @@ if( !class_exists('IHomefinderPermissions')) {
 		private $namedSearchEnabled= false;
 		private $featuredPropertiesEnabled= false;
 		
-		private $mapSearchEnabled= false;
-		private $communityPagesEnabled= false;
-		private $seoCityLinksEnabled= false;
+		private $mapSearchEnabled = false;
+		private $communityPagesEnabled = false;
+		private $seoCityLinksEnabled = false;
 		
 		//Gallery shortcodes
-		private $galleryShortCodesEnabled=false;
+		private $galleryShortCodesEnabled = false;
 		
-		private $pendingAccount=false;
+		private $pendingAccount = false;
+		private $activeTrialAccount =  false;
 		
-		
-		private function __construct(){
-			$this->emailUpdatesEnabled=get_option($this->emailUpdatesOptionName, false);
+		private function __construct() {
+			
+      $this->emailUpdatesEnabled=get_option($this->emailUpdatesOptionName, false);
 			$this->saveListingEnabled=get_option($this->saveListingOptionName, false);
 			$this->hotSheetEnabled=get_option($this->hotSheetOptionName, false);
 			$this->linkSearchEnabled=$this->isHotSheetEnabled() ;
@@ -80,7 +82,8 @@ if( !class_exists('IHomefinderPermissions')) {
 			$this->communityPagesEnabled=get_option($this->communityPagesOptionName, false);
 			$this->seoCityLinksEnabled=get_option($this->seoCityLinksOptionName, false);
 			
-			$this->pendingAccount=get_option($this->pendingAccountOptionName);
+			$this->pendingAccount = get_option($this->pendingAccountOptionName);
+      $this->activeTrialAccount = get_option($this->activeTrialAccountOptionName);
 
 		}
 		
@@ -111,6 +114,7 @@ if( !class_exists('IHomefinderPermissions')) {
 			update_option($this->mapSearchOptionName, strval($permissions->mapSearch ));
 			
 			update_option($this->pendingAccountOptionName, strval($permissions->pendingAccount ));
+      update_option($this->activeTrialAccountOptionName, strval($permissions->activeTrialAccount));
 			
 			$this->emailUpdatesEnabled=$permissions->emailUpdates;
 			$this->saveListingEnabled=$permissions->saveListing;
@@ -134,7 +138,8 @@ if( !class_exists('IHomefinderPermissions')) {
 			$this->communityPagesEnabled=$permissions->communityPages;
 			$this->seoCityLinksEnabled=$permissions->seoCityLinks;		
 			
-			$this->pendingAccount=$permissions->pendingAccount ; 
+			$this->pendingAccount = $permissions->pendingAccount;
+      $this->activeTrialAccount = $permissions->activeTrialAccount;
 		}
 		
 		public function isMoreInfoEnabled(){
@@ -256,6 +261,11 @@ if( !class_exists('IHomefinderPermissions')) {
 			$Return = filter_var( $this->pendingAccount, FILTER_VALIDATE_BOOLEAN );			
 			return $Return;
 		}
+    
+    public function isActiveTrialAccount() {
+      $Return = filter_var( $this->activeTrialAccount, FILTER_VALIDATE_BOOLEAN );
+      return $Return;
+    }
 		
 		public function isOmnipressSite(){
 			$Return = FALSE;

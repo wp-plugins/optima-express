@@ -56,7 +56,9 @@ var IhfGalleryDialog = {
 		if(typeof theForm.fitToWidth == 'undefined' || theForm.fitToWidth.checked == false) {
 			listingGalleryShortCode += ' width=' + this.getFieldValue(theForm.width);
 		}
-		listingGalleryShortCode += ' height=' + this.getFieldValue(theForm.height);
+		if(this.getFieldValue(theForm.height) != '') {
+			listingGalleryShortCode += ' height=' + this.getFieldValue(theForm.height);
+		}
 		listingGalleryShortCode += ' rows=' + this.getFieldValue(theForm.rows);
 		listingGalleryShortCode += ' columns=' + this.getFieldValue(theForm.columns);
 		listingGalleryShortCode += ' effect=' + this.getFieldValue(theForm.effect);		

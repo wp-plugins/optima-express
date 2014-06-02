@@ -162,11 +162,13 @@ $IHomefinderShortcodeDialog = new IHomefinderShortcodeDialog();
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 		<title>Insert Optima Express Shortcode</title>
-		<script type="text/javascript" src="../../../../../wp-includes/js/tinymce/tiny_mce_popup.js"></script>
-		<script type="text/javascript" src="../../../../../wp-includes/js/jquery/jquery.js"></script>
-		<script type="text/javascript" src="./js/dialog.js"></script>
-		<script src="../../js/bootstrap.js"></script>
-		<link href="../../css/bootstrap.css" rel="stylesheet">
+		<script type="text/javascript" src="<?php echo includes_url('/js/tinymce/tiny_mce_popup.js')?>"></script>
+		<script type="text/javascript" src="<?php echo includes_url('/js/jquery/jquery.js')?>"></script>
+		<script type="text/javascript" src="<?php echo plugins_url('js/dialog.js',__FILE__)?>"></script>
+		<script src="<?php echo plugins_url('/optima-express/js/bootstrap.js')?>"></script>
+		
+		<link href="<?php echo plugins_url('/optima-express/css/bootstrap.css')?>" rel="stylesheet">
+		
 		<style type="text/css">
 
 		</style>
@@ -397,16 +399,16 @@ $IHomefinderShortcodeDialog = new IHomefinderShortcodeDialog();
 									<?php if(IHomefinderLayoutManager::getInstance()->supportsListingGalleryResponsiveness()){?>
 										<div class="form-group">
 											<label class="control-label">Width</label>
-												<div class="checkbox">
-													<label class="control-label">
-														<input type="checkbox" name="fitToWidth" checked onchange="jQuery('#listingGalleryWidth').toggle();">
-														Fit to column
-													</label>
-												</div>
-												<div class="input-group" style="display: none;" id="listingGalleryWidth">
-													<input class="form-control" type="text" name="width" />
-													<span class="input-group-addon">px</span>
-												</div>
+											<div class="checkbox">
+												<label class="control-label">
+													<input type="checkbox" name="fitToWidth" checked onchange="jQuery('#listingGalleryWidth').toggle();">
+													Fit to column
+												</label>
+											</div>
+											<div class="input-group" style="display: none;" id="listingGalleryWidth">
+												<input class="form-control" type="text" name="width" />
+												<span class="input-group-addon">px</span>
+											</div>
 										</div>
 									<?php } else {?>
 										<div class="form-group">
@@ -420,7 +422,7 @@ $IHomefinderShortcodeDialog = new IHomefinderShortcodeDialog();
 									<div class="form-group">
 										<label class="control-label">Height</label>
 										<div class="input-group">
-											<input class="form-control" type="number" name="height" required="required" placeholder="Default" />
+											<input class="form-control" type="number" name="height" placeholder="Default" />
 											<span class="input-group-addon">px</span>
 										</div>
 									</div>

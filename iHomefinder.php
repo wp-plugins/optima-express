@@ -3,7 +3,7 @@
 	Plugin Name: Optima Express IDX Plugin
 	Plugin URI: http://wordpress.org/extend/plugins/optima-express/
 	Description: Adds MLS / IDX property search and listings to your site. Includes search and listing pages, widgets and shortcodes. Requires an IDX account from iHomefinder. Get a free trial account with sample IDX data, or a paid account with data from your MLS.
-	Version: 2.2.0
+	Version: 2.2.1
 	Author: ihomefinder
 	Author URI: http://www.ihomefinder.com
 	License: GPL
@@ -24,6 +24,7 @@ include_once 'iHomefinderListingInfo.php';
 include_once 'iHomefinderLogger.php';
 include_once 'iHomefinderMenu.php';
 include_once 'iHomefinderPermissions.php';
+include_once 'iHomefinderRegisterResource.php';
 include_once 'iHomefinderRequestor.php';
 include_once 'iHomefinderRewriteRules.php';
 include_once 'iHomefinderSearchLinkInfo.php';
@@ -123,9 +124,12 @@ if( is_admin()){
 	*/
 	add_action('setup_theme', array(IHomefinderInstaller::getInstance(), 'upgrade')) ;
 	
-	add_action('init',array(IHomefinderVirtualPageDispatcher::getInstance(), "loadJavaScript")) ;
+	add_action('init',array(IHomefinderRegisterResource::getInstance(), "loadStandardJavaScript")) ;
+	add_action('init', array(IHomefinderRegisterResource::getInstance(), "registerJavaScript"));
+	add_action('init', array(IHomefinderRegisterResource::getInstance(), "registerCSS"));
+	
 	add_action( 'wp_enqueue_scripts', array(IHomefinderWidgetContextUtility::getInstance(), "loadWidgetStyle") );
-
+	
 	//Remember the users state in the application (subscriber info and last search)
 	add_action('plugins_loaded',array(IHomefinderStateManager::getInstance(), "initialize"), 5);
 	
@@ -139,8 +143,9 @@ if( is_admin()){
 	
 	add_action('ihf_expired_transients_cleanup', array(IHomefinderCleaner::getInstance(), "removeExpiredIhfTransients"));
 	add_filter('comments_array', array(IHomefinderVirtualPageDispatcher::getInstance(), "clearComments"));
+
 }
-		
+
 
 		
 add_action('init', array(IHomefinderShortcodeDispatcher::getInstance(), "init"));

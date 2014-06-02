@@ -161,7 +161,7 @@ if( !class_exists('IHomefinderRequestor')){
 			if( isset($contentInfo->css )){
 				$cssList=$contentInfo->css;				
 				foreach ($cssList->item as $item) {
-					wp_enqueue_style($item->name, $item->url );
+					wp_enqueue_style($item->name );
 				}
 			}
 				
@@ -177,7 +177,9 @@ if( !class_exists('IHomefinderRequestor')){
 							array_push($depends, $oneDependency);
 						}
 					}
-					wp_enqueue_script($name, $url, $depends);
+					
+					//We now register all scripts.
+					wp_enqueue_script($name);
 				}
 			}			
 			return;			

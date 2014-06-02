@@ -4,6 +4,8 @@ if( !class_exists('IHomefinderAdmin')) {
 
 		private static $instance ;
 		private $virtualPageFactory ;
+		
+		private $iHomefinderNotification="By registering this plugin you consent to allow downloads of IDX listings that include images, attribution of iHomefinder as the IDX provider and other MLS-specified compliance requirements.";
 
 		private function __construct(){
 			$this->virtualPageFactory=IHomefinderVirtualPageFactory::getInstance() ;
@@ -289,8 +291,9 @@ if( !class_exists('IHomefinderAdmin')) {
 
 		}
 
-		private function activate($activationToken){
-			$urlFactory=IHomefinderUrlFactory::getInstance();
+		private function activate($activationToken) {
+			
+      $urlFactory=IHomefinderUrlFactory::getInstance();
 			$ajaxBaseUrl                          = urlencode($urlFactory->getAjaxBaseUrl());
 			$listingsSearchResultsUrl             = urlencode($urlFactory->getListingsSearchResultsUrl(true));
 			$listingsSearchFormUrl                = urlencode($urlFactory->getListingsSearchFormUrl(true));
@@ -325,7 +328,7 @@ if( !class_exists('IHomefinderAdmin')) {
 			$officeDetailUrl                      = urlencode($urlFactory->getOfficeDetailUrl(true));
 			$agentBioListUrl                      = urlencode($urlFactory->getAgentListUrl(true));
 			$agentBioDetailUrl                    = urlencode($urlFactory->getAgentDetailUrl(true));
-			$mapSearchUrl                    	  = urlencode($urlFactory->getMapSearchFormUrl(true));
+			$mapSearchUrl                     	  = urlencode($urlFactory->getMapSearchFormUrl(true));
 			
 			//Push CSS Override to iHomefinder
 			$cssOverride = get_option(IHomefinderConstants::CSS_OVERRIDE_OPTION);
@@ -408,9 +411,10 @@ if( !class_exists('IHomefinderAdmin')) {
 				IHomefinderRewriteRules::getInstance()->flushRules() ;
 			}
 			IHomefinderLogger::getInstance()->debugDumpVar($authenticationInfo);
-			return $authenticationInfo ;
-		}
-
+			
+      return $authenticationInfo;
+		
+    }
 
 		/**
 		 * Create register option groups and associated options.
@@ -545,6 +549,9 @@ if( !class_exists('IHomefinderAdmin')) {
 							<input type="text" size="45" name="<?php echo IHomefinderConstants::ACTIVATION_TOKEN_OPTION ?>" value="<?php echo get_option(IHomefinderConstants::ACTIVATION_TOKEN_OPTION); ?>" />
 						</td>
 					</tr>
+					<tr valign="top">
+						<td colspan="2"><?php echo($this->iHomefinderNotification); ?></td>
+					</tr>
 				</table>
 				<p class="submit">
 					<input type="submit" class="button-primary" value="<?php _e('Save Changes') ?>" />
@@ -557,6 +564,8 @@ if( !class_exists('IHomefinderAdmin')) {
 				?>
 			
 				<h2>Free Trial Sign-Up</h2>
+				
+				<p><?php echo($this->iHomefinderNotification); ?></p>
 				
 				<?php
 				
@@ -708,6 +717,7 @@ if( !class_exists('IHomefinderAdmin')) {
 					<p>Optima Express from iHomefinder adds MLS/IDX search and listings directly into your WordPress site.</p>
 					<p>A free trial account uses sample IDX listings from Northern California.</p>
 					<p>Signing up for IDX in your MLS provides access to all listings in your MLS and full support from iHomefinder. Plans start at $39.95 per month. You must be a member of an MLS to qualify for IDX service. <a target="_blank" href="http://www.ihomefinder.com/mls-coverage/">Learn More</a></p>
+					<p><?php echo($this->iHomefinderNotification); ?></p>
 					<?php
 					
 				} elseif( $_GET['reg'] == FALSE ) {
@@ -740,18 +750,14 @@ if( !class_exists('IHomefinderAdmin')) {
 		}
 		
 		public function adminIdxControlPanelForm(){
-			?>
-			<style type="text/css">
-				#contentFrame {
-					width: 100%;
-					height: 800px;
-					border: none;
-				}
-			</style>
-			<?php
 			if( get_option( IHomefinderConstants::ACTIVATION_TOKEN_OPTION ) != '' ) {
 				?>
-				<iframe id="contentFrame" src="<?php echo IHomefinderConstants::CONTROL_PANEL_EXTERNAL_URL; ?>/z.cfm?w=<?php echo get_option( IHomefinderConstants::ACTIVATION_TOKEN_OPTION ) ?>"></iframe>
+				
+				<h2>Your IDX Control Panel will open in a new window.</h2>
+				<p>If a new window does not open, please enable pop-ups for this site.</p>
+				<script type="text/JavaScript">
+					window.open("<?php echo IHomefinderConstants::CONTROL_PANEL_EXTERNAL_URL; ?>/z.cfm?w=<?php echo get_option( IHomefinderConstants::ACTIVATION_TOKEN_OPTION ) ?>");
+				</script>
 				<?php
 			}
 				

@@ -1,0 +1,236 @@
+/*MODAL RE-NAMESPACED CLASSES*/
+/*change modal- classes in ihf-bootstrap-3.css from #ihf-main-container to .ihf-container-modal to avoid applying all customizations */
+.ihf-container-modal .modal-open {
+	overflow: hidden;
+}
+
+body.ihf-container-modal .modal-open,
+.ihf-container-modal .modal-open .navbar-fixed-top,
+.ihf-container-modal .modal-open .navbar-fixed-bottom {
+	margin-right: 15px;
+}
+
+.ihf-container-modal .modal-backdrop {
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	z-index: 1030;
+	background-color: #000000;
+}
+
+.ihf-container-modal .modal-backdrop.fade {
+	opacity: 0;
+	filter: alpha(opacity=0);
+}
+
+.ihf-container-modal .modal-backdrop.in {
+	opacity: 0.5;
+	filter: alpha(opacity=50);
+}
+
+/*MODAL STYLES*/
+#ihf-main-container .modal-header {
+	background: none repeat scroll 0 0 #333;
+	border-radius: 5px 5px 0 0;
+}
+
+#ihf-main-container .modal-title {
+	color: #fff;
+	width: 80%;
+	font-weight: bold;
+}
+
+#ihf-main-container .modal-footer {
+	background: none repeat scroll 0 0 #eee;
+	border-radius: 0 0 5px 5px;
+	padding: 8px 8px 8px;
+}
+
+#ihf-main-container .modal-header .close {
+	margin-top: -25px;
+}
+
+#ihf-main-container .carousel-control {
+	bottom: 0;
+	color: #CCCCCC;
+	font-size: 20px;
+	left: 0;
+	opacity: 0.5;
+	position: absolute;
+	text-align: center;
+	text-shadow: 0 2px 1px rgba(0, 0, 0, 0.9);
+	top: 0;
+	width: 15%;
+}
+
+#ihf-main-container a.carousel-control {
+	outline: 0;
+}
+
+#ihf-main-container .carousel-control.left {
+	/*position: absolute;
+	left: 20px;*/
+	background-image: none;
+	font-size: 20px; /*20px on mobile, 40px above in media query*/
+	width: 15%;
+}
+
+#ihf-main-container .carousel-control.right {
+	/*position: absolute;
+	right: 20px;*/
+	background-image: none;
+	font-size: 20px;
+}
+
+#ihf-main-container .carousel-control .icon-prev,
+#ihf-main-container .carousel-control .glyphicon-chevron-left {
+	display: inline-block;
+	left: 15%;
+	position: absolute;
+	top: 50%;
+	z-index: 5;
+}
+
+#ihf-main-container .carousel-control .icon-next,
+#ihf-main-container .carousel-control .glyphicon-chevron-right {
+	display: inline-block;
+	right: 15%;
+	position: absolute;
+	top: 50%;
+	z-index: 5;
+	text-align: right;
+}
+
+#ihf-main-container .carousel-caption {
+	padding-bottom: 5px;
+	bottom: 10px;
+}
+
+/*SELECTIZE GLOBAL PADDING*/
+.selectize-input {
+	padding: 7px;
+}
+
+.selectize-control.form-control {
+	padding: 0;
+	height: auto;
+	border: none;
+	box-shadow: none;
+	border-radius: 0;
+	background-color: transparent;
+}
+
+.selectize-dropdown.form-control {
+	height: auto;
+}
+
+/*chosen select menu styles*/
+#ihf-main-container .chosen-container-single .chosen-single {
+	/*background: -moz-linear-gradient(center top , #FFFFFF 20%, #F6F6F6 50%, #EEEEEE 52%, #F4F4F4 100%) repeat scroll 0 0 padding-box rgba(0, 0, 0, 0);*/
+	background: #FFF;
+	border: 1px solid #CCCCCC;
+	border-radius: 5px 5px 5px 5px;
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+	color: #444444;
+	display: block;
+	height: 34px;
+	line-height: 24px;
+	overflow: hidden;
+	padding: 4px 0 0 8px;
+	position: relative;
+	text-decoration: none;
+	white-space: nowrap;
+}
+
+#ihf-main-container .chosen-container-single .chosen-single div b {
+	background: url("chosen-sprite.png") no-repeat scroll 0 7px rgba(0, 0, 0, 0);
+	display: block;
+	height: 100%;
+	width: 100%;
+}
+
+#ihf-main-container .chosen-choices {
+    margin: 0px;
+}
+
+#ihf-main-container .chosen-container-multi .chosen-choices li.search-field input[type="text"] {
+	color: #CCCCCC;
+	height: 20px;
+}
+
+#ihf-main-container .chosen-container-multi .chosen-choices {
+	border: 1px solid #CCCCCC;
+	border-radius: 5px 5px 5px 5px;
+	line-height: 32px;
+	padding: 0px 5px;
+}
+
+#ihf-main-container .chosen-container-multi .chosen-choices input {
+	line-height: 1.428571429;
+}
+
+#ihf-main-container .addthis_toolbox * {
+	-webkit-box-sizing: content-box;
+	-moz-box-sizing: content-box;
+	box-sizing: content-box;
+}
+
+/* Override WalkScore styles to fix layout */
+#ihf-main-container #ws-footer * {
+	position: relative !important;
+	left: 0px !important;
+}
+
+#ihf-main-container #ws-footer, #ihf-main-container #ws-form {
+	width: 100% !important;
+	margin-top: 3px !important;
+}
+
+#ihf-main-container #ws-a {
+	margin-top: 2px !important;
+	margin-right: 15px !important;
+}
+
+#ihf-main-container #ws-street {
+	width: 335px !important;
+	height: 15px !important;
+}
+
+/* Updates to override jQuery autocomplete default styles */
+.ui-state-default,
+.ui-widget-content .ui-state-default,
+.ui-widget-header .ui-state-default {
+	background: lightblue;
+	border-color: white;
+}
+.ui-autocomplete,
+.ui-autocomplete .ui-menu-item,
+.ui-autocomplete .ui-menu-item a {
+	background: none;
+	border-color: black;
+	color: black;
+}
+.ui-autocomplete {
+	background: none;
+	border-color: black;
+	color: black;
+}
+.ui-autocomplete .ui-menu-item {
+	background: none;
+	border-color: black;
+	color: black;
+}
+.ui-autocomplete .ui-menu-item a:hover {
+	background: none;
+	border-color: black;
+	color: black;
+}
+
+/* hides number input arrows on chrome */
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+    -webkit-appearance: none; 
+     margin: 0; 
+}

@@ -66,18 +66,6 @@ if( !class_exists('IHomefinderVirtualPageDispatcher')) {
 			return $comments;
 		}
 		
-		/**
-		 * Load JavaScript using Wordpress script queues
-		 * jquery-ui-tabs is included so that the srep plugin functions properly
-		 */
-		function loadJavaScript(){
-			wp_enqueue_script('jquery');			
-			wp_enqueue_script('jquery-ui-core');
-			wp_enqueue_script('jquery-ui-tabs');
-			wp_enqueue_script('jquery-ui-dialog');
-			wp_enqueue_script('jquery-ui-datepicker');
-			wp_enqueue_script('jquery-ui-autocomplete', '', array('jquery-ui-widget', 'jquery-ui-position'), '1.8.6'); 			
-		}
 
 		/**
 		 * We identify iHomefinder requests based on the query_var
