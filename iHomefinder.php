@@ -3,7 +3,7 @@
 	Plugin Name: Optima Express IDX Plugin
 	Plugin URI: http://wordpress.org/extend/plugins/optima-express/
 	Description: Adds MLS / IDX property search and listings to your site. Includes search and listing pages, widgets and shortcodes. Requires an IDX account from iHomefinder. Get a free trial account with sample IDX data, or a paid account with data from your MLS.
-	Version: 2.2.1
+	Version: 2.2.2
 	Author: ihomefinder
 	Author URI: http://www.ihomefinder.com
 	License: GPL
@@ -29,6 +29,8 @@ include_once 'iHomefinderRequestor.php';
 include_once 'iHomefinderRewriteRules.php';
 include_once 'iHomefinderSearchLinkInfo.php';
 include_once 'iHomefinderSearchFormFieldsUtility.php';
+include_once 'iHomefinderShortcodeDialog.php';
+include_once 'iHomefinderShortcodeDialogContent.php';
 include_once 'iHomefinderShortcodeDispatcher.php';
 include_once 'iHomefinderStateManager.php';
 include_once 'iHomefinderCleaner.php';
@@ -165,6 +167,7 @@ add_action("wp_ajax_nopriv_ihf_save_listing_subscriber_session", array(IHomefind
 add_action("wp_ajax_nopriv_ihf_save_search_subscriber_session",  array(IHomefinderAjaxHandler::getInstance(), "saveSearchForSubscriberInSession"));
 add_action("wp_ajax_nopriv_ihf_area_autocomplete",               array(IHomefinderAjaxHandler::getInstance(), "getAutocompleteMatches"));
 add_action("wp_ajax_nopriv_ihf_contact_form_request", array(IHomefinderAjaxHandler::getInstance(), "contactFormRequest"));
+add_action("wp_ajax_nopriv_ihf_send_password", array(IHomefinderAjaxHandler::getInstance(), "sendPassword")) ;
 
 add_action("wp_ajax_ihf_more_info_request",        array(IHomefinderAjaxHandler::getInstance(), "requestMoreInfo")) ;
 add_action("wp_ajax_ihf_schedule_showing",         array(IHomefinderAjaxHandler::getInstance(), "scheduleShowing"));
@@ -179,7 +182,10 @@ add_action("wp_ajax_ihf_saved_listing_rating",                array(IHomefinderA
 add_action("wp_ajax_ihf_save_listing_subscriber_session",     array(IHomefinderAjaxHandler::getInstance(), "saveListingForSubscriberInSession")) ;
 add_action("wp_ajax_ihf_save_search_subscriber_session",      array(IHomefinderAjaxHandler::getInstance(), "saveSearchForSubscriberInSession"));
 add_action("wp_ajax_ihf_area_autocomplete",                   array(IHomefinderAjaxHandler::getInstance(), "getAutocompleteMatches"));
-add_action("wp_ajax_ihf_contact_form_request", array(IHomefinderAjaxHandler::getInstance(), "contactFormRequest"));
+add_action("wp_ajax_ihf_contact_form_request",      array(IHomefinderAjaxHandler::getInstance(), "contactFormRequest"));
+add_action("wp_ajax_ihf_send_password",        array(IHomefinderAjaxHandler::getInstance(), "sendPassword")) ;
+
+add_action("wp_ajax_ihf_tiny_mce_shortcode_dialog",            array(IHomefinderShortcodeDialogContent::getInstance(), "getShortCodeDialogContent"));
 
 //Disable canonical urls, because we use a single page to display all results
 //and Wordpress creates a single canonical url for all of the virtual urls

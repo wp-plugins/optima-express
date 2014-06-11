@@ -23,6 +23,12 @@ if( !class_exists('IHomefinderOrganizerLoginSubmitVirtualPageImpl')) {
 			IHomefinderLogger::getInstance()->debug('Begin PropertyOrganizerLoginSubmitVirtualPage');
 			
 			$subscriberId=IHomefinderUtility::getInstance()->getQueryVar('subscriberID');
+			//if rememberMe parameter is set
+			//create a cookie 'rmuser' with leadcaptureid
+			if(isset($_REQUEST["rememberMe"]) && trim($_REQUEST["rememberMe"]) == '1'){
+				IHomefinderStateManager::getInstance()->createRememberMeCookie();
+			}
+			
 
 			$ihfUrl = IHomefinderLayoutManager::getInstance()->getExternalUrl() . '?method=handleRequest&viewType=json&requestType=property-organizer-login-submit' ;
 			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "authenticationToken", $authenticationToken);

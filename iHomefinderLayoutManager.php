@@ -9,23 +9,22 @@ if( !class_exists('IHomefinderLayoutManager')) {
 	class IHomefinderLayoutManager {
 
 		private static $instance ;
-		private $externalUrl ;
-		private $layout ;
 		
 		private function __construct(){
-			$this->layout=get_option(IHomefinderConstants::OPTION_LAYOUT_TYPE);		
+			
 		}
 		
 		public function isResponsive(){
 			$result=false;
-			if( $this->layout == IHomefinderConstants::OPTION_LAYOUT_TYPE_RESPONSIVE){
+			if( $this->getLayoutType() == IHomefinderConstants::OPTION_LAYOUT_TYPE_RESPONSIVE){
 				$result=true;
 			}
 			return $result;
 		}
 		
 		public function getLayoutType(){
-			return $this->layout;
+			$result = get_option(IHomefinderConstants::OPTION_LAYOUT_TYPE);
+			return $result;
 		}
 
 		public static function getInstance(){
@@ -36,15 +35,14 @@ if( !class_exists('IHomefinderLayoutManager')) {
 		}
 		
 		public function getExternalUrl(){
-			if( $this->externalUrl == null ){
-				if( $this->isResponsive()){
-					$this->externalUrl = IHomefinderConstants::RESPONSIVE_EXTERNAL_URL ;
-				}
-				else{
-					$this->externalUrl = IHomefinderConstants::LEGACY_EXTERNAL_URL ;
-				}	
+			$result = '';
+			if( $this->isResponsive()){
+				$result = IHomefinderConstants::RESPONSIVE_EXTERNAL_URL ;
 			}
-			return $this->externalUrl ;
+			else{
+				$result = IHomefinderConstants::LEGACY_EXTERNAL_URL ;
+			}
+			return $result;
 		}
 		
 		public function supportsMultipleQuickSearchLayouts(){

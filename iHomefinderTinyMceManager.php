@@ -26,7 +26,30 @@ if( !class_exists('IHomefinderTinyMceManager')) {
 			if ( get_user_option('rich_editing') == 'true') {
 				add_filter("mce_external_plugins", array($this,"addTinymcePlugins"));
 				add_filter('mce_buttons',          array($this,"registerButtons"));
+				add_action('in_admin_footer', array($this,'addTinymceVariables'));
 			}
+		}
+		
+		/**
+		 * This function inserts JavaScript variables that are accessible by the
+		 * tinymce init JavaScript and passed to the resulting dialog
+		 * via top.tinymce.activeEditor.windowManager.getParams()
+		 * 
+		 * Used for dynamically loading JavaScript and AJAX calls
+		 */
+		function addTinyMceVariables(){
+			?>
+			<script type="text/javascript">
+				var optimaExpressGalleryVars={
+					'wpIncludes': '<?php echo( includes_url())?>',
+					'jQueryUrl': '<?php echo( includes_url('/js/jquery/jquery.js'))?>',
+					'optimaExpressBaseUrl': '<?php echo( plugins_url('/', __FILE__))?>',
+					'ihfAdminAjaxUrl': '<?php echo(admin_url( 'admin-ajax.php' )) ?>'
+				};
+			
+			</script>
+			
+			<?php 
 		}
 
 		/**
@@ -43,7 +66,7 @@ if( !class_exists('IHomefinderTinyMceManager')) {
 		 */
 		function addTinymcePlugins($plugin_array) {
 			$baseUrl = IHomefinderUrlFactory::getInstance()->getBaseUrl() ;
-            $optimaExpressGalleryPluginUrl= $baseUrl . '/wp-content/plugins/' . plugin_basename( dirname(__FILE__) ) . '/tinymce/optimaExpressGallery/editor_plugin.js';
+            $optimaExpressGalleryPluginUrl=plugins_url('/tinymce/optimaExpressGallery/editor_plugin.js', __FILE__ ) ;
 			$plugin_array['optimaExpressGallery'] = $optimaExpressGalleryPluginUrl ;						
 			return $plugin_array;
 		}

@@ -135,7 +135,8 @@ if( !class_exists('IHomefinderAjaxHandler')) {
 
 			$ihfUrl = IHomefinderLayoutManager::getInstance()->getExternalUrl() . '?method=handleRequest&viewType=json&requestType=save-property' ;
 			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "authenticationToken", $authenticationToken);
-			$ihfUrl = iHomefinderRequestor::addVarsToUrl($ihfUrl, $_REQUEST );	
+			$ihfUrl = iHomefinderRequestor::addVarsToUrl($ihfUrl, $_REQUEST );
+      $ihfUrl = str_replace("&method=saveProperty", "", $ihfUrl);
 			
 			//echo( $ihfUrl);die();
 			
@@ -336,6 +337,29 @@ if( !class_exists('IHomefinderAjaxHandler')) {
 			$json = IHomefinderRequestor::getJson($contentInfo);
 			echo $json ;
 			die();	
+		}
+		
+		public function sendPassword(){
+			IHomefinderLogger::getInstance()->debug('Begin IHomefinderAjaxHandler.sendPassword');
+			$authenticationToken=$this->ihfAdmin->getAuthenticationToken();
+		
+			$isSpam=$this->isSpam() ;
+			if( $isSpam == false ){
+				$ihfUrl = IHomefinderLayoutManager::getInstance()->getExternalUrl() ;
+				$ihfUrl .= '?method=handleRequest&viewType=json&requestType=send-password';
+				$ihfUrl .= '&authenticationToken=' . $authenticationToken ;
+		
+				$ihfUrl = iHomefinderRequestor::addVarsToUrl($ihfUrl, $_REQUEST );
+		
+				$contentInfo = IHomefinderRequestor::remoteRequest($ihfUrl,true);
+		
+				$content = IHomefinderRequestor::getContent( $contentInfo );
+				IHomefinderLogger::getInstance()->debug( '<br/><br/>' . $ihfUrl ) ;
+				IHomefinderLogger::getInstance()->debug('End IHomefinderAjaxHandler.sendPassword');
+		
+				echo $content ;
+			}
+			die();
 		}
 	}//end class
 }//end ifclass_exists

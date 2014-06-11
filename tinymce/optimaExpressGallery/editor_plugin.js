@@ -27,8 +27,11 @@
               'optimaExpressGallery.delta_height', 0),
           inline : 1
         }, {
-          plugin_url : url, // Plugin absolute URL
-          some_custom_arg : 'custom arg' // Custom argument
+          'plugin_url' : url, // Plugin absolute URL
+          'optimaExpressBaseUrl' : optimaExpressGalleryVars.optimaExpressBaseUrl,
+          'ihfAdminAjaxUrl' : optimaExpressGalleryVars.ihfAdminAjaxUrl ,
+          'wpIncludes' : optimaExpressGalleryVars.wpIncludes ,
+          'jQueryUrl' : optimaExpressGalleryVars.jQueryUrl 
         });
       });
 

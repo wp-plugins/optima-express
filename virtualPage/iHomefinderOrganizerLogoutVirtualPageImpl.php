@@ -33,7 +33,9 @@ if( !class_exists('iHomefinderOrganizerLogoutVirtualPageImpl')) {
 				$ihfUrl = IHomefinderLayoutManager::getInstance()->getExternalUrl() . '?method=handleRequest&viewType=json&requestType=property-organizer-logout' ;
 				$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "authenticationToken", $authenticationToken);
 				$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "phpStyle", "true");
-		
+				//delete rememberme cookie if user logs out
+				IHomefinderStateManager::getInstance()->deleteRememberMeCookie();
+				
 				$contentInfo = IHomefinderRequestor::remoteRequest($ihfUrl);
 				$idxContent = IHomefinderRequestor::getContent( $contentInfo );
 				IHomefinderLogger::getInstance()->debug( '<br/><br/>' . $ihfUrl ) ;

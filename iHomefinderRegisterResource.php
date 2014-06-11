@@ -32,7 +32,7 @@ if( !class_exists('IHomefinderRegisterResource')) {
 			wp_register_script('jquery-validation', plugins_url( 'js/jquery-libs/jquery.validate.min.js' , __FILE__ ), 'jquery');
 			wp_register_script('jquery-validation-additional-methods', plugins_url( 'js/jquery-libs/additional-methods.min.js' , __FILE__ ), 'jquery');
 			wp_register_script('jquery-touchSwipe', plugins_url( 'js/jquery-libs/jquery.touchSwipe.min-1.6.4.js' , __FILE__ ), 'jquery');
-			wp_register_script('marker-clusterer', plugins_url( 'js/maps/markerclusterer_packed.js' , __FILE__ ), 'jquery');
+			wp_register_script('marker-clusterer', plugins_url( 'js/maps/markerclusterer.js' , __FILE__ ), 'jquery');
 			wp_register_script('jquery-cycle2', plugins_url( 'js/jquery-libs/jquery.cycle2.min.js' , __FILE__ ), 'jquery');
 		}
 		

@@ -14,6 +14,7 @@ if( !class_exists('IHomefinderStateManager')) {
 		private static $instance ;
 		private $uniqueId = null;
 		private $identifierCookieName = "ihf_identifier";
+		private $rememberMeCookieName = "ihf_rmuser";
 			
 		//url used for last search
 		//stored in a cookie
@@ -378,6 +379,21 @@ if( !class_exists('IHomefinderStateManager')) {
 				return true;
 			}
 			return false ;
+		}
+		
+		public function createRememberMeCookie(){
+			$leadCaptureUserId = $this->getLeadCaptureId();
+			if( leadCaptureUserId != null  && !$this->isWebCrawler() ){
+				$expireTime=time()+60*60*24*365*5 ; /* expire in 5 years */
+				setcookie($this->rememberMeCookieName, $leadCaptureUserId, $expireTime, "/");
+			}
+		}
+		
+		public function deleteRememberMeCookie(){
+			if(isset($_COOKIE[$this->rememberMeCookieName])) {
+				unset($_COOKIE[$this->rememberMeCookieName]);
+				setcookie($this->rememberMeCookieName, '', time()-3600, "/"); // empty value and old timestamp
+			}
 		}
 		
 	}//end class

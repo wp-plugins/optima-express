@@ -42,6 +42,10 @@ if( !class_exists('IHomefinderRequestor')){
 			
 			$ihfUrl = IHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "loadJQuery", "false" ) ;
 			$ihfUrl = IHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "leadCaptureSupport", "true" ) ;
+			//if rememberme cookie is set then append variable to url
+			if(isSet($_COOKIE["ihf_rmuser"])){
+				$ihfUrl = IHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "rmuser", "true" ) ;
+			}
 			
 			IHomefinderLogger::getInstance()->debug("ihfUrl: " . $ihfUrl);
 			//if( $ajaxRequest ){echo( $ihfUrl );die();}
