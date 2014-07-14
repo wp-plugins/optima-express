@@ -207,8 +207,10 @@
 }
 
 .ihf-mapsearch-refine-overlay {
-	position: absolute; 
-	background: url('../images/listing/transbg_black70.png') repeat scroll 0% 0% transparent; 
+	position: absolute;
+	/*fallback color*/
+	background-color: rgb(0,0,0);
+	background-color: rgba(0,0,0,.7);
 	border: 1px solid rgb(255, 255, 255); 
 	width: 300px; 
 	/*height: 400px; */
@@ -1155,6 +1157,33 @@ padding-right: 6px;
 /*firefox number input fields issue*/
 input[type=number] {
 -moz-appearance: textfield;
+}
+
+/* agent / office styles */
+#ihf-main-container .ihf-agent-list .clearfix {
+	display:block !important;
+}
+
+.ihf-agent-photo {
+	float: left; 
+	width: 160px; 
+	margin-right: 25px;
+}
+
+.ihf-agent-info {
+	float: left;
+	white-space: -moz-pre-wrap; /* Mozilla */
+  white-space: -hp-pre-wrap; /* HP printers */
+  white-space: -o-pre-wrap; /* Opera 7 */
+  white-space: -pre-wrap; /* Opera 4-6 */
+  white-space: pre-wrap; /* CSS 2.1 */
+  white-space: pre-line; /* CSS 3 (and 2.1 as well, actually) */
+  word-wrap: break-word; /* IE */
+  word-break: break-all;
+}
+
+.ihf-xs-font {
+	font-size: .8em;
 }
 
 

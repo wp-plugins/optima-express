@@ -217,7 +217,7 @@
 									<div class="form-group">
 										<label class="control-label">Office</label>
 										<div>
-											<?php //$ihfShortCodeDialog->createOfficeSelect( TRUE ); ?>
+											<?php $ihfShortCodeDialog->createOfficeSelect( TRUE ); ?>
 										</div>
 									</div>
 									<input class="btn btn-default" type="button" name="insertOfficeListings" value="Insert" onclick="return IhfGalleryDialog.validateForm(this.form) && IhfGalleryDialog.insertOfficeListings(this.form, '<?php echo(IHomefinderShortcodeDispatcher::getInstance()->getOfficeListingsShortcode()) ?>');" />

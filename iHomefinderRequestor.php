@@ -279,7 +279,7 @@ if( !class_exists('IHomefinderRequestor')){
 			}
 			else if( property_exists($contentInfo, "view")){
 				//success, display the view
-				$content = $contentInfo->view ;
+				$content = html_entity_decode( $contentInfo->view, null, 'UTF-8' );
 			}
 			
 			return $content ;

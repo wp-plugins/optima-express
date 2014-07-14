@@ -16,7 +16,7 @@ jQuery(document).ready(function() {
     jQuery('#ihf_upload_email_logo_button').click(function() {
     	//debugger;
     	jQuery('html').addClass('Image');
-    	formFieldId='ihf_upload_office_logo';
+    	formFieldId='ihf_upload_email_logo';
     	formField = jQuery('#' + formFieldId ).attr('name');
     	tb_show('', 'media-upload.php?type=image&TB_iframe=true');
     	return false;

@@ -48,6 +48,11 @@ if( !class_exists('IHomefinderAdmin')) {
 				<?php
 				
 			}
+			
+			if( $_GET['ihf-migrate'] == 'true' ) {
+				IHomefinderInstaller::getInstance()->migrateWpidxToOe();
+			}
+			
 			if( get_option( 'ihf-wpidx-oe-migrated' ) == 'error' ) {
 				?>
 					<div class='error'>
@@ -67,17 +72,12 @@ if( !class_exists('IHomefinderAdmin')) {
 				$errors = array();
 				//Get current wordpress plugins as array
 				$plugins = get_plugins();
-					
-				//check if wordpress address and site address match
-				if (get_home_url() != get_site_url()) {					
-					$errors[] = "<p><a href='options-general.php'>WordPress Address and Site Address do not match (Error 404)</a></p>";
-				}
-					
+				
 				//check if permalink structure is set
 				if (get_option('permalink_structure') == "") {
 					$errors[] = "<p><a href='options-permalink.php'>WordPress permalink settings are set as default (Error 404)</a></p>";					
 				}
-		
+				
 				//check if both OE plugins are active
 				if (array_key_exists("optima-express/iHomefinder.php",$plugins) == true && array_key_exists("wordpress-idx/WordpressIDX.php",$plugins) == true) {
 					$errors[] = "<p><a href='plugins.php?s=idx'>Multiple IDX plugins are installed</a></p>";					
@@ -1087,7 +1087,7 @@ if( !class_exists('IHomefinderAdmin')) {
 			    <p/>
 
 				<input type="radio" name="<?php echo(IHomefinderConstants::EMAIL_DISPLAY_TYPE_OPTION)?>"
-					<?php if( IHomefinderAdminEmailDisplay::EMAIL_DISPLAY_TYPE_CUSTOM_IMAGES_VALUE == $emailDisplayType ){echo(" checked ");}?>
+					<?php if( IHomefinderAdminEmailDisplay::EMAIL_DISPLAY_TYPE_CUSTOM_IMAGES_VALUE == $emailDisplayType || empty( $emailDisplayType ) ){echo(" checked ");}?>
 					value="<?php echo(IHomefinderAdminEmailDisplay::EMAIL_DISPLAY_TYPE_CUSTOM_IMAGES_VALUE)?>"/>&nbsp;Basic Branding<br/>
 					
 				<p/>

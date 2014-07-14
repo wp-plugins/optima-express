@@ -29,7 +29,7 @@ if( !class_exists('IHomefinderUrlFactory')) {
 		 */
 		public function getBaseUrl(){
 			if( $this->baseUrl == null ){
-				$baseUrl = site_url();
+				$baseUrl = home_url();
 				//if almost pretty permalinks are used then alter the baseUrl to include
 				$permalinkStructure= get_option('permalink_structure');
 				$thePosition=strpos( $permalinkStructure, 'index.php');

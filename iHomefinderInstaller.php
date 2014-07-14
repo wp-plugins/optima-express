@@ -68,9 +68,7 @@ if(!class_exists('IHomefinderInstaller')){
 			$currentVersion=get_option(IHomefinderConstants::VERSION_OPTION);
 
 			if( $currentVersion != IHomefinderConstants::VERSION ){
-				
-				$this->migrateWpidxToOe();
-				
+						
 				if( $this->ihfAdmin->previouslyActivated() ){
 					$this->ihfAdmin->updateAuthenticationToken() ;
 					$this->ihfRewriteRules->initialize();
@@ -82,9 +80,9 @@ if(!class_exists('IHomefinderInstaller')){
 			}
 		}
 		
-		private function migrateWpidxToOe() {
+		public function migrateWpidxToOe() {
 			
-			if( IHomefinderConstants::VERSION_NAME == 'WordPress IDX' && ( get_option( 'ihf-wpidx-oe-migrated' ) != 'true' && get_option( 'ihf-wpidx-oe-migrated' ) != 'error' ) ) {
+			if( get_option( 'ihf-wpidx-oe-migrated' ) != 'true' && get_option( 'ihf-wpidx-oe-migrated' ) != 'error' ) {
 				
 				global $wpdb;
 				
@@ -99,7 +97,7 @@ if(!class_exists('IHomefinderInstaller')){
 				$widgets = preg_replace('!s:(\d+):"(.*?)";!e', "'s:'.strlen('$2').':\"$2\";'", $widgets );
 				$widgets = mysql_real_escape_string( $widgets );
 				
-				$sqlList = array( 
+				$sqlList = array(
 					//make a backup of each affected table.
 					"CREATE TABLE " . $optionsTableName . "_bu LIKE " . $optionsTableName . ";",
 					"INSERT INTO " . $optionsTableName . "_bu SELECT * FROM " . $optionsTableName . ";",
@@ -136,7 +134,11 @@ if(!class_exists('IHomefinderInstaller')){
 					update_option( 'ihf-wpidx-oe-migrated', 'true' );
 				}
 				
-				header( 'Location: ' . $_SERVER['REQUEST_URI'] );
+				?>
+				<script type="text/javascript">
+					window.location = 'index.php';
+				</script>
+				<?php
 				die();
 				
 			}

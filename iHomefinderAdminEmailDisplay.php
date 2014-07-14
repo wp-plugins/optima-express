@@ -41,9 +41,6 @@ if( !class_exists('IHomefinderAdminEmailDisplay')) {
 		}
 
 		private function basicEmailHeader( $agentPhoto, $logo, $name, $company, $address1, $address2, $phone ){
-
-			$logoSize=getimagesize($logo);		
-			$logoHeight=$logoSize[1];
 			
 			$emailHeader="<table width='650' border='0' cellpadding='2' cellspacing='0' bgcolor='#9b9b9b'><tr><td>";
 			$emailHeader.="<table width='100%' border='0' cellpadding='0' cellspacing='0' bgcolor='#ffffff'><tr>";
