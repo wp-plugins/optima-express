@@ -5,12 +5,15 @@ if( !class_exists('iHomefinderLinkWidget')) {
 	 */
 	class iHomefinderLinkWidget extends WP_Widget {
 		
-	    /** constructor */
-	    function iHomefinderLinkWidget() {
-	    	$options=array('description'=>'Displays a list of Homes For Sale links in the choosen cities from Themes Options - SEO indexing tool.');
-	        parent::WP_Widget( false,
-	                           $name = 'IDX: SEO City Links',
-	                           $widget_options=$options );
+	    public function __construct() {
+	    	$options = array(
+				'description' => 'Displays a list of Homes For Sale links in the choosen cities from Themes Options - SEO indexing tool.'
+			);
+	        parent::WP_Widget(
+				false,
+				$name = 'IDX: SEO City Links',
+				$widget_options = $options
+			);
 	    }
 
 	    /**
@@ -18,7 +21,7 @@ if( !class_exists('iHomefinderLinkWidget')) {
 	     *
 	     * @see WP_Widget::widget
 	     */
-	    function widget($args, $instance) {
+	    public function widget($args, $instance) {
 	        $linkWidth=get_option(IHomefinderConstants::SE0_CITY_LINK_WIDTH,'80');
 	        //sets vars like $before_widget from $args
 	    	extract( $args );
@@ -26,33 +29,33 @@ if( !class_exists('iHomefinderLinkWidget')) {
 	    	echo $before_widget;
            	echo $before_title;
 
-	   		$linkArray=get_option(IHomefinderConstants::SE0_CITY_LINKS_SETTINGS);	
+	   		$linkArray = get_option(IHomefinderConstants::SE0_CITY_LINKS_SETTINGS);	
 	   		
+			if(!empty($linkArray)) {
+				echo("<div>");
+				foreach($linkArray as $link ){
+					
+					//create link
+					$linkText=$link[IHomefinderConstants::SE0_CITY_LINKS_TEXT];
+					$cityZip=$link[IHomefinderConstants::SE0_CITY_LINKS_CITY_ZIP];
+					$propertyType=$link[IHomefinderConstants::SE0_CITY_LINKS_PROPERTY_TYPE];
+					$minPrice=$link[IHomefinderConstants::SE0_CITY_LINKS_MIN_PRICE];
+					$maxPrice=$link[IHomefinderConstants::SE0_CITY_LINKS_MAX_PRICE];
+					
+					if( !empty($linkText)){
+						$searchLinkInfo=new iHomefinderSearchLinkInfo($linkText, $cityZip, $propertyType, $minPrice, $maxPrice);
+						$linkUrl= $this->createLinkUrl($searchLinkInfo);		
+						?>
+						<div class="ihf-seo-link" style="width: <?php echo($linkWidth)?>px;">
+							<a href="<?php echo($linkUrl)?>"><?php echo($searchLinkInfo->getLinkText())?></a>
+						</div>
+						<?php 		    		
+					}
+					
+				}//foreach loop
+				echo("</div>");
+           	}
 			
-			echo("<div>");
-			foreach($linkArray as $link ){
-    			
-		    	//create link
-		    	$linkText=$link[IHomefinderConstants::SE0_CITY_LINKS_TEXT];
-		    	$cityZip=$link[IHomefinderConstants::SE0_CITY_LINKS_CITY_ZIP];
-		    	$propertyType=$link[IHomefinderConstants::SE0_CITY_LINKS_PROPERTY_TYPE];
-		    	$minPrice=$link[IHomefinderConstants::SE0_CITY_LINKS_MIN_PRICE];
-		    	$maxPrice=$link[IHomefinderConstants::SE0_CITY_LINKS_MAX_PRICE];
-		    	
-		    	if( !empty($linkText)){
-			    	$searchLinkInfo=new iHomefinderSearchLinkInfo($linkText, $cityZip, $propertyType, $minPrice, $maxPrice);
-			    	$linkUrl= $this->createLinkUrl($searchLinkInfo);		
-					?>
-					<div class="ihf-seo-link" style="width: <?php echo($linkWidth)?>px;">
-						<a href="<?php echo($linkUrl)?>"><?php echo($searchLinkInfo->getLinkText())?></a>
-					</div>              
-		    		<?php 		    		
-		    	}
-		    	
-		    }//foreach loop  
-			
-           	echo("</div>");
-           	
            	echo $after_title;
            	echo $after_widget;
 	    }
@@ -63,7 +66,7 @@ if( !class_exists('iHomefinderLinkWidget')) {
 	     *
 	     *  @see WP_Widget::update
 	     */
-	    function update($new_instance, $old_instance) {
+	    public function update($new_instance, $old_instance) {
 			$instance = $new_instance;
 	        return $instance;
 	    }
@@ -73,10 +76,10 @@ if( !class_exists('iHomefinderLinkWidget')) {
 	     *
 	     *  @see WP_Widget::form
 	     */
-	    function form($instance) {
-	    	$cityLinksConfigurationUrl=site_url();
+	    public function form($instance) {
+	    	$cityLinksConfigurationUrl = site_url();
 	    	$cityLinksConfigurationUrl .= "/wp-admin/admin.php?page=ihf-seo-city-links-page";
-	    	echo("<a href='" . $cityLinksConfigurationUrl . "'>Configure City Links</a>");
+	    	echo "<a href='" . $cityLinksConfigurationUrl . "'>Configure City Links</a>";
 	    }
 	    
 	    private function createLinkUrl($searchLinkInfo ){

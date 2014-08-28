@@ -8,7 +8,7 @@
 if( !interface_exists('IHomefinderConstants')){
 	interface IHomefinderConstants{
 
-		const VERSION="2.2.2";
+		const VERSION="2.2.4";
 		const VERSION_NAME="Optima Express";
 		
 		const LEGACY_EXTERNAL_URL= "http://www.idxre.com/services/wordpress";
@@ -128,16 +128,7 @@ if( !interface_exists('IHomefinderConstants')){
 		//Used throughout the application to discover iHomefinder requests
 		//and used to determin the proper filter to execute.
 		const IHF_TYPE_URL_VAR='ihf-type';
-
-		///////////////////////////////////////////////////////
-		//Transient Values
-		const PROPERTY_GALLERY_CACHE = "ihf_property_gallery_cache";
-		//Number of seconds for transient to timeout 60*60*24= 86400 = 1 day
-		//Number of seconds for transient to timeout 60*30= 86400 = 30 minutes
-		const PROPERTY_GALLERY_CACHE_TIMEOUT = 1800 ;
-		///////////////////////////////////////////////////////
-
-
+		
 		// Used to set the widget context.
 		// A search widget should not display on a
 		// search related virtual page

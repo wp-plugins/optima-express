@@ -174,6 +174,14 @@ if( !class_exists('IHomefinderPermissions')) {
 			}
 		}
 		
+		public function isHotsheetListWidgetEnabled(){
+			if( IHomefinderLayoutManager::getInstance()->isResponsive() ) {
+				return TRUE;
+			} else {
+				return FALSE;
+			}
+		}
+		
 		public function isMapSearchEnabled(){
 			$Return = filter_var( $this->mapSearchEnabled, FILTER_VALIDATE_BOOLEAN );			
 			return $Return;

@@ -8,8 +8,7 @@ if( !class_exists('iHomefinderAgentBioWidget')) {
 		const STANDARD_DISPLAY_TYPE="standard";
 		const NARROW_DISPLAY_TYPE="narrow";
 		
-		/** constructor */
-	    function iHomefinderAgentBioWidget() {
+	    public function __construct() {
 	    	$options=array('description'=>'Displays an agent bio.');
 	        parent::WP_Widget( false,
 	                           $name = 'IDX: Agent Bio',
@@ -21,7 +20,7 @@ if( !class_exists('iHomefinderAgentBioWidget')) {
 	     *
 	     * @see WP_Widget::widget
 	     */
-	    function widget($args, $instance) {
+	    public function widget($args, $instance) {
 	    	
 	    	//sets vars like $before_widget from $args
 	    	extract( $args );
@@ -84,7 +83,7 @@ if( !class_exists('iHomefinderAgentBioWidget')) {
 	     *
 	     *  @see WP_Widget::update
 	     */
-	  function update($new_instance, $old_instance){
+	  public function update($new_instance, $old_instance){
  		$instance=$old_instance ;
  		$instance['displayType']=$new_instance['displayType'];
     	return $instance;
@@ -97,7 +96,7 @@ if( !class_exists('iHomefinderAgentBioWidget')) {
 	   *
 	   *  @see WP_Widget::form
 	   */
-	  function form($instance){
+	  public function form($instance){
 	  	
 	 	$displayType = esc_attr($instance['displayType']);
 	    ?>

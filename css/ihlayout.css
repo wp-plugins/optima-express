@@ -461,7 +461,7 @@
 	font-size: 18px;
 	font-weight: bold;
 	padding-top: 25px;
-	text-align: right;
+	text-align: left;
 }
 
 #ihf-main-container .mc-amount {
@@ -535,6 +535,10 @@ fieldset[disabled] #ihf-main-container .btn-primary.active {
 
 .ihf-gallery-slider-paging {
     width: auto;
+}
+
+#ihf-main-container .ihf-results-extra-info img {
+	width: 60px;
 }
 
 /***********************************************************/

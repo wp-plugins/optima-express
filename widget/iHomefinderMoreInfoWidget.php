@@ -5,8 +5,7 @@ if( !class_exists('iHomefinderMoreInfoWidget')) {
 	 */
 	class iHomefinderMoreInfoWidget extends WP_Widget {
 	
-		/** constructor */
-	    function iHomefinderMoreInfoWidget() {
+	    public function __construct() {
 	    	$options=array('description'=>'Displays a More Information form on listing detail virtual pages.');
 	        parent::WP_Widget( false,
 	                           $name = 'IDX: More Info',
@@ -57,29 +56,26 @@ if( !class_exists('iHomefinderMoreInfoWidget')) {
 	     *
 	     *  @see WP_Widget::update
 	     */
-	  function update($new_instance, $old_instance){
+	  public function update($new_instance, $old_instance){
 		$instance = $old_instance;
 		$instance['title'] = strip_tags(stripslashes($new_instance['title']));			
         return $instance;	  	
 	  }
-
-
-
+	  
 	  /**
 	   * Create the admin form, for adding the Widget to the blog.
 	   *
 	   *  @see WP_Widget::form
 	   */
-	    function form($instance) {
+		public function form($instance) {
 	        $title = esc_attr($instance['title']);
-	    ?>
-	            <p>
-	            	<?php _e('Title:'); ?>
-	            	<input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $title; ?>" />
-	            </p>
-	    <?php 
-	            
-	    }
+			?>
+			<p>
+				<?php _e('Title:'); ?>
+				<input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $title; ?>" />
+			</p>
+			<?php      
+		}
 	  
 	} // class iHomefinderMoreInfoWidget
 }//end if( !class_exists('iHomefinderMoreInfoWidget'))

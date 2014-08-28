@@ -5,8 +5,7 @@ if( !class_exists('iHomefinderSocialWidget')) {
 	 */
 	class iHomefinderSocialWidget extends WP_Widget {
 	    
-		/** constructor */
-	    function iHomefinderSocialWidget() {
+	    public function __construct() {
 	    	$options=array('description'=>'Displays an social links.');
 	        parent::WP_Widget( false,
 	                           $name = 'IDX: Social',
@@ -18,7 +17,7 @@ if( !class_exists('iHomefinderSocialWidget')) {
 	     *
 	     * @see WP_Widget::widget
 	     */
-	    function widget($args, $instance) {
+	    public function widget($args, $instance) {
 	    	
 	    	$facebookUrl= get_option( IHomefinderConstants::FACEBOOK_URL_OPTION );
 	    	$twitterUrl=  get_option( IHomefinderConstants::TWITTER_URL_OPTION );
@@ -53,7 +52,7 @@ if( !class_exists('iHomefinderSocialWidget')) {
 	     *
 	     *  @see WP_Widget::update
 	     */
-	    function update($new_instance, $old_instance) {
+	    public function update($new_instance, $old_instance) {
 			$instance = $new_instance;
 	        return $instance;
 	    }
@@ -63,7 +62,7 @@ if( !class_exists('iHomefinderSocialWidget')) {
 	     *
 	     *  @see WP_Widget::form
 	     */
-	    function form($instance) {
+	    public function form($instance) {
 			$socialConfigurationUrl=site_url();
 	    	$socialConfigurationUrl .= "/wp-admin/admin.php?page=ihf-social-page";
 	    	echo("<a href='" . $socialConfigurationUrl . "'>Configure Social Links</a>");	    	

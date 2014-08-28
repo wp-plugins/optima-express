@@ -5,15 +5,16 @@ if( !class_exists('iHomefinderPropertiesGallery')) {
 	 */
 	class iHomefinderPropertiesGallery extends WP_Widget {
 		
-		private $contextUtility ;
+		private $contextUtility;
+		private $cacheUtility;
 		
-	    /** constructor */
-	    function iHomefinderPropertiesGallery() {
+	    public function __construct() {
 	    	$options=array('description'=>'Display a list of properties.');
 	        parent::WP_Widget( false,
 	                           $name = 'IDX: Property Gallery',
 	                           $widget_options=$options  );
 			$this->contextUtility=IHomefinderWidgetContextUtility::getInstance() ; 	                           
+			$this->cacheUtility = new IHomefinderCacheUtility();
 	    }
 
 	    /**
@@ -21,7 +22,7 @@ if( !class_exists('iHomefinderPropertiesGallery')) {
 	     *
 	     * @see WP_Widget::widget
 	     */
-	    function widget($args, $instance) {
+	    public function widget($args, $instance) {
 
 	    	if( $this->contextUtility->isEnabled($instance)){
 	    		$galleryType = $instance['galleryType'];
@@ -41,35 +42,8 @@ if( !class_exists('iHomefinderPropertiesGallery')) {
 	    		}
 	    	}
 	    }
-
-
-         /**
-          * Get a cached version of the widget output.
-          * @param $instance
-          */
-         function getCachedVersion(){
-             $cacheKey=$this->getCacheKey();
-             IHomefinderLogger::getInstance()->debug( 'get cached version cacheKey ' . $cacheKey );
-             // Fetch a saved transient
-             $propertyGalleryContent = get_transient($cacheKey);
-             return $propertyGalleryContent   ;
-         }
-
-		 function getCacheKey( ){
-	    	$widgetId=$this->id;
-        	$cacheKey=iHomefinderConstants::PROPERTY_GALLERY_CACHE . "_" .  $widgetId;
-        	$cacheKey=md5($cacheKey);
-        	IHomefinderLogger::getInstance()->debug('get $cacheKey ' . $cacheKey) ;
-        	return $cacheKey;
-        }
-
-         function updateCache( $propertyGalleryContent ){
-         	$cacheKey=$this->getCacheKey();
-			IHomefinderLogger::getInstance()->debug( 'updating cache cacheKey ' . $cacheKey );
-         	set_transient($cacheKey, $propertyGalleryContent, IHomefinderConstants::PROPERTY_GALLERY_CACHE_TIMEOUT);
-         }
-
-         function hotSheet($args, $instance) {
+		
+         private function hotSheet($args, $instance) {
          	global $blog_id;
          	global $post;
 
@@ -82,13 +56,13 @@ if( !class_exists('iHomefinderPropertiesGallery')) {
          		$linkText = esc_attr($instance['linkText']);
 
          		//link to all listings in the hotsheet
-         		$nameInUrl=preg_replace("[^A-Za-z0-9-]", "-", $title) ;
+         		$nameInUrl = preg_replace("[^A-Za-z0-9-]", "-", $title) ;
 
-         		$nameInUrl=str_replace(" ", "-", $nameInUrl) ;
+         		$nameInUrl = str_replace(" ", "-", $nameInUrl) ;
 
-         		$linkUrl =  IHomefinderUrlFactory::getInstance()->getHotsheetSearchResultsUrl(true) . '/' . $nameInUrl . '/'.$hotSheetId ;
+         		$linkUrl = IHomefinderUrlFactory::getInstance()->getHotsheetSearchResultsUrl(true) . '/' . $nameInUrl . '/'.$hotSheetId ;
 
-         		$propertyGalleryContent = $this->getCachedVersion($instance);
+         		$propertyGalleryContent = $this->cacheUtility->getItem($this->id);
          		if( empty($propertyGalleryContent)){
          			$authenticationToken=IHomefinderAdmin::getInstance()->getAuthenticationToken();
          			$ihfUrl = IHomefinderLayoutManager::getInstance()->getExternalUrl() . '?method=handleRequest&viewType=json&requestType=hotsheet-results' ;
@@ -101,7 +75,7 @@ if( !class_exists('iHomefinderPropertiesGallery')) {
          			$contentInfo = iHomefinderRequestor::remoteRequest($ihfUrl);
          			$propertyGalleryContent = (string) $contentInfo->view;
 
-         			$this->updateCache($propertyGalleryContent);
+         			$this->cacheUtility->updateItem( $this->id, $propertyGalleryContent, 1800 );
          		}
          		
          		echo $before_widget;
@@ -121,7 +95,7 @@ if( !class_exists('iHomefinderPropertiesGallery')) {
          	}
          }
 
-         function featuredListing($args, $instance) {
+         private function featuredListing($args, $instance) {
              global $blog_id;
              global $post;
 
@@ -135,8 +109,8 @@ if( !class_exists('iHomefinderPropertiesGallery')) {
              	//link to all featured properties
              	$linkUrl = IHomefinderUrlFactory::getInstance()->getFeaturedSearchResultsUrl(true) ;
 
-             	$propertyGalleryContent = $this->getCachedVersion($instance);
-
+             	$propertyGalleryContent = $this->cacheUtility->getItem( $this->id );
+				
              	if( empty($propertyGalleryContent)){
              		IHomefinderLogger::getInstance()->debug( ' Featured Listings Widget NOT CACHED' );
              		$authenticationToken=IHomefinderAdmin::getInstance()->getAuthenticationToken();
@@ -147,7 +121,7 @@ if( !class_exists('iHomefinderPropertiesGallery')) {
              		$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "smallView", "true" );
              		$contentInfo = iHomefinderRequestor::remoteRequest($ihfUrl);
              		$propertyGalleryContent = (string) $contentInfo->view;
-             		$this->updateCache($propertyGalleryContent);
+             		$this->cacheUtility->updateItem( $this->id, $propertyGalleryContent, 1800 );
              	}
              	echo $before_widget;
              	if ( $title ){
@@ -159,7 +133,7 @@ if( !class_exists('iHomefinderPropertiesGallery')) {
              }
          }
 
-         function linkSearch($args, $instance) {
+         private function linkSearch($args, $instance) {
            global $blog_id;
            global $post;
 
@@ -194,13 +168,13 @@ if( !class_exists('iHomefinderPropertiesGallery')) {
          }
 
 
-         function namedSearch($args, $instance) {
+         private function namedSearch($args, $instance) {
            global $blog_id;
            global $post;
-
+			
            if( IHomefinderPermissions::getInstance()->isNamedSearchEnabled()){
            	$title = apply_filters('widget_title', $instance['name']);
-
+			
            	extract( $args );
            	$cityId = esc_attr($instance['cityId']);
            	$bed = esc_attr($instance['bed']);
@@ -210,7 +184,7 @@ if( !class_exists('iHomefinderPropertiesGallery')) {
            	$propertyType = esc_attr($instance['propertyType']);
            	$numberOfListingsToDisplay  = empty($instance['propertiesShown']) ? '5' : $instance['propertiesShown'];
            	$linkText = esc_attr($instance['linkText']);
-
+			
            	//link to all featured listings
            	$linkUrl = IHomefinderUrlFactory::getInstance()->getListingsSearchResultsUrl(true) ;
            	$linkUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($linkUrl, "cityId", $cityId);
@@ -219,11 +193,11 @@ if( !class_exists('iHomefinderPropertiesGallery')) {
            	$linkUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($linkUrl, "bathcount", $bath);
            	$linkUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($linkUrl, "minListPrice", $minPrice);
            	$linkUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($linkUrl, "maxListPrice", $maxPrice);
-
-           	$propertyGalleryContent = $this->getCachedVersion($instance);
+			
+           	$propertyGalleryContent = $this->cacheUtility->getItem( $this->id );
            	if( empty($propertyGalleryContent)){
            		$authenticationToken=IHomefinderAdmin::getInstance()->getAuthenticationToken();
-
+				
            		$ihfUrl = IHomefinderLayoutManager::getInstance()->getExternalUrl() . '?method=handleRequest&viewType=json&requestType=listing-search-results' ;
            		$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "cityId", $cityId);
            		$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "bedrooms", $bed);
@@ -234,10 +208,10 @@ if( !class_exists('iHomefinderPropertiesGallery')) {
            		$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "authenticationToken", $authenticationToken);
            		$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "numListingsLimit", $numberOfListingsToDisplay );
            		$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "smallView", "true");
-
+				
            		$contentInfo = iHomefinderRequestor::remoteRequest($ihfUrl);
            		$propertyGalleryContent = (string) $contentInfo->view;
-           		$this->updateCache($propertyGalleryContent);
+           		$this->cacheUtility->updateItem( $this->id, $propertyGalleryContent, 1800 );
            	}
 
            	echo $before_widget;
@@ -251,7 +225,7 @@ if( !class_exists('iHomefinderPropertiesGallery')) {
            }
          }
 
-         function getGalleryFormData(){
+         private function getGalleryFormData(){
             $galleryFormData = IHomefinderSearchFormFieldsUtility::getInstance()->getFormData() ;
             return $galleryFormData;
          }
@@ -262,7 +236,7 @@ if( !class_exists('iHomefinderPropertiesGallery')) {
 	     *
 	     *  @see WP_Widget::update
 	     */
-	    function update($new_instance, $old_instance) {    	
+	    public function update($new_instance, $old_instance) {    	
                 $instance = $old_instance;
                 $instance['galleryType'] = strip_tags(stripslashes($new_instance['galleryType']));
                 $instance['listingID'] = strip_tags(stripslashes($new_instance['listingID']));
@@ -279,8 +253,8 @@ if( !class_exists('iHomefinderPropertiesGallery')) {
                 
 				$instance = $this->contextUtility->updateContext($new_instance, $instance);
 				
-                $cacheKey=$this->getCacheKey();
-                delete_transient($cacheKey);
+				//delete the cached item
+                $this->cacheUtility->deleteItem( $this->id );
 
 	        return $instance;
 	    }
@@ -290,7 +264,7 @@ if( !class_exists('iHomefinderPropertiesGallery')) {
 	     *
 	     *  @see WP_Widget::form
 	     */
-	    function form($instance) {
+	    public function form($instance) {
 	    		    	
                 $galleryType = ($instance) ? esc_attr($instance['galleryType']) : '';
                 $listingID = ($instance) ? esc_attr($instance['listingID']) : '';

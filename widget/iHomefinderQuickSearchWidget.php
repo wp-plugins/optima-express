@@ -4,18 +4,17 @@ if( !class_exists('iHomefinderQuickSearchWidget')) {
 	 * iHomefinderQuickSearchWidget Class
 	 */
 	class iHomefinderQuickSearchWidget extends WP_Widget {
-	    
+	
 	    private $contextUtility ;
-	    	    
-	    /** constructor */
-	    function iHomefinderQuickSearchWidget() {
+	    private $cacheUtility;
+		
+	    public function __construct() {
 	    	$options=array('description'=>'Property Search form.');
 	        parent::WP_Widget( false,
 	                           $name = 'IDX: Quick Search',
 	                           $widget_options=$options );
-	        $this->contextUtility=IHomefinderWidgetContextUtility::getInstance() ; 	
-	        
-	        
+	        $this->contextUtility=IHomefinderWidgetContextUtility::getInstance(); 	
+	        $this->cacheUtility = new IHomefinderCacheUtility();
 	    }
 
 	    /**
@@ -23,7 +22,7 @@ if( !class_exists('iHomefinderQuickSearchWidget')) {
 	     *
 	     * @see WP_Widget::widget
 	     */
-	    function widget($args, $instance) {
+		public function widget($args, $instance) {
 	    	//Do not display the search widget on the search form page
 	    	
 	    	$type = get_query_var(IHomefinderConstants::IHF_TYPE_URL_VAR );
@@ -32,19 +31,19 @@ if( !class_exists('iHomefinderQuickSearchWidget')) {
 	    			extract( $args );
 	    			$title = apply_filters('widget_title', $instance['title']);
 
-	    			$quickSearchContent = $this->getCachedVersion($instance);
+	    			$quickSearchContent = $this->cacheUtility->getItem($this->id);
 	    			if( empty($quickSearchContent)){
 	    				$authenticationToken=IHomefinderAdmin::getInstance()->getAuthenticationToken();
 	    				$ihfUrl = IHomefinderLayoutManager::getInstance()->getExternalUrl() . '?method=handleRequest&viewType=json&requestType=listing-search-form' ;
 	    				$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "authenticationToken", $authenticationToken);
 	    				$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "smallView", "true" );
 	    				$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "phpStyle", "true" );
-	    				
 	    				$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "style", $instance['style'] );
+						
 	    				$contentInfo = iHomefinderRequestor::remoteRequest($ihfUrl);
 	    				
 	    				$quickSearchContent = (string) $contentInfo->view;
-	    				$this->updateCache($quickSearchContent);	    				
+	    				$this->cacheUtility->updateItem( $this->id, $quickSearchContent, 86400 );
 	    			}
 	    			
 	    			echo $before_widget;
@@ -53,12 +52,12 @@ if( !class_exists('iHomefinderQuickSearchWidget')) {
 			    	}
 			    	
 			    	if( IHomefinderLayoutManager::getInstance()->hasExtraLineBreaksInWidget()){
-			    		echo "<br/>" ;	
-			    		echo $quickSearchContent ;
-			    		echo "<br/>" ;
+			    		echo "<br/>";	
+			    		echo $quickSearchContent;
+			    		echo "<br/>";
 			    	}
 			    	else{
-			    		echo $quickSearchContent ;
+			    		echo $quickSearchContent;
 			    	}
 		
 			    	echo $after_widget;
@@ -72,40 +71,20 @@ if( !class_exists('iHomefinderQuickSearchWidget')) {
 	     *
 	     *  @see WP_Widget::update
 	     */
-	    function update($new_instance, $old_instance) {
+	    public function update($new_instance, $old_instance) {
 			$instance = $old_instance;
 			$instance['title'] = strip_tags(stripslashes($new_instance['title']));
 			$instance['style'] = strip_tags(stripslashes($new_instance['style']));
 			
 			//Add context related values.
-			$instance = $this->contextUtility->updateContext($new_instance, $instance) ;
+			$instance = $this->contextUtility->updateContext($new_instance, $instance);
 			
-			delete_transient($cacheKey);
+			//delete the cached item
+			$this->cacheUtility->deleteItem( $this->id );
+	  
 	        return $instance;
 	    }
-
-	     /**
-          * Get a cached version of the widget output.
-          * @param $instance
-          */
-         function getCachedVersion($instance){
-             $cacheKey=$this->getCacheKey();
-             // Fetch a saved transient
-             $quickSearchContent = get_transient($cacheKey);
-             return $quickSearchContent   ;
-         }
-
-		 function getCacheKey( ){
-	    	$widgetId=$this->id;
-        	$cacheKey=iHomefinderConstants::PROPERTY_GALLERY_CACHE . "_" .  $widgetId;
-        	return $cacheKey;
-        }
-
-         function updateCache( $quickSearchContent ){
-         	$cacheKey=$this->getCacheKey();
-			set_transient($cacheKey, $quickSearchContent, IHomefinderConstants::PROPERTY_GALLERY_CACHE_TIMEOUT);
-         }
-
+		
 	    /**
 	     * Create the admin form, for adding the Widget to the blog.
 	     *
@@ -124,9 +103,9 @@ if( !class_exists('iHomefinderQuickSearchWidget')) {
 	            <p>
 		            <?php _e('Style:'); ?>
 		            <select class="widefat" id="<?php echo $this->get_field_id('style'); ?>" name="<?php echo $this->get_field_name('style'); ?>">
+		            	<option value="vertical" <?php if($style=="vertical"){echo(' selected');}?>>Vertical</option>
 		            	<option value="horizontal" <?php if($style=="horizontal"){echo(' selected');}?>>Horizontal</option>
 		            	<option value="twoline" <?php if($style=="twoline"){echo(' selected');}?>>Two Line</option>
-		            	<option value="vertical" <?php if($style=="vertical"){echo(' selected');}?>>Vertical</option>
 		            </select>	         		
            		</p>
            		<?php }?>

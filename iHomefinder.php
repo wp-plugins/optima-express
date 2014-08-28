@@ -3,7 +3,7 @@
 	Plugin Name: Optima Express IDX Plugin
 	Plugin URI: http://wordpress.org/extend/plugins/optima-express/
 	Description: Adds MLS / IDX property search and listings to your site. Includes search and listing pages, widgets and shortcodes. Requires an IDX account from iHomefinder. Get a free trial account with sample IDX data, or a paid account with data from your MLS.
-	Version: 2.2.3
+	Version: 2.2.4
 	Author: ihomefinder
 	Author URI: http://www.ihomefinder.com
 	License: GPL
@@ -42,6 +42,7 @@ include_once 'iHomefinderVirtualPageDispatcher.php';
 include_once 'iHomefinderVirtualPageFactory.php';
 include_once 'iHomefinderVirtualPageHelper.php';
 include_once 'iHomefinderLayoutManager.php';
+include_once 'iHomefinderCacheUtility.php';
 
 
 /**
@@ -50,40 +51,44 @@ include_once 'iHomefinderLayoutManager.php';
 include("widget/iHomefinderWidgetContextUtility.php");
 include("widget/iHomefinderPropertiesGallery.php");
 include("widget/iHomefinderQuickSearchWidget.php");
+include("widget/iHomefinderLinkWidget.php");
 include("widget/iHomefinderSearchByAddressWidget.php");
 include("widget/iHomefinderSearchByListingIdWidget.php");
 include("widget/iHomefinderContactFormWidget.php");
-include("widget/iHomefinderLinkWidget.php");
 include("widget/iHomefinderMoreInfoWidget.php");
 include("widget/iHomefinderAgentBioWidget.php");
 include("widget/iHomefinderSocialWidget.php");
+include("widget/iHomefinderHotsheetListWidget.php");
 
-if( IHomefinderPermissions::getInstance()->isPropertiesGalleryEnabled() == TRUE ) {
+if( IHomefinderPermissions::getInstance()->isPropertiesGalleryEnabled() ) {
 	add_action('widgets_init', create_function('', 'return register_widget("iHomefinderPropertiesGallery");'));
 }	
-if( IHomefinderPermissions::getInstance()->isQuickSearchEnabled() == TRUE ) {
+if( IHomefinderPermissions::getInstance()->isQuickSearchEnabled() ) {
 	add_action('widgets_init', create_function('', 'return register_widget("iHomefinderQuickSearchWidget");'));
 }
-if( IHomefinderPermissions::getInstance()->isSeoCityLinksEnabled() == TRUE ) {
+if( IHomefinderPermissions::getInstance()->isSeoCityLinksEnabled() ) {
 	add_action('widgets_init', create_function('', 'return register_widget("iHomefinderLinkWidget");'));
 }
-if( IHomefinderPermissions::getInstance()->isAgentBioWidgetEnabled() == TRUE ) {
-	add_action('widgets_init', create_function('', 'return register_widget("iHomefinderAgentBioWidget");'));
-}
-if( IHomefinderPermissions::getInstance()->isSocialEnabled() == TRUE ) {
-	add_action('widgets_init', create_function('', 'return register_widget("iHomefinderSocialWidget");'));
-}
-if( IHomefinderPermissions::getInstance()->isMoreInfoEnabled() == TRUE ) {
-	add_action('widgets_init', create_function('', 'return register_widget("iHomefinderMoreInfoWidget");'));
-}
-if( IHomefinderPermissions::getInstance()->isSearchByAddressEnabled() == TRUE ) {
+if( IHomefinderPermissions::getInstance()->isSearchByAddressEnabled() ) {
 	add_action('widgets_init', create_function('', 'return register_widget("iHomefinderSearchByAddressWidget");'));
 }
-if( IHomefinderPermissions::getInstance()->isSearchByListingIdEnabled() == TRUE ) {
+if( IHomefinderPermissions::getInstance()->isSearchByListingIdEnabled() ) {
 	add_action('widgets_init', create_function('', 'return register_widget("iHomefinderSearchByListingIdWidget");'));
 }
-if( IHomefinderPermissions::getInstance()->isContactFormWidgetEnabled() == TRUE ) {
+if( IHomefinderPermissions::getInstance()->isContactFormWidgetEnabled() ) {
 	add_action('widgets_init', create_function('', 'return register_widget("iHomefinderContactFormWidget");'));
+}
+if( IHomefinderPermissions::getInstance()->isMoreInfoEnabled() ) {
+	add_action('widgets_init', create_function('', 'return register_widget("iHomefinderMoreInfoWidget");'));
+}
+if( IHomefinderPermissions::getInstance()->isAgentBioWidgetEnabled() ) {
+	add_action('widgets_init', create_function('', 'return register_widget("iHomefinderAgentBioWidget");'));
+}
+if( IHomefinderPermissions::getInstance()->isSocialEnabled() ) {
+	add_action('widgets_init', create_function('', 'return register_widget("iHomefinderSocialWidget");'));
+}
+if( IHomefinderPermissions::getInstance()->isHotsheetListWidgetEnabled() ) {
+	add_action('widgets_init', create_function('', 'return register_widget("iHomefinderHotsheetListWidget");'));
 }
 
 /* Runs when plugin is activated */

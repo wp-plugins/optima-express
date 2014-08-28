@@ -1,20 +1,20 @@
 <?php
-if( !class_exists('iHomefinderSearchByListingIdWidget') ) {
+if( !class_exists('iHomefinderHotsheetListWidget') ) {
 	/**
-	 * iHomefinderSearchByListingIdWidget Class
+	 * iHomefinderHotsheetListWidget Class
 	 */
-	class iHomefinderSearchByListingIdWidget extends WP_Widget {
+	class iHomefinderHotsheetListWidget extends WP_Widget {
 
     private $contextUtility;
-	private $cacheUtility;
-
+    private $cacheUtility;
+	
     public function __construct() {
-      $options=array('description'=>'Search by Listing ID form.');
-      parent::WP_Widget( false,
-                         $name = 'IDX: Listing ID Search',
-                         $widget_options=$options );
-      $this->contextUtility=IHomefinderWidgetContextUtility::getInstance();
-	  $this->cacheUtility = new IHomefinderCacheUtility();
+		$options=array('description'=>'List of Saved Search Pages');
+		parent::WP_Widget( false,
+					 $name = 'IDX: Saved Search Page List',
+					 $widget_options=$options );
+		$this->contextUtility=IHomefinderWidgetContextUtility::getInstance();
+		$this->cacheUtility = new IHomefinderCacheUtility();
     }
 
     /**
@@ -32,19 +32,19 @@ if( !class_exists('iHomefinderSearchByListingIdWidget') ) {
         extract( $args );
         $title = apply_filters('widget_title', $instance['title']);
 		
-		$searchByListingIdContent = $this->cacheUtility->getItem($this->id);
-		if( empty($searchByListingIdContent)){
+		
+		$content = $this->cacheUtility->getItem($this->id);
+		if( empty($content)){
 			$authenticationToken=IHomefinderAdmin::getInstance()->getAuthenticationToken();
-			$ihfUrl = IHomefinderLayoutManager::getInstance()->getExternalUrl() . '?method=handleRequest&viewType=json&requestType=search-by-listing-id-form' ;
+			$ihfUrl = IHomefinderLayoutManager::getInstance()->getExternalUrl() . '?method=handleRequest&viewType=json&requestType=hotsheet-list' ;
 			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "authenticationToken", $authenticationToken);
 			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "smallView", "true" );
 			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "phpStyle", "true" );
-			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "style", $instance['style'] );
-			
+			iHomefinderLogger::getInstance()->debug("url: " . $ihfUrl);
 			$contentInfo = iHomefinderRequestor::remoteRequest($ihfUrl);
+			$content = (string) $contentInfo->view;
 			
-			$searchByListingIdContent = (string) $contentInfo->view;
-			$this->cacheUtility->updateItem( $this->id, $searchByListingIdContent, 86400 );
+			$this->cacheUtility->updateItem( $this->id, $content, 3600 );
 		}
 		
         echo $before_widget;
@@ -54,11 +54,10 @@ if( !class_exists('iHomefinderSearchByListingIdWidget') ) {
         
         if( IHomefinderLayoutManager::getInstance()->hasExtraLineBreaksInWidget()){
           echo "<br/>" ;	
-          echo $searchByListingIdContent;
+          echo $content;
           echo "<br/>" ;
-        }
-        else{
-          echo $searchByListingIdContent;
+        } else {
+          echo $content;
         }
         
         echo $after_widget;
@@ -78,10 +77,10 @@ if( !class_exists('iHomefinderSearchByListingIdWidget') ) {
       
       //Add context related values.
       $instance = $this->contextUtility->updateContext($new_instance, $instance);
-
+	  
       //delete the cached item
       $this->cacheUtility->deleteItem( $this->id );
-
+	
       return $instance;
     }
 
@@ -100,6 +99,6 @@ if( !class_exists('iHomefinderSearchByListingIdWidget') ) {
       <?php
         $this->contextUtility->getPageSelector($this, $instance, IHomefinderConstants::SEARCH_OTHER_WIDGET_TYPE );
     }
-  } // class iHomefinderSearchByListingIdWidget
-}//end if( !class_exists('iHomefinderSearchByListingIdWidget'))
+  } // class iHomefinderHotsheetListWidget
+}//end if( !class_exists('iHomefinderHotsheetListWidget'))
 ?>

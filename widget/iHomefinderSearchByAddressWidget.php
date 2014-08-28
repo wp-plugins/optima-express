@@ -6,14 +6,15 @@ if( !class_exists('iHomefinderSearchByAddressWidget') ) {
 	class iHomefinderSearchByAddressWidget extends WP_Widget {
 
     private $contextUtility;
+	private $cacheUtility;
 
-    /** constructor */
-    function iHomefinderSearchByAddressWidget() {
+    public function __construct() {
       $options=array('description'=>'Search by Address form.');
       parent::WP_Widget( false,
                          $name = 'IDX: Address Search',
                          $widget_options=$options );
       $this->contextUtility=IHomefinderWidgetContextUtility::getInstance();
+	  $this->cacheUtility = new IHomefinderCacheUtility();
     }
 
     /**
@@ -21,7 +22,7 @@ if( !class_exists('iHomefinderSearchByAddressWidget') ) {
      *
      * @see WP_Widget::widget
      */
-    function widget($args, $instance) {
+    public function widget($args, $instance) {
 
       global $blog_id;
       global $post;
@@ -30,21 +31,23 @@ if( !class_exists('iHomefinderSearchByAddressWidget') ) {
 
       	//sets vars like $before_widget from $args
 	    extract( $args );
-        //extract( $args );
         $title = apply_filters('widget_title', $instance['title']);
-
-        $authenticationToken=IHomefinderAdmin::getInstance()->getAuthenticationToken();
-        $ihfUrl = IHomefinderLayoutManager::getInstance()->getExternalUrl() . '?method=handleRequest&viewType=json&requestType=search-by-address-form' ;
-        $ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "authenticationToken", $authenticationToken);
-        $ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "smallView", "true" );
-        $ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "phpStyle", "true" );
-
-        $ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "style", $instance['style'] );
-
-        $contentInfo = iHomefinderRequestor::remoteRequest($ihfUrl);
-
-        $searchByAddressContent = $contentInfo->view;
-
+		
+		$searchByAddressContent = $this->cacheUtility->getItem($this->id);
+		if( empty($searchByAddressContent)){
+			$authenticationToken=IHomefinderAdmin::getInstance()->getAuthenticationToken();
+			$ihfUrl = IHomefinderLayoutManager::getInstance()->getExternalUrl() . '?method=handleRequest&viewType=json&requestType=search-by-address-form' ;
+			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "authenticationToken", $authenticationToken);
+			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "smallView", "true" );
+			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "phpStyle", "true" );
+			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "style", $instance['style'] );
+			
+			$contentInfo = iHomefinderRequestor::remoteRequest($ihfUrl);
+			
+			$searchByAddressContent = (string) $contentInfo->view;
+			$this->cacheUtility->updateItem( $this->id, $searchByAddressContent, 86400 );
+		}
+		
         echo $before_widget;
         if ( $title ) {
           echo $before_title . $title . $after_title;
@@ -61,7 +64,7 @@ if( !class_exists('iHomefinderSearchByAddressWidget') ) {
      *
      *  @see WP_Widget::update
      */
-    function update($new_instance, $old_instance) {
+    public function update($new_instance, $old_instance) {
       $instance = $old_instance;
       $instance['title'] = strip_tags(stripslashes($new_instance['title']));
       $instance['style'] = strip_tags(stripslashes($new_instance['style']));
@@ -69,31 +72,10 @@ if( !class_exists('iHomefinderSearchByAddressWidget') ) {
       //Add context related values.
       $instance = $this->contextUtility->updateContext($new_instance, $instance);
 
-      delete_transient($cacheKey);
+      //delete the cached item
+      $this->cacheUtility->deleteItem( $this->id );
 
       return $instance;
-    }
-
-    /**
-     * Get a cached version of the widget output.
-     * @param $instance
-     */
-    function getCachedVersion($instance) {
-      $cacheKey=$this->getCacheKey();
-      // Fetch a saved transient
-      $searchByAddressContent = get_transient($cacheKey);
-      return $searchByAddressContent;
-    }
-
-    function getCacheKey() {
-      $widgetId=$this->id;
-      $cacheKey=iHomefinderConstants::PROPERTY_GALLERY_CACHE . "_" .  $widgetId;
-      return $cacheKey;
-    }
-
-    function updateCache( $searchByAddressContent ) {
-      $cacheKey=$this->getCacheKey();
-      set_transient($cacheKey, $searchByAddressContent, IHomefinderConstants::PROPERTY_GALLERY_CACHE_TIMEOUT);
     }
 
     /**
@@ -101,7 +83,7 @@ if( !class_exists('iHomefinderSearchByAddressWidget') ) {
      *
      *  @see WP_Widget::form
      */
-    function form($instance) {
+    public function form($instance) {
       $title = esc_attr($instance['title']);
       $style = esc_attr($instance['style']);
       ?>
