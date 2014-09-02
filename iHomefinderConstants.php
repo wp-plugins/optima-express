@@ -8,7 +8,7 @@
 if( !interface_exists('IHomefinderConstants')){
 	interface IHomefinderConstants{
 
-		const VERSION="2.2.4";
+		const VERSION="2.2.5";
 		const VERSION_NAME="Optima Express";
 		
 		const LEGACY_EXTERNAL_URL= "http://www.idxre.com/services/wordpress";
@@ -134,10 +134,17 @@ if( !interface_exists('IHomefinderConstants')){
 		// search related virtual page
 		const SEARCH_WIDGET_TYPE="searchWidget";
 		const GALLERY_WIDGET_TYPE="galleryWidget";
-
-    // Search widgets that can display on search pages
-    const SEARCH_OTHER_WIDGET_TYPE="searchOtherWidget";
-
+		
+		// Search widgets that can display on search pages
+		const SEARCH_OTHER_WIDGET_TYPE="searchOtherWidget";
+		
+		/*
+		prefix should only be up 13 character in length because
+		cache key can only be 45 characters. prefix (13) + md5
+		hash (32). 
+		*/
+		const CACHE_PREFIX = "ihf_cache_";
+		
 		const DEBUG = false;
 	}
 }
