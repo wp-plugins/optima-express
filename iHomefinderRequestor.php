@@ -148,45 +148,10 @@ if( !class_exists('IHomefinderRequestor')){
 				$searchSummary=$contentInfo->searchSummary ;
 				IHomefinderStateManager::getInstance()->saveSearchSummary($searchSummary);
 			}
-
-			IHomefinderRequestor::loadJavaScriptAndCss($contentInfo);
 			
 			IHomefinderLogger::getInstance()->debug("End IHomefinderRequestor.remoteRequest: " );
 				
 			return $contentInfo ;
-		}
-		
-		/**
-		 * 
-		 * Enqueue CSS and JavaScript if included in the contentInfo
-		 * @param unknown_type $contentInfo
-		 */
-		private static function loadJavaScriptAndCss( $contentInfo ){
-			if( isset($contentInfo->css )){
-				$cssList=$contentInfo->css;				
-				foreach ($cssList->item as $item) {
-					wp_enqueue_style($item->name );
-				}
-			}
-				
-			if( isset($contentInfo->javascript )){
-				$javascriptList=$contentInfo->javascript;				
-				foreach ($javascriptList->item as $item) {
-					$name=$item->name;
-					$url=$item->url;
-					$depends=false;
-					if( isset($item->depends)){
-						$depends=array();
-						foreach( $item->depends as $oneDependency ){
-							array_push($depends, $oneDependency);
-						}
-					}
-					
-					//We now register all scripts.
-					wp_enqueue_script($name);
-				}
-			}			
-			return;			
 		}
 		
 		public static function remotePostRequest( $ihfUrl, $postData ){

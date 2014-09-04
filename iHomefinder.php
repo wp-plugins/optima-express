@@ -3,7 +3,7 @@
 	Plugin Name: Optima Express IDX Plugin
 	Plugin URI: http://wordpress.org/extend/plugins/optima-express/
 	Description: Adds MLS / IDX property search and listings to your site. Includes search and listing pages, widgets and shortcodes. Requires an IDX account from iHomefinder. Get a free trial account with sample IDX data, or a paid account with data from your MLS.
-	Version: 2.2.5
+	Version: 2.2.6
 	Author: ihomefinder
 	Author URI: http://www.ihomefinder.com
 	License: GPL
@@ -24,7 +24,7 @@ include_once 'iHomefinderListingInfo.php';
 include_once 'iHomefinderLogger.php';
 include_once 'iHomefinderMenu.php';
 include_once 'iHomefinderPermissions.php';
-include_once 'iHomefinderRegisterResource.php';
+include_once 'iHomefinderEnqueueResource.php';
 include_once 'iHomefinderRequestor.php';
 include_once 'iHomefinderRewriteRules.php';
 include_once 'iHomefinderSearchLinkInfo.php';
@@ -131,9 +131,9 @@ if( is_admin()){
 	*/
 	add_action('setup_theme', array(IHomefinderInstaller::getInstance(), 'upgrade')) ;
 	
-	add_action('init',array(IHomefinderRegisterResource::getInstance(), "loadStandardJavaScript")) ;
-	add_action('init', array(IHomefinderRegisterResource::getInstance(), "registerJavaScript"));
-	add_action('init', array(IHomefinderRegisterResource::getInstance(), "registerCSS"));
+	add_action('init',array(IHomefinderEnqueueResource::getInstance(), "loadStandardJavaScript")) ;
+	add_action('init', array(IHomefinderEnqueueResource::getInstance(), "loadJavaScript"));
+	add_action('init', array(IHomefinderEnqueueResource::getInstance(), "loadCSS"));
 	
 	add_action( 'wp_enqueue_scripts', array(IHomefinderWidgetContextUtility::getInstance(), "loadWidgetStyle") );
 	

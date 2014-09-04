@@ -339,7 +339,7 @@ if( !class_exists('IHomefinderAdmin')) {
 			$layoutType = urlencode( $layoutType);
 			
 			//Push color scheme to iHomefinder
-			$colorScheme = get_option(IHomefinderConstants::COLOR_SCHEME_OPTION);
+			$colorScheme = IHomefinderLayoutManager::getInstance()->getColorScheme();
 			$colorScheme = urlencode( $colorScheme);
 			
 			//Push mobile site setting to iHomefinder

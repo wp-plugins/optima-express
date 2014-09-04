@@ -27,6 +27,11 @@ if( !class_exists('IHomefinderLayoutManager')) {
 			return $result;
 		}
 
+		public function getColorScheme(){
+			$result = get_option(IHomefinderConstants::COLOR_SCHEME_OPTION);
+			return $result;
+		}
+
 		public static function getInstance(){
 			if( !isset(self::$instance)){
 				self::$instance = new IHomefinderLayoutManager();
