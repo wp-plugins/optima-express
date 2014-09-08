@@ -67,7 +67,7 @@ if( !class_exists('IHomefinderEnqueueResource')) {
 			wp_enqueue_style( "ihf-layout" );
 			wp_enqueue_style( "ihf-lib-override" );
 			 
-			$colorScheme = IHomefinderLayoutManager::getColorScheme();
+			$colorScheme = IHomefinderLayoutManager::getInstance()->getColorScheme();
 			switch( $colorScheme ) {
 				case "red":
 					wp_enqueue_style( "ihf-layout-red" );
