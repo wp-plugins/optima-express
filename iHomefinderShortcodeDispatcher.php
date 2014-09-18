@@ -462,6 +462,9 @@ if( !class_exists('IHomefinderShortcodeDispatcher')) {
 			if(isset($attr['auto'])){
 				$ihfUrl = $ihfUrl .'&auto='   .$attr['auto'];
 			}
+			if(isset($attr['maxresults'])){
+				$ihfUrl = $ihfUrl .'&maxResults='   .$attr['maxresults'];
+			}
 			if(isset($attr['id'])){
 				$ihfUrl = $ihfUrl  .'&hid='    .$attr['id'];
 			}else if(isset($attr['hotsheetid'])){

@@ -63,6 +63,7 @@ var IhfGalleryDialog = {
 		listingGalleryShortCode += ' columns=' + this.getFieldValue(theForm.columns);
 		listingGalleryShortCode += ' effect=' + this.getFieldValue(theForm.effect);		
 		listingGalleryShortCode += ' auto=' + this.getFieldValue(theForm.auto);
+		listingGalleryShortCode += ' maxResults=' + this.getFieldValue(theForm.maxResults);
 		listingGalleryShortCode += "]";
 		
 		tinyMCEPopup.editor.execCommand('mceInsertContent', false, listingGalleryShortCode);

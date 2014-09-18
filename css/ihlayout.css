@@ -677,6 +677,13 @@ fieldset[disabled] #ihf-main-container .btn-primary.active {
 	}
 	
 }
+
+@media print {
+   #ihf-main-container #ihf-detail-navrow, #ihf-leadcaputre-btns, #ihf-detail-extrainfo-tabrow, #ihf-main-container .addthis_toolbox, #ihf-main-container .ihf-image-carousel-counter {
+			display:none; 
+	 }
+}
+
 /***********************************************************************/
 /*****End non mobile screen size style area  ***************************/
 /***********************************************************************/

@@ -459,8 +459,8 @@ if( !class_exists('IHomefinderAdmin')) {
 			register_setting( IHomefinderConstants::OPTION_GROUP_EMAIL_DISPLAY, IHomefinderConstants::EMAIL_DISPLAY_TYPE_OPTION  );
 
 		 	//SEO City Links Options
-		 	register_setting(IHomefinderConstants::OPTION_GROUP_SEO_CITY_LINKS, IHomefinderConstants::SE0_CITY_LINKS_SETTINGS);
-		 	register_setting(IHomefinderConstants::OPTION_GROUP_SEO_CITY_LINKS, IHomefinderConstants::SE0_CITY_LINK_WIDTH);
+		 	register_setting(IHomefinderConstants::OPTION_GROUP_SEO_CITY_LINKS, IHomefinderConstants::SEO_CITY_LINKS_SETTINGS);
+		 	register_setting(IHomefinderConstants::OPTION_GROUP_SEO_CITY_LINKS, IHomefinderConstants::SEO_CITY_LINK_WIDTH);
 
 			//Compatibility Check Options
 		 	register_setting(IHomefinderConstants::OPTION_GROUP_COMPATIBILITY_CHECK, IHomefinderConstants::COMPATIBILITY_CHECK_ENABLED);
@@ -543,7 +543,7 @@ if( !class_exists('IHomefinderAdmin')) {
 				<table class="form-table">
 					<tr valign="top">
 						<th scope="row">
-							<b>Registration Key:</b>
+							<strong>Registration Key:</strong>
 						</th>
 						<td>
 							<input type="text" size="45" name="<?php echo IHomefinderConstants::ACTIVATION_TOKEN_OPTION ?>" value="<?php echo get_option(IHomefinderConstants::ACTIVATION_TOKEN_OPTION); ?>" />
@@ -569,43 +569,51 @@ if( !class_exists('IHomefinderAdmin')) {
 				
 				<?php
 				
-				$Email = $_POST['Email'];
-				$AccountType = $_POST['AccountType'];
+				$firstName = $_POST['firstName'];
+				$lastName = $_POST['lastName'];
+				$phoneNumber = $_POST['phoneNumber'];
+				$email = $_POST['email'];
+				$accountType = $_POST['accountType'];
 				
 				$errors = array();
 				
-				if( filter_var( $Email, FILTER_VALIDATE_EMAIL ) == FALSE ) {
+				if( !filter_var( $email, FILTER_VALIDATE_EMAIL ) ) {
 					$errors[] = '<p>Email address is not valid.</p>';
 				}
 								
-				if( $AccountType == '' ) {
+				if( empty( $accountType ) ) {
 					$errors[] = '<p>Select type of trial account.</p>';
 				}
 				
 				if( count( $errors ) == 0 ) {
 					
-					$params = array();
-					$params['plugin'] = 'true';
-					$params['clientfirstname'] = 'Trial User';
-					$params['clientlastname'] = 'Account';
-					if( $AccountType == 'Broker' ) {
-						$params['companyname'] = 'Many Homes Realty';
+					if( $accountType == "Broker" ) {
+						$companyname = "Many Homes Realty";
 					} else {
-						$params['companyname'] = 'Jamie Agent';
+						$companyname = "Jamie Agent";
 					}
-					$params['companyemail'] = $Email;
-					$params['password'] = substr( str_shuffle( 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890' ), 0, 6 );
-					$params['companyphone'] = '800-555-1212';
-					$params['companyaddress'] = '123 Main St.';
-					$params['companycity'] = 'Anytown';
-					$params['companystate'] = 'CA';
-					$params['companyzip'] = '12345';
-					$params['account_type'] = $AccountType;
-					$params['product'] = 'Optima Express';
-					$params['lead_source'] = 'Plugin';
-					$params['lead_source_description'] = 'Optima Express Trial Form';
-					$params['ad_code'] = '';
-					$params['ip_address'] = $_SERVER['REMOTE_ADDR'];
+					
+					$password = substr( str_shuffle( "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890" ), 0, 6 );
+					
+					$params = array(
+						"plugin" => "true",
+						"clientfirstname" => $firstName,
+						"clientlastname" => $lastName,
+						"companyname" => $companyname,
+						"companyemail" => $email,
+						"password" => $password,
+						"companyphone" => $phoneNumber,
+						"companyaddress" => "123 Main St.",
+						"companycity" => "Anytown",
+						"companystate" => "CA",
+						"companyzip" => "12345",
+						"account_type" => $accountType,
+						"product" => "Optima Express",
+						"lead_source" => "Plugin",
+						"lead_source_description" => "Optima Express Trial Form",
+						"ad_code" => "",
+						"ip_address" => $_SERVER["REMOTE_ADDR"],
+					);
 					
 					$requestUrl = 'http://www.ihomefinder.com/store/optima-express-trial.php';
 					
@@ -616,7 +624,7 @@ if( !class_exists('IHomefinderAdmin')) {
 						$responseBody = wp_remote_retrieve_body( $response );
 						$responseBody = json_decode($responseBody, true);
 						
-						$clientID = $responseBody['clientID'];
+						$clientId = $responseBody['clientID'];
 						$regKey = $responseBody['regKey'];
 						$username = $responseBody['username'];
 						$password = $responseBody['password'];
@@ -629,9 +637,9 @@ if( !class_exists('IHomefinderAdmin')) {
 							<p>Your Optima Express plugin has been registered.</p>
 						</div>
 						<p>Thank you for evaluating Optima Express!</p>
-						<p>Your trial account uses sample listing data from Northern California. For search and listings in your MLS, <a href="http://www.ihomefinder.com/store/convert.php?cid=<?php echo $clientID ?>" target="_blank">upgrade to a paid account</a>.</p>
+						<p>Your trial account uses sample listing data from Northern California. For search and listings in your MLS, <a href="http://www.ihomefinder.com/store/convert.php?cid=<?php echo $clientId ?>" target="_blank">upgrade to a paid account</a>.</p>
 						<p>Visit our <a href="http://support.ihomefinder.com/index.php?/Knowledgebase/List/Index/23/optima-express-responsive/" target="_blank">knowledge base</a> for assistance setting up IDX on your site.</p>
-						<p>Don't hesitate to <a href="http://www.ihomefinder.com/forms/contact-us/" target="_blank">contact us</a> if you have any questions.</p>
+						<p>Don't hesitate to <a href="http://www.ihomefinder.com/contact-us/" target="_blank">contact us</a> if you have any questions.</p>
 						
 						<?php
 						
@@ -654,36 +662,79 @@ if( !class_exists('IHomefinderAdmin')) {
 					}
 					
 					?>
-					
+					<style>
+						table {
+							width: 300px;
+						}
+						tr td:nth-child(1) {
+							width: 150px;
+						}
+						input,
+						select {
+							display: block;
+							width: 250px;
+						}
+						label {
+							font-weight: bold;
+						}
+					</style>
 					<form method="post">
-						<table class="form-table" style="width: 300px">
+						<table class="form-table">
 							<tr>
 								<td>
-									<b>
-										<label for="Email">Email:</label>
-									</b>
+									<label for="email">First Name:</label>
 								</td>
 								<td>
-									<br />
-									<input id="Email" style="width: 250px;" name="Email" type="text" value="<?php echo $Email ?>" />
-									<small>This will be your username.</small>
+									<input id="email" name="firstName" type="text" required="required" value="<?php echo $firstName ?>" />
 								</td>
 							</tr>
 							<tr>
-								<td colspan="2">
-									<p>
-										<b>Account Type:</b>
-									</p>
-									<input id="AccountType_Agent" name="AccountType" type="radio" value="Agent" <?php if($AccountType == 'Agent') {echo 'checked';} ?>>
-									<label for="AccountType_Agent">Individual Agent</label>
-									<br />
-									<input id="AccountType_Broker" name="AccountType" type="radio" value="Broker" <?php if($AccountType == 'Broker') {echo 'checked';} ?>>
-									<label for="AccountType_Broker">Office with Multiple Agents</label>
+								<td>
+									<label for="email">Last Name:</label>
+								</td>
+								<td>
+									<input id="email" name="lastName" type="text" required="required" value="<?php echo $lastName ?>" />
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<label for="email">Phone Number:</label>
+								</td>
+								<td>
+									<input id="email" name="phoneNumber" type="text" required="required" value="<?php echo $phoneNumber ?>" />
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<label for="email">Email:</label>
+								</td>
+								<td>
+									<input id="email" name="email" type="email" required="required" placeholder="Your email will be your username" value="<?php echo $email ?>" />
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<label>Account Type:</label>
+								</td>
+								<td>
+									<?php
+									if( $accountType == "Agent" ) {
+										$agentSelected = "selected=\"selected\"";
+									}
+									if( $accountType == "Broker" ) {
+										$brokerSelected = "selected=\"selected\"";
+									}									
+									?>
+									<select name="accountType">
+										<option>Select One</option>
+										<option value="Agent" <?php echo $agentSelected ?>>Individual Agent</option>
+										<option value="Broker" <?php echo $brokerSelected ?>>Office with Multiple Agents</option>
+									</select>
 								</td>
 							</tr>
 						</table>
 						<p class="submit">
-							<input type="submit" class="button-primary" value="Start Trial" />
+							<button type="submit" class="button-primary">Start Trial</button>
 							<span>&nbsp;&nbsp;&nbsp;Creating your trial account can take up to 60 seconds to complete. Please do not refresh the page or press the back button.</span>
 						</p>
 					</form>
@@ -948,7 +999,7 @@ if( !class_exists('IHomefinderAdmin')) {
 	    	     	<label>Location:</label>
 	            </div>
             	<input type="text" id="ihfSeoLinksAutoComplete"
-            		name="<?php echo IHomefinderConstants::SE0_CITY_LINKS_SETTINGS . '[0][' . IHomefinderConstants::SE0_CITY_LINKS_CITY_ZIP . ']'?>"
+            		name="<?php echo IHomefinderConstants::SEO_CITY_LINKS_SETTINGS . '[0][' . IHomefinderConstants::SEO_CITY_LINKS_CITY_ZIP . ']'?>"
             		value="Enter City - OR - Postal Code"
             		size="30"/>
 
@@ -958,7 +1009,7 @@ if( !class_exists('IHomefinderAdmin')) {
 				<div>
 	    	     	<label>Property Type:</label>
 	            </div>
-            	<select name="<?php echo IHomefinderConstants::SE0_CITY_LINKS_SETTINGS . '[0][' . IHomefinderConstants::SE0_CITY_LINKS_PROPERTY_TYPE . ']' ?>">
+            	<select name="<?php echo IHomefinderConstants::SEO_CITY_LINKS_SETTINGS . '[0][' . IHomefinderConstants::SEO_CITY_LINKS_PROPERTY_TYPE . ']' ?>">
              	<?php
 	    			foreach ($propertyTypesList as $i => $value) {
     					echo "<option value='" . $propertyTypesList[$i]->propertyTypeCode . "'>" . $propertyTypesList[$i]->displayName . "</option>" ;
@@ -973,7 +1024,7 @@ if( !class_exists('IHomefinderAdmin')) {
 	    	        	<label>Min Price:</label>
 	        	    </div>
 	            	<div style="float:left">
-	            		<input name="<?php echo IHomefinderConstants::SE0_CITY_LINKS_SETTINGS . '[0][' . IHomefinderConstants::SE0_CITY_LINKS_MIN_PRICE . ']'?>" type="text" size="10"/>
+	            		<input name="<?php echo IHomefinderConstants::SEO_CITY_LINKS_SETTINGS . '[0][' . IHomefinderConstants::SEO_CITY_LINKS_MIN_PRICE . ']'?>" type="text" size="10"/>
 					</div>
 				</div>
 				<div style="clear:both;"></div>
@@ -983,7 +1034,7 @@ if( !class_exists('IHomefinderAdmin')) {
 	    	        	<label>Max Price:</label>
 	        	    </div>
 	            	<div style="float:left">
-	            		<input name="<?php echo IHomefinderConstants::SE0_CITY_LINKS_SETTINGS . '[0][' . IHomefinderConstants::SE0_CITY_LINKS_MAX_PRICE . ']'?>" type="text" size="10"/>
+	            		<input name="<?php echo IHomefinderConstants::SEO_CITY_LINKS_SETTINGS . '[0][' . IHomefinderConstants::SEO_CITY_LINKS_MAX_PRICE . ']'?>" type="text" size="10"/>
 					</div>
 					<div style="clear:both;"></div>
         		</div>
@@ -993,7 +1044,7 @@ if( !class_exists('IHomefinderAdmin')) {
 	    	     	<label>Link Text:</label>
 	            </div>
 	           	<div style="float:left">
-	           		<input id="ihfSeoLinksText" name="<?php echo IHomefinderConstants::SE0_CITY_LINKS_SETTINGS . '[0][' . IHomefinderConstants::SE0_CITY_LINKS_TEXT. ']'?>" type="text" size="30"/>
+	           		<input id="ihfSeoLinksText" name="<?php echo IHomefinderConstants::SEO_CITY_LINKS_SETTINGS . '[0][' . IHomefinderConstants::SEO_CITY_LINKS_TEXT. ']'?>" type="text" size="30"/>
 				</div>
 				<div style="clear:both;"></div>
 
@@ -1002,7 +1053,7 @@ if( !class_exists('IHomefinderAdmin')) {
 	    	    	<label>Link Width:</label>
 	           	</div>
 	           	<div style="float:left;width:80px;">
-	           		<input name="<?php echo(IHomefinderConstants::SE0_CITY_LINK_WIDTH)?>" type="text" size="3" value="<?php echo(get_option(IHomefinderConstants::SE0_CITY_LINK_WIDTH, '80'))?>"/>
+	           		<input name="<?php echo(IHomefinderConstants::SEO_CITY_LINK_WIDTH)?>" type="text" size="3" value="<?php echo(get_option(IHomefinderConstants::SEO_CITY_LINK_WIDTH, '80'))?>"/>
 				</div>
 
 
@@ -1016,22 +1067,22 @@ if( !class_exists('IHomefinderAdmin')) {
 				<p/>
 			    <?php
 
-			    	$seoCityLinksSettings =get_option(IHomefinderConstants::SE0_CITY_LINKS_SETTINGS);
+			    	$seoCityLinksSettings =get_option(IHomefinderConstants::SEO_CITY_LINKS_SETTINGS);
 			    	if( $seoCityLinksSettings && is_array($seoCityLinksSettings)){
 		    			sort($seoCityLinksSettings);
 		    			//save sorted array
-		    			update_option(IHomefinderConstants::SE0_CITY_LINKS_SETTINGS, $seoCityLinksSettings);
+		    			update_option(IHomefinderConstants::SEO_CITY_LINKS_SETTINGS, $seoCityLinksSettings);
 		    			foreach ($seoCityLinksSettings as $i => $value) {
-		    				$index=$value[IHomefinderConstants::SE0_CITY_LINKS_TEXT ];
+		    				$index=$value[IHomefinderConstants::SEO_CITY_LINKS_TEXT ];
 		    				if($index){
 			    				echo("<div>");
 			    				echo("<input type='button' class='button-secondary' value='X' onclick='ihfRemoveSeoLink(this);'/>");
 			    				echo("&nbsp;&nbsp;" . $index );
-			    				echo "<input type='hidden' name='" . IHomefinderConstants::SE0_CITY_LINKS_SETTINGS . '[' . $index . '][' . IHomefinderConstants::SE0_CITY_LINKS_TEXT . "]' value='" . $value[IHomefinderConstants::SE0_CITY_LINKS_TEXT ] . "'>" ;
-	   							echo "<input type='hidden' name='" . IHomefinderConstants::SE0_CITY_LINKS_SETTINGS . '[' . $index . '][' . IHomefinderConstants::SE0_CITY_LINKS_CITY_ZIP . "]' value='" . $value[IHomefinderConstants::SE0_CITY_LINKS_CITY_ZIP ] . "'>" ;
-	   							echo "<input type='hidden' name='" . IHomefinderConstants::SE0_CITY_LINKS_SETTINGS . '[' . $index . '][' . IHomefinderConstants::SE0_CITY_LINKS_PROPERTY_TYPE . "]' value='" . $value[IHomefinderConstants::SE0_CITY_LINKS_PROPERTY_TYPE ] . "'>" ;
-	   							echo "<input type='hidden' name='" . IHomefinderConstants::SE0_CITY_LINKS_SETTINGS . '[' . $index . '][' . IHomefinderConstants::SE0_CITY_LINKS_MIN_PRICE . "]' value='" . $value[IHomefinderConstants::SE0_CITY_LINKS_MIN_PRICE ] . "'>" ;
-	   							echo "<input type='hidden' name='" . IHomefinderConstants::SE0_CITY_LINKS_SETTINGS . '[' . $index . '][' . IHomefinderConstants::SE0_CITY_LINKS_MAX_PRICE . "]' value='" . $value[IHomefinderConstants::SE0_CITY_LINKS_MAX_PRICE ] . "'>" ;
+			    				echo "<input type='hidden' name='" . IHomefinderConstants::SEO_CITY_LINKS_SETTINGS . '[' . $index . '][' . IHomefinderConstants::SEO_CITY_LINKS_TEXT . "]' value='" . $value[IHomefinderConstants::SEO_CITY_LINKS_TEXT ] . "'>" ;
+	   							echo "<input type='hidden' name='" . IHomefinderConstants::SEO_CITY_LINKS_SETTINGS . '[' . $index . '][' . IHomefinderConstants::SEO_CITY_LINKS_CITY_ZIP . "]' value='" . $value[IHomefinderConstants::SEO_CITY_LINKS_CITY_ZIP ] . "'>" ;
+	   							echo "<input type='hidden' name='" . IHomefinderConstants::SEO_CITY_LINKS_SETTINGS . '[' . $index . '][' . IHomefinderConstants::SEO_CITY_LINKS_PROPERTY_TYPE . "]' value='" . $value[IHomefinderConstants::SEO_CITY_LINKS_PROPERTY_TYPE ] . "'>" ;
+	   							echo "<input type='hidden' name='" . IHomefinderConstants::SEO_CITY_LINKS_SETTINGS . '[' . $index . '][' . IHomefinderConstants::SEO_CITY_LINKS_MIN_PRICE . "]' value='" . $value[IHomefinderConstants::SEO_CITY_LINKS_MIN_PRICE ] . "'>" ;
+	   							echo "<input type='hidden' name='" . IHomefinderConstants::SEO_CITY_LINKS_SETTINGS . '[' . $index . '][' . IHomefinderConstants::SEO_CITY_LINKS_MAX_PRICE . "]' value='" . $value[IHomefinderConstants::SEO_CITY_LINKS_MAX_PRICE ] . "'>" ;
 	   							echo("</div>");
 		    				}
 		    			}

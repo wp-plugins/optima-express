@@ -22,25 +22,25 @@ if( !class_exists('iHomefinderLinkWidget')) {
 	     * @see WP_Widget::widget
 	     */
 	    public function widget($args, $instance) {
-	        $linkWidth=get_option(IHomefinderConstants::SE0_CITY_LINK_WIDTH,'80');
+	        $linkWidth=get_option(IHomefinderConstants::SEO_CITY_LINK_WIDTH,'80');
 	        //sets vars like $before_widget from $args
 	    	extract( $args );
 	    	
 	    	echo $before_widget;
            	echo $before_title;
 
-	   		$linkArray = get_option(IHomefinderConstants::SE0_CITY_LINKS_SETTINGS);	
+	   		$linkArray = get_option(IHomefinderConstants::SEO_CITY_LINKS_SETTINGS);	
 	   		
 			if(!empty($linkArray)) {
 				echo("<div>");
 				foreach($linkArray as $link ){
 					
 					//create link
-					$linkText=$link[IHomefinderConstants::SE0_CITY_LINKS_TEXT];
-					$cityZip=$link[IHomefinderConstants::SE0_CITY_LINKS_CITY_ZIP];
-					$propertyType=$link[IHomefinderConstants::SE0_CITY_LINKS_PROPERTY_TYPE];
-					$minPrice=$link[IHomefinderConstants::SE0_CITY_LINKS_MIN_PRICE];
-					$maxPrice=$link[IHomefinderConstants::SE0_CITY_LINKS_MAX_PRICE];
+					$linkText=$link[IHomefinderConstants::SEO_CITY_LINKS_TEXT];
+					$cityZip=$link[IHomefinderConstants::SEO_CITY_LINKS_CITY_ZIP];
+					$propertyType=$link[IHomefinderConstants::SEO_CITY_LINKS_PROPERTY_TYPE];
+					$minPrice=$link[IHomefinderConstants::SEO_CITY_LINKS_MIN_PRICE];
+					$maxPrice=$link[IHomefinderConstants::SEO_CITY_LINKS_MAX_PRICE];
 					
 					if( !empty($linkText)){
 						$searchLinkInfo=new iHomefinderSearchLinkInfo($linkText, $cityZip, $propertyType, $minPrice, $maxPrice);

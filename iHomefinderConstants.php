@@ -8,7 +8,7 @@
 if( !interface_exists('IHomefinderConstants')){
 	interface IHomefinderConstants{
 
-		const VERSION="2.2.6";
+		const VERSION="2.2.7";
 		const VERSION_NAME="Optima Express";
 		
 		const LEGACY_EXTERNAL_URL= "http://www.idxre.com/services/wordpress";
@@ -77,13 +77,13 @@ if( !interface_exists('IHomefinderConstants')){
 		const EMAIL_DISPLAY_TYPE_OPTION="ihf-email-display-type-option";
 
 		//SEO City Links settings
-		const SE0_CITY_LINKS_SETTINGS="ihf-seo-city-links-settings";
-		const SE0_CITY_LINKS_CITY_ZIP="ihf-seo-city-links-city-zip";
-		const SE0_CITY_LINKS_TEXT="ihf-seo-city-links-text";
-		const SE0_CITY_LINKS_MIN_PRICE="ihf-seo-city-links-min-price";
-		const SE0_CITY_LINKS_MAX_PRICE="ihf-seo-city-links-max-price";
-		const SE0_CITY_LINKS_PROPERTY_TYPE="ihf-seo-city-links-property-type";
-		const SE0_CITY_LINK_WIDTH = "ihf-seo-city-link-width";
+		const SEO_CITY_LINKS_SETTINGS="ihf-seo-city-links-settings";
+		const SEO_CITY_LINKS_CITY_ZIP="ihf-seo-city-links-city-zip";
+		const SEO_CITY_LINKS_TEXT="ihf-seo-city-links-text";
+		const SEO_CITY_LINKS_MIN_PRICE="ihf-seo-city-links-min-price";
+		const SEO_CITY_LINKS_MAX_PRICE="ihf-seo-city-links-max-price";
+		const SEO_CITY_LINKS_PROPERTY_TYPE="ihf-seo-city-links-property-type";
+		const SEO_CITY_LINK_WIDTH = "ihf-seo-city-link-width";
 
 
 

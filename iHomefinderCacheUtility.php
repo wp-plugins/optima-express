@@ -22,9 +22,11 @@ if( !class_exists('IHomefinderCacheUtility')) {
 		
 		public function updateItem( $key, $value, $expiration ) {
 			$cacheKey = $this->getKey( $key );
-			IHomefinderLogger::getInstance()->debug( 'updating cache cacheKey ' . $cacheKey );
-			// Set a new transient
-			set_transient( $cacheKey, $value, $expiration );
+			if( !strpos( $value, "You don't have permission to access" ) ) {
+				IHomefinderLogger::getInstance()->debug( 'updating cache cacheKey ' . $cacheKey );
+				// Set a new transient
+				set_transient( $cacheKey, $value, $expiration );
+			}
 		}
 		
 		public function deleteItem( $key ) {

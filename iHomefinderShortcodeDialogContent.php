@@ -300,6 +300,12 @@
 											</select>
 										</div>
 									</div>
+									<div class="form-group">
+										<label class="control-label">Max. Results</label>
+										<div>
+											<input class="form-control" type="number" name="maxResults" value="25" />
+										</div>
+									</div>
 									<input class="btn btn-default" type="button" name="insertListingGallery" value="Insert" onclick="return IhfGalleryDialog.validateForm(this.form) && IhfGalleryDialog.insertListingGallery(this.form, '<?php echo(IHomefinderShortcodeDispatcher::getInstance()->getListingGalleryShortcode()) ?>');" />
 								</form>
 							</div>
