@@ -31,7 +31,7 @@ if( !class_exists('iHomefinderQuickSearchWidget')) {
 	    			extract( $args );
 	    			$title = apply_filters('widget_title', $instance['title']);
 
-	    			$quickSearchContent = $this->cacheUtility->getItem($this->id);
+	    			//$quickSearchContent = $this->cacheUtility->getItem($this->id);
 	    			if( empty($quickSearchContent)){
 	    				$authenticationToken=IHomefinderAdmin::getInstance()->getAuthenticationToken();
 	    				$ihfUrl = IHomefinderLayoutManager::getInstance()->getExternalUrl() . '?method=handleRequest&viewType=json&requestType=listing-search-form' ;
@@ -39,6 +39,7 @@ if( !class_exists('iHomefinderQuickSearchWidget')) {
 	    				$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "smallView", "true" );
 	    				$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "phpStyle", "true" );
 	    				$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "style", $instance['style'] );
+	    				$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "showPropertyType", $instance['showPropertyType'] );
 						
 	    				$contentInfo = iHomefinderRequestor::remoteRequest($ihfUrl);
 	    				
@@ -75,6 +76,7 @@ if( !class_exists('iHomefinderQuickSearchWidget')) {
 			$instance = $old_instance;
 			$instance['title'] = strip_tags(stripslashes($new_instance['title']));
 			$instance['style'] = strip_tags(stripslashes($new_instance['style']));
+			$instance['showPropertyType'] = $new_instance['showPropertyType'];
 			
 			//Add context related values.
 			$instance = $this->contextUtility->updateContext($new_instance, $instance);
@@ -93,6 +95,7 @@ if( !class_exists('iHomefinderQuickSearchWidget')) {
 	    function form($instance) {
 	        $title = esc_attr($instance['title']);
 	        $style = esc_attr($instance['style']);
+	        $showPropertyType = $instance['showPropertyType'];
 	    ?>
 	            <p>
 	            	<?php _e('Title:'); ?>
@@ -107,6 +110,14 @@ if( !class_exists('iHomefinderQuickSearchWidget')) {
 		            	<option value="horizontal" <?php if($style=="horizontal"){echo(' selected');}?>>Horizontal</option>
 		            	<option value="twoline" <?php if($style=="twoline"){echo(' selected');}?>>Two Line</option>
 		            </select>	         		
+           		</p>
+           		<?php }?>
+	            <?php if(IHomefinderLayoutManager::getInstance()->supportsQuickSearchPropertyType()){?>
+	            <p>
+					<label>
+						<input type="checkbox" name="<?php echo $this->get_field_name('showPropertyType'); ?>" value="true" <?php if($showPropertyType === "true"){echo "checked";} ?> />
+						<span><?php _e('Show Property Type'); ?></span>
+					</label>         		
            		</p>
            		<?php }?>
 	    <?php 

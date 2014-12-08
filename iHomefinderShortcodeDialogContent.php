@@ -366,6 +366,16 @@
 										</div>
 									</div>
 								<?php }?>
+								<?php if(IHomefinderLayoutManager::getInstance()->supportsQuickSearchPropertyType()){?>
+									<div class="form-group">
+										<div class="checkbox">
+											<label class="control-label">
+												<input type="checkbox" name="showPropertyType" value="true" checked />
+												<span>Show Property Type</span>
+											</label>
+										</div>
+									</div>
+								<?php }?>
 								<input class="btn btn-default" type="button" name="insertQuickSearch" value="Insert" onclick="return IhfGalleryDialog.validateForm(this.form) && IhfGalleryDialog.insertQuickSearch(this.form, '<?php echo(IHomefinderShortcodeDispatcher::getInstance()->getQuickSearchShortcode()) ?>');" />
 							</form>
 						</div>

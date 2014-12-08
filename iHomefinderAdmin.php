@@ -1497,11 +1497,15 @@ if( !class_exists('IHomefinderAdmin')) {
 							echo('<p/>');
 						}
 
-						$pageConfig->getContactFormPageSetup();
-						echo('<p/>');
+						if( $permissions->isContactFormEnabled()){
+							$pageConfig->getContactFormPageSetup();
+							echo('<p/>');
+						}
 
-						$pageConfig->getValuationFormPageSetup();
-						echo('<p/>');
+						if( $permissions->isValuationEnabled()){
+							$pageConfig->getValuationFormPageSetup();
+							echo('<p/>');
+						}
 
 						$pageConfig->getOpenHomeSearchFormPageSetup();
 						echo('<p/>');

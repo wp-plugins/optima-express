@@ -76,8 +76,10 @@ var IhfGalleryDialog = {
 		if(typeof theForm.style.value != 'undefined') {
 			quickSearchShortCode += ' style=' + this.getFieldValue(theForm.style);
 		}
+		if(typeof theForm.showPropertyType != 'undefined') {
+			quickSearchShortCode += ' showPropertyType=' + theForm.showPropertyType.checked;
+		}
 		quickSearchShortCode += "]";
-		
 		tinyMCEPopup.editor.execCommand('mceInsertContent', false, quickSearchShortCode);
 		tinyMCEPopup.close();
 	},

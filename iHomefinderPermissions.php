@@ -13,7 +13,7 @@ if( !class_exists('IHomefinderPermissions')) {
 		private $saveListingOptionName="ihf_save_listing_enabled";
 		private $hotSheetOptionName="ihf_hotsheet_enabled";
 		private $featuredPropertiesOptionName="ihf_featured_properties_enabled";
-		private $organizerOptionName="ihf_featured_properties_enabled";
+		private $organizerOptionName="ihf_organizer_enabled";
 		private $galleryShortcodesOptionName="ihf_gallery_shortcodes_enabled";
 		
 		private $officeOptionName="ihf_office_enabled";
@@ -28,7 +28,7 @@ if( !class_exists('IHomefinderPermissions')) {
 		private $communityPagesOptionName="ihf_community_pages_enabled";
 		
 		private $pendingAccountOptionName = "ihf_pending_account";
-    private $activeTrialAccountOptionName = "ihf_active_trial_account";
+   		private $activeTrialAccountOptionName = "ihf_active_trial_account";
 		
 		private static $instance ;
 		

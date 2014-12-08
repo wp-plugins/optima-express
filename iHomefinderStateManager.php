@@ -113,7 +113,7 @@ if( !class_exists('IHomefinderStateManager')) {
 			$value='';
 			if( $this->isSessionsEnabled() ){
 				if( array_key_exists($cacheKey, $_SESSION )){
-					$value=$_SESSION[$cacheKey];
+					$value = unserialize($_SESSION[$cacheKey]);
 				}	
 			}else{
 				$value=get_transient($cacheKey);
@@ -123,7 +123,7 @@ if( !class_exists('IHomefinderStateManager')) {
 		
 		private function saveStateValue( $cacheKey, $value ){
 			if( $this->isSessionsEnabled() ){
-				$_SESSION[$cacheKey]=$value;
+				$_SESSION[$cacheKey] = serialize($value);
 			}else{
 				set_transient($cacheKey, $value ,$this->transientTimeout );
 			}

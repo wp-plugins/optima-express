@@ -58,6 +58,14 @@ if( !class_exists('IHomefinderLayoutManager')) {
 			return $result;
 		}
 		
+		public function supportsQuickSearchPropertyType(){
+			$result=false;
+			if( $this->isResponsive()){
+				$result=true;
+			}
+			return $result;
+		}
+		
 		public function supportsMapSearchCenterLatLong(){
 			$result=false;
 			if( $this->isResponsive()){

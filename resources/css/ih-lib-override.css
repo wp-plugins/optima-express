@@ -205,23 +205,13 @@ body.ihf-container-modal .modal-open,
 	background: lightblue;
 	border-color: white;
 }
-.ui-autocomplete,
-.ui-autocomplete .ui-menu-item,
-.ui-autocomplete .ui-menu-item a {
-	background: none;
-	border-color: black;
-	color: black;
-}
+
 .ui-autocomplete {
-	background: none;
 	border-color: black;
-	color: black;
 }
-.ui-autocomplete .ui-menu-item {
-	background: none;
-	border-color: black;
-	color: black;
-}
+
+.ui-autocomplete .ui-menu-item,
+.ui-autocomplete .ui-menu-item a,
 .ui-autocomplete .ui-menu-item a:hover {
 	background: none;
 	border-color: black;
@@ -233,4 +223,14 @@ input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button { 
     -webkit-appearance: none; 
      margin: 0; 
+}
+
+#ihf-main-container .page-header {
+    border: none;
+    margin: 0px;
+}
+
+/* fix for Mobile Safari 5.1 on iOS 5 (iPad 2 and iPad 1) */
+#ihf-main-container .chosen-container .chosen-results li {
+    position: relative;
 }

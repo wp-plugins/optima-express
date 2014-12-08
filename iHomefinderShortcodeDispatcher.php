@@ -367,6 +367,10 @@ if( !class_exists('IHomefinderShortcodeDispatcher')) {
 	    		$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "style", $attr['style'] );
 	    	}
 
+	    	if(isset($attr['showpropertytype'])){
+	    		$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "showPropertyType", $attr['showpropertytype'] );
+	    	}
+
 	    	$contentInfo = iHomefinderRequestor::remoteRequest($ihfUrl);
 	    	$quickSearchContent = $contentInfo->view;
 
