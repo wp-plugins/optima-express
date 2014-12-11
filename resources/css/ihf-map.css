@@ -1,0 +1,82 @@
+#ihf-main-container .leaflet-popup {
+    width: 330px;
+}
+
+#ihf-main-container .leaflet-popup-content {
+    width: auto !important;
+}
+
+@media(max-width: 480px) {
+    #ihf-main-container .leaflet-popup {
+        width: 200px;
+    }
+}
+
+#ihf-main-container .leaflet-top,
+#ihf-main-container .leaflet-bottom {
+    z-index: 80;
+}
+
+#ihf-main-container .leaflet-control-container a:hover,
+#ihf-main-container .leaflet-control-container a:active,
+#ihf-main-container a.leaflet-popup-close-button:hover,
+#ihf-main-container a.leaflet-popup-close-button:active {
+    text-decoration: none;
+}
+
+#ihf-main-container .leaflet-div-icon {
+    background: none;
+    border: none;
+}
+
+#ihf-main-container .leaflet-popup-content-wrapper {
+	padding: 10px;
+	border-radius: 5px;
+	overflow: hidden;
+}
+
+#ihf-main-container .leaflet-popup-content {
+    margin: 0;
+}
+
+#ihf-main-container .leaflet-cluster-anim .leaflet-marker-icon,
+#ihf-main-container .leaflet-cluster-anim .leaflet-marker-shadow {
+	-webkit-transition: -webkit-transform 0.3s ease-out, opacity 0.3s ease-in;
+	-moz-transition: -moz-transform 0.3s ease-out, opacity 0.3s ease-in;
+	-o-transition: -o-transform 0.3s ease-out, opacity 0.3s ease-in;
+	transition: transform 0.3s ease-out, opacity 0.3s ease-in;
+}
+
+#ihf-main-container .marker-cluster div {
+	display: none;
+}
+
+#ihf-main-container .marker-cluster-small {
+	width: 50px !important;
+	height: 50px !important;
+	background-image: url('//www.idxre.com/idx/images/mapcount_bg5_blue.png');
+}
+
+#ihf-main-container .marker-cluster-medium,
+#ihf-main-container .marker-cluster-large {
+	width: 64px !important;
+	height: 63px !important;
+	background-image: url('//www.idxre.com/idx/images/mapcount_bg6_blue.png');
+}
+
+#ihf-main-container .leaflet-control-layers-base label {
+    display: block !important;
+}
+
+#ihf-main-container #ihf-refine-search-close {
+    color: white;
+    text-decoration: none;
+}
+
+#ihf-main-container #ihf-map-canvas a {
+    text-rendering: initial;
+}
+
+#ihf-main-container #ihf-map-canvas img {
+	box-shadow: none;
+}
