@@ -508,6 +508,12 @@
 									Property Organizer Login
 								</label>
 							</div>
+							<div class="radio">
+								<label class="control-label">
+									<input name="shortcodeType" type="radio" onclick="jQuery('.ihfMenu').hide(); jQuery('#valuationFormMenu').toggle();">
+									Valuation Form
+								</label>
+							</div>
 						</div>
 					</div>
 					<div class="col-xs-8">
@@ -524,6 +530,11 @@
 						<div id="organizerLoginMenu" style="display: none;" class="ihfMenu">
 							<form onsubmit="return false;" action="#">
 								<input class="btn btn-default" type="button" name="insertOrganizerLogin" value="Insert" onclick="return IhfGalleryDialog.validateForm(this.form) && IhfGalleryDialog.insertOrganizerLogin(this.form, '<?php echo(IHomefinderShortcodeDispatcher::getInstance()->getOrganizerLoginShortcode()) ?>');" />
+							</form>
+						</div>
+						<div id="valuationFormMenu" style="display: none;" class="ihfMenu">
+							<form onsubmit="return false;" action="#">
+								<input class="btn btn-default" type="button" name="insertValuationForm" value="Insert" onclick="return IhfGalleryDialog.validateForm(this.form) && IhfGalleryDialog.insertValuationForm(this.form, '<?php echo(IHomefinderShortcodeDispatcher::getInstance()->getValuationFormShortcode()) ?>');" />
 							</form>
 						</div>
 					</div>

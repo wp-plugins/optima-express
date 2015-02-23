@@ -97,7 +97,7 @@ if( !class_exists('iHomefinderContactFormWidget') ) {
 				<input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $title; ?>" />
 			</p>
 			<?php
-			$this->contextUtility->getPageSelector($this, $instance, IHomefinderConstants::SEARCH_OTHER_WIDGET_TYPE );
+			$this->contextUtility->getPageSelector($this, $instance, IHomefinderConstants::CONTACT_WIDGET_TYPE );
 		}
 	} // class iHomefinderContactFormWidget
 }//end if( !class_exists('iHomefinderContactFormWidget'))

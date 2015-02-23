@@ -128,7 +128,12 @@ if( !class_exists('IHomefinderWidgetContextUtility')) {
 				unset( $listOfPages["Email Alerts"]);
 				unset( $listOfPages["Map Search"]);
 			}
-				
+			
+			//Contact page is not valid for contact form widget
+			if( $widgetType == IHomefinderConstants::CONTACT_WIDGET_TYPE){
+				unset ($listOfPages["Contact Form"]);
+			}
+			
 			return $listOfPages ;
 		}
 		

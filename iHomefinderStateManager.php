@@ -66,7 +66,9 @@ if( !class_exists('IHomefinderStateManager')) {
 
 		public function initialize(){
 			
-			session_start();
+			if( !$this->isSessionStarted() ) {
+				session_start();
+			}
 			
 			if( array_key_exists($this->identifierCookieName, $_COOKIE )){
 				$this->uniqueId = $_COOKIE[$this->identifierCookieName];
@@ -99,6 +101,14 @@ if( !class_exists('IHomefinderStateManager')) {
 					setcookie($this->getLeadCaptureKey(), $this->leadCaptureId, $expireTime, "/");
 				}
 			}		
+		}
+		
+		private function isSessionStarted(){
+			$result = true;
+			if(session_id() === "" || (function_exists("session_status") && session_status() === PHP_SESSION_NONE)) {
+				$result = false;
+			}
+			return $result;			
 		}
 		
 		private function isSessionsEnabled(){

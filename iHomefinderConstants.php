@@ -8,13 +8,11 @@
 if( !interface_exists('IHomefinderConstants')){
 	interface IHomefinderConstants{
 
-		const VERSION="2.4.0";
+		const VERSION="2.5.0";
 		const VERSION_NAME="Optima Express";
-		
 		const LEGACY_EXTERNAL_URL= "http://www.idxre.com/services/wordpress";
-   		const RESPONSIVE_EXTERNAL_URL= "http://www.idxhome.com/service/wordpress";
-   		const CONTROL_PANEL_EXTERNAL_URL= "http://www.idxre.com/idx/guid";
-		
+		const RESPONSIVE_EXTERNAL_URL= "http://www.idxhome.com/service/wordpress";
+		const CONTROL_PANEL_EXTERNAL_URL= "http://www.idxre.com/idx/guid";
 
 		//Group for Activation related options
 		//Also used as menu slug for the Activate Menu
@@ -134,6 +132,9 @@ if( !interface_exists('IHomefinderConstants')){
 		// search related virtual page
 		const SEARCH_WIDGET_TYPE="searchWidget";
 		const GALLERY_WIDGET_TYPE="galleryWidget";
+		//contact widget should not display on contact form
+		//virtual page
+		const CONTACT_WIDGET_TYPE="contactWidget";
 		
 		// Search widgets that can display on search pages
 		const SEARCH_OTHER_WIDGET_TYPE="searchOtherWidget";

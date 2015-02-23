@@ -30,6 +30,7 @@ if( !class_exists('IHomefinderShortcodeDispatcher')) {
 		private $advancedSearchShortCode    = "optima_express_advanced_search";
 		private $organizerLoginShortCode    = "optima_express_organizer_login";
 		private $agentDetailShortCode       = "optima_express_agent_detail";		
+		private $valuationFormShortCode     = "optima_express_valuation_form";		
 		
 		private $galleryFormData ;
 		private $mapSearchContent ;
@@ -62,6 +63,7 @@ if( !class_exists('IHomefinderShortcodeDispatcher')) {
 			add_shortcode($this->getAdvancedSearchShortcode(),        array($this, "getAdvancedSearch"));
 			add_shortcode($this->getOrganizerLoginShortcode(),        array($this, "getOrganizerLogin"));
 			add_shortcode($this->getAgentDetailShortcode(),           array($this, "getAgentDetail"));
+			add_shortcode($this->getValuationFormShortcode(),           array($this, "getValuationForm"));
 		}
 
 		public function getToppicksShortcode(){
@@ -119,6 +121,10 @@ if( !class_exists('IHomefinderShortcodeDispatcher')) {
 			return $this->agentDetailShortCode ;
 		}		
 		
+		public function getValuationFormShortcode(){
+			return $this->valuationFormShortCode ;
+		}		
+		
 		function getBasicSearch( $attr ) {
 			$content='';
 			$basicSearchVirtualPage=IHomefinderVirtualPageFactory::getInstance()->getVirtualPage( IHomefinderVirtualPageFactory::LISTING_SEARCH_FORM );
@@ -148,12 +154,20 @@ if( !class_exists('IHomefinderShortcodeDispatcher')) {
 
 		function getAgentDetail( $attr ){
 			$virtualPage=IHomefinderVirtualPageFactory::getInstance()->getVirtualPage( IHomefinderVirtualPageFactory::AGENT_DETAIL );
-			$authenticationToken=$this->ihfAdmin->getAuthenticationToken();
+			$authenticationToken = $this->ihfAdmin->getAuthenticationToken();
 			$content='';
 			//All values in the $attr array are convered to lowercase.
 			if( $attr['agentid'] != null ){
 				$_REQUEST['agentID']=$attr['agentid'];
 			}
+			$content=$virtualPage->getContent($authenticationToken);
+			return $content;
+		}
+		
+		function getValuationForm( $attr ){
+			$virtualPage=IHomefinderVirtualPageFactory::getInstance()->getVirtualPage( IHomefinderVirtualPageFactory::VALUATION_FORM );
+			$authenticationToken = $this->ihfAdmin->getAuthenticationToken();
+			$content='';
 			$content=$virtualPage->getContent($authenticationToken);
 			return $content;
 		}

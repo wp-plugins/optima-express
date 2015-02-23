@@ -761,13 +761,13 @@ if( !class_exists('IHomefinderAdmin')) {
 					<a href="admin.php?page=<?php echo IHomefinderConstants::OPTION_ACTIVATE ?>&section=enter-reg-key">I already have a registration key</a>
 					<br />
 					<br />
-					<a href="admin.php?page=<?php echo IHomefinderConstants::OPTION_ACTIVATE ?>&section=free-trial" class="button button-primary button-large-ihf" >Get a Free Trial<br />IDX Account</a>
-					<a href="http://www.ihomefinder.com/products/optima-express/optima-express-agent-pricing/?plugin=true&redirectURL=<?php echo urlencode ( 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] ); ?>" class="button button-primary button-large-ihf">Sign Up for IDX<br />in Your MLS</a>
+					<a href="admin.php?page=<?php echo IHomefinderConstants::OPTION_ACTIVATE ?>&section=free-trial" class="button button-primary button-large-ihf" >Get a Free<br />30-Day Trial</a>
+					<a href="http://www.ihomefinder.com/products/optima-express/optima-express-agent-pricing/?plugin=true&redirectURL=<?php echo urlencode ( 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] ); ?>" class="button button-primary button-large-ihf">Sign Up for a<br />Paid Account</a>
 					<br />
 					<br />
 					<p>Optima Express from iHomefinder adds MLS/IDX search and listings directly into your WordPress site.</p>
 					<p>A free trial account uses sample IDX listings from Northern California.</p>
-					<p>Signing up for IDX in your MLS provides access to all listings in your MLS and full support from iHomefinder. Plans start at $39.95 per month. You must be a member of an MLS to qualify for IDX service. <a target="_blank" href="http://www.ihomefinder.com/mls-coverage/">Learn More</a></p>
+					<p>Signing up for a paid account provides access to listings in your MLS&reg; System and full support from iHomefinder. Plans start at $39.95 per month. You must be a member of an MLS to qualify for IDX service. <a target="_blank" href="http://www.ihomefinder.com/mls-coverage/">Learn More</a></p>
 					<p><?php echo($this->iHomefinderNotification); ?></p>
 					<?php
 					

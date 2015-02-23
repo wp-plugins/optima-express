@@ -69,26 +69,32 @@ if( !class_exists('IHomefinderRequestor')){
 			if( is_wp_error($response)){
 				$contentInfo=null;
 			} else {
-				if( $response['response']['code'] >= 400 ) {
-					$responseBody = wp_remote_retrieve_body( $response );
-					$contentInfo = new stdClass();
-					$contentInfo->view = $responseBody;
-				} else {
-					$responseBody = wp_remote_retrieve_body( $response );
-					IHomefinderLogger::getInstance()->debug('responseBody: ' . $responseBody );
-					try{
-						$contentType=wp_remote_retrieve_header($response, "content-type");
-						//$ihfSessionId=wp_remote_retrieve_header($response, "ihfSessionId");		
-						if( $contentType != null && $contentType == "text/xml;charset=UTF-8"){
-							$contentInfo=simplexml_load_string($responseBody);	
-						}
-						else{
-							$contentInfo=json_decode($responseBody);
-						}
-					}catch (Exception $e){
-						var_dump($e);
+				$responseBody = wp_remote_retrieve_body( $response );
+				IHomefinderLogger::getInstance()->debug('responseBody: ' . $responseBody );
+				try{
+					$contentType=wp_remote_retrieve_header($response, "content-type");
+					//$ihfSessionId=wp_remote_retrieve_header($response, "ihfSessionId");
+					if( $contentType != null && $contentType == "text/xml;charset=UTF-8"){
+						$contentInfo=simplexml_load_string($responseBody);
 					}
+					else{
+						$contentInfo=json_decode($responseBody);
+					}
+				}catch (Exception $e){
+					var_dump($e);
 				}
+				if( $response['response']['code'] >= 400 ) {
+					//This is specifically for listings that are 
+					//not found. We set status from java code to '404 not found'
+					//$contentInfo->view = $responseBody;
+					if($response['response']['code'] == 404){
+							global $wp_query;
+							$wp_query->set_404();
+							status_header(404);
+							nocache_headers();
+						}
+					}
+					
 			}
 			
 			//if( $ajaxRequest ){var_dump($contentInfo);die();}

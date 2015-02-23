@@ -130,6 +130,15 @@ var IhfGalleryDialog = {
 		tinyMCEPopup.close();
 	},
 	
+	insertValuationForm : function(theForm, valuationFormShortCodeToken) {
+		// Insert the contents from the input into the document
+		var valuationFormShortCode = "[" + valuationFormShortCodeToken;
+		valuationFormShortCode += "]";
+		
+		tinyMCEPopup.editor.execCommand('mceInsertContent', false, valuationFormShortCode);
+		tinyMCEPopup.close();
+	},
+	
 	insertMapSearch : function(theForm, mapSearchShortCodeToken) {
 		// Insert the contents from the input into the document
 		var mapSearchShortCode = "[" + mapSearchShortCodeToken;

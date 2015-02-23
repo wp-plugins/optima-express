@@ -39,7 +39,7 @@ if( !class_exists('IHomefinderAdvancedSearchFormVirtualPageImpl')) {
 				. '?method=handleRequest'
 				. '&viewType=json'
 				. '&requestType=listing-advanced-search-form'
-				. '&includeAreaSelectorAreas=true'
+				. '&includeAreaSelectorAreas=false'
 				. '&authenticationToken=' . $authenticationToken
 				. '&phpStyle=true';
 				
