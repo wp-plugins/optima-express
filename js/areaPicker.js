@@ -145,6 +145,9 @@
 			var ENTER_KEY = 13;
 
 			var selectedAutoCompleteIndex = -1;
+			
+			var useCustomCitiesForAjax = true;
+			customAreaListToggle.html(customAreaListToggleMoreAreasText);
 
 			var allAreas;
 			if (source !== undefined && source !== null && source.allAreas !== undefined) {
@@ -234,6 +237,18 @@
 					customAreaListToggle.html(customAreaListToggleLessAreasText);
 				} else {
 					customAreaListToggle.html(customAreaListToggleMoreAreasText);
+				}
+			};
+			
+			// Toggle the text to diplay a full list of areas
+			// or a custom list of areas using Ajax
+			var toggleCustomAreaStatusAjax = function() {
+				if ( useCustomCitiesForAjax ) {
+					useCustomCitiesForAjax = false;
+					customAreaListToggle.html(customAreaListToggleMoreAreasText);
+				} else {
+					useCustomCitiesForAjax = true;
+					customAreaListToggle.html(customAreaListToggleLessAreasText);
 				}
 			};
 
@@ -466,6 +481,60 @@
 					return a.label.localeCompare(b.label);
 				});
 			};
+			
+			// Load areas for Ajax requests only
+			var loadAreasForAjaxRequests = function(expandAllAreas) {
+				
+				var data = {
+					fieldName: "cityId",
+					maxResults: 0
+				};
+				var self = this;
+				var url = autocompleteRequestUrl;
+				
+				if ( !useCustomCitiesForAjax ) {
+					data.onlyCustomAreasIfAvailable = false;
+				}
+				
+				// Display busy indicator
+				jQuery( 'body *' ).css('cursor', 'progress');
+				
+				jQuery.ajax({
+						type: 'GET',
+						url: url,
+						data: data,
+						traditional: true,
+						dataType: 'jsonp'
+					})
+					.done(function(response) {
+						
+						// End busy indicator
+						jQuery('body *').css('cursor', '');
+						jQuery('#areaPickerCustomListToggle').css('cursor', 'pointer');
+						jQuery('#areaPickerClearAll').css('cursor', 'pointer');
+						jQuery('#ihf-main-search-form-submit').css('cursor', 'pointer');
+						jQuery('.ihf-advanced-search-launch').css('cursor', 'pointer');
+							   
+						allAreas = response;
+						
+						jQuery("#areaPickerExpandAllResults").empty();
+						createFullyExpandedArea(allAreas, expandAllResults, getExpandAllDivId);
+						hideAutoCompleteMatchValues(false);
+						setDefaults(true);
+						if (expandAllAreas) {
+							areaPickerExpandAll.toggle();
+						}
+						toggleCustomAreaStatusAjax();
+						
+						// Show more/less links
+						customAreaListToggle.show();
+						customAreaListToggle.unbind("click");
+						customAreaListToggle.click(function(event) {
+							loadAreasForAjaxRequests(false);
+						});
+
+					});
+			}
 
 			// Find an array of values that match the typed text
 			var getMatches = function(searchTerm, onSuccess) {
@@ -673,26 +742,7 @@
 
 			var toggleAreaPickerExpandAllContainer = function() {
 				if (allAreas === undefined) {
-					var data = {
-						fieldName: "cityId",
-						maxResults: 0
-					};
-					var self = this;
-					var url = autocompleteRequestUrl;
-					jQuery.ajax({
-							type: 'GET',
-							url: url,
-							data: data,
-							traditional: true,
-							dataType: 'jsonp'
-						})
-						.done(function(response) {
-							allAreas = response;
-							createFullyExpandedArea(allAreas, expandAllResults, getExpandAllDivId);
-							hideAutoCompleteMatchValues(false);
-							setDefaults(true);
-							areaPickerExpandAll.toggle();
-						});
+					loadAreasForAjaxRequests(true);
 				} else {
 					hideAutoCompleteMatchValues(false);
 					setDefaults(true);
