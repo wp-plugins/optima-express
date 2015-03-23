@@ -1,51 +1,46 @@
 <?php
-if( !class_exists('IHomefinderOrganizerViewSavedListingListVirtualPageImpl')) {
-	
-	class IHomefinderOrganizerViewSavedListingListVirtualPageImpl implements IHomefinderVirtualPage {
-	
-		private $path="property-organizer-saved-listings";	
-		public function __construct(){
-			
-		}
-		public function getTitle(){
-			return "Saved Listing List";
-		}	
 
+class iHomefinderOrganizerViewSavedListingListVirtualPageImpl extends iHomefinderAbstractVirtualPage {
 	
-		public function getPageTemplate(){
+	private $path="property-organizer-saved-listings";	
+	
+	public function __construct() {
+		
+	}
+	public function getTitle() {
+		return "Saved Listing List";
+	}	
+
+
+	public function getPageTemplate() {
+		
+	}
+	
+	public function getPath() {
+		return $this->path;
+	}
 			
+	public function getContent() {
+		iHomefinderLogger::getInstance()->debug('Begin iHomefinderOrganizerViewSavedListingListFilterImpl');
+		iHomefinderStateManager::getInstance()->saveLastSearch();
+		
+		$isLoggedIn = iHomefinderStateManager::getInstance()->isLoggedIn();
+		if($isLoggedIn) {
+			$subscriberInfo=iHomefinderStateManager::getInstance()->getCurrentSubscriber();
+			$subscriberId=$subscriberInfo->getId();
 		}
 		
-		public function getPath(){
-			return $this->path ;
-		}
-				
-		public function getContent( $authenticationToken ){
-			IHomefinderLogger::getInstance()->debug('Begin IHomefinderOrganizerViewSavedListingListFilterImpl');
-			IHomefinderStateManager::getInstance()->saveLastSearch() ;
-			
-			$isLoggedIn = IHomefinderStateManager::getInstance()->isLoggedIn();
-			if($isLoggedIn){
-				$subscriberInfo=IHomefinderStateManager::getInstance()->getCurrentSubscriber();
-				$subscriberId=$subscriberInfo->getId();
-			}
-			
-			$ihfUrl = IHomefinderLayoutManager::getInstance()->getExternalUrl() . '?method=handleRequest&viewType=json&requestType=property-organizer-view-saved-listing-list' ;
-			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "authenticationToken", $authenticationToken);
-			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "subscriberId", $subscriberId );
-			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "includeSearchSummary", "true" );
-			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "phpStyle", "true");
-			$ihfUrl = iHomefinderRequestor::addVarsToUrl($ihfUrl, $_REQUEST);
-			$contentInfo = IHomefinderRequestor::remoteRequest($ihfUrl);
-			$idxContent = IHomefinderRequestor::getContent( $contentInfo );
-	
-			$content=$idxContent;
-			
-			IHomefinderLogger::getInstance()->debug( '<br/><br/>' . $ihfUrl ) ;
-			IHomefinderLogger::getInstance()->debug('End IHomefinderOrganizerViewSavedListingListFilterImpl');
-			
-			return $content ;
-		}
+		$requestData = 'method=handleRequest&viewType=json&requestType=property-organizer-view-saved-listing-list';
+		$requestData = iHomefinderRequestor::getInstance()->appendQueryVarIfNotEmpty($requestData, "subscriberId", $subscriberId);
+		$requestData = iHomefinderRequestor::getInstance()->appendQueryVarIfNotEmpty($requestData, "includeSearchSummary", "true");
+		$requestData = iHomefinderRequestor::getInstance()->appendQueryVarIfNotEmpty($requestData, "phpStyle", "true");
+		$requestData = iHomefinderRequestor::getInstance()->addVarsToUrl($requestData, $_REQUEST);
+		$this->remoteResponse = iHomefinderRequestor::getInstance()->remoteGetRequest($requestData);
+		$body = iHomefinderRequestor::getInstance()->getContent($this->remoteResponse);
+		
+		iHomefinderLogger::getInstance()->debug($requestData);
+		iHomefinderLogger::getInstance()->debug('End iHomefinderOrganizerViewSavedListingListFilterImpl');
+		
+		return $body;
 	}
 }
-?>

@@ -192,8 +192,8 @@ var IhfGalleryDialog = {
 		tinyMCEPopup.close();
 	},	
 
-	includeMap: function( theForm ){
-		if( theForm.includeMap && theForm.includeMap.checked ){
+	includeMap: function(theForm) {
+		if(theForm.includeMap && theForm.includeMap.checked) {
 			return " includeMap=true";
 		}
 		return " includeMap=false";
@@ -201,26 +201,26 @@ var IhfGalleryDialog = {
 
 	getFieldValue : function(formField) {
 		var value = formField.value;
-		if (this.isEmpty( value )) {
+		if (this.isEmpty(value)) {
 			value = "";
 		}
 		return value;
 	},
 		
-	isEmpty: function( value ){
+	isEmpty: function(value) {
 		if (value === null || value.length === 0) {
 			return true;
 		}
 		return false;
 	},
 	
-	validateForm: function( theForm ){
+	validateForm: function(theForm) {
 		returnValue = true;
 		nodeList = theForm.querySelectorAll('input,select,textarea');
-		for ( var i = 0, node; node = nodeList[i]; i++ ) {
+		for (var i = 0, node; node = nodeList[i]; i++) {
 			parent = node.parentNode;
-			parent.className = parent.className.replace( ' has-error', '' );
-			if ( node.getAttribute( 'required' ) && node.value == '' ) {
+			parent.className = parent.className.replace(' has-error', '');
+			if (node.getAttribute('required') && node.value == '') {
 				parent.className = parent.className + ' has-error';
 				returnValue = false;
 			}

@@ -1,48 +1,44 @@
 <?php
-if( !class_exists('iHomefinderOrganizerViewSavedSearchVirtualPageImpl')) {
 
-	class IHomefinderOrganizerViewSavedSearchVirtualPageImpl implements IHomefinderVirtualPage {
-
-		private $path="property-organizer-view-saved-search";
-		public function __construct(){
-				
-		}
-		public function getTitle(){
-			return "Saved Search";
-		}
-
-		public function getPageTemplate(){
-			
-		}
-		
-		public function getPath(){
-			return $this->path;
-		}
+class iHomefinderOrganizerViewSavedSearchVirtualPageImpl extends iHomefinderAbstractVirtualPage {
 	
+	private $path="property-organizer-view-saved-search";
+	public function __construct() {
+			
+	}
+	public function getTitle() {
+		return "Saved Search";
+	}
+
+	public function getPageTemplate() {
 		
-		public function getContent( $authenticationToken ){
-			IHomefinderLogger::getInstance()->debug('Begin iHomefinderOrganizerViewSavedSearchFilterImpl');
+	}
+	
+	public function getPath() {
+		return $this->path;
+	}
 
-			$searchProfileId=IHomefinderUtility::getInstance()->getQueryVar('searchProfileID');
-			$startRowNumber=IHomefinderUtility::getInstance()->getQueryVar('startRowNumber');
-			$sortBy=IHomefinderUtility::getInstance()->getQueryVar('sortBy');
-			
-			IHomefinderStateManager::getInstance()->saveLastSearch() ;
-				
-			$ihfUrl = IHomefinderLayoutManager::getInstance()->getExternalUrl() . '?method=handleRequest&viewType=json&requestType=property-organizer-view-saved-search' ;
-			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "searchProfileId", $searchProfileId);
-			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "startRowNumber", $startRowNumber);
-			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "sortBy", $sortBy);
-			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "authenticationToken", $authenticationToken);
+	
+	public function getContent() {
+		iHomefinderLogger::getInstance()->debug('Begin iHomefinderOrganizerViewSavedSearchFilterImpl');
 
-			$contentInfo = IHomefinderRequestor::remoteRequest($ihfUrl);
-			$content = IHomefinderRequestor::getContent( $contentInfo );
+		$searchProfileId=iHomefinderUtility::getInstance()->getQueryVar('searchProfileID');
+		$startRowNumber=iHomefinderUtility::getInstance()->getQueryVar('startRowNumber');
+		$sortBy=iHomefinderUtility::getInstance()->getQueryVar('sortBy');
+		
+		iHomefinderStateManager::getInstance()->saveLastSearch();
 			
-			IHomefinderLogger::getInstance()->debug( '<br/><br/>' . $ihfUrl ) ;
-			IHomefinderLogger::getInstance()->debug('End iHomefinderOrganizerViewSavedSearchFilterImpl');
-				
-			return $content ;
-		}
-	}//end class
+		$requestData = 'method=handleRequest&viewType=json&requestType=property-organizer-view-saved-search';
+		$requestData = iHomefinderRequestor::getInstance()->appendQueryVarIfNotEmpty($requestData, "searchProfileId", $searchProfileId);
+		$requestData = iHomefinderRequestor::getInstance()->appendQueryVarIfNotEmpty($requestData, "startRowNumber", $startRowNumber);
+		$requestData = iHomefinderRequestor::getInstance()->appendQueryVarIfNotEmpty($requestData, "sortBy", $sortBy);
+
+		$this->remoteResponse = iHomefinderRequestor::getInstance()->remoteGetRequest($requestData);
+		$body = iHomefinderRequestor::getInstance()->getContent($this->remoteResponse);
+		
+		iHomefinderLogger::getInstance()->debug($requestData);
+		iHomefinderLogger::getInstance()->debug('End iHomefinderOrganizerViewSavedSearchFilterImpl');
+			
+		return $body;
+	}
 }
-?>

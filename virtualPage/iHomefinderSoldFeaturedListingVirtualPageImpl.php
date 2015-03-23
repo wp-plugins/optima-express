@@ -1,61 +1,50 @@
 <?php
-if( !class_exists('IHomefinderSoldFeaturedListingVirtualPageImpl')) {
-	
-	class IHomefinderSoldFeaturedListingVirtualPageImpl implements IHomefinderVirtualPage {
-	
-		private $path="sold-featured-listing";
-		private $title="Sold Properties";
-	
-		public function __construct(){
-		}
-		
-		public function getTitle(){
-			$customTitle = get_option(IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_SOLD_FEATURED );
-			if( $customTitle != null && "" != $customTitle ){
-				$this->title=$customTitle ;
-			}			
-			return $this->title;
-		}
-	
-		public function getPageTemplate(){
-			$pageTemplate = get_option(IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_SOLD_FEATURED);
-			//$pageTemplage = '';
-			return $pageTemplate;			
-		}
-		
-		public function getPath(){
-			$customPath = get_option(IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_SOLD_FEATURED );	
-			if( $customPath != null && "" != $customPath ){
-				$this->path = $customPath ;
-			}
-			return $this->path;
-		}
-		
-				
-		public function getContent( $authenticationToken ){
-			IHomefinderStateManager::getInstance()->saveLastSearch() ;
-			IHomefinderLogger::getInstance()->debug('Begin IHomefinderSoldFeaturedPageImpl');
-			$ihfUrl = IHomefinderLayoutManager::getInstance()->getExternalUrl() 
-				. '?method=handleRequest'
-				. '&viewType=json'
-				. '&requestType=sold-featured-listing'
-				. '&authenticationToken=' . $authenticationToken
-				. '&phpStyle=true'
-				. '&includeSearchSummary=true';
 
+class iHomefinderSoldFeaturedListingVirtualPageImpl extends iHomefinderAbstractVirtualPage {
+	
+	private $path="sold-featured-listing";
+	private $title="Sold Properties";
 
-			$ihfUrl = iHomefinderRequestor::addVarsToUrl($ihfUrl, $_REQUEST) ;
-			$contentInfo = IHomefinderRequestor::remoteRequest($ihfUrl);
-			$idxContent = IHomefinderRequestor::getContent( $contentInfo );
-			
-			
-			$content=$idxContent;
-			
-			IHomefinderLogger::getInstance()->debug('End IHomefinderSoldFeaturedPageImpl');
-			IHomefinderLogger::getInstance()->debug('<br/><br/>' . $ihfUrl);
-			return $content ;
-		}
+	public function __construct() {
 	}
+	
+	public function getTitle() {
+		$customTitle = get_option(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_SOLD_FEATURED);
+		if($customTitle != null && "" != $customTitle) {
+			$this->title=$customTitle;
+		}			
+		return $this->title;
+	}
+
+	public function getPageTemplate() {
+		$pageTemplate = get_option(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_SOLD_FEATURED);
+		return $pageTemplate;			
+	}
+	
+	public function getPath() {
+		$customPath = get_option(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_SOLD_FEATURED);	
+		if($customPath != null && "" != $customPath) {
+			$this->path = $customPath;
+		}
+		return $this->path;
+	}
+	
+			
+	public function getContent() {
+		iHomefinderStateManager::getInstance()->saveLastSearch();
+		iHomefinderLogger::getInstance()->debug('Begin iHomefinderSoldFeaturedPageImpl');
+		$requestData = 'method=handleRequest'
+			. '&viewType=json'
+			. '&requestType=sold-featured-listing'
+			. '&phpStyle=true'
+			. '&includeSearchSummary=true';
 		
+		$requestData = iHomefinderRequestor::getInstance()->addVarsToUrl($requestData, $_REQUEST);
+		$this->remoteResponse = iHomefinderRequestor::getInstance()->remoteGetRequest($requestData);
+		$body = iHomefinderRequestor::getInstance()->getContent($this->remoteResponse);
+		
+		iHomefinderLogger::getInstance()->debug('End iHomefinderSoldFeaturedPageImpl');
+		iHomefinderLogger::getInstance()->debug($requestData);
+		return $body;
+	}
 }
-?>

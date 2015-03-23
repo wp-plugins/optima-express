@@ -1,41 +1,35 @@
 <?php
-if( !class_exists('IHomefinderOrganizerEditSubscriberVirtualPageImpl')) {
+
+class iHomefinderOrganizerEditSubscriberVirtualPageImpl extends iHomefinderAbstractVirtualPage {
 	
-	class IHomefinderOrganizerEditSubscriberVirtualPageImpl implements IHomefinderVirtualPage {
-	
-		private $path="property-organizer-edit-subscriber";	
-		public function __construct(){
-			
-		}
-		public function getTitle(){
-			return "Organizer Help";
-		}	
-	
-		public function getPageTemplate(){
-			
-		}
+	private $path = "property-organizer-edit-subscriber";	
+	public function __construct() {
 		
-		public function getPath(){
-			return $this->path ;
-		}
-				
-		public function getContent( $authenticationToken ){
-			IHomefinderLogger::getInstance()->debug('Begin IHomefinderOrganizerEditSubscriberVirtualPageImpl');
-			
-			$ihfUrl = IHomefinderLayoutManager::getInstance()->getExternalUrl() . '?method=handleRequest&viewType=json&requestType=property-organizer-edit-subscriber' ;
-			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "authenticationToken", $authenticationToken);
-			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "phpStyle", "true");
-			$ihfUrl = iHomefinderRequestor::addVarsToUrl($ihfUrl, $_REQUEST) ;
-			$contentInfo = IHomefinderRequestor::remoteRequest($ihfUrl);
-			$idxContent = IHomefinderRequestor::getContent( $contentInfo );
+	}
+	public function getTitle() {
+		return "Organizer Help";
+	}	
+
+	public function getPageTemplate() {
+		
+	}
 	
-			$content=$idxContent;
+	public function getPath() {
+		return $this->path;
+	}
 			
-			IHomefinderLogger::getInstance()->debug( '<br/><br/>' . $ihfUrl ) ;
-			IHomefinderLogger::getInstance()->debug('End IHomefinderOrganizerEditSubscriberVirtualPageImpl');
-			
-			return $content ;
-		}
+	public function getContent() {
+		iHomefinderLogger::getInstance()->debug('Begin iHomefinderOrganizerEditSubscriberVirtualPageImpl');
+		
+		$requestData = 'method=handleRequest&viewType=json&requestType=property-organizer-edit-subscriber';
+		$requestData = iHomefinderRequestor::getInstance()->appendQueryVarIfNotEmpty($requestData, "phpStyle", "true");
+		$requestData = iHomefinderRequestor::getInstance()->addVarsToUrl($requestData, $_REQUEST);
+		$this->remoteResponse = iHomefinderRequestor::getInstance()->remoteGetRequest($requestData);
+		$body = iHomefinderRequestor::getInstance()->getContent($this->remoteResponse);
+		
+		iHomefinderLogger::getInstance()->debug($requestData);
+		iHomefinderLogger::getInstance()->debug('End iHomefinderOrganizerEditSubscriberVirtualPageImpl');
+		
+		return $body;
 	}
 }
-?>

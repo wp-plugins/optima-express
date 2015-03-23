@@ -1,41 +1,36 @@
 <?php
-if( !class_exists('IHomefinderOrganizerHelpVirtualPageImpl')) {
+
+class iHomefinderOrganizerHelpVirtualPageImpl extends iHomefinderAbstractVirtualPage {
 	
-	class IHomefinderOrganizerHelpVirtualPageImpl implements IHomefinderVirtualPage {
+	private $path = "property-organizer-help";
 	
-		private $path="property-organizer-help";	
-		public function __construct(){
-			
-		}
-		public function getTitle(){
-			return "Organizer Help";
-		}	
-	
-		public function getPageTemplate(){
-			
-		}
+	public function __construct() {
 		
-		public function getPath(){
-			return $this->path ;
-		}
-				
-		public function getContent( $authenticationToken ){
-			IHomefinderLogger::getInstance()->debug('Begin IHomefinderOrganizerHelpFilterImpl');
-			
-			$ihfUrl = IHomefinderLayoutManager::getInstance()->getExternalUrl() . '?method=handleRequest&viewType=json&requestType=property-organizer-help' ;
-			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "authenticationToken", $authenticationToken);
-			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "phpStyle", "true");
-			
-			$contentInfo = IHomefinderRequestor::remoteRequest($ihfUrl);
-			$idxContent = IHomefinderRequestor::getContent( $contentInfo );
+	}
+	public function getTitle() {
+		return "Organizer Help";
+	}	
+
+	public function getPageTemplate() {
+		
+	}
 	
-			$content=$idxContent;
+	public function getPath() {
+		return $this->path;
+	}
 			
-			IHomefinderLogger::getInstance()->debug( '<br/><br/>' . $ihfUrl ) ;
-			IHomefinderLogger::getInstance()->debug('End IHomefinderOrganizerHelpFilterImpl');
-			
-			return $content ;
-		}
+	public function getContent() {
+		iHomefinderLogger::getInstance()->debug('Begin iHomefinderOrganizerHelpFilterImpl');
+		
+		$requestData = 'method=handleRequest&viewType=json&requestType=property-organizer-help';
+		$requestData = iHomefinderRequestor::getInstance()->appendQueryVarIfNotEmpty($requestData, "phpStyle", "true");
+		
+		$this->remoteResponse = iHomefinderRequestor::getInstance()->remoteGetRequest($requestData);
+		$body = iHomefinderRequestor::getInstance()->getContent($this->remoteResponse);
+		
+		iHomefinderLogger::getInstance()->debug($requestData);
+		iHomefinderLogger::getInstance()->debug('End iHomefinderOrganizerHelpFilterImpl');
+		
+		return $body;
 	}
 }
-?>

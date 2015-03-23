@@ -1,41 +1,36 @@
 <?php
-if( !class_exists('IHomefinderOrganizerEmailUpdatesConfirmationVirtualPageImpl')) {
-	
-	class IHomefinderOrganizerEmailUpdatesConfirmationVirtualPageImpl implements IHomefinderVirtualPage {
-	
-		private $path="email-updates-confirmation";
-		public function __construct(){
-			
-		}
-		public function getTitle(){
-			return "Email Updates Confirmation";
-		}	
 
-		public function getPageTemplate(){
-			
-		}
-
-		public function getPath(){
-			return $this->path;
-		}
+class iHomefinderOrganizerEmailUpdatesConfirmationVirtualPageImpl extends iHomefinderAbstractVirtualPage {
+	
+	private $path = "email-updates-confirmation";
+	
+	public function __construct() {
 		
-		public function getContent( $authenticationToken ){
-			IHomefinderLogger::getInstance()->debug('Begin IHomefinderOrganizerEmailUpdatesConfirmationVirtualPageImpl');
-			$message=IHomefinderUtility::getInstance()->getQueryVar('message');		
-			$ihfUrl = IHomefinderLayoutManager::getInstance()->getExternalUrl() . '?method=handleRequest&viewType=json&requestType=property-organizer-email-updates-confirmation' ;
-			$ihfUrl = IHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "authenticationToken", $authenticationToken);
-			$ihfUrl = IHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "message", $message);
-						
-			$contentInfo = IHomefinderRequestor::remoteRequest($ihfUrl);
-			$idxContent = IHomefinderRequestor::getContent( $contentInfo );
-
-			$content=$idxContent;
-				
-			IHomefinderLogger::getInstance()->debug( '<br/><br/>' . $ihfUrl ) ;
-			IHomefinderLogger::getInstance()->debug('End IHomefinderOrganizerEmailUpdatesConfirmationVirtualPageImpl');
-			
-			return $content ;
-		}		
 	}
+	public function getTitle() {
+		return "Email Updates Confirmation";
+	}	
+
+	public function getPageTemplate() {
+		
+	}
+
+	public function getPath() {
+		return $this->path;
+	}
+	
+	public function getContent() {
+		iHomefinderLogger::getInstance()->debug('Begin iHomefinderOrganizerEmailUpdatesConfirmationVirtualPageImpl');
+		$message=iHomefinderUtility::getInstance()->getQueryVar('message');		
+		$requestData = 'method=handleRequest&viewType=json&requestType=property-organizer-email-updates-confirmation';
+		$requestData = iHomefinderRequestor::getInstance()->appendQueryVarIfNotEmpty($requestData, "message", $message);
+		
+		$this->remoteResponse = iHomefinderRequestor::getInstance()->remoteGetRequest($requestData);
+		$body = iHomefinderRequestor::getInstance()->getContent($this->remoteResponse);
+		
+		iHomefinderLogger::getInstance()->debug($requestData);
+		iHomefinderLogger::getInstance()->debug('End iHomefinderOrganizerEmailUpdatesConfirmationVirtualPageImpl');
+		
+		return $body;
+	}		
 }
-?>

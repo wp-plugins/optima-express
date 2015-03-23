@@ -1,59 +1,51 @@
 <?php
-if( !class_exists('IHomefinderSearchFormVirtualPageImpl')) {
+
+class iHomefinderSearchFormVirtualPageImpl extends iHomefinderAbstractVirtualPage {
 	
-	class IHomefinderSearchFormVirtualPageImpl implements IHomefinderVirtualPage {
+	private $path="homes-for-sale-search";
+	private $title="Property Search";
+
+	public function __construct() {
 		
-		private $path="homes-for-sale-search";
-		private $title="Property Search";
+	}
+	public function getTitle() {
+		$customTitle = get_option(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_SEARCH);
+		if($customTitle != null && "" != $customTitle) {
+			$this->title=$customTitle;
+		}
+		
+		return $this->title;
+	}
+
+	public function getPageTemplate() {
+		$pageTemplate = get_option(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_SEARCH);
+		return $pageTemplate;			
+	}
 	
-		public function __construct(){
+	public function getPath() {
+		$customPath = get_option(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_SEARCH);	
+		if($customPath != null && "" != $customPath) {
+			$this->path = $customPath;
+		}
+		return $this->path;
+	}
+	
 			
-		}
-		public function getTitle(){
-			$customTitle = get_option(IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_SEARCH);
-			if( $customTitle != null && "" != $customTitle ){
-				$this->title=$customTitle ;
-			}
-			
-			return $this->title;
-		}
-	
-		public function getPageTemplate(){
-			$pageTemplate = get_option(IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_SEARCH);
-			//$pageTemplage = '';
-			return $pageTemplate;			
-		}
-		
-		public function getPath(){
-			$customPath = get_option(IHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_SEARCH );	
-			if( $customPath != null && "" != $customPath ){
-				$this->path = $customPath ;
-			}
-			return $this->path;
-		}
-		
-				
-		public function getContent( $authenticationToken ){
-			IHomefinderLogger::getInstance()->debug('Begin IHomefinderFilter.filterSearchForm');
-			$ihfUrl = IHomefinderLayoutManager::getInstance()->getExternalUrl() 
-				. '?method=handleRequest'
-				. '&viewType=json'
-				. '&requestType=listing-search-form'
-				. '&includeAreaSelectorAreas=false'
-				. '&authenticationToken=' . $authenticationToken
-				. '&phpStyle=true';
+	public function getContent() {
+		iHomefinderLogger::getInstance()->debug('Begin iHomefinderFilter.filterSearchForm');
+		$requestData = 'method=handleRequest'
+			. '&viewType=json'
+			. '&requestType=listing-search-form'
+			. '&includeAreaSelectorAreas=false'
+			. '&phpStyle=true';
 
 
-			$ihfUrl = iHomefinderRequestor::addVarsToUrl($ihfUrl, $_REQUEST) ;
-			$contentInfo = IHomefinderRequestor::remoteRequest($ihfUrl);
-			$idxContent = IHomefinderRequestor::getContent( $contentInfo );
-			
-			$content=$idxContent;
-			
-			IHomefinderLogger::getInstance()->debug('End IHomefinderFilter.filterSearchForm');
-			IHomefinderLogger::getInstance()->debug('<br/><br/>' . $ihfUrl);
-			return $content ;
-		}
+		$requestData = iHomefinderRequestor::getInstance()->addVarsToUrl($requestData, $_REQUEST);
+		$this->remoteResponse = iHomefinderRequestor::getInstance()->remoteGetRequest($requestData);
+		$body = iHomefinderRequestor::getInstance()->getContent($this->remoteResponse);
+		
+		iHomefinderLogger::getInstance()->debug('End iHomefinderFilter.filterSearchForm');
+		iHomefinderLogger::getInstance()->debug($requestData);
+		return $body;
 	}
 }
-?>

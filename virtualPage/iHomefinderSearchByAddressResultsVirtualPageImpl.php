@@ -1,46 +1,40 @@
 <?php
-if( !class_exists('IHomefinderSearchByAddressResultsVirtualPageImpl')) {
+
+class iHomefinderSearchByAddressResultsVirtualPageImpl extends iHomefinderAbstractVirtualPage {
 	
-	class IHomefinderSearchByAddressResultsVirtualPageImpl implements IHomefinderVirtualPage {
+	//default path used for URL Rewriting
+	private $path="address-listing-results";
+
+	public function __construct() {
 		
-		//default path used for URL Rewriting
-		private $path="address-listing-results";
-	
-		public function __construct(){
-			
-		}
-		
-		public function getTitle(){
-			return "Search By Address Results";
-		}	
-			
-		function getPageTemplate(){
-			
-		}
-		
-		public function getPath(){
-			return $this->path ;
-		}
-				
-		public function getContent( $authenticationToken ){
-			IHomefinderLogger::getInstance()->debug('Begin IHomefinderFilter.filterSearchByAddressResults');
-			IHomefinderStateManager::getInstance()->saveLastSearch() ;
-			
-			$ihfUrl = IHomefinderLayoutManager::getInstance()->getExternalUrl() . '?method=handleRequest&viewType=json&requestType=results-by-address' ;
-			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "authenticationToken", $authenticationToken);
-			//used to remember search results
-			//$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "includeSearchSummary", "true");	
-			$ihfUrl = iHomefinderRequestor::addVarsToUrl($ihfUrl, $_REQUEST);
-			$contentInfo = IHomefinderRequestor::remoteRequest($ihfUrl);
-			$idxContent = IHomefinderRequestor::getContent( $contentInfo );
-	
-			$content=$idxContent  ;
-			
-			IHomefinderLogger::getInstance()->debug( '<br/><br/>' . $ihfUrl ) ;
-			IHomefinderLogger::getInstance()->debug('End IHomefinderFilter.filterSearchByAddressResults');
-						
-			return $content ;
-		}		
 	}
+	
+	public function getTitle() {
+		return "Search By Address Results";
+	}	
+		
+	function getPageTemplate() {
+		
+	}
+	
+	public function getPath() {
+		return $this->path;
+	}
+			
+	public function getContent() {
+		iHomefinderLogger::getInstance()->debug('Begin iHomefinderFilter.filterSearchByAddressResults');
+		iHomefinderStateManager::getInstance()->saveLastSearch();
+		
+		$requestData = 'method=handleRequest&viewType=json&requestType=results-by-address';
+		//used to remember search results
+		//$requestData = iHomefinderRequestor::getInstance()->appendQueryVarIfNotEmpty($requestData, "includeSearchSummary", "true");	
+		$requestData = iHomefinderRequestor::getInstance()->addVarsToUrl($requestData, $_REQUEST);
+		$this->remoteResponse = iHomefinderRequestor::getInstance()->remoteGetRequest($requestData);
+		$body = iHomefinderRequestor::getInstance()->getContent($this->remoteResponse);
+		
+		iHomefinderLogger::getInstance()->debug($requestData);
+		iHomefinderLogger::getInstance()->debug('End iHomefinderFilter.filterSearchByAddressResults');
+					
+		return $body;
+	}		
 }
-?>

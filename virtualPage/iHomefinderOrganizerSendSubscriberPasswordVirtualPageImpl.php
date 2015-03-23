@@ -1,44 +1,39 @@
 <?php
-if( !class_exists('iHomefinderOrganizerSendSubscriberPasswordVirtualPageImpl')) {
+
+class iHomefinderOrganizerSendSubscriberPasswordVirtualPageImpl extends iHomefinderAbstractVirtualPage {
 	
-	class iHomefinderOrganizerSendSubscriberPasswordVirtualPageImpl implements IHomefinderVirtualPage {
+	private $path="property-organizer-send-login";
 	
-		private $path="property-organizer-send-login";
+	public function __construct() {
 		
-		public function __construct(){
-			
-		}
+	}
+	
+	public function getTitle() {
+		return "Email Password";
+	}			
+	
+	public function getPageTemplate() {
 		
-		public function getTitle(){
-			return "Email Password";
-		}			
+	}
+	
+	public function getPath() {
+		return $this->path;
+	}
+	
+	public function getContent() {
+		iHomefinderLogger::getInstance()->debug('Begin iHomefinderOrganizerSendSubscriberPasswordFilterImpl');
 		
-		public function getPageTemplate(){
-			
-		}
+		$email=iHomefinderUtility::getInstance()->getQueryVar('email');
+					
+		$requestData = 'method=handleRequest&viewType=json&requestType=property-organizer-password-email';
+		$requestData = iHomefinderRequestor::getInstance()->appendQueryVarIfNotEmpty($requestData, "email", $email);
 		
-		public function getPath(){
-			return $this->path ;
-		}
+		$this->remoteResponse = iHomefinderRequestor::getInstance()->remoteGetRequest($requestData);
+		$body = iHomefinderRequestor::getInstance()->getContent($this->remoteResponse);	
 		
-		public function getContent( $authenticationToken ){
-			IHomefinderLogger::getInstance()->debug('Begin iHomefinderOrganizerSendSubscriberPasswordFilterImpl');
-			
-			$email=IHomefinderUtility::getInstance()->getQueryVar('email');
-						
-			$ihfUrl = IHomefinderLayoutManager::getInstance()->getExternalUrl() . '?method=handleRequest&viewType=json&requestType=property-organizer-password-email' ;
-			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "authenticationToken", $authenticationToken);
-			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "email", $email);
-			
-			$contentInfo = IHomefinderRequestor::remoteRequest($ihfUrl);
-			$idxContent = IHomefinderRequestor::getContent( $contentInfo );	
-			$content=$idxContent;
-			
-			IHomefinderLogger::getInstance()->debug( '<br/><br/>' . $ihfUrl ) ;
-			IHomefinderLogger::getInstance()->debug('End iHomefinderOrganizerSendSubscriberPasswordFilterImpl');
-			
-			return $content ;
-		}
-	}//end class
+		iHomefinderLogger::getInstance()->debug($requestData);
+		iHomefinderLogger::getInstance()->debug('End iHomefinderOrganizerSendSubscriberPasswordFilterImpl');
+		
+		return $body;
+	}
 }
-?>

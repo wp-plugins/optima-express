@@ -1,57 +1,53 @@
 <?php
-if( !class_exists('IHomefinderOrganizerEditSavedSearchVirtualPageImpl')) {
+
+class iHomefinderOrganizerEditSavedSearchVirtualPageImpl extends iHomefinderAbstractVirtualPage {
 	
-	class IHomefinderOrganizerEditSavedSearchVirtualPageImpl implements IHomefinderVirtualPage {
+	private $path = "property-organizer-edit-saved-search-submit";
 	
-		private $path ="property-organizer-edit-saved-search-submit";
-		public function __construct(){
-			
-		}
-		public function getTitle(){
-			return "Email Alert";
-		}		
-				
-		public function getPageTemplate(){
-			
-		}
+	public function __construct() {
 		
-		public function getPath(){
-			return $this->path;
-		}
-		
-		public function getContent( $authenticationToken ){
-			IHomefinderLogger::getInstance()->debug('Begin IHomefinderOrganizerEditSavedSearchVirtualPageImpl');
-						
-			$searchProfileName=IHomefinderUtility::getInstance()->getQueryVar('searchProfileName');
+	}
+	public function getTitle() {
+		return "Email Alert";
+	}		
 			
-			$ihfUrl = IHomefinderLayoutManager::getInstance()->getExternalUrl() . '?method=handleRequest&viewType=json&requestType=property-organizer-edit-saved-search-submit' ;
-			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "authenticationToken", $authenticationToken);
-			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "name", $searchProfileName);
-			$ihfUrl = iHomefinderRequestor::addVarsToUrl($ihfUrl, $_REQUEST) ;
-			//$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "phpStyle", "true");
-			$contentInfo = IHomefinderRequestor::remoteRequest($ihfUrl);
-			$content = IHomefinderRequestor::getContent( $contentInfo );
-			$subscriberSessionOnJavaServers = IHomefinderLayoutManager::getInstance()->isSubscriberSessionOnJavaServers();
-			if (!subscriberSessionOnJavaServers){
-				if(IHomefinderStateManager::getInstance()->isLoggedIn() ){
-					$redirectUrl=IHomefinderUrlFactory::getInstance()->getOrganizerViewSavedSearchListUrl(true) ;
-					//redirect to the list of saved searches to avoid double posting the request
-					$content = '<meta http-equiv="refresh" content="0;url=' . $redirectUrl . '">';
-				} else {
-					$redirectUrl=IHomefinderUrlFactory::getInstance()->getOrganizerEmailUpdatesConfirmationUrl(true) ;
-					//redirect to the list of saved searches to avoid double posting the request
-					$content = '<meta http-equiv="refresh" content="0;url=' . $redirectUrl . '">';
-				}
+	public function getPageTemplate() {
+		
+	}
+	
+	public function getPath() {
+		return $this->path;
+	}
+	
+	public function getContent() {
+		iHomefinderLogger::getInstance()->debug('Begin iHomefinderOrganizerEditSavedSearchVirtualPageImpl');
+					
+		$searchProfileName=iHomefinderUtility::getInstance()->getQueryVar('searchProfileName');
+		
+		$requestData = 'method=handleRequest&viewType=json&requestType=property-organizer-edit-saved-search-submit';
+		$requestData = iHomefinderRequestor::getInstance()->appendQueryVarIfNotEmpty($requestData, "name", $searchProfileName);
+		$requestData = iHomefinderRequestor::getInstance()->addVarsToUrl($requestData, $_REQUEST);
+		//$requestData = iHomefinderRequestor::getInstance()->appendQueryVarIfNotEmpty($requestData, "phpStyle", "true");
+		
+		$this->remoteResponse = iHomefinderRequestor::getInstance()->remoteGetRequest($requestData);
+		$body = iHomefinderRequestor::getInstance()->getContent($this->remoteResponse);
+		
+		$subscriberSessionOnJavaServers = iHomefinderLayoutManager::getInstance()->isSubscriberSessionOnJavaServers();
+		if (!subscriberSessionOnJavaServers) {
+			if(iHomefinderStateManager::getInstance()->isLoggedIn()) {
+				$redirectUrl=iHomefinderUrlFactory::getInstance()->getOrganizerViewSavedSearchListUrl(true);
+				//redirect to the list of saved searches to avoid double posting the request
+				$body = '<meta http-equiv="refresh" content="0;url=' . $redirectUrl . '">';
+			} else {
+				$redirectUrl=iHomefinderUrlFactory::getInstance()->getOrganizerEmailUpdatesConfirmationUrl(true);
+				//redirect to the list of saved searches to avoid double posting the request
+				$body = '<meta http-equiv="refresh" content="0;url=' . $redirectUrl . '">';
 			}
-// 			$redirectUrl=IHomefinderUrlFactory::getInstance()->getOrganizerViewSavedSearchListUrl(true) ;
-// 			//redirect to the list of saved searches to avoid double posting the request
-// 			$content = '<meta http-equiv="refresh" content="0;url=' . $redirectUrl . '">';
-			
-			IHomefinderLogger::getInstance()->debug( '<br/><br/>' . $ihfUrl ) ;
-			IHomefinderLogger::getInstance()->debug('End IHomefinderOrganizerEditSavedSearchVirtualPageImpl');
-			
-			return $content ;
 		}
-	}//end class
+		
+		iHomefinderLogger::getInstance()->debug($requestData);
+		iHomefinderLogger::getInstance()->debug('End iHomefinderOrganizerEditSavedSearchVirtualPageImpl');
+		
+		return $body;
+	}
 }
-?>

@@ -1,66 +1,51 @@
 <?php
-if( !class_exists('IHomefinderAgentOrOfficeListingsVirtualPageImpl')) {
+
+/**
+ * 
+ * This virtual page is used in a shortcode and does not have a title, template or path.
+ * 
+ * @author ihomefinder
+ *
+ */
+class iHomefinderAgentOrOfficeListingsVirtualPageImpl extends iHomefinderAbstractVirtualPage {
+	
+	public function __construct() {			
+	}
+	
+	public function getTitle() {
+		return "";
+	}
+	
+	public function getPageTemplate() {
+		return "";			
+	}
 	
 	/**
-	 * 
-	 * This virtual page is used in a shortcode and does not have a title, template or path.
-	 * 
-	 * @author ihomefinder
-	 *
+	 * @see wp-content/plugins/OptimaExpress/virtualPage/iHomefinderVirtualPage::getPath()
 	 */
-	class IHomefinderAgentOrOfficeListingsVirtualPageImpl implements IHomefinderVirtualPage {
-		
-		public function __construct(){			
-		}
-
-		
-		/**
-		 * @see wp-content/plugins/OptimaExpress/virtualPage/IHomefinderVirtualPage::getTitle()
-		 */
-		public function getTitle(){
-			return "" ;
-		}
-	
-
-		/**
-		 * @see wp-content/plugins/OptimaExpress/virtualPage/IHomefinderVirtualPage::getPageTemplate()
-		 */
-		public function getPageTemplate(){
-			return "";			
-		}
-		
-		/**
-		 * @see wp-content/plugins/OptimaExpress/virtualPage/IHomefinderVirtualPage::getPath()
-		 */
-		public function getPath(){
-			return "";
-		}
-				
-		public function getContent( $authenticationToken ){
-			IHomefinderStateManager::getInstance()->saveLastSearch() ;
-			IHomefinderLogger::getInstance()->debug('Begin IHomefinderAgentOrOfficeListingsVirtualPageImpl');
+	public function getPath() {
+		return "";
+	}
 			
-			$agentId  = IHomefinderUtility::getInstance()->getRequestVar('agentId');
-			$officeId = IHomefinderUtility::getInstance()->getRequestVar('officeId');	
+	public function getContent() {
+		iHomefinderStateManager::getInstance()->saveLastSearch();
+		iHomefinderLogger::getInstance()->debug('Begin iHomefinderAgentOrOfficeListingsVirtualPageImpl');
+		
+		$agentId  = iHomefinderUtility::getInstance()->getRequestVar('agentId');
+		$officeId = iHomefinderUtility::getInstance()->getRequestVar('officeId');	
 
-			$ihfUrl = IHomefinderLayoutManager::getInstance()->getExternalUrl() 
-				. '?method=handleRequest'
-				. '&viewType=json'
-				. '&requestType=agent-or-office-listings'
-				. '&authenticationToken=' . $authenticationToken;
-				
-			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "agentId", $agentId);	
-			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "officeId", $officeId);
-						
-			$contentInfo = IHomefinderRequestor::remoteRequest($ihfUrl);
-			$idxContent = IHomefinderRequestor::getContent( $contentInfo );
-						
-			$content=$idxContent;
+		$requestData = 'method=handleRequest'
+			. '&viewType=json'
+			. '&requestType=agent-or-office-listings';
 			
-			IHomefinderLogger::getInstance()->debug('End IHomefinderAgentOrOfficeListingsVirtualPageImpl');
-			IHomefinderLogger::getInstance()->debug('<br/><br/>' . $ihfUrl);
-			return $content ;
-		}
+		$requestData = iHomefinderRequestor::getInstance()->appendQueryVarIfNotEmpty($requestData, "agentId", $agentId);	
+		$requestData = iHomefinderRequestor::getInstance()->appendQueryVarIfNotEmpty($requestData, "officeId", $officeId);
+					
+		$this->remoteResponse = iHomefinderRequestor::getInstance()->remoteGetRequest($requestData);
+		$body = iHomefinderRequestor::getInstance()->getContent($this->remoteResponse);
+		
+		iHomefinderLogger::getInstance()->debug('End iHomefinderAgentOrOfficeListingsVirtualPageImpl');
+		iHomefinderLogger::getInstance()->debug($requestData);
+		return $body;
 	}
 }
-?>

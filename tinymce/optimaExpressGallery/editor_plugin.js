@@ -19,7 +19,7 @@
       // tinyMCE.activeEditor.execCommand('mceOptimaExpressGallery');
       ed.addCommand('mceOptimaExpressGallery', function() {
         // debugger;
-        ed.windowManager.open( {
+        ed.windowManager.open({
           file : url + '/dialog.php',
           width : 675 + ed.getLang(
               'optimaExpressGallery.delta_width', 0),

@@ -1,52 +1,49 @@
 <?php
-if( !class_exists('IHomefinderOrganizerDeleteSavedSearchVirtualPageImpl')) {
 
-	class IHomefinderOrganizerDeleteSavedSearchVirtualPageImpl implements IHomefinderVirtualPage {
+class iHomefinderOrganizerDeleteSavedSearchVirtualPageImpl extends iHomefinderAbstractVirtualPage {
+	
+	private $path = "property-organizer-delete-saved-search-submit";
+	
+	public function __construct() {
 
-		private $path="property-organizer-delete-saved-search-submit";
-		public function __construct(){
+	}
 
+	public function getTitle() {
+		return "Delete Saved Search";
+	}
+
+	public function getPageTemplate() {
+
+	}
+
+	public function getPath() {
+		return $this->path;
+	}
+
+	public function getContent() {
+		iHomefinderLogger::getInstance()->debug('Begin iHomefinderOrganizerDeleteSavedSearchVirtualPageImpl');
+		$subscriberId=iHomefinderUtility::getInstance()->getQueryVar('subscriberID');
+		if(empty($subscriberId)) {
+			$subscriberId=iHomefinderUtility::getInstance()->getQueryVar('subscriberId');
+		}
+		$searchProfileId=iHomefinderUtility::getInstance()->getQueryVar('searchProfileID');
+		if(empty($searchProfileId)) {
+			$searchProfileId=iHomefinderUtility::getInstance()->getQueryVar('searchProfileId');
 		}
 
-		public function getTitle(){
-			return "Delete Saved Search";
-		}
+		$requestData = 'method=handleRequest&viewType=json&requestType=property-organizer-delete-saved-search-submit';
+		$requestData = iHomefinderRequestor::getInstance()->appendQueryVarIfNotEmpty($requestData, "subscriberId", $subscriberId);
+		$requestData = iHomefinderRequestor::getInstance()->appendQueryVarIfNotEmpty($requestData, "searchProfileId", $searchProfileId);
 
-		public function getPageTemplate(){
+		$this->remoteResponse = iHomefinderRequestor::getInstance()->remoteGetRequest($requestData);
+		//$body = iHomefinderRequestor::getInstance()->getContent($this->remoteResponse);
+		iHomefinderLogger::getInstance()->debug($requestData);
+		iHomefinderLogger::getInstance()->debug('End iHomefinderOrganizerDeleteSavedSearchVirtualPageImpl');
 
-		}
+		$redirectUrl=iHomefinderUrlFactory::getInstance()->getOrganizerViewSavedSearchListUrl(true);
+		//redirect to the list of saved searches to avoid double posting the request
+		$body = '<meta http-equiv="refresh" content="0;url=' . $redirectUrl . '">';
 
-		public function getPath(){
-			return $this->path ;
-		}
-
-		public function getContent( $authenticationToken ){
-			IHomefinderLogger::getInstance()->debug('Begin IHomefinderOrganizerDeleteSavedSearchVirtualPageImpl');
-			$subscriberId=IHomefinderUtility::getInstance()->getQueryVar('subscriberID');
-			if(empty($subscriberId)){
-				$subscriberId=IHomefinderUtility::getInstance()->getQueryVar('subscriberId');
-			}
-			$searchProfileId=IHomefinderUtility::getInstance()->getQueryVar('searchProfileID');
-			if(empty($searchProfileId)){
-				$searchProfileId=IHomefinderUtility::getInstance()->getQueryVar('searchProfileId');
-			}
-
-			$ihfUrl = IHomefinderLayoutManager::getInstance()->getExternalUrl() . '?method=handleRequest&viewType=json&requestType=property-organizer-delete-saved-search-submit' ;
-			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "subscriberId", $subscriberId);
-			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "searchProfileId", $searchProfileId);
-			$ihfUrl = iHomefinderRequestor::appendQueryVarIfNotEmpty($ihfUrl, "authenticationToken", $authenticationToken);
-
-			$contentInfo = IHomefinderRequestor::remoteRequest($ihfUrl);
-			//$content = IHomefinderRequestor::getContent( $contentInfo );
-			IHomefinderLogger::getInstance()->debug( '<br/><br/>' . $ihfUrl ) ;
-			IHomefinderLogger::getInstance()->debug('End IHomefinderOrganizerDeleteSavedSearchVirtualPageImpl');
-
-			$redirectUrl=IHomefinderUrlFactory::getInstance()->getOrganizerViewSavedSearchListUrl(true) ;
-			//redirect to the list of saved searches to avoid double posting the request
-			$content = '<meta http-equiv="refresh" content="0;url=' . $redirectUrl . '">';
-
-			return $content ;
-		}
-	}//end class
+		return $body;
+	}
 }
-?>
