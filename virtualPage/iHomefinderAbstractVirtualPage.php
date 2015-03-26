@@ -24,10 +24,6 @@ abstract class iHomefinderAbstractVirtualPage implements iHomefinderVirtualPageI
 		return null;
 	}
 	
-	public function getExcerpt() {
-		return $this->remoteResponse->excerpt;
-	}
-	
 	public function getMetaTags() {
 		return $this->remoteResponse->metatags;
 	}

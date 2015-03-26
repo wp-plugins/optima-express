@@ -40,15 +40,23 @@ class iHomefinderVirtualPageDispatcher {
 		if(!$this->initialized && $postsCount == 0 && !empty($type)) {
 			$this->virtualPage = iHomefinderVirtualPageFactory::getInstance()->getVirtualPage($type);
 			$this->content = (string) $this->virtualPage->getContent();
-			$this->excerpt = (string) $this->virtualPage->getExcerpt();
+			$this->excerpt = (string) $this->virtualPage->getContent();
 			$this->title = (string) $this->virtualPage->getTitle();
 			iHomefinderEnqueueResource::getInstance()->addToHeader($this->virtualPage->getHead());
 			iHomefinderEnqueueResource::getInstance()->addToMetaTags($this->virtualPage->getMetaTags());
 			$this->initialized = true;
 			//turn off some filters on ihf pages
-			remove_filter("the_content", "wpautop");
-			remove_filter("the_content", "wptexturize");
-			remove_filter("the_content", "convert_chars");
+			$this->removeFilters();
+		}
+	}
+	
+	private function removeFilters() {
+		$tags = array("the_content", "the_excerpt");
+		$functionNames = array("wpautop", "wptexturize", "convert_chars");
+		foreach($tags as $tag) {
+			foreach($functionNames as $functionName) {
+				remove_filter($tag, $functionName);
+			}
 		}
 	}
 	
