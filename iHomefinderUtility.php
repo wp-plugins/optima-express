@@ -31,10 +31,9 @@ class iHomefinderUtility {
 	}
 
 	public function getVarFromArray($name, $arrayVar) {
-		$result=null;
-		$name=strtolower($name);
-		$arrayVar=$this->arrayKeysToLowerCase($arrayVar);
-		
+		$result = null;
+		$name = strtolower($name);
+		$arrayVar = $this->arrayKeysToLowerCase($arrayVar);
 		if(array_key_exists($name, $arrayVar)) {
 			$result = $arrayVar[$name];
 		}
@@ -42,10 +41,10 @@ class iHomefinderUtility {
 	}
 	
 	private function arrayKeysToLowerCase($arrayVar) {
-		$lowerCaseKeysArray=array();
+		$lowerCaseKeysArray = array();
 		foreach($arrayVar as $key => $value) {
-			$key=strtolower($key);
-			$lowerCaseKeysArray[$key]=$value;
+			$key = strtolower($key);
+			$lowerCaseKeysArray[$key] = $value;
 		}
 		return $lowerCaseKeysArray;
 	}
@@ -60,28 +59,26 @@ class iHomefinderUtility {
 	 */
 	public function setPreviousAndNextInformation($requestData, $boardId, $listingNumber) {
 		$searchSummaryArray = iHomefinderStateManager::getInstance()->getSearchSummary();
-		$key= $boardId . "|" . $listingNumber;
-		if(isset($searchSummaryArray)) {
-			$searchSummaryObject = $searchSummaryArray[ $key ];				
-			if(isset($searchSummaryObject)) {
-				if(isset($searchSummaryObject->previousId)) {
-					$searchSummaryPrevious = $searchSummaryArray[ $searchSummaryObject->previousId ];
-					$prevBoardAndListingNumber = explode("|", $searchSummaryObject->previousId);
-					$requestData .= "&prevBoardId=" . $prevBoardAndListingNumber[0];					
-					$requestData .= "&prevListingNumber=" . $prevBoardAndListingNumber[1];
-					$requestData .= "&prevAddress=" . urlencode($searchSummaryPrevious->address);
-					$requestData .= "&prevStatus=" . urlencode($searchSummaryPrevious->status);
-				}
-				
-				if(isset($searchSummaryObject->nextId)) {
-					$searchSummaryNext = $searchSummaryArray[ $searchSummaryObject->nextId ];
-					$nextBoardAndListingNumber = explode("|", $searchSummaryObject->nextId);
-					$requestData .= "&nextBoardId=" . $nextBoardAndListingNumber[0];					
-					$requestData .= "&nextListingNumber=" . $nextBoardAndListingNumber[1];
-					$requestData .= "&nextAddress=" . urlencode($searchSummaryNext->address);
-					$requestData .= "&nextStatus=" . urlencode($searchSummaryNext->status);
-				}
-			}	
+		$key = $boardId . "|" . $listingNumber;
+		if(isset($searchSummaryArray) && is_array($searchSummaryArray) && array_key_exists($key, $searchSummaryArray)) {
+			$searchSummaryObject = $searchSummaryArray[$key];				
+			if(isset($searchSummaryObject->previousId)) {
+				$searchSummaryPrevious = $searchSummaryArray[ $searchSummaryObject->previousId ];
+				$prevBoardAndListingNumber = explode("|", $searchSummaryObject->previousId);
+				$requestData .= "&prevBoardId=" . $prevBoardAndListingNumber[0];					
+				$requestData .= "&prevListingNumber=" . $prevBoardAndListingNumber[1];
+				$requestData .= "&prevAddress=" . urlencode($searchSummaryPrevious->address);
+				$requestData .= "&prevStatus=" . urlencode($searchSummaryPrevious->status);
+			}
+			
+			if(isset($searchSummaryObject->nextId)) {
+				$searchSummaryNext = $searchSummaryArray[$searchSummaryObject->nextId];
+				$nextBoardAndListingNumber = explode("|", $searchSummaryObject->nextId);
+				$requestData .= "&nextBoardId=" . $nextBoardAndListingNumber[0];					
+				$requestData .= "&nextListingNumber=" . $nextBoardAndListingNumber[1];
+				$requestData .= "&nextAddress=" . urlencode($searchSummaryNext->address);
+				$requestData .= "&nextStatus=" . urlencode($searchSummaryNext->status);
+			}
 		}
 		
 		return $requestData;
@@ -92,13 +89,12 @@ class iHomefinderUtility {
 	 * @return boolean
 	 */
 	public function isWebCrawler() {
-		$result=true;
+		$result = true;
 		$userAgent = strtolower($_SERVER['HTTP_USER_AGENT']);			
-		$knownCrawlersArray 
-			= array("Mediapartners-Google","Googlebot","Baiduspider","Bingbot","msnbot","Slurp","Twiceler","YandexBot");			
-		foreach ($knownCrawlersArray as $value) {
+		$knownCrawlersArray = array("Mediapartners-Google","Googlebot","Baiduspider","Bingbot","msnbot","Slurp","Twiceler","YandexBot");			
+		foreach($knownCrawlersArray as $value) {
 			if(strpos($userAgent, $value)) {
-				$result=true;
+				$result = true;
 				break;
 			}
 		}
@@ -112,7 +108,6 @@ class iHomefinderUtility {
 	 */
 	public function isStringEmpty($value) {
 		$result=true;
-		
 		if($value != null && strlen($value) > 0) {
 			$result=false;
 		}

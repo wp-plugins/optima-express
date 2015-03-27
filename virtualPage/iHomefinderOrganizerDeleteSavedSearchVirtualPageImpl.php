@@ -22,17 +22,13 @@ class iHomefinderOrganizerDeleteSavedSearchVirtualPageImpl extends iHomefinderAb
 
 	public function getContent() {
 		iHomefinderLogger::getInstance()->debug('Begin iHomefinderOrganizerDeleteSavedSearchVirtualPageImpl');
-		$subscriberId=iHomefinderUtility::getInstance()->getQueryVar('subscriberID');
-		if(empty($subscriberId)) {
-			$subscriberId=iHomefinderUtility::getInstance()->getQueryVar('subscriberId');
-		}
+		
 		$searchProfileId=iHomefinderUtility::getInstance()->getQueryVar('searchProfileID');
 		if(empty($searchProfileId)) {
 			$searchProfileId=iHomefinderUtility::getInstance()->getQueryVar('searchProfileId');
 		}
 
 		$requestData = 'method=handleRequest&viewType=json&requestType=property-organizer-delete-saved-search-submit';
-		$requestData = iHomefinderRequestor::getInstance()->appendQueryVarIfNotEmpty($requestData, "subscriberId", $subscriberId);
 		$requestData = iHomefinderRequestor::getInstance()->appendQueryVarIfNotEmpty($requestData, "searchProfileId", $searchProfileId);
 
 		$this->remoteResponse = iHomefinderRequestor::getInstance()->remoteGetRequest($requestData);
