@@ -40,6 +40,9 @@ class iHomefinderAjaxHandler {
 			$requestData = iHomefinderRequestor::getInstance()->addVarsToUrl($requestData, $_REQUEST);
 			$contentInfo = iHomefinderRequestor::getInstance()->remoteGetRequest($requestData);
 			$content = iHomefinderRequestor::getInstance()->getContent($contentInfo);
+			if(property_exists($contentInfo, "head")) {
+				$content .= $contentInfo->head;
+			}
 			iHomefinderLogger::getInstance()->debug($requestData);
 			iHomefinderLogger::getInstance()->debug('End iHomefinderAjaxHandler.requestMoreInfo');
 			echo $content;
@@ -55,6 +58,9 @@ class iHomefinderAjaxHandler {
 			$requestData = iHomefinderRequestor::getInstance()->addVarsToUrl($requestData, $_REQUEST);
 			$contentInfo = iHomefinderRequestor::getInstance()->remoteGetRequest($requestData);
 			$content = iHomefinderRequestor::getInstance()->getContent($contentInfo);
+			if(property_exists($contentInfo, "head")) {
+				$content .= $contentInfo->head;
+			}
 			iHomefinderLogger::getInstance()->debug($requestData);
 			iHomefinderLogger::getInstance()->debug('End iHomefinderAjaxHandler.contactFormRequest');
 
@@ -71,6 +77,9 @@ class iHomefinderAjaxHandler {
 			$requestData = iHomefinderRequestor::getInstance()->addVarsToUrl($requestData, $_REQUEST);	
 			$contentInfo = iHomefinderRequestor::getInstance()->remoteGetRequest($requestData);				
 			$content = iHomefinderRequestor::getInstance()->getContent($contentInfo);
+			if(property_exists($contentInfo, "head")) {
+				$content .= $contentInfo->head;
+			}
 			iHomefinderLogger::getInstance()->debug($requestData);
 			iHomefinderLogger::getInstance()->debug('End iHomefinderAjaxHandler.scheduleShowing');
 			echo $content;
@@ -88,6 +97,9 @@ class iHomefinderAjaxHandler {
 		$requestData = iHomefinderRequestor::getInstance()->appendQueryVarIfNotEmpty($requestData, "boardId", $boardID);
 		$contentInfo = iHomefinderRequestor::getInstance()->remoteGetRequest($requestData);
 		$content = iHomefinderRequestor::getInstance()->getContent($contentInfo);
+		if(property_exists($contentInfo, "head")) {
+			$content .= $contentInfo->head;
+		}
 		iHomefinderLogger::getInstance()->debug($requestData);
 		iHomefinderLogger::getInstance()->debug('End iHomefinderAjaxHandler.photoTour');
 		echo $content;
@@ -102,6 +114,9 @@ class iHomefinderAjaxHandler {
 		$contentInfo = iHomefinderRequestor::getInstance()->remoteGetRequest($requestData);
 		iHomefinderLogger::getInstance()->debugDumpVar($contentInfo);
 		$content = iHomefinderRequestor::getInstance()->getContent($contentInfo);
+		if(property_exists($contentInfo, "head")) {
+			$content .= $contentInfo->head;
+		}
 		echo $content;
 		die(); //don't remove
 	}
@@ -121,6 +136,9 @@ class iHomefinderAjaxHandler {
 		$requestData .= '&' . $lastSearchQueryString;
 		$contentInfo = iHomefinderRequestor::getInstance()->remoteGetRequest($requestData);
 		$content = iHomefinderRequestor::getInstance()->getContent($contentInfo);
+		if(property_exists($contentInfo, "head")) {
+			$content .= $contentInfo->head;
+		}
 		iHomefinderLogger::getInstance()->debugDumpVar($contentInfo);
 		iHomefinderLogger::getInstance()->debug($requestData);
 		iHomefinderLogger::getInstance()->debug('End iHomefinderAjaxHandler.saveSearch');
@@ -135,6 +153,9 @@ class iHomefinderAjaxHandler {
 		$requestData = iHomefinderRequestor::getInstance()->appendQueryVarIfNotEmpty($requestData, "phpStyle", "true");
 		$contentInfo = iHomefinderRequestor::getInstance()->remoteGetRequest($requestData);
 		$content = iHomefinderRequestor::getInstance()->getContent($contentInfo);
+		if(property_exists($contentInfo, "head")) {
+			$content .= $contentInfo->head;
+		}
 		echo $content;
 		iHomefinderLogger::getInstance()->debug('End advancedSearchMultiSelects');
 		die(); //don't remove
@@ -148,6 +169,9 @@ class iHomefinderAjaxHandler {
 		$requestData = iHomefinderRequestor::getInstance()->appendQueryVarIfNotEmpty($requestData, "phpStyle", "true");
 		$contentInfo = iHomefinderRequestor::getInstance()->remoteGetRequest($requestData);
 		$content = iHomefinderRequestor::getInstance()->getContent($contentInfo);
+		if(property_exists($contentInfo, "head")) {
+			$content .= $contentInfo->head;
+		}
 		echo $content;
 		iHomefinderLogger::getInstance()->debug('End getAdvancedSearchFormFields');
 		die(); //don't remove
@@ -164,6 +188,9 @@ class iHomefinderAjaxHandler {
 		}
 		$contentInfo = iHomefinderRequestor::getInstance()->remoteGetRequest($requestData);
 		$content = iHomefinderRequestor::getInstance()->getContent($contentInfo);
+		if(property_exists($contentInfo, "head")) {
+			$content .= $contentInfo->head;
+		}
 		echo $content;
 		iHomefinderLogger::getInstance()->debug('End leadCaptureLogin');
 		die(); //don't remove
@@ -175,6 +202,9 @@ class iHomefinderAjaxHandler {
 		$requestData = iHomefinderRequestor::getInstance()->addVarsToUrl($requestData, $_REQUEST);	
 		$contentInfo = iHomefinderRequestor::getInstance()->remoteGetRequest($requestData);
 		$content = iHomefinderRequestor::getInstance()->getContent($contentInfo);
+		if(property_exists($contentInfo, "head")) {
+			$content .= $contentInfo->head;
+		}
 		//We do not need to get any content back
 		//echo $content;
 		iHomefinderLogger::getInstance()->debug('End addSavedListingComments');
@@ -188,6 +218,9 @@ class iHomefinderAjaxHandler {
 		$contentInfo = iHomefinderRequestor::getInstance()->remoteGetRequest($requestData);
 		iHomefinderLogger::getInstance()->debugDumpVar($contentInfo);
 		$content = iHomefinderRequestor::getInstance()->getContent($contentInfo);
+		if(property_exists($contentInfo, "head")) {
+			$content .= $contentInfo->head;
+		}
 		//We do not need to get any content back
 		//echo $content;
 		iHomefinderLogger::getInstance()->debug('End addSavedListingRating');
@@ -201,6 +234,9 @@ class iHomefinderAjaxHandler {
 		$contentInfo = iHomefinderRequestor::getInstance()->remoteGetRequest($requestData);
 		iHomefinderLogger::getInstance()->debugDumpVar($contentInfo);
 		$content = iHomefinderRequestor::getInstance()->getContent($contentInfo);
+		if(property_exists($contentInfo, "head")) {
+			$content .= $contentInfo->head;
+		}
 		echo $content;
 		die(); //don't remove
 	}
@@ -212,6 +248,9 @@ class iHomefinderAjaxHandler {
 		$contentInfo = iHomefinderRequestor::getInstance()->remoteGetRequest($requestData);
 		iHomefinderLogger::getInstance()->debugDumpVar($contentInfo);
 		$content = iHomefinderRequestor::getInstance()->getContent($contentInfo);
+		if(property_exists($contentInfo, "head")) {
+			$content .= $contentInfo->head;
+		}
 		echo $content;
 		die(); //don't remove
 	}
@@ -235,6 +274,9 @@ class iHomefinderAjaxHandler {
 			$requestData = iHomefinderRequestor::getInstance()->addVarsToUrl($requestData, $_REQUEST);
 			$contentInfo = iHomefinderRequestor::getInstance()->remoteGetRequest($requestData);
 			$content = iHomefinderRequestor::getInstance()->getContent($contentInfo);
+			if(property_exists($contentInfo, "head")) {
+				$content .= $contentInfo->head;
+			}
 			iHomefinderLogger::getInstance()->debug($requestData);
 			iHomefinderLogger::getInstance()->debug('End iHomefinderAjaxHandler.sendPassword');
 			echo $content;
