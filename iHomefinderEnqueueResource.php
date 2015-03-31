@@ -126,7 +126,7 @@ class iHomefinderEnqueueResource {
 	}
 	
 	public function addToMetaTags($value) {
-		array_push($this->footer, $value);
+		array_push($this->metaTags, $value);
 	}
 	
 	public function getMetaTags() {
