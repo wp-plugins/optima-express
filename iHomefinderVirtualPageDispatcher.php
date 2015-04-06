@@ -40,7 +40,7 @@ class iHomefinderVirtualPageDispatcher {
 		if(!$this->initialized && $postsCount == 0 && !empty($type)) {
 			$this->virtualPage = iHomefinderVirtualPageFactory::getInstance()->getVirtualPage($type);
 			$this->content = (string) $this->virtualPage->getContent();
-			$this->excerpt = (string) $this->virtualPage->getContent();
+			$this->excerpt = (string) $this->content;
 			$this->title = (string) $this->virtualPage->getTitle();
 			iHomefinderEnqueueResource::getInstance()->addToHeader($this->virtualPage->getHead());
 			iHomefinderEnqueueResource::getInstance()->addToMetaTags($this->virtualPage->getMetaTags());

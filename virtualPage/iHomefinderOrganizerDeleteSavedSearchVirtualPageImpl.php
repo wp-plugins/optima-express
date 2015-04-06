@@ -9,7 +9,7 @@ class iHomefinderOrganizerDeleteSavedSearchVirtualPageImpl extends iHomefinderAb
 	}
 
 	public function getTitle() {
-		return "Delete Saved Search";
+		return "Saved Search List";
 	}
 
 	public function getPageTemplate() {
@@ -32,13 +32,13 @@ class iHomefinderOrganizerDeleteSavedSearchVirtualPageImpl extends iHomefinderAb
 		$requestData = iHomefinderRequestor::getInstance()->appendQueryVarIfNotEmpty($requestData, "searchProfileId", $searchProfileId);
 
 		$this->remoteResponse = iHomefinderRequestor::getInstance()->remoteGetRequest($requestData);
-		//$body = iHomefinderRequestor::getInstance()->getContent($this->remoteResponse);
+		$body = iHomefinderRequestor::getInstance()->getContent($this->remoteResponse);
 		iHomefinderLogger::getInstance()->debug($requestData);
 		iHomefinderLogger::getInstance()->debug('End iHomefinderOrganizerDeleteSavedSearchVirtualPageImpl');
 
 		$redirectUrl=iHomefinderUrlFactory::getInstance()->getOrganizerViewSavedSearchListUrl(true);
 		//redirect to the list of saved searches to avoid double posting the request
-		$body = '<meta http-equiv="refresh" content="0;url=' . $redirectUrl . '">';
+		//$body = '<meta http-equiv="refresh" content="0;url=' . $redirectUrl . '">';
 
 		return $body;
 	}
