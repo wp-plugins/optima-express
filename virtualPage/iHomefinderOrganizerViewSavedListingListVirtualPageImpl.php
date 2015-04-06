@@ -24,14 +24,7 @@ class iHomefinderOrganizerViewSavedListingListVirtualPageImpl extends iHomefinde
 		iHomefinderLogger::getInstance()->debug('Begin iHomefinderOrganizerViewSavedListingListFilterImpl');
 		iHomefinderStateManager::getInstance()->saveLastSearch();
 		
-		$isLoggedIn = iHomefinderStateManager::getInstance()->isLoggedIn();
-		if($isLoggedIn) {
-			$subscriberInfo=iHomefinderStateManager::getInstance()->getCurrentSubscriber();
-			$subscriberId=$subscriberInfo->getId();
-		}
-		
 		$requestData = 'method=handleRequest&viewType=json&requestType=property-organizer-view-saved-listing-list';
-		$requestData = iHomefinderRequestor::getInstance()->appendQueryVarIfNotEmpty($requestData, "subscriberId", $subscriberId);
 		$requestData = iHomefinderRequestor::getInstance()->appendQueryVarIfNotEmpty($requestData, "includeSearchSummary", "true");
 		$requestData = iHomefinderRequestor::getInstance()->appendQueryVarIfNotEmpty($requestData, "phpStyle", "true");
 		$requestData = iHomefinderRequestor::getInstance()->addVarsToUrl($requestData, $_REQUEST);

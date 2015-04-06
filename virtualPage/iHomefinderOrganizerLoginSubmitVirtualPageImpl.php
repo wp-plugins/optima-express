@@ -22,16 +22,15 @@ class iHomefinderOrganizerLoginSubmitVirtualPageImpl extends iHomefinderAbstract
 	public function getContent() {
 		iHomefinderLogger::getInstance()->debug('Begin PropertyOrganizerLoginSubmitVirtualPage');
 		
-		$subscriberId=iHomefinderUtility::getInstance()->getQueryVar('subscriberID');
 		//if rememberMe parameter is set
 		//create a cookie 'rmuser' with leadcaptureid
 		if(isset($_REQUEST["rememberMe"]) && trim($_REQUEST["rememberMe"]) == '1') {
 			iHomefinderStateManager::getInstance()->createRememberMeCookie();
 		}
 		
-
 		$requestData = 'method=handleRequest&viewType=json&requestType=property-organizer-login-submit';
-
+		
+		$subscriberId=iHomefinderUtility::getInstance()->getQueryVar('subscriberID');
 		if($subscriberId == null || trim($subscriberId) == "") {
 			//If no subscriber id, then get the authentication info from the request and pass it along
 			$requestData = iHomefinderRequestor::getInstance()->addVarsToUrl($requestData, $_REQUEST);

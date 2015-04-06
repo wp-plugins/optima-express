@@ -106,7 +106,7 @@ class iHomefinderEnqueueResource {
 	}
 	
 	public function addToHeader($value) {
-		array_push($this->header, $value);
+		$this->header[] = $value;
 	}
 	
 	public function getHeader() {
@@ -116,7 +116,7 @@ class iHomefinderEnqueueResource {
 	}
 	
 	public function addToFooter($value) {
-		array_push($this->footer, $value);
+		$this->footer[] = $value;
 	}
 	
 	public function getFooter() {
@@ -126,7 +126,7 @@ class iHomefinderEnqueueResource {
 	}
 	
 	public function addToMetaTags($value) {
-		array_push($this->footer, $value);
+		$this->metaTags[] = $value;
 	}
 	
 	public function getMetaTags() {

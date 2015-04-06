@@ -47,13 +47,6 @@ class iHomefinderOrganizerLoginFormVirtualPageImpl extends iHomefinderAbstractVi
 		$requestData = iHomefinderRequestor::getInstance()->appendQueryVarIfNotEmpty($requestData, "message", $message);
 		$requestData = iHomefinderRequestor::getInstance()->appendQueryVarIfNotEmpty($requestData, "afterLoginUrl", $afterLoginUrl);
 		
-		$isLoggedIn = iHomefinderStateManager::getInstance()->isLoggedIn();
-		if($isLoggedIn) {
-			$subscriberInfo=iHomefinderStateManager::getInstance()->getCurrentSubscriber();
-			$subscriberId=$subscriberInfo->getId();
-			$requestData = iHomefinderRequestor::getInstance()->appendQueryVarIfNotEmpty($requestData, "subscriberId", $subscriberId);
-		}
-		
 		$this->remoteResponse = iHomefinderRequestor::getInstance()->remoteGetRequest($requestData);
 		$body = iHomefinderRequestor::getInstance()->getContent($this->remoteResponse);
 		

@@ -8,7 +8,7 @@ class iHomefinderOrganizerEditSavedSearchVirtualPageImpl extends iHomefinderAbst
 		
 	}
 	public function getTitle() {
-		return "Email Alert";
+		return "Saved Search List";
 	}		
 			
 	public function getPageTemplate() {
@@ -33,7 +33,7 @@ class iHomefinderOrganizerEditSavedSearchVirtualPageImpl extends iHomefinderAbst
 		$body = iHomefinderRequestor::getInstance()->getContent($this->remoteResponse);
 		
 		$subscriberSessionOnJavaServers = iHomefinderLayoutManager::getInstance()->isSubscriberSessionOnJavaServers();
-		if (!subscriberSessionOnJavaServers) {
+		if (!$subscriberSessionOnJavaServers) {
 			if(iHomefinderStateManager::getInstance()->isLoggedIn()) {
 				$redirectUrl=iHomefinderUrlFactory::getInstance()->getOrganizerViewSavedSearchListUrl(true);
 				//redirect to the list of saved searches to avoid double posting the request

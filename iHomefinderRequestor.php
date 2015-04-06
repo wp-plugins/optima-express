@@ -70,6 +70,7 @@ class iHomefinderRequestor{
 		
 		iHomefinderLogger::getInstance()->debug("ihfUrl: " . $ihfUrl);
 		$ihfid=site_url() + ";" + "WordpressPlugin";
+		$wp_version = get_bloginfo("version");
 		$ihfUserInfo= 'WordPress/' . $wp_version . '; ' . get_bloginfo('url');
 		//modified user-agent in the request header to pass original user-agent
 		//This information is used by spring-mobile library to determine 
@@ -183,6 +184,7 @@ class iHomefinderRequestor{
 		$ihfUrl = iHomefinderLayoutManager::getInstance()->getExternalUrl();
 		iHomefinderLogger::getInstance()->debug("ihfUrl: " . $ihfUrl);
 		$ihfid=site_url() + ";" + "WordpressPlugin";
+		$wp_version = get_bloginfo("version");
 		$ihfUserInfo= 'WordPress/' . $wp_version . '; ' . get_bloginfo('url');
 		//modified user-agent in the request header to pass original user-agent
 		//This information is used by spring-mobile library to determine

@@ -33,7 +33,9 @@ class iHomefinderSearchByListingIdWidget extends WP_Widget {
 		$requestData = 'method=handleRequest&viewType=json&requestType=search-by-listing-id-form';
 		$requestData = iHomefinderRequestor::getInstance()->appendQueryVarIfNotEmpty($requestData, "smallView", "true");
 		$requestData = iHomefinderRequestor::getInstance()->appendQueryVarIfNotEmpty($requestData, "phpStyle", "true");
-		$requestData = iHomefinderRequestor::getInstance()->appendQueryVarIfNotEmpty($requestData, "style", $instance['style']);
+		if(array_key_exists("style", $instance)) {
+			$requestData = iHomefinderRequestor::getInstance()->appendQueryVarIfNotEmpty($requestData, "style", $instance['style']);
+		}
 		$contentInfo = iHomefinderRequestor::getInstance()->remoteGetRequest($requestData, 86400);
 		$content = iHomefinderRequestor::getInstance()->getContent($contentInfo);
 		iHomefinderEnqueueResource::getInstance()->addToFooter($contentInfo->head);

@@ -7,7 +7,7 @@
  */
 interface iHomefinderConstants{
 
-	const VERSION = "2.5.3";
+	const VERSION = "2.5.4";
 	const VERSION_NAME = "Optima Express";
 	const LEGACY_EXTERNAL_URL = "http://www.idxre.com/services/wordpress";
 	const RESPONSIVE_EXTERNAL_URL = "http://www.idxhome.com/service/wordpress";
