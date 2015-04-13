@@ -4,9 +4,6 @@ class iHomefinderOrganizerViewSavedSearchListVirtualPageImpl extends iHomefinder
 	
 	private $path="property-organizer-view-saved-search-list";
 	
-	public function __construct() {
-		
-	}
 	public function getTitle() {
 		return "Saved Search List";
 	}			
@@ -20,17 +17,14 @@ class iHomefinderOrganizerViewSavedSearchListVirtualPageImpl extends iHomefinder
 	}
 			
 	public function getContent() {
-		iHomefinderLogger::getInstance()->debug('Begin iHomefinderOrganizerViewSavedSearchListFilterImpl');
-		
-		$requestData = 'method=handleRequest&viewType=json&requestType=property-organizer-view-saved-search-list';
-		$requestData = iHomefinderRequestor::getInstance()->appendQueryVarIfNotEmpty($requestData, "phpStyle", "true");
-		
-		$this->remoteResponse = iHomefinderRequestor::getInstance()->remoteGetRequest($requestData);
-		$body = iHomefinderRequestor::getInstance()->getContent($this->remoteResponse);
-		
-		iHomefinderLogger::getInstance()->debug($requestData);
-		iHomefinderLogger::getInstance()->debug('End iHomefinderOrganizerViewSavedSearchListFilterImpl');
-		
+		$this->remoteRequest
+			->addParameter("method", "handleRequest")
+			->addParameter("viewType", "json")
+			->addParameter("requestType", "property-organizer-view-saved-search-list")
+			->addParameter("phpStyle", true)
+		;
+		$this->remoteResponse = $this->remoteRequest->remoteGetRequest();
+		$body = $this->remoteRequest->getContent($this->remoteResponse);
 		return $body;
 	}
 }

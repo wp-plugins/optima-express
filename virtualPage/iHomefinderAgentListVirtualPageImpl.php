@@ -4,9 +4,6 @@ class iHomefinderAgentListVirtualPageImpl extends iHomefinderAbstractVirtualPage
 	
 	private $path = "agent-list";
 	private $title = "Agent List";
-
-	public function __construct() {
-	}
 	
 	public function getTitle() {
 		$customTitle = get_option(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_AGENT_LIST);
@@ -31,22 +28,16 @@ class iHomefinderAgentListVirtualPageImpl extends iHomefinderAbstractVirtualPage
 	
 			
 	public function getContent() {
-		iHomefinderLogger::getInstance()->debug('Begin iHomefinderAgentListPageImpl');
-
-		//used to remember search results
-		$requestData = 'method=handleRequest'
-			. '&viewType=json'
-			. '&requestType=agent-list'
-			. '&phpStyle=true'
-			. '&includeSearchSummary=true';
-
-
-		$requestData = iHomefinderRequestor::getInstance()->addVarsToUrl($requestData, $_REQUEST);
-		$this->remoteResponse = iHomefinderRequestor::getInstance()->remoteGetRequest($requestData);
-		$body = iHomefinderRequestor::getInstance()->getContent($this->remoteResponse);
-		
-		iHomefinderLogger::getInstance()->debug('End iHomefinderAgentListPageImpl');
-		iHomefinderLogger::getInstance()->debug($requestData);
+		$this->remoteRequest
+			->addParameter("method", "handleRequest")
+			->addParameter("viewType", "json")
+			->addParameter("requestType", "agent-list")
+			->addParameter("phpStyle", true)
+			->addParameter("includeSearchSummary", true)
+		;
+		$this->remoteRequest->addParameters($_REQUEST);
+		$this->remoteResponse = $this->remoteRequest->remoteGetRequest();
+		$body = $this->remoteRequest->getContent($this->remoteResponse);
 		return $body;
 	}
 }

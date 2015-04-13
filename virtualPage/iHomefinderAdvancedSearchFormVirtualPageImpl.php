@@ -5,10 +5,7 @@ class iHomefinderAdvancedSearchFormVirtualPageImpl extends iHomefinderAbstractVi
 	private $path = "homes-for-sale-search-advanced";
 	private $title = "Advanced Property Search";
 	
-	public function __construct() {
-		
-	}
-		public function getTitle() {
+	public function getTitle() {
 		$customTitle = get_option(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_ADV_SEARCH);
 		if($customTitle != null && "" != $customTitle) {
 			$this->title=$customTitle;
@@ -31,25 +28,20 @@ class iHomefinderAdvancedSearchFormVirtualPageImpl extends iHomefinderAbstractVi
 	}
 	
 	public function getContent() {
-		iHomefinderLogger::getInstance()->debug('Begin iHomefinderAdvancedSearchFormVirtualPageImpl');
-		$boardId=iHomefinderUtility::getInstance()->getQueryVar('bid');
-		$requestData = 'method=handleRequest'
-			. '&viewType=json'
-			. '&requestType=listing-advanced-search-form'
-			. '&includeAreaSelectorAreas=false'
-			. '&phpStyle=true';
-			
-		$requestData = iHomefinderRequestor::getInstance()->addVarsToUrl($requestData, $_REQUEST);	
-	
+		$boardId=iHomefinderUtility::getInstance()->getQueryVar("bid");
+		$this->remoteRequest
+			->addParameter("method", "handleRequest")
+			->addParameter("viewType", "json")
+			->addParameter("requestType", "listing-advanced-search-form")
+			->addParameter("includeAreaSelectorAreas", false)
+			->addParameter("phpStyle", true)
+		;
+		$this->remoteRequest->addParameters($_REQUEST);
 		if(is_numeric($boardId)) {
-			$requestData = iHomefinderRequestor::getInstance()->appendQueryVarIfNotEmpty($requestData, "boardId", $boardId);		
+			$this->remoteRequest->addParameter("boardId", $boardId);
 		}
-
-		$this->remoteResponse = iHomefinderRequestor::getInstance()->remoteGetRequest($requestData);
-		$body = iHomefinderRequestor::getInstance()->getContent($this->remoteResponse);
-		
-		iHomefinderLogger::getInstance()->debug('End iHomefinderAdvancedSearchFormVirtualPageImpl');
-		iHomefinderLogger::getInstance()->debug($requestData);
+		$this->remoteResponse = $this->remoteRequest->remoteGetRequest();
+		$body = $this->remoteRequest->getContent($this->remoteResponse);
 		return $body;
 	}
 }

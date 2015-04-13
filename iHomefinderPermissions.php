@@ -9,75 +9,65 @@
 class iHomefinderPermissions {	
 	
 	//Names of options in the database
-	private $emailUpdatesOptionName="ihf_email_updates_enabled";
-	private $saveListingOptionName="ihf_save_listing_enabled";
-	private $hotSheetOptionName="ihf_hotsheet_enabled";
-	private $featuredPropertiesOptionName="ihf_featured_properties_enabled";
-	private $organizerOptionName="ihf_organizer_enabled";
-	private $galleryShortcodesOptionName="ihf_gallery_shortcodes_enabled";
-	
-	private $officeOptionName="ihf_office_enabled";
-	private $agentBioOptionName="ihf_agent_bio_enabled";
-	private $soldPendingOptionName="ihf_sold_pending_enabled";
-	private $valuationOptionName="ihf_valuation_enabled";
-	private $contactFormOptionName="ihf_contact_form_enabled";
-	private $supplementalListingsOptionName="ihf_supplemental_listings_enabled";
-	
-	private $mapSearchOptionName="ihf_map_search_enabled";
-	private $seoCityLinksOptionName="ihf_seo_city_links_enabled";
-	private $communityPagesOptionName="ihf_community_pages_enabled";
-	
+	private $emailUpdatesOptionName = "ihf_email_updates_enabled";
+	private $saveListingOptionName = "ihf_save_listing_enabled";
+	private $hotSheetOptionName = "ihf_hotsheet_enabled";
+	private $featuredPropertiesOptionName = "ihf_featured_properties_enabled";
+	private $organizerOptionName = "ihf_organizer_enabled";
+	private $galleryShortcodesOptionName = "ihf_gallery_shortcodes_enabled";
+	private $officeOptionName = "ihf_office_enabled";
+	private $agentBioOptionName = "ihf_agent_bio_enabled";
+	private $soldPendingOptionName = "ihf_sold_pending_enabled";
+	private $valuationOptionName = "ihf_valuation_enabled";
+	private $contactFormOptionName = "ihf_contact_form_enabled";
+	private $supplementalListingsOptionName = "ihf_supplemental_listings_enabled";
+	private $mapSearchOptionName = "ihf_map_search_enabled";
+	private $seoCityLinksOptionName = "ihf_seo_city_links_enabled";
+	private $communityPagesOptionName = "ihf_community_pages_enabled";
 	private $pendingAccountOptionName = "ihf_pending_account";
 	private $activeTrialAccountOptionName = "ihf_active_trial_account";
 	
-	private static $instance;
-	
-	private $officeEnabled=false;
-	private $agentBioEnabled=false;
-	private $soldPendingEnabled=false;
-	private $valuationEnabled=false;
-	private $contactFormEnabled=false;
-	private $supplementalListingsEnabled=false;
-	
-	//Property Organizer functionality
-	private $organizerEnabled=false;
+	private $officeEnabled = false;
+	private $agentBioEnabled = false;
+	private $soldPendingEnabled = false;
+	private $valuationEnabled = false;
+	private $contactFormEnabled = false;
+	private $supplementalListingsEnabled = false;
+	private $organizerEnabled = false;
 	private $emailUpdatesEnabled = false;
 	private $saveListingEnabled = false;
-	
-	//Property Gallery functionality
 	private $hotSheetEnabled = false;
-	private $linkSearchEnabled= false;
-	private $namedSearchEnabled= false;
-	private $featuredPropertiesEnabled= false;
-	
+	private $linkSearchEnabled = false;
+	private $namedSearchEnabled = false;
+	private $featuredPropertiesEnabled = false;
 	private $mapSearchEnabled = false;
 	private $communityPagesEnabled = false;
 	private $seoCityLinksEnabled = false;
-	
-	//Gallery shortcodes
 	private $galleryShortCodesEnabled = false;
 	
 	private $pendingAccount = false;
-	private $activeTrialAccount =  false;
+	private $activeTrialAccount = false;
+	
+	private static $instance;
 	
 	private function __construct() {
-		$this->emailUpdatesEnabled=get_option($this->emailUpdatesOptionName, false);
-		$this->saveListingEnabled=get_option($this->saveListingOptionName, false);
-		$this->hotSheetEnabled=get_option($this->hotSheetOptionName, false);
-		$this->linkSearchEnabled=$this->isHotSheetEnabled();
-		$this->namedSearchEnabled=$this->isHotSheetEnabled();
-		$this->featuredPropertiesEnabled=get_option($this->featuredPropertiesOptionName, false);
-		$this->organizerEnabled=get_option($this->organizerOptionName, false);
-		$this->galleryShortCodesEnabled=get_option($this->galleryShortcodesOptionName, false);
-		$this->officeEnabled=get_option($this->officeOptionName, false);
-		$this->agentBioEnabled=get_option($this->agentBioOptionName, false);
-		$this->soldPendingEnabled=get_option($this->soldPendingOptionName, false);
-		$this->valuationEnabled=get_option($this->valuationOptionName, false);
-		$this->contactFormEnabled=get_option($this->contactFormOptionName, false);
-		$this->supplementalListingsEnabled=get_option($this->supplementalListingsOptionName, false);
-		$this->mapSearchEnabled=get_option($this->mapSearchOptionName, false);
-		$this->communityPagesEnabled=get_option($this->communityPagesOptionName, false);
-		$this->seoCityLinksEnabled=get_option($this->seoCityLinksOptionName, false);
+		$this->emailUpdatesEnabled = get_option($this->emailUpdatesOptionName, false);
+		$this->saveListingEnabled = get_option($this->saveListingOptionName, false);
+		$this->hotSheetEnabled = get_option($this->hotSheetOptionName, false);
+		$this->linkSearchEnabled = $this->isHotSheetEnabled();
+		$this->namedSearchEnabled = $this->isHotSheetEnabled();
+		$this->featuredPropertiesEnabled = get_option($this->featuredPropertiesOptionName, false);
+		$this->organizerEnabled = get_option($this->organizerOptionName, false);
+		$this->galleryShortCodesEnabled = get_option($this->galleryShortcodesOptionName, false);
+		$this->officeEnabled = get_option($this->officeOptionName, false);
+		$this->agentBioEnabled = get_option($this->agentBioOptionName, false);
+		$this->soldPendingEnabled = get_option($this->soldPendingOptionName, false);
+		$this->valuationEnabled = get_option($this->valuationOptionName, false);
+		$this->contactFormEnabled = get_option($this->contactFormOptionName, false);
+		$this->supplementalListingsEnabled = get_option($this->supplementalListingsOptionName, false);
+		$this->mapSearchEnabled = get_option($this->mapSearchOptionName, false);
+		$this->communityPagesEnabled = get_option($this->communityPagesOptionName, false);
+		$this->seoCityLinksEnabled = get_option($this->seoCityLinksOptionName, false);
 		$this->pendingAccount = get_option($this->pendingAccountOptionName);
 		$this->activeTrialAccount = get_option($this->activeTrialAccountOptionName);
 	}
@@ -108,29 +98,29 @@ class iHomefinderPermissions {
 		update_option($this->pendingAccountOptionName, strval($permissions->pendingAccount));
 		update_option($this->activeTrialAccountOptionName, strval($permissions->activeTrialAccount));
 		
-		$this->emailUpdatesEnabled=$permissions->emailUpdates;
-		$this->saveListingEnabled=$permissions->saveListing;
-		$this->hotSheetEnabled=$permissions->hotSheet;
-		$this->featuredPropertiesEnabled=$permissions->featuredProperties;
-		$this->organizerEnabled=$permissions->organizer;
-		$this->linkSearchEnabled=$this->isHotSheetEnabled();
-		$this->namedSearchEnabled=$this->isHotSheetEnabled();
-		$this->galleryShortCodesEnabled=$this->isHotSheetEnabled();
-		$this->officeEnabled=$permissions->office;
-		$this->agentBioEnabled=$permissions->agentBio;
-		$this->soldPendingEnabled=$permissions->soldPending;
-		$this->valuationEnabled=$permissions->valuation;
-		$this->contactFormEnabled=$permissions->contactForm;
-		$this->supplementalListingsEnabled=$permissions->supplementalListings;
-		$this->mapSearchEnabled=$permissions->mapSearch;
-		$this->communityPagesEnabled=$permissions->communityPages;
-		$this->seoCityLinksEnabled=$permissions->seoCityLinks;		
+		$this->emailUpdatesEnabled = $permissions->emailUpdates;
+		$this->saveListingEnabled = $permissions->saveListing;
+		$this->hotSheetEnabled = $permissions->hotSheet;
+		$this->featuredPropertiesEnabled = $permissions->featuredProperties;
+		$this->organizerEnabled = $permissions->organizer;
+		$this->linkSearchEnabled = $this->isHotSheetEnabled();
+		$this->namedSearchEnabled = $this->isHotSheetEnabled();
+		$this->galleryShortCodesEnabled = $this->isHotSheetEnabled();
+		$this->officeEnabled = $permissions->office;
+		$this->agentBioEnabled = $permissions->agentBio;
+		$this->soldPendingEnabled = $permissions->soldPending;
+		$this->valuationEnabled = $permissions->valuation;
+		$this->contactFormEnabled = $permissions->contactForm;
+		$this->supplementalListingsEnabled = $permissions->supplementalListings;
+		$this->mapSearchEnabled = $permissions->mapSearch;
+		$this->communityPagesEnabled = $permissions->communityPages;
+		$this->seoCityLinksEnabled = $permissions->seoCityLinks;		
 		$this->pendingAccount = $permissions->pendingAccount;
 		$this->activeTrialAccount = $permissions->activeTrialAccount;
 	}
 	
 	public function isMoreInfoEnabled() {
-		if(iHomefinderLayoutManager::getInstance()->isResponsive()) {
+		if(iHomefinderLayoutManager::getInstance()->isResponsive() && $this->isContactFormEnabled()) {
 			return true;
 		} else {
 			return false;
@@ -154,7 +144,7 @@ class iHomefinderPermissions {
 	}
 	
 	public function isContactFormWidgetEnabled() {
-		if(iHomefinderLayoutManager::getInstance()->isResponsive()) {
+		if(iHomefinderLayoutManager::getInstance()->isResponsive() && $this->isContactFormEnabled()) {
 			return true;
 		} else {
 			return false;
@@ -162,7 +152,7 @@ class iHomefinderPermissions {
 	}
 	
 	public function isHotsheetListWidgetEnabled() {
-		if(iHomefinderLayoutManager::getInstance()->isResponsive()) {
+		if(iHomefinderLayoutManager::getInstance()->isResponsive() && $this->isHotSheetEnabled()) {
 			return true;
 		} else {
 			return false;
@@ -264,7 +254,7 @@ class iHomefinderPermissions {
 	
 	public function isOmnipressSite() {
 		$result = false;
-		if(get_option('clientId')) {
+		if(get_option("clientId")) {
 			$result = true;
 		}
 		return $result;

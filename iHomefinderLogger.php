@@ -1,16 +1,8 @@
 <?php
 
-/**
- * 
- * This class is handle all iHomefinder Ajax Requests.
- * It proxies the requests and returns the proper results.
- * 
- * @author ihomefinder
- */
 class iHomefinderLogger {
-
+	
 	private static $instance;
-
 	
 	private function __construct() {
 	}
@@ -47,10 +39,14 @@ class iHomefinderLogger {
 			echo microtime(true) . ": ";
 			echo $message;
 		}				
-	}				
+	}
+			
 	public function debugDumpVar($message) {	
 		if($this->isDebug()) {	
+			echo "\n\r";
+			echo microtime(true) . ": ";
 			var_dump($message);
 		}				
-	}				
+	}
+				
 }

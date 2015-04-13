@@ -4,9 +4,6 @@ class iHomefinderOrganizerLoginSubmitVirtualPageImpl extends iHomefinderAbstract
 	
 	private $path="property-organizer-login-submit";
 	
-	public function __construct() {
-
-	}
 	public function getTitle() {
 		return "Organizer Login";
 	}
@@ -20,36 +17,25 @@ class iHomefinderOrganizerLoginSubmitVirtualPageImpl extends iHomefinderAbstract
 	}
 	
 	public function getContent() {
-		iHomefinderLogger::getInstance()->debug('Begin PropertyOrganizerLoginSubmitVirtualPage');
-		
-		//if rememberMe parameter is set
-		//create a cookie 'rmuser' with leadcaptureid
-		if(isset($_REQUEST["rememberMe"]) && trim($_REQUEST["rememberMe"]) == '1') {
+		//if rememberMe parameter is set create a cookie "rmuser" with leadcaptureid
+		if(isset($_REQUEST["rememberMe"]) && trim($_REQUEST["rememberMe"]) == "1") {
 			iHomefinderStateManager::getInstance()->createRememberMeCookie();
 		}
-		
-		$requestData = 'method=handleRequest&viewType=json&requestType=property-organizer-login-submit';
-		
-		$subscriberId=iHomefinderUtility::getInstance()->getQueryVar('subscriberID');
+		$this->remoteRequest
+			->addParameter("method", "handleRequest")
+			->addParameter("viewType", "json")
+			->addParameter("requestType", "property-organizer-login-submit")
+		;
+		$subscriberId=iHomefinderUtility::getInstance()->getQueryVar("subscriberID");
 		if($subscriberId == null || trim($subscriberId) == "") {
 			//If no subscriber id, then get the authentication info from the request and pass it along
-			$requestData = iHomefinderRequestor::getInstance()->addVarsToUrl($requestData, $_REQUEST);
+			$this->remoteRequest->addParameters($_REQUEST);
 		} else {
-			$requestData = iHomefinderRequestor::getInstance()->appendQueryVarIfNotEmpty($requestData, "subscriberId", $subscriberId);
+			$this->remoteRequest->addParameter("subscriberId", $subscriberId);
 		}
-
-		$this->remoteResponse = iHomefinderRequestor::getInstance()->remoteGetRequest($requestData);
-		$body = iHomefinderRequestor::getInstance()->getContent($this->remoteResponse);
-		
-		$isLoggedIn = iHomefinderStateManager::getInstance()->isLoggedIn();
-		if($isLoggedIn && $body == "") {
-			$redirectUrl=iHomefinderUrlFactory::getInstance()->getOrganizerViewSavedListingListUrl();
-			//$body = '<meta http-equiv="refresh" content="0;url=' . $redirectUrl . '">';
-		}
-
-		iHomefinderLogger::getInstance()->debug($requestData);
-		iHomefinderLogger::getInstance()->debug('End PropertyOrganizerLoginSubmitVirtualPage');
-
+		$this->remoteResponse = $this->remoteRequest->remoteGetRequest();
+		$body = $this->remoteRequest->getContent($this->remoteResponse);
 		return $body;
 	}
+	
 }

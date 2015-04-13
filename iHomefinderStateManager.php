@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Uses a cookie to uniquely identify users.  The
+ * Uses a cookie to uniquely identify users. The
  * cookie id is used to store transient data about
  * the user's state, such as subscriber info and
  * last search url.
@@ -35,22 +35,22 @@ class iHomefinderStateManager {
 	//summary of search results
 	//stored in the session
 	private $searchSummaryName = "ihf_search_summary";
-	private $transientTimeout=86400;
+	private $transientTimeout = 86400;
 
 	private $searchContext = false;
 	
-	private $webCrawler=false;
+	private $webCrawler = false;
 	
 	
 	//Save the current listing information
 	//May be used in a widget like More Info Widget
-	private $listingInfo=null;
+	private $listingInfo = null;
 	
 	//We have this variable here in case a client cannot
-	//use sessions.  If we set this to false, we can save
+	//use sessions. If we set this to false, we can save
 	//session information as a transient, but this causes
 	//the database to grow quickly.
-	private $sessionsEnabled=true;
+	private $sessionsEnabled = true;
 
 	private function __construct() {
 
@@ -72,8 +72,7 @@ class iHomefinderStateManager {
 		if(array_key_exists($this->identifierCookieName, $_COOKIE)) {
 			$this->uniqueId = $_COOKIE[$this->identifierCookieName];
 		}
-
-		//iHomefinderLogger::getInstance()->debug("uniqueId: " . $this->uniqueId);
+		
 		$isWebCrawler=iHomefinderUtility::getInstance()->isWebCrawler();
 		if(empty($this->uniqueId) && !$this->isWebCrawler()) {
 			$this->uniqueId= uniqid();
@@ -83,11 +82,11 @@ class iHomefinderStateManager {
 					
 		/**
 		 * We want to store the lead capture information in the cookie, to keep the 
-		 * size of wp_options down to a reasonable size.  When we first get the
+		 * size of wp_options down to a reasonable size. When we first get the
 		 * lead capture id, we cannot set the cookie, b/c headers have already 
-		 * been sent.  As a result, we temporarily store the leadCaptureId as
-		 * a transient.  If we cannot get the lead capture id from a cookie, then
-		 * look for the transient.  If the transient is found, then store the
+		 * been sent. As a result, we temporarily store the leadCaptureId as
+		 * a transient. If we cannot get the lead capture id from a cookie, then
+		 * look for the transient. If the transient is found, then store the
 		 * value as a cookie and delete the transient.
 		 */
 		if(array_key_exists($this->getLeadCaptureKey(), $_COOKIE)) {
@@ -124,8 +123,8 @@ class iHomefinderStateManager {
 			if(array_key_exists($cacheKey, $_SESSION)) {
 				$value = unserialize($_SESSION[$cacheKey]);
 			}	
-		}else{
-			$value=get_transient($cacheKey);
+		} else {
+			$value = get_transient($cacheKey);
 		}
 		return $value;
 	}
@@ -133,14 +132,14 @@ class iHomefinderStateManager {
 	private function saveStateValue($cacheKey, $value) {
 		if($this->isSessionsEnabled()) {
 			$_SESSION[$cacheKey] = serialize($value);
-		}else{
-			set_transient($cacheKey, $value ,$this->transientTimeout);
+		} else {
+			set_transient($cacheKey, $value, $this->transientTimeout);
 		}
 	}		
 
 	/**
 	 * The uniqueKey is used to help identify any transients / options for the
-	 * given user.  This helps to remember previous searches, subscribier info,
+	 * given user. This helps to remember previous searches, subscribier info,
 	 * and lead capture info.
 	 */
 	private function getUniqueKey() {
@@ -200,8 +199,8 @@ class iHomefinderStateManager {
 	}		
 	/**
 	 * If leadCaptureId is set, then we have retrieved it from a cookie
-	 * value in the initialize method.  If it is not set, try to get it
-	 * from a transient variable.  We temporarily store the leadCaptureId
+	 * value in the initialize method. If it is not set, try to get it
+	 * from a transient variable. We temporarily store the leadCaptureId
 	 * in a session variable in our first request, because we can no
 	 * longer set the value a a cookie.
 	 */
@@ -210,7 +209,7 @@ class iHomefinderStateManager {
 		if($this->leadCaptureId == null) {
 			if(!$this->isWebCrawler()) {
 				$cacheKey=$this->getLeadCaptureKey();
-				$this->leadCaptureId=$this->getStateValue($cacheKey);					
+				$this->leadCaptureId = $this->getStateValue($cacheKey);					
 			}
 		}
 		return $this->leadCaptureId;
@@ -223,7 +222,7 @@ class iHomefinderStateManager {
 	 */
 	public function saveLeadCaptureId($leadCaptureId) {			
 		if(!$this->isWebCrawler()) {
-			$cacheKey=$this->getLeadCaptureKey();
+			$cacheKey = $this->getLeadCaptureKey();
 			$this->saveStateValue($cacheKey, (string) $leadCaptureId);
 		}
 	}
@@ -231,8 +230,8 @@ class iHomefinderStateManager {
 	public function getIhfSessionId() {
 		if($this->ihfSessionId == null) {				
 			if(!$this->isWebCrawler()) {
-				$cacheKey=$this->getIhfSessionKey();
-				$this->ihfSessionId=$this->getStateValue($cacheKey);
+				$cacheKey = $this->getIhfSessionKey();
+				$this->ihfSessionId = $this->getStateValue($cacheKey);
 			}
 		}
 		return $this->ihfSessionId;
@@ -245,8 +244,8 @@ class iHomefinderStateManager {
 	 */		
 	public function saveIhfSessionId($ihfSessionId) {
 		if(!$this->isWebCrawler()) {
-			$cacheKey=$this->getIhfSessionKey();
-			$this->saveStateValue($cacheKey, (string)  $ihfSessionId);
+			$cacheKey = $this->getIhfSessionKey();
+			$this->saveStateValue($cacheKey, (string) $ihfSessionId);
 		}
 	}
 	
@@ -285,7 +284,7 @@ class iHomefinderStateManager {
 		return $lastSearch;
 	}
 
-	public function getLastSearchQueryString() {
+	private function getLastSearchQueryString() {
 		$queryString="";
 		if(!$this->isWebCrawler()) {
 			$lastSearch = $this->getLastSearch();
@@ -297,12 +296,11 @@ class iHomefinderStateManager {
 		return $queryString;
 	}
 
-	public function getLastSearchQueryArray() {
+	public function getLastSearchQuery() {
 		$lastSearchQueryString=$this->getLastSearchQueryString();
 		if($lastSearchQueryString != null && trim($lastSearchQueryString) != '') {
 			$lastSearchNameValueArray=explode("&", $lastSearchQueryString);	
-		}
-					
+		}		
 		$lastSearchArray=array();
 		if(isset($lastSearchNameValueArray) && count($lastSearchNameValueArray) > 0) {
 			foreach ($lastSearchNameValueArray as $value) {
@@ -329,8 +327,6 @@ class iHomefinderStateManager {
 
 	public function saveSubscriberLogin($subscriberInfo) {
 		if(!$this->isWebCrawler()) {
-			iHomefinderLogger::getInstance()->debugDumpVar($subscriberInfo);
-			
 			$cacheKey=$this->getSubscriberInfoKey();
 			$this->saveStateValue($cacheKey, $subscriberInfo);
 		}
@@ -370,7 +366,7 @@ class iHomefinderStateManager {
 		
 		if(!$this->isWebCrawler()) {
 			$searchSummaryArray=(array) $searchSummary;				
-			$cacheKey=$this->getSearchSummaryKey();
+			$cacheKey = $this->getSearchSummaryKey();
 			$this->saveStateValue($cacheKey, $searchSummaryArray);
 		}
 	}
@@ -392,7 +388,7 @@ class iHomefinderStateManager {
 	
 	public function createRememberMeCookie() {
 		$leadCaptureUserId = $this->getLeadCaptureId();
-		if(leadCaptureUserId != null  && !$this->isWebCrawler()) {
+		if(leadCaptureUserId != null && !$this->isWebCrawler()) {
 			$expireTime=time()+60*60*24*365*5; /* expire in 5 years */
 			setcookie($this->rememberMeCookieName, $leadCaptureUserId, $expireTime, "/");
 		}

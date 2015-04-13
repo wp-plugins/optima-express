@@ -33,12 +33,12 @@ class iHomefinderWidgetContextUtility {
 	}
 
 	public function loadWidgetStyle() {
-		wp_register_style('ihf-widget-style', plugins_url('css/style.css', __FILE__));
-		wp_enqueue_style('ihf-widget-style');
+		wp_register_style("ihf-widget-style", plugins_url("css/style.css", __FILE__));
+		wp_enqueue_style("ihf-widget-style");
 	}
 			
 	public function loadWidgetJavascript() {
-	   wp_enqueue_script('widgetSupport', plugins_url('/js/widgetSupport.js', __FILE__));
+	   wp_enqueue_script("widgetSupport", plugins_url("/js/widgetSupport.js", __FILE__));
 	}    		
 	
 	public function isEnabled($widgetInstance) {
@@ -111,13 +111,13 @@ class iHomefinderWidgetContextUtility {
 		);
 		
 		if(iHomefinderPermissions::getInstance()->isAgentBioEnabled()) {
-			$listOfPages['Agent Bio'] = iHomefinderVirtualPageFactory::AGENT_DETAIL;
-			$listOfPages['Agent List'] = iHomefinderVirtualPageFactory::AGENT_LIST;
+			$listOfPages["Agent Bio"] = iHomefinderVirtualPageFactory::AGENT_DETAIL;
+			$listOfPages["Agent List"] = iHomefinderVirtualPageFactory::AGENT_LIST;
 		}
 		
 		if(iHomefinderPermissions::getInstance()->isOfficeEnabled()) {
-			$listOfPages['Office Detail'] = iHomefinderVirtualPageFactory::OFFICE_DETAIL;
-			$listOfPages['Office List'] = iHomefinderVirtualPageFactory::OFFICE_LIST;
+			$listOfPages["Office Detail"] = iHomefinderVirtualPageFactory::OFFICE_DETAIL;
+			$listOfPages["Office List"] = iHomefinderVirtualPageFactory::OFFICE_LIST;
 			
 		}
 		//Search pages are not valid for search widgets.
@@ -159,29 +159,32 @@ class iHomefinderWidgetContextUtility {
 		//cannot use $this->id in the function name, b/c it has characters
 		//that are not allowed for JavaScript functions
 		$uniqueId=uniqid();
-		$selectAllFunction=  'selectAll' . $uniqueId . 'Function';
-		$selectAllCheckbox=  'selectAllCheckbox' . $widget->id;
-		$selectAllCheckboxDiv='selectAllContainer' . $widget->id;
-		$selectAllCheckboxReset =  'selectAllCheckboxReset' . $uniqueId . "Function";	
+		$selectAllFunction=  "selectAll" . $uniqueId . "Function";
+		$selectAllCheckbox=  "selectAllCheckbox" . $widget->id;
+		$selectAllCheckboxDiv="selectAllContainer" . $widget->id;
+		$selectAllCheckboxReset =  "selectAllCheckboxReset" . $uniqueId . "Function";	
 		
 		//this is false if the user has upgraded from 1.1.1 to 1.1.2
-		//because the widget instance does not have the listing detial field
+		//because the widget instance does not have the listing detail field
 		$hasPageSelector = array_key_exists(iHomefinderVirtualPageFactory::LISTING_DETAIL, $instance);		
 		?>
 		<br />
-		<br />			
+		<br />
 		<label>Display widget on selected IDX pages:</label>
 		<br />
-		<br />	
-		<input id="<?php echo($selectAllCheckbox)?>"
-			   type="checkbox" 
-			   <?php if(!$hasPageSelector) {echo("checked='checked' ");}?>
-			   onclick="selectAllCheckboxes('<?php echo($selectAllCheckbox)?>', '<?php echo($selectAllCheckboxDiv)?>');"/>
-		Select All &nbsp;&nbsp;<br/>
+		<br />
+		<input
+			id="<?php echo $selectAllCheckbox ?>"
+			type="checkbox"
+			<?php if(!$hasPageSelector) {echo "checked='checked'";}?>
+			onclick="selectAllCheckboxes('<?php echo $selectAllCheckbox ?>', '<?php echo $selectAllCheckboxDiv ?>');"
+		/>
+		Select All &nbsp;&nbsp;
+		<br/>
 		<div id="<?php echo $selectAllCheckboxDiv ?>">	
 			<?php
 			//The following call adds for variables to setup a context for pages to display.
-			$listOfPages=$this->listOfPages($widgetType);
+			$listOfPages = $this->listOfPages($widgetType);
 			//The value is the type from iHomefinderVirtualPageFactory
 			foreach ($listOfPages as $label => $pageType) {
 				$fieldName = $widget->get_field_name($pageType);
@@ -192,16 +195,19 @@ class iHomefinderWidgetContextUtility {
 				//this plugin from 1.1.1 to 1.1.2
 				$fieldValue = "true";
 				if($hasPageSelector) {
-					$fieldValue = $instance[ $pageType ];
+					$fieldValue = $instance[$pageType];
 				}
 				?>
-				<input id='<?php echo($fieldId)?>' 
-				   name='<?php echo($fieldName)?>' 
-				   type='checkbox' 
-				   onclick="selectAllCheckboxesReset('<?php echo($selectAllCheckbox)?>', '<?php echo($selectAllCheckboxDiv)?>')"
-				   <?php if($fieldValue == "true") {echo("checked='checked' "); }?>
-				   <?php if(!$hasPageSelector) {echo("checked='checked' ");}?>
-				   />&nbsp;<?php echo($label)?>
+				<input id="<?php echo $fieldId ?>"
+				   name="<?php echo $fieldName ?>"
+				   type="checkbox" 
+				   onclick="selectAllCheckboxesReset('<?php echo $selectAllCheckbox ?>', '<?php echo $selectAllCheckboxDiv ?>')"
+				   <?php if($fieldValue == "true") {echo "checked='checked'";}?>
+				   <?php if(!$hasPageSelector) {echo "checked='checked'";}?>
+				   />
+				<label for="<?php echo $fieldId ?>">
+					<?php echo $label ?>
+				</label>
 				<br/>
 			<?php }?>
 		</div>

@@ -4,10 +4,7 @@ class iHomefinderSearchFormVirtualPageImpl extends iHomefinderAbstractVirtualPag
 	
 	private $path="homes-for-sale-search";
 	private $title="Property Search";
-
-	public function __construct() {
-		
-	}
+	
 	public function getTitle() {
 		$customTitle = get_option(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_SEARCH);
 		if($customTitle != null && "" != $customTitle) {
@@ -16,7 +13,7 @@ class iHomefinderSearchFormVirtualPageImpl extends iHomefinderAbstractVirtualPag
 		
 		return $this->title;
 	}
-
+	
 	public function getPageTemplate() {
 		$pageTemplate = get_option(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_SEARCH);
 		return $pageTemplate;			
@@ -30,22 +27,17 @@ class iHomefinderSearchFormVirtualPageImpl extends iHomefinderAbstractVirtualPag
 		return $this->path;
 	}
 	
-			
 	public function getContent() {
-		iHomefinderLogger::getInstance()->debug('Begin iHomefinderFilter.filterSearchForm');
-		$requestData = 'method=handleRequest'
-			. '&viewType=json'
-			. '&requestType=listing-search-form'
-			. '&includeAreaSelectorAreas=false'
-			. '&phpStyle=true';
-
-
-		$requestData = iHomefinderRequestor::getInstance()->addVarsToUrl($requestData, $_REQUEST);
-		$this->remoteResponse = iHomefinderRequestor::getInstance()->remoteGetRequest($requestData);
-		$body = iHomefinderRequestor::getInstance()->getContent($this->remoteResponse);
-		
-		iHomefinderLogger::getInstance()->debug('End iHomefinderFilter.filterSearchForm');
-		iHomefinderLogger::getInstance()->debug($requestData);
+		$this->remoteRequest
+			->addParameter("method", "handleRequest")
+			->addParameter("viewType", "json")
+			->addParameter("requestType", "listing-search-form")
+			->addParameter("includeAreaSelectorAreas", false)
+			->addParameter("phpStyle", true)
+		;
+		$this->remoteRequest->addParameters($_REQUEST);
+		$this->remoteResponse = $this->remoteRequest->remoteGetRequest();
+		$body = $this->remoteRequest->getContent($this->remoteResponse);
 		return $body;
 	}
 }

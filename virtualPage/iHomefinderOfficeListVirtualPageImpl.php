@@ -4,9 +4,6 @@ class iHomefinderOfficeListVirtualPageImpl extends iHomefinderAbstractVirtualPag
 	
 	private $path = "office-list";
 	private $title = "Office List";
-
-	public function __construct() {
-	}
 	
 	public function getTitle() {
 		$customTitle = get_option(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_OFFICE_LIST);
@@ -31,21 +28,17 @@ class iHomefinderOfficeListVirtualPageImpl extends iHomefinderAbstractVirtualPag
 	
 			
 	public function getContent() {
-		iHomefinderLogger::getInstance()->debug('Begin iHomefinderOfficeListPageImpl');
-
-		//used to remember search results
-		$requestData = 'method=handleRequest'
-			. '&viewType=json'
-			. '&requestType=office-list'
-			. '&phpStyle=true'
-			. '&includeSearchSummary=true';
-			
-		$requestData = iHomefinderRequestor::getInstance()->addVarsToUrl($requestData, $_REQUEST);
-		$this->remoteResponse = iHomefinderRequestor::getInstance()->remoteGetRequest($requestData);
-		$body = iHomefinderRequestor::getInstance()->getContent($this->remoteResponse);
-		
-		iHomefinderLogger::getInstance()->debug('End iHomefinderOfficeListPageImpl');
-		iHomefinderLogger::getInstance()->debug($requestData);
+		$this->remoteRequest
+			->addParameter("method", "handleRequest")
+			->addParameter("viewType", "json")
+			->addParameter("requestType", "office-list")
+			->addParameter("phpStyle", true)
+			->addParameter("includeSearchSummary", true)
+		;
+		$this->remoteRequest->addParameters($_REQUEST);
+		$this->remoteResponse = $this->remoteRequest->remoteGetRequest();
+		$body = $this->remoteRequest->getContent($this->remoteResponse);
 		return $body;
 	}
+	
 }

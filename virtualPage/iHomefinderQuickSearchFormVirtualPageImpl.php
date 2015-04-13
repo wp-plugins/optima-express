@@ -4,9 +4,6 @@ class iHomefinderQuickSearchFormVirtualPageImpl extends iHomefinderAbstractVirtu
 	
 	private $path="";
 	
-	public function __construct() {
-		
-	}
 	public function getTitle() {
 		return "";
 	}			
@@ -20,21 +17,16 @@ class iHomefinderQuickSearchFormVirtualPageImpl extends iHomefinderAbstractVirtu
 	}
 			
 	public function getContent() {
-		iHomefinderLogger::getInstance()->debug('Begin iHomefinderQuickSearchFormFilterImpl.filter');
-		$requestData = 'method=handleRequest'
-			. '&viewType=json'
-			. '&requestType=listing-quick-search-form'
-			. '&phpStyle=true'
-			. '&includeJQuery=false'
-			. '&includeJQueryUI=false';
-		
-		iHomefinderLogger::getInstance()->debug('requestData: ' . $requestData);	
-
-		$this->remoteResponse = iHomefinderRequestor::getInstance()->remoteGetRequest($requestData);
-		$body = iHomefinderRequestor::getInstance()->getContent($this->remoteResponse);
-		
-		iHomefinderLogger::getInstance()->debug('End iHomefinderQuickSearchFormFilterImpl.filter');
-		iHomefinderLogger::getInstance()->debug($requestData);
+		$this->remoteRequest
+			->addParameter("method", "handleRequest")
+			->addParameter("viewType", "json")
+			->addParameter("requestType", "listing-quick-search-form")
+			->addParameter("phpStyle", true)
+			->addParameter("includeJQuery", false)
+			->addParameter("includeJQueryUI", false)
+		;
+		$this->remoteResponse = $this->remoteRequest->remoteGetRequest();
+		$body = $this->remoteRequest->getContent($this->remoteResponse);
 		return $body;
 	}
 }

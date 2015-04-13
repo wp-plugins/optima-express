@@ -8,6 +8,7 @@
 class iHomefinderSearchFormFieldsUtility {
 	
 	private static $instance;
+	private $formData;
 	
 	private function __construct() {
 	}
@@ -20,39 +21,42 @@ class iHomefinderSearchFormFieldsUtility {
 	}
 	
 	public function getFormData() {
-		$requestData = 'method=handleRequest&viewType=json&requestType=search-form-lists';
-		$galleryFormData = iHomefinderRequestor::getInstance()->remoteGetRequest($requestData);
-		//var_dump($galleryFormData);die();
-		$hotsheetsList=array();
-		$citiesList=array();
-		$cityZipList=array();
-		$propertyTypesList=array();
-		$agentList=array();
-		$officeList=array();
-		
-		if(isset($galleryFormData->hotsheetsList)) {
-			$hotsheetsList =$this->convertItemValues($galleryFormData->hotsheetsList);
+		if($this->formData != null) {
+			return $this->formData;
 		}
-		if(isset($galleryFormData->citiesList)) {
-			$citiesList =$this->convertItemValues($galleryFormData->citiesList);
+		$remoteRequest = new iHomefinderRequestor();
+		$remoteRequest
+			->addParameter("method", "handleRequest")
+			->addParameter("viewType", "json")
+			->addParameter("requestType", "search-form-lists")
+		;
+		$response = $remoteRequest->remoteGetRequest();
+		$hotsheetsList = array();
+		$citiesList = array();
+		$cityZipList = array();
+		$propertyTypesList = array();
+		$agentList = array();
+		$officeList = array();
+		if(property_exists($response, "hotsheetsList")) {
+			$hotsheetsList = $this->convertItemValues($response->hotsheetsList);
 		}
-		if(isset($galleryFormData->cityZipList)) {
-			$cityZipList =$this->convertItemValues($galleryFormData->cityZipList);
+		if(property_exists($response, "citiesList")) {
+			$citiesList = $this->convertItemValues($response->citiesList);
 		}
-		if(isset($galleryFormData->propertyTypesList)) {
-			$propertyTypesList =$this->convertItemValues($galleryFormData->propertyTypesList);
+		if(property_exists($response, "cityZipList")) {
+			$cityZipList = $this->convertItemValues($response->cityZipList);
 		}
-		if(isset($galleryFormData->agentList)) {
-			$agentList =$this->convertItemValues($galleryFormData->agentList);
+		if(property_exists($response, "propertyTypesList")) {
+			$propertyTypesList = $this->convertItemValues($response->propertyTypesList);
 		}
-		if(isset($galleryFormData->officeList)) {
-			$officeList =$this->convertItemValues($galleryFormData->officeList);
-		}        
-		
-		$galleryFormData=
-				new iHomefinderFormData($hotsheetsList, $citiesList, $cityZipList, $propertyTypesList, $agentList, $officeList);
-					
-		return $galleryFormData;
+		if(property_exists($response, "agentList")) {
+			$agentList = $this->convertItemValues($response->agentList);
+		}
+		if(property_exists($response, "officeList")) {
+			$officeList = $this->convertItemValues($response->officeList);
+		}
+		$this->formData = new iHomefinderFormData($hotsheetsList, $citiesList, $cityZipList, $propertyTypesList, $agentList, $officeList);
+		return $this->formData;
 	 }	
 
 	 /**
@@ -62,62 +66,13 @@ class iHomefinderSearchFormFieldsUtility {
 	  */
 	 private function convertItemValues($fromValue) {
 		if(iHomefinderLayoutManager::getInstance()->hasItemInSearchFormData()) {
-			$result=array();
+			$result = array();
 			foreach($fromValue->item as $element) {
-				array_push($result, $element);
+				$result[] = $element;
 			} 
+		} else {
+			$result = $fromValue;
 		}
-		else{
-			$result=$fromValue;
-		}
-		
 		return $result;
 	 }
-} // class iHomefinderFormFieldsUtility
-
-
-
-class iHomefinderFormData {
-	
-	private $hotsheetsList;
-	private $citiesList; 
-	private $cityZipList; 
-	private $propertyTypesList;
-	private $agentList;
-	private $officeList;
-	
-	
-	public function __construct($hotsheetsList, $citiesList, $cityZipList, $propertyTypesList, $agentList, $officeList) {
-		$this->hotsheetsList=$hotsheetsList;
-		$this->citiesList=$citiesList;
-		$this->cityZipList=$cityZipList;
-		$this->propertyTypesList=$propertyTypesList;
-		$this->agentList=$agentList;
-		$this->officeList=$officeList;
-	}
-	
-	public function getHotsheetList() {
-		return $this->hotsheetsList;
-	}
-	
-	public function getCitiesList() {
-		return $this->citiesList;
-	}
-	
-	public function getCityZipList() {
-		return $this->cityZipList;
-	}
-	
-	public function getPropertyTypesList() {
-		return $this->propertyTypesList;
-	}
-	
-	public function getAgentList() {
-		return $this->agentList;
-	}
-	
-	public function getOfficeList() {
-		return $this->officeList;
-	}		
-	
 }

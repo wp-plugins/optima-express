@@ -4,9 +4,6 @@ class iHomefinderSupplementalListingVirtualPageImpl extends iHomefinderAbstractV
 	
 	private $path="supplemental-listing";
 	private $title="Supplemental Listings";
-
-	public function __construct() {
-	}
 	
 	public function getTitle() {
 		$customTitle = get_option(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_SUPPLEMENTAL_LISTING);
@@ -28,25 +25,19 @@ class iHomefinderSupplementalListingVirtualPageImpl extends iHomefinderAbstractV
 		}
 		return $this->path;
 	}
-	
-			
-	public function getContent() {
-		iHomefinderLogger::getInstance()->debug('Begin iHomefinderSupplementalListingPageImpl');
-		iHomefinderStateManager::getInstance()->saveLastSearch();
-		//used to remember search results
-		$requestData = 'method=handleRequest'
-			. '&viewType=json'
-			. '&requestType=supplemental-listing'
-			. '&phpStyle=true'
-			. '&includeSearchSummary=true';
-
-
-		$requestData = iHomefinderRequestor::getInstance()->addVarsToUrl($requestData, $_REQUEST);
-		$this->remoteResponse = iHomefinderRequestor::getInstance()->remoteGetRequest($requestData);
-		$body = iHomefinderRequestor::getInstance()->getContent($this->remoteResponse);
 		
-		iHomefinderLogger::getInstance()->debug('End iHomefinderSupplementalListingPageImpl');
-		iHomefinderLogger::getInstance()->debug($requestData);
+	public function getContent() {
+		iHomefinderStateManager::getInstance()->saveLastSearch();
+		$this->remoteRequest
+			->addParameter("method", "handleRequest")
+			->addParameter("viewType", "json")
+			->addParameter("requestType", "supplemental-listing")
+			->addParameter("phpStyle", true)
+			->addParameter("includeSearchSummary", true)
+		;
+		$this->remoteRequest->addParameters($_REQUEST);
+		$this->remoteResponse = $this->remoteRequest->remoteGetRequest();
+		$body = $this->remoteRequest->getContent($this->remoteResponse);
 		return $body;
 	}
 }

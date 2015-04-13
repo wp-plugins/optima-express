@@ -4,10 +4,6 @@ class iHomefinderOrganizerResendConfirmationVirtualPageImpl extends iHomefinderA
 	
 	private $path = "property-organizer-resend-confirmation-email";
 	
-	public function __construct() {
-		
-	}
-	
 	public function getTitle() {
 		return "Resend Confirmation Email";
 	}	
@@ -21,29 +17,25 @@ class iHomefinderOrganizerResendConfirmationVirtualPageImpl extends iHomefinderA
 	}	
 			
 	public function getContent() {
-		iHomefinderLogger::getInstance()->debug('Begin iHomefinderOrganizerResendConfirmationFilterImpl');
-		
-		$email=iHomefinderUtility::getInstance()->getQueryVar('email');
-		$password=iHomefinderUtility::getInstance()->getQueryVar('password');
-		$name=iHomefinderUtility::getInstance()->getQueryVar('name');
-		$phone=iHomefinderUtility::getInstance()->getQueryVar('phone');
-		$agentId=iHomefinderUtility::getInstance()->getQueryVar('agentId');
-		$afterLoginUrl=iHomefinderUtility::getInstance()->getRequestVar('afterLoginUrl');
-		
-		$requestData = 'method=handleRequest&viewType=json&requestType=property-organizer-resend-confirm-email';
-		$requestData = iHomefinderRequestor::getInstance()->appendQueryVarIfNotEmpty($requestData, "email", $email);
-		$requestData = iHomefinderRequestor::getInstance()->appendQueryVarIfNotEmpty($requestData, "afterLoginUrl", $afterLoginUrl);
-		$requestData = iHomefinderRequestor::getInstance()->appendQueryVarIfNotEmpty($requestData, "password", $password);
-		$requestData = iHomefinderRequestor::getInstance()->appendQueryVarIfNotEmpty($requestData, "name", $name);
-		$requestData = iHomefinderRequestor::getInstance()->appendQueryVarIfNotEmpty($requestData, "phone", $phone);
-		$requestData = iHomefinderRequestor::getInstance()->appendQueryVarIfNotEmpty($requestData, "agentId", agentId);
-		
-		$this->remoteResponse = iHomefinderRequestor::getInstance()->remoteGetRequest($requestData);
-		$body = iHomefinderRequestor::getInstance()->getContent($this->remoteResponse);
-		
-		iHomefinderLogger::getInstance()->debug($requestData);
-		iHomefinderLogger::getInstance()->debug('End iHomefinderOrganizerResendConfirmationFilterImpl');
-		
+		$email = iHomefinderUtility::getInstance()->getQueryVar("email");
+		$password = iHomefinderUtility::getInstance()->getQueryVar("password");
+		$name = iHomefinderUtility::getInstance()->getQueryVar("name");
+		$phone = iHomefinderUtility::getInstance()->getQueryVar("phone");
+		$agentId = iHomefinderUtility::getInstance()->getQueryVar("agentId");
+		$afterLoginUrl = iHomefinderUtility::getInstance()->getRequestVar("afterLoginUrl");
+		$this->remoteRequest
+			->addParameter("method", "handleRequest")
+			->addParameter("viewType", "json")
+			->addParameter("requestType", "property-organizer-resend-confirm-email")
+			->addParameter("email", $email)
+			->addParameter("password", $password)
+			->addParameter("name", $name)
+			->addParameter("phone", $phone)
+			->addParameter("agentId", $agentId)
+			->addParameter("afterLoginUrl", $afterLoginUrl)
+		;
+		$this->remoteResponse = $this->remoteRequest->remoteGetRequest();
+		$body = $this->remoteRequest->getContent($this->remoteResponse);
 		return $body;
 	}
 }

@@ -103,7 +103,6 @@ class iHomefinderVirtualPageFactory {
 
 	public function getVirtualPage($type) {
 		$virtualPage;
-		//iHomefinderLogger::getInstance()->debug("Begin iHomefinderVirtualPageFactory.getVirtualPage type=" . $type);
 		if($type == iHomefinderVirtualPageFactory::LISTING_SEARCH_RESULTS) {
 			$virtualPage = new iHomefinderSearchResultsVirtualPageImpl();
 		}
@@ -218,8 +217,6 @@ class iHomefinderVirtualPageFactory {
 		else if($type == iHomefinderVirtualPageFactory::AGENT_OR_OFFICE_LISTINGS) {
 			$virtualPage = new iHomefinderAgentOrOfficeListingsVirtualPageImpl();
 		}
-
-		//iHomefinderLogger::getInstance()->debug("Complete iHomefinderVirtualPageFactory.getVirtualPage");
 		return $virtualPage;
 	}
 }

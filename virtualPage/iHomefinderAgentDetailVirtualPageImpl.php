@@ -5,9 +5,6 @@ class iHomefinderAgentDetailVirtualPageImpl extends iHomefinderAbstractVirtualPa
 	private $path = "agent-detail";
 	private $title = "";
 	private $defaultTitle = "";
-
-	public function __construct() {
-	}
 	
 	public function getTitle() {
 		$customTitle = get_option(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_AGENT_DETAIL);
@@ -36,35 +33,25 @@ class iHomefinderAgentDetailVirtualPageImpl extends iHomefinderAbstractVirtualPa
 	
 			
 	public function getContent() {
-		iHomefinderLogger::getInstance()->debug('Begin iHomefinderAgentDetailPageImpl');
 		iHomefinderStateManager::getInstance()->saveLastSearch();
-		
-		if(iHomefinderUtility::getInstance()->getQueryVar('agentID')) {
-			$_REQUEST['agentID']=iHomefinderUtility::getInstance()->getQueryVar('agentID');
+		$this->remoteRequest
+			->addParameter("method", "handleRequest")
+			->addParameter("viewType", "json")
+			->addParameter("requestType", "agent-detail")
+			->addParameter("phpStyle", true)
+			->addParameter("includeSearchSummary", false)
+		;
+		$agentId = iHomefinderUtility::getInstance()->getQueryVar("agentID");
+		if($agentId != null && is_numeric($agentId)) {
+			$this->remoteRequest->addParameter("agentID", $agentId);
 		}
-		
-		$agentID=iHomefinderUtility::getInstance()->getRequestVar('agentID');
-		//used to remember search results
-		$requestData = 'method=handleRequest'
-			. '&viewType=json'
-			. '&requestType=agent-detail'
-			. '&phpStyle=true'
-			. '&includeSearchSummary=true';
-
-		if(is_numeric($agentID)) {
-			$requestData = iHomefinderRequestor::getInstance()->appendQueryVarIfNotEmpty($requestData, "agentID", $agentID);		
-		}
-
-		$this->remoteResponse = iHomefinderRequestor::getInstance()->remoteGetRequest($requestData);
-		$body = iHomefinderRequestor::getInstance()->getContent($this->remoteResponse);
+		$this->remoteResponse = $this->remoteRequest->remoteGetRequest();
+		$body = $this->remoteRequest->getContent($this->remoteResponse);
 		
 		if(property_exists($this->remoteResponse, "title")) {
 			//success, display the view
 			$this->defaultTitle = $this->remoteResponse->title;
-		}			
-		
-		iHomefinderLogger::getInstance()->debug('End iHomefinderAgentDetailPageImpl');
-		iHomefinderLogger::getInstance()->debug($requestData);
+		}
 		return $body;
 	}
 }

@@ -1,8 +1,5 @@
 <?php
 
-/**
- * iHomefinderQuickSearchWidget Class
- */
 class iHomefinderQuickSearchWidget extends WP_Widget {
 
 	private $contextUtility;
@@ -14,12 +11,7 @@ class iHomefinderQuickSearchWidget extends WP_Widget {
 						   $widget_options=$options);
 		$this->contextUtility=iHomefinderWidgetContextUtility::getInstance();
 	}
-
-	/**
-	 * Used to create the widget for display in the blog.
-	 *
-	 * @see WP_Widget::widget
-	 */
+	
 	public function widget($args, $instance) {
 		//Do not display the search widget on the search form page
 		
@@ -28,15 +20,21 @@ class iHomefinderQuickSearchWidget extends WP_Widget {
 			if($this->contextUtility->isEnabled($instance)) {
 				extract($args);
 				$title = apply_filters('widget_title', $instance['title']);
-
-				$requestData = 'method=handleRequest&viewType=json&requestType=listing-search-form';
-				$requestData = iHomefinderRequestor::getInstance()->appendQueryVarIfNotEmpty($requestData, "smallView", "true");
-				$requestData = iHomefinderRequestor::getInstance()->appendQueryVarIfNotEmpty($requestData, "phpStyle", "true");
-				$requestData = iHomefinderRequestor::getInstance()->appendQueryVarIfNotEmpty($requestData, "style", $instance['style']);
-				$requestData = iHomefinderRequestor::getInstance()->appendQueryVarIfNotEmpty($requestData, "showPropertyType", $instance['showPropertyType']);
 				
-				$contentInfo = iHomefinderRequestor::getInstance()->remoteGetRequest($requestData, 86400);
-				$content = iHomefinderRequestor::getInstance()->getContent($contentInfo);
+				$remoteRequest = new iHomefinderRequestor();
+					
+				$remoteRequest
+					->addParameter("method", "handleRequest")
+					->addParameter("viewType", "json")
+					->addParameter("requestType", "listing-search-form")
+					->addParameter("smallView", true)
+					->addParameter("phpStyle", true)
+					->addParameter("style", $instance['style'])
+					->addParameter("showPropertyType", $instance['showPropertyType'])
+				;
+				
+				$contentInfo = $remoteRequest->remoteGetRequest(86400);
+				$content = $remoteRequest->getContent($contentInfo);
 				iHomefinderEnqueueResource::getInstance()->addToFooter($contentInfo->head);
 				
 				echo $before_widget;
@@ -57,13 +55,7 @@ class iHomefinderQuickSearchWidget extends WP_Widget {
 			}
 		}
 	}
-
-	/**
-	 *  Processes form submission in the admin area for configuring
-	 *  the widget.
-	 *
-	 *  @see WP_Widget::update
-	 */
+	
 	public function update($new_instance, $old_instance) {
 		$instance = $old_instance;
 		$instance['title'] = strip_tags(stripslashes($new_instance['title']));
@@ -76,22 +68,17 @@ class iHomefinderQuickSearchWidget extends WP_Widget {
 		return $instance;
 	}
 	
-	/**
-	 * Create the admin form, for adding the Widget to the blog.
-	 *
-	 *  @see WP_Widget::form
-	 */
 	function form($instance) {
 		$title = esc_attr($instance['title']);
 		$style = esc_attr($instance['style']);
 		$showPropertyType = $instance['showPropertyType'];
-	?>
-			<p>
-				<?php _e('Title:'); ?>
-				<input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $title; ?>" />
-			</p>
+		?>
+		<p>
+			<?php _e('Title:'); ?>
+			<input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $title; ?>" />
+		</p>
 			
-			<?php if(iHomefinderLayoutManager::getInstance()->supportsMultipleQuickSearchLayouts()) {?>
+		<?php if(iHomefinderLayoutManager::getInstance()->supportsMultipleQuickSearchLayouts()) {?>
 			<p>
 				<?php _e('Style:'); ?>
 				<select class="widefat" id="<?php echo $this->get_field_id('style'); ?>" name="<?php echo $this->get_field_name('style'); ?>">
@@ -108,10 +95,10 @@ class iHomefinderQuickSearchWidget extends WP_Widget {
 					<span><?php _e('Show Property Type'); ?></span>
 				</label>         		
 			</p>
-			<?php }?>
-	<?php 
+		<?php }?>
+		<?php 
 		$this->contextUtility->getPageSelector($this, $instance, iHomefinderConstants::SEARCH_WIDGET_TYPE);
-			
+		
 	}
 	
 }

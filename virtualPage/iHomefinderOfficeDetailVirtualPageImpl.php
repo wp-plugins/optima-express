@@ -5,9 +5,6 @@ class iHomefinderOfficeDetailVirtualPageImpl extends iHomefinderAbstractVirtualP
 	private $path = "office-detail";
 	private $title = "";
 	private $defaultTitle = "";
-
-	public function __construct() {
-	}
 	
 	public function getTitle() {
 		$customTitle = get_option(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_OFFICE_DETAIL);
@@ -34,32 +31,25 @@ class iHomefinderOfficeDetailVirtualPageImpl extends iHomefinderAbstractVirtualP
 		return $this->path;
 	}
 	
-			
 	public function getContent() {
-		iHomefinderLogger::getInstance()->debug('Begin iHomefinderOfficeDetailPageImpl');
-
-		$officeID=iHomefinderUtility::getInstance()->getQueryVar('officeID');
-		//used to remember search results
-		$requestData = 'method=handleRequest'
-			. '&viewType=json'
-			. '&requestType=office-detail'
-			. '&phpStyle=true';
-
-		if(is_numeric($officeID)) {
-			$requestData = iHomefinderRequestor::getInstance()->appendQueryVarIfNotEmpty($requestData, "officeID", $officeID);		
+		$this->remoteRequest
+			->addParameter("method", "handleRequest")
+			->addParameter("viewType", "json")
+			->addParameter("requestType", "office-detail")
+			->addParameter("phpStyle", true)
+		;
+		$officeId = iHomefinderUtility::getInstance()->getQueryVar("officeID");
+		if(is_numeric($officeId)) {
+			$this->remoteRequest->addParameter("officeID", $officeId);
 		}
-			
-		$requestData = iHomefinderRequestor::getInstance()->addVarsToUrl($requestData, $_REQUEST);
-		$this->remoteResponse = iHomefinderRequestor::getInstance()->remoteGetRequest($requestData);
-		$body = iHomefinderRequestor::getInstance()->getContent($this->remoteResponse);
-		
+		$this->remoteRequest->addParameters($_REQUEST);
+		$this->remoteResponse = $this->remoteRequest->remoteGetRequest();
+		$body = $this->remoteRequest->getContent($this->remoteResponse);
 		if(property_exists($this->remoteResponse, "title")) {
 			//success, display the view
 			$this->defaultTitle = $this->remoteResponse->title;
-		}					
-		
-		iHomefinderLogger::getInstance()->debug('End iHomefinderOfficeDetailPageImpl');
-		iHomefinderLogger::getInstance()->debug($requestData);
+		}
 		return $body;
 	}
+	
 }
