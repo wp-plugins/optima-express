@@ -3,12 +3,11 @@
 class iHomefinderAdmin {
 
 	private static $instance;
-	private $virtualPageFactory;
 	
-	private $iHomefinderNotification="By registering this plugin you consent to allow downloads of IDX listings that include images, attribution of iHomefinder as the IDX provider and other MLS-specified compliance requirements.";
+	private $iHomefinderNotification = "By registering this plugin you consent to allow downloads of IDX listings that include images, attribution of iHomefinder as the IDX provider and other MLS-specified compliance requirements.";
 
 	private function __construct() {
-		$this->virtualPageFactory=iHomefinderVirtualPageFactory::getInstance();
+		
 	}
 
 	public static function getInstance() {
@@ -19,71 +18,67 @@ class iHomefinderAdmin {
 	}
 	
 	public function checkError() {
-		$pageName=$_REQUEST["page"];
+		$pageName = null;
+		if(array_key_exists("page", $_REQUEST)) {
+			$pageName = $_REQUEST["page"];
+		}
 		
 		//Check for valid plugin registration
 		//Do not check for registration on the registration page.
-		if ($pageName != iHomefinderConstants::OPTION_ACTIVATE && !get_option(iHomefinderConstants::AUTHENTICATION_TOKEN_CACHE)) {
-			
+		if ($pageName != iHomefinderConstants::OPTION_ACTIVATE && !get_option(iHomefinderConstants::AUTHENTICATION_TOKEN_OPTION)) {
 			?>
-			
 			<style type="text/css">
-			.green-bar {
-				border-radius: 3px 3px 3px 3px;
-				border-style: solid;
-				border-width: 1px;
-				color: #FFFFFF;
-				width: 95%;
-				padding: 0.4em 1em;
-				text-align: left;
-				font:12px arial;
-				background-color: #4F800D;
-			}
+				.green-bar {
+					border-radius: 3px 3px 3px 3px;
+					border-style: solid;
+					border-width: 1px;
+					color: #FFFFFF;
+					width: 95%;
+					padding: 0.4em 1em;
+					text-align: left;
+					font:12px arial;
+					background-color: #4F800D;
+				}
 			</style>
-			 
 			<p class="green-bar">
 			<a href="admin.php?page=<?php echo iHomefinderConstants::OPTION_ACTIVATE ?>" class="button button-primary">Activate Your Optima Express Account</a>
 			&nbsp;&nbsp;&nbsp;Get an unlimited free trial or paid subscription for your MLS</p>
-
 			<?php
-			
 		}
 		
-		if($_REQUEST[iHomefinderConstants::COMPATIBILITY_CHECK_ENABLED] == 'false') {
-			update_option(iHomefinderConstants::COMPATIBILITY_CHECK_ENABLED, 'false');
+		if(array_key_exists(iHomefinderConstants::COMPATIBILITY_CHECK_ENABLED, $_REQUEST) && $_REQUEST[iHomefinderConstants::COMPATIBILITY_CHECK_ENABLED] == "false") {
+			update_option(iHomefinderConstants::COMPATIBILITY_CHECK_ENABLED, "false");
 		}
 		
-		if(get_option(iHomefinderConstants::COMPATIBILITY_CHECK_ENABLED) != 'false') {
+		if(get_option(iHomefinderConstants::COMPATIBILITY_CHECK_ENABLED) != "false") {
 		
 			$errors = array();
 			//Get current wordpress plugins as array
 			$plugins = get_plugins();
 			
 			//check if permalink structure is set
-			if (get_option('permalink_structure') == "") {
+			if (get_option("permalink_structure") == "") {
 				$errors[] = "<p><a href='options-permalink.php'>WordPress permalink settings are set as default (Error 404)</a></p>";					
 			}
 			
-			//check if both OE plugins are active
-			if (array_key_exists("optima-express/iHomefinder.php",$plugins) == true && array_key_exists("wordpress-idx/WordpressIDX.php",$plugins) == true) {
-				$errors[] = "<p><a href='plugins.php?s=idx'>Multiple IDX plugins are installed</a></p>";					
-			}
+			$remoteRequest = new iHomefinderRequestor();
+			$remoteRequest
+				->addParameter("method", "handleRequest")
+				->addParameter("viewType", "json")
+				->addParameter("requestType", "compatibility-check")
+			;
 			
-			$ihfUrl = 'method=handleRequest&viewType=json&requestType=compatibility-check';
-			$ihfUrl = iHomefinderRequestor::getInstance()->appendQueryVarIfNotEmpty($ihfUrl, "smallView", "true");
-			$ihfUrl = iHomefinderRequestor::getInstance()->appendQueryVarIfNotEmpty($ihfUrl, "phpStyle", "true");
-
-			$contentInfo = iHomefinderRequestor::getInstance()->remoteGetRequest($ihfUrl);
+			$contentInfo = $remoteRequest->remoteGetRequest();
 			
 			if(empty($contentInfo) === false) {
 				
 				if(iHomefinderLayoutManager::getInstance()->isResponsive() === true) {
-					$content = (string) iHomefinderRequestor::getInstance()->getJson($contentInfo);
+					$content = (string) $remoteRequest->getJson($contentInfo);
 				} else {
 					$content = json_encode($contentInfo);
 				}
 				
-				if(isset($content) === true && $content != '') {
+				if(isset($content) === true && $content != "") {
 					$compatibility = json_decode($content, true);
 					$compatibilityPluginArray=$compatibility["Plugin"];
 													
@@ -93,10 +88,12 @@ class iHomefinderAdmin {
 						if (is_plugin_active($pluginPath) == true) {
 							//get plugin name
 							$pluginName = $plugin["Name"];	
-							$message=$compatibilityPluginArray[$pluginName];
-							if($message != null) {
-								$errors[] = "<p><a href='plugins.php?s=" .  urlencode($pluginName) . "'>" . $pluginName . "</a> (" . $message . ")</p>";	
-							}		
+							if(array_key_exists($pluginName, $compatibilityPluginArray)) {
+								$message = $compatibilityPluginArray[$pluginName];
+								if($message != null) {
+									$errors[] = "<p><a href='plugins.php?s=" .  urlencode($pluginName) . "'>" . $pluginName . "</a> (" . $message . ")</p>";
+								}
+							}	
 						}
 					}
 						
@@ -105,9 +102,11 @@ class iHomefinderAdmin {
 						$theme = wp_get_theme();	
 						$themeName=$theme["Name"];
 						$compatibilityThemeArray=$compatibility["Theme"];	
-						$message=$compatibilityThemeArray[$themeName];
-						if($message != null) {
-							$errors[] = "<p><a href='themes.php'>" . $themeName . "</a> (" . $message . ")</p>";
+						if(array_key_exists($themeName, $compatibilityThemeArray)) {
+							$message = $compatibilityThemeArray[$themeName];
+							if($message != null) {
+								$errors[] = "<p><a href='themes.php'>" . $themeName . "</a> (" . $message . ")</p>";
+							}	
 						}
 					}
 				}
@@ -139,66 +138,47 @@ class iHomefinderAdmin {
 	}
 
 	public function createAdminMenu() {
-		$permissions=iHomefinderPermissions::getInstance();
-		add_menu_page('Optima Express', 'Optima Express', 'manage_options', 'ihf_idx', array($this, 'adminOptionsForm'));
-		add_submenu_page('ihf_idx', 'Information', 'Information', 'manage_options', 'ihf_idx', array(&$this, 'adminOptionsForm'));
-		add_submenu_page('ihf_idx', 'Register', 'Register', 'manage_options', iHomefinderConstants::OPTION_ACTIVATE, array(&$this, 'adminOptionsActivateForm'));
-		add_submenu_page('ihf_idx', 'IDX Control Panel', 'IDX Control Panel', 'manage_options', iHomefinderConstants::OPTION_IDX_CONTROL_PANEL, array(&$this, 'adminIdxControlPanelForm'));
-		add_submenu_page('ihf_idx', 'IDX Pages', 'IDX Pages', 'manage_options', iHomefinderConstants::OPTION_PAGES, array(&$this, 'adminOptionsPagesForm'));
-		add_submenu_page('ihf_idx', 'Configuration', 'Configuration', 'manage_options', iHomefinderConstants::OPTION_CONFIG_PAGE, array(&$this, 'adminConfigurationForm'));
-
-		add_submenu_page('ihf_idx', 'Bio Widget', 'Bio Widget', 'manage_options', iHomefinderConstants::BIO_PAGE, array(&$this, 'bioInformationForm'));
-		add_submenu_page('ihf_idx', 'Social Widget', 'Social Widget', 'manage_options', iHomefinderConstants::SOCIAL_PAGE, array(&$this, 'socialInformationForm'));
-
-		add_submenu_page('ihf_idx', 'Email Branding', 'Email Branding', 'manage_options', iHomefinderConstants::EMAIL_BRANDING_PAGE, array(&$this, 'emailDisplayForm'));
+		$permissions = iHomefinderPermissions::getInstance();
+		add_menu_page("Optima Express", "Optima Express", "manage_options", "ihf_idx", array($this, "adminOptionsForm"));
+		add_submenu_page("ihf_idx", "Information", "Information", "manage_options", "ihf_idx", array($this, "adminOptionsForm"));
+		add_submenu_page("ihf_idx", "Register", "Register", "manage_options", iHomefinderConstants::OPTION_ACTIVATE, array($this, "adminOptionsActivateForm"));
+		add_submenu_page("ihf_idx", "IDX Control Panel", "IDX Control Panel", "manage_options", iHomefinderConstants::OPTION_IDX_CONTROL_PANEL, array($this, "adminIdxControlPanelForm"));
+		add_submenu_page("ihf_idx", "IDX Pages", "IDX Pages", "manage_options", iHomefinderConstants::OPTION_PAGES, array($this, "adminOptionsPagesForm"));
+		add_submenu_page("ihf_idx", "Configuration", "Configuration", "manage_options", iHomefinderConstants::OPTION_CONFIG_PAGE, array($this, "adminConfigurationForm"));
+		add_submenu_page("ihf_idx", "Bio Widget", "Bio Widget", "manage_options", iHomefinderConstants::BIO_PAGE, array($this, "bioInformationForm"));
+		add_submenu_page("ihf_idx", "Social Widget", "Social Widget", "manage_options", iHomefinderConstants::SOCIAL_PAGE, array($this, "socialInformationForm"));
+		add_submenu_page("ihf_idx", "Email Branding", "Email Branding", "manage_options", iHomefinderConstants::EMAIL_BRANDING_PAGE, array($this, "emailDisplayForm"));
 		if(iHomefinderPermissions::getInstance()->isCommunityPagesEnabled()) {
-			add_submenu_page('ihf_idx', 'Community Pages', 'Community Pages', 'manage_options', iHomefinderConstants::COMMUNITY_PAGES, array(&$this, 'communityPagesForm'));
+			add_submenu_page("ihf_idx", "Community Pages", "Community Pages", "manage_options", iHomefinderConstants::COMMUNITY_PAGES, array($this, "communityPagesForm"));
 		}
 		if(iHomefinderPermissions::getInstance()->isSeoCityLinksEnabled()) {
-			add_submenu_page('ihf_idx', 'SEO City Links', 'SEO City Links', 'manage_options', iHomefinderConstants::SEO_CITY_LINKS_PAGE, array(&$this, 'seoCityLinksForm'));
+			add_submenu_page("ihf_idx", "SEO City Links", "SEO City Links", "manage_options", iHomefinderConstants::SEO_CITY_LINKS_PAGE, array($this, "seoCityLinksForm"));
 		}
-
 	}
 
 	public function adminOptionsForm() {
 				if (!current_user_can('manage_options'))  {
-					wp_die(__('You do not have sufficient permissions to access this page.'));
+					wp_die('You do not have sufficient permissions to access this page.');
 				}
 				?>
-
 				<div class="wrap">
 					<h2>Information</h2>
-					<br/>
-					<div>
-
-						<h3>Version <?php echo iHomefinderConstants::VERSION ?></h3>
-
-						<h3>Register</h3>
-						The Optima Express plugin needs to be registered with iHomefinder. Registration is automatic if you signup for a trial account or purchase a live account from this page. Or, you can enter a registration key that you've received separately.
-
-						<h3>IDX Pages</h3>
-						View and configure your Optima Express IDX pages here. Change permalinks, page titles and templates.
-
-						<h3>Configuration</h3>
-						This page provides customization features including the ability to override default styles for Optima Express.
-
-						<h3>Bio Widget</h3>
-						Setup your bio information.  Upload a photo and insert contact information.
-
-						<h3>Social Widget</h3>
-						Enter your social network information.
-
-						<h3>Email Display</h3>
-						Customize your email header and footer
-
-						<h3>Community Pages</h3>
-						Create custom pages for your communities.  These pages contain a list of properties in
-						the community, SEO friendly URLs and the ability to add custom content.
-
-						<h3>SEO City Links</h3>
-						Create SEO links for display in the SEO City Links widget.
-
-					</div>
+					<h3>Register</h3>
+					<p>The Optima Express plugin needs to be registered with iHomefinder. Registration is automatic if you signup for a trial account or purchase a live account from this page. Or, you can enter a registration key that you've received separately.</p>
+					<h3>IDX Pages</h3>
+					<p>View and configure your Optima Express IDX pages here. Change permalinks, page titles and templates.</p>
+					<h3>Configuration</h3>
+					<p>This page provides customization features including the ability to override default styles for Optima Express.</p>
+					<h3>Bio Widget</h3>
+					<p>Setup your bio information.  Upload a photo and insert contact information.</p>
+					<h3>Social Widget</h3>
+					<p>Enter your social network information.</p>
+					<h3>Email Display</h3>
+					<p>Customize your email header and footer</p>
+					<h3>Community Pages</h3>
+					<p>Create custom pages for your communities.  These pages contain a list of properties in the community, SEO friendly URLs and the ability to add custom content.</p>
+					<h3>SEO City Links</h3>
+					<p>Create SEO links for display in the SEO City Links widget.
 				</div>
 				<?php
 	}
@@ -214,44 +194,35 @@ class iHomefinderAdmin {
 			update_option(iHomefinderConstants::ACTIVATION_TOKEN_OPTION, $activationToken);
 		}
 
-		if($activationToken != null && "" != $activationToken) {
-			
-	iHomefinderLogger::getInstance()->debug('Begin iHomefinderAdmin.activate');
-	
-	$authenticationInfo=$this->activate($activationToken);
-	
-	iHomefinderLogger::getInstance()->debugDumpVar($authenticationInfo);
-	
-	iHomefinderLogger::getInstance()->debug('Begin set authentication token');
-	
-	$authenticationToken = '';
+		if(!empty($activationToken)) {
+			$authenticationInfo = $this->activate($activationToken);
+			$authenticationToken = "";
 			if($authenticationInfo->authenticationToken) {
 				$authenticationToken = (string) $authenticationInfo->authenticationToken;
-				
 				$permissions = $authenticationInfo->permissions;
 				iHomefinderPermissions::getInstance()->initialize($permissions);
-
 				if(!$this->previouslyActivated()) {
 					update_option(iHomefinderConstants::IS_ACTIVATED_OPTION,'true');
 				}
 			}				
-			update_option(iHomefinderConstants::AUTHENTICATION_TOKEN_CACHE, $authenticationToken);				
+			update_option(iHomefinderConstants::AUTHENTICATION_TOKEN_OPTION, $authenticationToken);				
 		}
-		iHomefinderMenu::getInstance()->updateOptimaExpressMenu();
+		iHomefinderMenu::getInstance()->updateMenu();
 	}
-
-
+	
+	/**
+	 * This forces reactivation of the plugin at next site visit.
+	 */
 	public function deleteAuthenticationToken() {
-		//This forces reactivation of the plugin at next site visit.
-		delete_option(iHomefinderConstants::AUTHENTICATION_TOKEN_CACHE);
+		delete_option(iHomefinderConstants::AUTHENTICATION_TOKEN_OPTION);
 	}
-
+	
 	/**
 	 * If the authentication token has expired then generate a new authentication token
 	 * from the activationToken.
 	 */
 	public function getAuthenticationToken() {
-		$authenticationToken = get_option(iHomefinderConstants::AUTHENTICATION_TOKEN_CACHE);
+		$authenticationToken = get_option(iHomefinderConstants::AUTHENTICATION_TOKEN_OPTION);
 		return $authenticationToken;
 	}
 
@@ -261,58 +232,51 @@ class iHomefinderAdmin {
 
 	private function createOneLink($name, $url, $description) {
 		$link = array(
-			'link_url' => $url,
-			'link_name' => $name,
-			'link_description' => $description
+			"link_url" => $url,
+			"link_name" => $name,
+			"link_description" => $description
 		);
-
-		// Insert the post into the database
-		try {
-			wp_insert_link($link);
-		} catch (Exception $e) {
-			echo('<hr/>exception: '.$e.'<hr/>');
-		}
-
+		wp_insert_link($link);
 	}
 
 	private function activate($activationToken) {
 		
-  $urlFactory=iHomefinderUrlFactory::getInstance();
-		$ajaxBaseUrl                          = urlencode($urlFactory->getAjaxBaseUrl());
-		$listingsSearchResultsUrl             = urlencode($urlFactory->getListingsSearchResultsUrl(true));
-		$listingsSearchFormUrl                = urlencode($urlFactory->getListingsSearchFormUrl(true));
-		$listingDetailUrl                     = urlencode($urlFactory->getListingDetailUrl(true));
-		$featuredSearchResultsUrl             = urlencode($urlFactory->getFeaturedSearchResultsUrl(true));
-		$hotsheetSearchResultsUrl             = urlencode($urlFactory->getHotsheetSearchResultsUrl(true));
-		$organizerLoginUrl                    = urlencode($urlFactory->getOrganizerLoginUrl(true));
-		$organizerLogoutUrl                   = urlencode($urlFactory->getOrganizerLogoutUrl(true));
-		$organizerLoginSubmitUrl              = urlencode($urlFactory->getOrganizerLoginSubmitUrl(true));
-		$organizerEditSavedSearchUrl          = urlencode($urlFactory->getOrganizerEditSavedSearchUrl(true));
-		$organizerEditSavedSearchSubmitUrl    = urlencode($urlFactory->getOrganizerEditSavedSearchSubmitUrl(true));
-		$organizerDeleteSavedSearchSubmitUrl  = urlencode($urlFactory->getOrganizerDeleteSavedSearchSubmitUrl(true));
-		$organizerViewSavedSearchUrl          = urlencode($urlFactory->getOrganizerViewSavedSearchUrl(true));
-		$organizerViewSavedSearchListUrl      = urlencode($urlFactory->getOrganizerViewSavedSearchListUrl(true));
-		$organizerViewSavedListingListUrl     = urlencode($urlFactory->getOrganizerViewSavedListingListUrl(true));
-		$organizerDeleteSavedListingUrl       = urlencode($urlFactory->getOrganizerDeleteSavedListingUrl(true));
-		$organizerResendConfirmationEmailUrl  = urlencode($urlFactory->getOrganizerResendConfirmationEmailUrl(true));
-		$organizerActivateSubscriberUrl       = urlencode($urlFactory->getOrganizerActivateSubscriberUrl(true));
-		$organizerSendSubscriberPasswordUrl   = urlencode($urlFactory->getOrganizerSendSubscriberPasswordUrl(true));
-		$listingsAdvancedSearchFormUrl        = urlencode($urlFactory->getListingsAdvancedSearchFormUrl(true));
-		$organizerHelpUrl                     = urlencode($urlFactory->getOrganizerHelpUrl(true));
-		$organizerEditSubscriberUrl           = urlencode($urlFactory->getOrganizerEditSubscriberUrl(true));
-		$contactFormUrl                       = urlencode($urlFactory->getContactFormUrl(true));
-		$valuationFormUrl                     = urlencode($urlFactory->getValuationFormUrl(true));
-		$listingSoldDetailUrl                 = urlencode($urlFactory->getListingSoldDetailUrl(true));
-		$openHomeSearchFormUrl                = urlencode($urlFactory->getOpenHomeSearchFormUrl(true));
-		$soldFeaturedListingUrl               = urlencode($urlFactory->getSoldFeaturedListingUrl(true));
-		$supplementalListingUrl               = urlencode($urlFactory->getSupplementalListingUrl(true));
-		$listingSearchByAddressResultsUrl     = urlencode($urlFactory->getListingSearchByAddressResultsUrl(true));
-		$listingSearchByListingIdResultsUrl   = urlencode($urlFactory->getListingSearchByListingIdResultsUrl(true));
-		$officeListUrl                        = urlencode($urlFactory->getOfficeListUrl(true));
-		$officeDetailUrl                      = urlencode($urlFactory->getOfficeDetailUrl(true));
-		$agentBioListUrl                      = urlencode($urlFactory->getAgentListUrl(true));
-		$agentBioDetailUrl                    = urlencode($urlFactory->getAgentDetailUrl(true));
-		$mapSearchUrl                     	  = urlencode($urlFactory->getMapSearchFormUrl(true));
+		$urlFactory = iHomefinderUrlFactory::getInstance();
+		$ajaxBaseUrl = urlencode($urlFactory->getAjaxBaseUrl());
+		$listingsSearchResultsUrl = urlencode($urlFactory->getListingsSearchResultsUrl(true));
+		$listingsSearchFormUrl = urlencode($urlFactory->getListingsSearchFormUrl(true));
+		$listingDetailUrl = urlencode($urlFactory->getListingDetailUrl(true));
+		$featuredSearchResultsUrl = urlencode($urlFactory->getFeaturedSearchResultsUrl(true));
+		$hotsheetSearchResultsUrl = urlencode($urlFactory->getHotsheetSearchResultsUrl(true));
+		$organizerLoginUrl = urlencode($urlFactory->getOrganizerLoginUrl(true));
+		$organizerLogoutUrl = urlencode($urlFactory->getOrganizerLogoutUrl(true));
+		$organizerLoginSubmitUrl = urlencode($urlFactory->getOrganizerLoginSubmitUrl(true));
+		$organizerEditSavedSearchUrl = urlencode($urlFactory->getOrganizerEditSavedSearchUrl(true));
+		$organizerEditSavedSearchSubmitUrl = urlencode($urlFactory->getOrganizerEditSavedSearchSubmitUrl(true));
+		$organizerDeleteSavedSearchSubmitUrl = urlencode($urlFactory->getOrganizerDeleteSavedSearchSubmitUrl(true));
+		$organizerViewSavedSearchUrl = urlencode($urlFactory->getOrganizerViewSavedSearchUrl(true));
+		$organizerViewSavedSearchListUrl = urlencode($urlFactory->getOrganizerViewSavedSearchListUrl(true));
+		$organizerViewSavedListingListUrl = urlencode($urlFactory->getOrganizerViewSavedListingListUrl(true));
+		$organizerDeleteSavedListingUrl = urlencode($urlFactory->getOrganizerDeleteSavedListingUrl(true));
+		$organizerResendConfirmationEmailUrl = urlencode($urlFactory->getOrganizerResendConfirmationEmailUrl(true));
+		$organizerActivateSubscriberUrl = urlencode($urlFactory->getOrganizerActivateSubscriberUrl(true));
+		$organizerSendSubscriberPasswordUrl = urlencode($urlFactory->getOrganizerSendSubscriberPasswordUrl(true));
+		$listingsAdvancedSearchFormUrl = urlencode($urlFactory->getListingsAdvancedSearchFormUrl(true));
+		$organizerHelpUrl = urlencode($urlFactory->getOrganizerHelpUrl(true));
+		$organizerEditSubscriberUrl = urlencode($urlFactory->getOrganizerEditSubscriberUrl(true));
+		$contactFormUrl = urlencode($urlFactory->getContactFormUrl(true));
+		$valuationFormUrl = urlencode($urlFactory->getValuationFormUrl(true));
+		$listingSoldDetailUrl = urlencode($urlFactory->getListingSoldDetailUrl(true));
+		$openHomeSearchFormUrl = urlencode($urlFactory->getOpenHomeSearchFormUrl(true));
+		$soldFeaturedListingUrl = urlencode($urlFactory->getSoldFeaturedListingUrl(true));
+		$supplementalListingUrl = urlencode($urlFactory->getSupplementalListingUrl(true));
+		$listingSearchByAddressResultsUrl = urlencode($urlFactory->getListingSearchByAddressResultsUrl(true));
+		$listingSearchByListingIdResultsUrl = urlencode($urlFactory->getListingSearchByListingIdResultsUrl(true));
+		$officeListUrl = urlencode($urlFactory->getOfficeListUrl(true));
+		$officeDetailUrl = urlencode($urlFactory->getOfficeDetailUrl(true));
+		$agentBioListUrl = urlencode($urlFactory->getAgentListUrl(true));
+		$agentBioDetailUrl = urlencode($urlFactory->getAgentDetailUrl(true));
+		$mapSearchUrl = urlencode($urlFactory->getMapSearchFormUrl(true));
 		
 		//Push CSS Override to iHomefinder
 		$cssOverride = get_option(iHomefinderConstants::CSS_OVERRIDE_OPTION);
@@ -329,63 +293,64 @@ class iHomefinderAdmin {
 		//Push mobile site setting to iHomefinder
 		$mobileSiteYn = get_option(iHomefinderConstants::OPTION_MOBILE_SITE_YN);
 		
-		$emailHeader=iHomefinderAdminEmailDisplay::getInstance()->getHeader();
+		$emailHeader = iHomefinderAdminEmailDisplay::getInstance()->getHeader();
 		$emailHeader = urlencode($emailHeader);
 
-		$emailFooter=iHomefinderAdminEmailDisplay::getInstance()->getFooter();
+		$emailFooter = iHomefinderAdminEmailDisplay::getInstance()->getFooter();
 		$emailFooter = urlencode($emailFooter);
 		
-		$postData= array(
-			'method'=>'handleRequest',
-			'requestType'=>'activate',
-			'viewType'=>'json',
-			'activationToken'=>$activationToken,
-			'ajaxBaseUrl'=> $ajaxBaseUrl,
-			'type'=> "wordpress",
-			'listingSearchResultsUrl'=> $listingsSearchResultsUrl,
-			'listingSearchFormUrl'=> $listingsSearchFormUrl,
-			'listingDetailUrl'=> $listingDetailUrl,
-			'featuredSearchResultsUrl'=> $featuredSearchResultsUrl,
-			'hotsheetSearchResultsUrl'=> $hotsheetSearchResultsUrl,
-			'organizerLoginUrl'=> $organizerLoginUrl,
-			'organizerLogoutUrl'=> $organizerLogoutUrl,
-			'organizerLoginSubmitUrl'=> $organizerLoginSubmitUrl,
-			'organizerEditSavedSearchUrl'=> $organizerEditSavedSearchUrl,
-			'organizerEditSavedSearchSubmitUrl'=> $organizerEditSavedSearchSubmitUrl,
-			'organizerDeleteSavedSearchSubmitUrl'=> $organizerDeleteSavedSearchSubmitUrl,
-			'organizerViewSavedSearchUrl'=> $organizerViewSavedSearchUrl,
-			'organizerViewSavedSearchListUrl'=> $organizerViewSavedSearchListUrl,
-			'organizerViewSavedListingListUrl'=> $organizerViewSavedListingListUrl,
-			'organizerDeleteSavedListingUrl'=> $organizerDeleteSavedListingUrl,
-			'organizerResendConfirmationEmailUrl'=> $organizerResendConfirmationEmailUrl,
-			'organizerActivateSubscriberUrl'=> $organizerActivateSubscriberUrl,
-			'organizerSendSubscriberPasswordUrl'=> $organizerSendSubscriberPasswordUrl,
-			'listingAdvancedSearchFormUrl'=> $listingsAdvancedSearchFormUrl,
-			'organizerHelpUrl'=> $organizerHelpUrl,
-			'organizerEditSubscriberUrl'=> $organizerEditSubscriberUrl,
-			'contactFormUrl'=> $contactFormUrl,
-			'valuationFormUrl'=> $valuationFormUrl,
-			'listingSoldDetailUrl'=> $listingSoldDetailUrl,
-			'openHomeSearchFormUrl'=> $openHomeSearchFormUrl,
-			'soldFeaturedListingUrl'=> $soldFeaturedListingUrl,
-			'supplementalListingUrl'=> $supplementalListingUrl,
-			'listingSearchByAddressResultsUrl' => $listingSearchByAddressResultsUrl,
-			'listingSearchByListingIdResultsUrl' => $listingSearchByListingIdResultsUrl,
-			'officeListUrl'=> $officeListUrl,
-			'officeDetailUrl'=> $officeDetailUrl,
-			'agentBioListUrl'=> $agentBioListUrl,
-			'agentBioDetailUrl'=> $agentBioDetailUrl,
-			'mapSearchUrl' => $mapSearchUrl,
-			'cssOverride'=> $cssOverride,
-			'emailHeader'=> $emailHeader,
-			'emailFooter'=> $emailFooter,
-			'layoutType'=> $layoutType,
-			'colorScheme'=> $colorScheme,
-			'mobileSiteYn'=> $mobileSiteYn
+		$postData = array(
+			"method" => "handleRequest",
+			"requestType" => "activate",
+			"viewType" => "json",
+			"activationToken" => $activationToken,
+			"ajaxBaseUrl" => $ajaxBaseUrl,
+			"type" => "wordpress",
+			"listingSearchResultsUrl" => $listingsSearchResultsUrl,
+			"listingSearchFormUrl" => $listingsSearchFormUrl,
+			"listingDetailUrl" => $listingDetailUrl,
+			"featuredSearchResultsUrl" => $featuredSearchResultsUrl,
+			"hotsheetSearchResultsUrl" => $hotsheetSearchResultsUrl,
+			"organizerLoginUrl" => $organizerLoginUrl,
+			"organizerLogoutUrl" => $organizerLogoutUrl,
+			"organizerLoginSubmitUrl" => $organizerLoginSubmitUrl,
+			"organizerEditSavedSearchUrl" => $organizerEditSavedSearchUrl,
+			"organizerEditSavedSearchSubmitUrl" => $organizerEditSavedSearchSubmitUrl,
+			"organizerDeleteSavedSearchSubmitUrl" => $organizerDeleteSavedSearchSubmitUrl,
+			"organizerViewSavedSearchUrl" => $organizerViewSavedSearchUrl,
+			"organizerViewSavedSearchListUrl" => $organizerViewSavedSearchListUrl,
+			"organizerViewSavedListingListUrl" => $organizerViewSavedListingListUrl,
+			"organizerDeleteSavedListingUrl" => $organizerDeleteSavedListingUrl,
+			"organizerResendConfirmationEmailUrl" => $organizerResendConfirmationEmailUrl,
+			"organizerActivateSubscriberUrl" => $organizerActivateSubscriberUrl,
+			"organizerSendSubscriberPasswordUrl" => $organizerSendSubscriberPasswordUrl,
+			"listingAdvancedSearchFormUrl" => $listingsAdvancedSearchFormUrl,
+			"organizerHelpUrl" => $organizerHelpUrl,
+			"organizerEditSubscriberUrl" => $organizerEditSubscriberUrl,
+			"contactFormUrl" => $contactFormUrl,
+			"valuationFormUrl" => $valuationFormUrl,
+			"listingSoldDetailUrl" => $listingSoldDetailUrl,
+			"openHomeSearchFormUrl" => $openHomeSearchFormUrl,
+			"soldFeaturedListingUrl" => $soldFeaturedListingUrl,
+			"supplementalListingUrl" => $supplementalListingUrl,
+			"listingSearchByAddressResultsUrl" => $listingSearchByAddressResultsUrl,
+			"listingSearchByListingIdResultsUrl" => $listingSearchByListingIdResultsUrl,
+			"officeListUrl" => $officeListUrl,
+			"officeDetailUrl" => $officeDetailUrl,
+			"agentBioListUrl" => $agentBioListUrl,
+			"agentBioDetailUrl" => $agentBioDetailUrl,
+			"mapSearchUrl" => $mapSearchUrl,
+			"cssOverride" => $cssOverride,
+			"emailHeader" => $emailHeader,
+			"emailFooter" => $emailFooter,
+			"layoutType" => $layoutType,
+			"colorScheme" => $colorScheme,
+			"mobileSiteYn" => $mobileSiteYn
 		);
-  
-		iHomefinderLogger::getInstance()->debug('$ihfUrl:::' . $ihfUrl.http_build_query($postData));
-		$authenticationInfo = iHomefinderRequestor::getInstance()->remotePostRequest($postData);
+		
+		$remoteRequest = new iHomefinderRequestor();
+		$remoteRequest->addParameters($postData);
+		$authenticationInfo = $remoteRequest->remotePostRequest();
 
 		//We need to flush the rewrite rules, if any permalinks have been updated.
 		//Only flush in the admin screens, because that is the only point
@@ -395,9 +360,9 @@ class iHomefinderAdmin {
 		}
 		iHomefinderLogger::getInstance()->debugDumpVar($authenticationInfo);
 		
-  return $authenticationInfo;
+		return $authenticationInfo;
 	
-}
+	}
 
 	/**
 	 * Create register option groups and associated options.
@@ -405,8 +370,8 @@ class iHomefinderAdmin {
 	 */
 	public function registerSettings() {
 		//Activation settings
-		register_setting(iHomefinderConstants::OPTION_ACTIVATE, iHomefinderConstants::ACTIVATION_TOKEN_OPTION);
-		register_setting(iHomefinderConstants::OPTION_ACTIVATE, iHomefinderConstants::ACTIVATION_DATE_OPTION);			
+		register_setting(iHomefinderConstants::OPTION_ACTIVATE, iHomefinderConstants::ACTIVATION_TOKEN_OPTION);		
+		register_setting(iHomefinderConstants::OPTION_ACTIVATE, iHomefinderConstants::AUTHENTICATION_TOKEN_OPTION);
 		
 		//Configuration Settings
 		register_setting(iHomefinderConstants::OPTION_CONFIG_PAGE, iHomefinderConstants::OPTION_LAYOUT_TYPE);
@@ -419,7 +384,6 @@ class iHomefinderAdmin {
 		register_setting(iHomefinderConstants::OPTION_GROUP_BIO, iHomefinderConstants::AGENT_TEXT_OPTION);
 		register_setting(iHomefinderConstants::OPTION_GROUP_BIO, iHomefinderConstants::AGENT_DISPLAY_TITLE_OPTION);
 		register_setting(iHomefinderConstants::OPTION_GROUP_BIO, iHomefinderConstants::AGENT_LICENSE_INFO_OPTION);
-
 		register_setting(iHomefinderConstants::OPTION_GROUP_BIO, iHomefinderConstants::AGENT_DESIGNATIONS_OPTION);
 		register_setting(iHomefinderConstants::OPTION_GROUP_BIO, iHomefinderConstants::CONTACT_PHONE_OPTION);
 		register_setting(iHomefinderConstants::OPTION_GROUP_BIO, iHomefinderConstants::CONTACT_EMAIL_OPTION);
@@ -454,13 +418,9 @@ class iHomefinderAdmin {
 	}
 
 	//Check if an options form has been updated.
+	//When new options are updated, the parameter "updated" is set to true
 	private function isUpdated() {
-		//When new options are updated, the paramerter "updated" is set to true
-		$isUpdated = (array_key_exists('updated', $_REQUEST) && $_REQUEST["updated"]);
-		if(!$isUpdated) {register_setting(iHomefinderConstants::OPTION_GROUP_EMAIL_DISPLAY, iHomefinderConstants::EMAIL_DISPLAY_TYPE_OPTION);
-			//version 3.1 sets this value, rather than "updated"
-			$isUpdated = (array_key_exists('settings-updated', $_REQUEST) && $_REQUEST["settings-updated"]);
-		}
+		$isUpdated = (array_key_exists("settings-updated", $_REQUEST) && $_REQUEST["settings-updated"] === "true");
 		return $isUpdated;
 	}
 
@@ -471,13 +431,17 @@ class iHomefinderAdmin {
 		<div class="wrap">
 		
 		<?php
-		if (!current_user_can('manage_options'))  {
-			wp_die(__('You do not have sufficient permissions to access this page.'));
+		if (!current_user_can("manage_options"))  {
+			wp_die("You do not have sufficient permissions to access this page.");
 		}
 		
-		if($_GET['reg']) {
-			$regKey = $_GET['reg'];
-			update_option(iHomefinderConstants::ACTIVATION_TOKEN_OPTION, $regKey);
+		$activationToken = null;
+		if(array_key_exists("reg", $_REQUEST)) {
+			$activationToken = $_REQUEST["reg"];
+		}
+		
+		if($activationToken) {
+			update_option(iHomefinderConstants::ACTIVATION_TOKEN_OPTION, $activationToken);
 			$this->updateAuthenticationToken();
 			?>
 			<h2>Thanks For Signing Up</h2>
@@ -493,20 +457,25 @@ class iHomefinderAdmin {
 			$this->updateAuthenticationToken();
 		}
 		
-		if($_GET['section'] == 'enter-reg-key') {
+		$section = null;
+		if(array_key_exists("section", $_REQUEST)) {
+			$section = $_REQUEST["section"];
+		}
+		
+		if($section === "enter-reg-key") {
 			
 			?>
 			
 			<h2>Add Registration Key</h2>
 			
 			<?php
-			if(get_option(iHomefinderConstants::ACTIVATION_TOKEN_OPTION) == '') {
+			if(get_option(iHomefinderConstants::ACTIVATION_TOKEN_OPTION) == "") {
 				?>
 				<div class="error">
 					<p>Add your Registration Key and click "Save Changes" to get started with Optima Express.</p>
 				</div>
 				<?php
-			} elseif(get_option(iHomefinderConstants::AUTHENTICATION_TOKEN_CACHE) != '') {
+			} elseif(get_option(iHomefinderConstants::AUTHENTICATION_TOKEN_OPTION) != "") {
 				?>
 				<div class="updated">
 					<p>Your Optima Express plugin has been registered.</p>
@@ -533,39 +502,40 @@ class iHomefinderAdmin {
 					</td>
 				</tr>
 				<tr valign="top">
-					<td colspan="2"><?php echo($this->iHomefinderNotification); ?></td>
+					<td colspan="2">
+						<?php echo $this->iHomefinderNotification; ?>
+					</td>
 				</tr>
 			</table>
 			<p class="submit">
-				<input type="submit" class="button-primary" value="<?php _e('Save Changes') ?>" />
+				<input type="submit" class="button-primary" value="<?php _e("Save Changes") ?>" />
 			</p>
 			</form>
 			
 		<?php
 			
-		} elseif($_GET['section'] == 'free-trial') {
+		} elseif($section === "free-trial") {
 			?>
-		
 			<h2>Free Trial Sign-Up</h2>
-			
-			<p><?php echo($this->iHomefinderNotification); ?></p>
-			
+			<p>
+				<?php echo $this->iHomefinderNotification; ?>
+			</p>
 			<?php
 			
-			$firstName = $_POST['firstName'];
-			$lastName = $_POST['lastName'];
-			$phoneNumber = $_POST['phoneNumber'];
-			$email = $_POST['email'];
-			$accountType = $_POST['accountType'];
+			$firstName = $_POST["firstName"];
+			$lastName = $_POST["lastName"];
+			$phoneNumber = $_POST["phoneNumber"];
+			$email = $_POST["email"];
+			$accountType = $_POST["accountType"];
 			
 			$errors = array();
 			
 			if(!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-				$errors[] = '<p>Email address is not valid.</p>';
+				$errors[] = "<p>Email address is not valid.</p>";
 			}
 							
 			if(empty($accountType)) {
-				$errors[] = '<p>Select type of trial account.</p>';
+				$errors[] = "<p>Select type of trial account.</p>";
 			}
 			
 			if(count($errors) == 0) {
@@ -598,19 +568,19 @@ class iHomefinderAdmin {
 					"ip_address" => $_SERVER["REMOTE_ADDR"],
 				);
 				
-				$requestUrl = 'http://www.ihomefinder.com/store/optima-express-trial.php';
+				$requestUrl = "http://www.ihomefinder.com/store/optima-express-trial.php";
 				
 				set_time_limit(90);
-				$requestArgs = array('timeout' => '90', 'body' => $params);
+				$requestArgs = array("timeout" => "90", "body" => $params);
 				$response = wp_remote_post($requestUrl, $requestArgs);
 				if(!is_wp_error($response)) {
 					$responseBody = wp_remote_retrieve_body($response);
 					$responseBody = json_decode($responseBody, true);
 					
-					$clientId = $responseBody['clientID'];
-					$regKey = $responseBody['regKey'];
-					$username = $responseBody['username'];
-					$password = $responseBody['password'];
+					$clientId = $responseBody["clientID"];
+					$regKey = $responseBody["regKey"];
+					$username = $responseBody["username"];
+					$password = $responseBody["password"];
 					
 					update_option(iHomefinderConstants::ACTIVATION_TOKEN_OPTION, $regKey);
 					$this->updateAuthenticationToken();
@@ -638,14 +608,14 @@ class iHomefinderAdmin {
 			
 				if($_POST) {
 					echo "<div class='error'>";
-					foreach ($errors as $Error) {
-						echo $Error;
+					foreach ($errors as $error) {
+						echo $error;
 					}
 					echo "</div>";
 				}
 				
 				?>
-				<style>
+				<style type="text/css">
 					table {
 						width: 300px;
 					}
@@ -726,18 +696,17 @@ class iHomefinderAdmin {
 			}
 			
 		} else {
-		
-			if(get_option(iHomefinderConstants::ACTIVATION_TOKEN_OPTION) == '') {
-				
+			$authenticationToken = get_option(iHomefinderConstants::AUTHENTICATION_TOKEN_OPTION);
+			if(empty($authenticationToken)) {
 				?>
 				<style type="text/css">
-				.button-large-ihf {
-					height: 54px !important;
-					text-align: center;
-					font: 14px arial !important;
-					padding-top: 10px !important;
-					margin-right: 15px !important;
-				}
+					.button-large-ihf {
+						height: 54px !important;
+						text-align: center;
+						font: 14px arial !important;
+						padding-top: 10px !important;
+						margin-right: 15px !important;
+					}
 				</style>
 				<h2>Register Optima Express</h2>
 				<br />
@@ -751,18 +720,20 @@ class iHomefinderAdmin {
 				<p>Optima Express from iHomefinder adds MLS/IDX search and listings directly into your WordPress site.</p>
 				<p>A free trial account uses sample IDX listings from Northern California.</p>
 				<p>Signing up for a paid account provides access to listings in your MLS&reg; System and full support from iHomefinder. Plans start at $39.95 per month. You must be a member of an MLS to qualify for IDX service. <a target="_blank" href="http://www.ihomefinder.com/mls-coverage/">Learn More</a></p>
-				<p><?php echo($this->iHomefinderNotification); ?></p>
+				<p>
+					<?php echo $this->iHomefinderNotification; ?>
+				</p>
 				<?php
-				
-			} elseif($_GET['reg'] == false) {
+			} elseif($activationToken == false) {
 				?>
 				<h2>Unregister Optima Express</h2>
 				<p>Optima Express is currently registered. Clicking the below button will unregister the IDX plugin.<p>
 				<form method="post" action="options.php">
 					<?php settings_fields(iHomefinderConstants::OPTION_ACTIVATE); ?>
 					<input type="hidden" name="<?php echo iHomefinderConstants::ACTIVATION_TOKEN_OPTION ?>" value="" />
+					<input type="hidden" name="<?php echo iHomefinderConstants::AUTHENTICATION_TOKEN_OPTION ?>" value="" />
 					<p class="submit">
-						<input type="submit" class="button-primary" value="<?php _e('Unregister') ?>" onclick="return confirm('Are you sure you want to unregister Optima Express?');" />
+						<input type="submit" class="button-primary" value="<?php _e("Unregister") ?>" onclick="return confirm('Are you sure you want to unregister Optima Express?');" />
 					</p>
 				</form>
 				<form method="post" action="options.php" name="refreshRegistration">
@@ -784,7 +755,7 @@ class iHomefinderAdmin {
 	}
 	
 	public function adminIdxControlPanelForm() {
-		if(get_option(iHomefinderConstants::ACTIVATION_TOKEN_OPTION) != '') {
+		if(get_option(iHomefinderConstants::AUTHENTICATION_TOKEN_OPTION) != "") {
 			?>
 			
 			<h2>Your IDX Control Panel will open in a new window.</h2>
@@ -794,16 +765,15 @@ class iHomefinderAdmin {
 			</script>
 			<?php
 		}
-			
 	}
 
 	public function addScripts() {
 		//Used for the Bio Page for image uploads
-		if (isset($_GET['page']) && ($_GET['page'] == iHomefinderConstants::BIO_PAGE || $_GET['page'] == iHomefinderConstants::EMAIL_BRANDING_PAGE)) {
-			wp_enqueue_script('jquery'); // include jQuery
-			wp_register_script('bioInformation', plugins_url("/optima-express/js/bioInformation.js"), array('jquery','editor','media-upload','thickbox'));
-			wp_enqueue_style('thickbox');
-			wp_enqueue_script('bioInformation');  // include script.js
+		if (isset($_GET["page"]) && ($_GET["page"] == iHomefinderConstants::BIO_PAGE || $_GET["page"] == iHomefinderConstants::EMAIL_BRANDING_PAGE)) {
+			wp_enqueue_script("jquery"); // include jQuery
+			wp_register_script("bioInformation", plugins_url("/optima-express/js/bioInformation.js"), array("jquery","editor","media-upload","thickbox"));
+			wp_enqueue_style("thickbox");
+			wp_enqueue_script("bioInformation");  // include script.js
 		}
 	}
 
@@ -821,22 +791,22 @@ class iHomefinderAdmin {
 			<?php settings_fields(iHomefinderConstants::OPTION_GROUP_BIO); ?>
 
 			<p class="submit">
-			<input type="submit" class="button-primary" value="<?php _e('Save Changes') ?>" />
+			<input type="submit" class="button-primary" value="<?php _e("Save Changes") ?>" />
 			</p>
 
 			<h3>Agent Photo</h3>
 			<?php if(get_option(iHomefinderConstants::AGENT_PHOTO_OPTION)) {
 				?>
 				<img id="ihf_upload_agent_photo_image" src="<?php echo(get_option(iHomefinderConstants::AGENT_PHOTO_OPTION))?>"
-					<?php if(!get_option(iHomefinderConstants::AGENT_PHOTO_OPTION)) {echo(" style='display:none'");}?>/><br/>
+					<?php if(!get_option(iHomefinderConstants::AGENT_PHOTO_OPTION)) {echo(" style='display:none'");}?>/><br />
 				<?php
 			}
 			?>
 			<input id="ihf_upload_agent_photo" type="text" size="36" name="<?php echo(iHomefinderConstants::AGENT_PHOTO_OPTION)?>" value="<?php echo(get_option(iHomefinderConstants::AGENT_PHOTO_OPTION))?>" />
 			<input id="ihf_upload_agent_photo_button" type="button" value="Upload Agent Photo" class="button-secondary"/>
-			<br/>
+			<br />
 			Enter an image URL or use an image from the Media Library
-			<br/><br/><br/>
+			<br /><br /><br />
 
 			<div style="float:left;width:100px;">Display Name:</div>
 			<input type="text" size="36" name="<?php echo(iHomefinderConstants::AGENT_DISPLAY_TITLE_OPTION)?>" value="<?php echo(get_option(iHomefinderConstants::AGENT_DISPLAY_TITLE_OPTION))?>" />
@@ -859,24 +829,24 @@ class iHomefinderAdmin {
 			<input type="text" size="36" name="<?php echo(iHomefinderConstants::AGENT_LICENSE_INFO_OPTION)?>" value="<?php echo(get_option(iHomefinderConstants::AGENT_LICENSE_INFO_OPTION))?>" />
 			<div style="clear:both;"></div>
 			
-			<br/><br/>
+			<br /><br />
 
 			<h3>Agent Bio Text</h3>
 			<?php
 				$agent_bio_editor_settings =  array (
-					'textarea_rows' => 15,
-					'media_buttons' => true,
-					'teeny'         => true,
-					'tinymce'       => true,
-					'textarea_name' => iHomefinderConstants::AGENT_TEXT_OPTION
+					"textarea_rows" => 15,
+					"media_buttons" => true,
+					"teeny"         => true,
+					"tinymce"       => true,
+					"textarea_name" => iHomefinderConstants::AGENT_TEXT_OPTION
 				);
-				wp_editor(get_option(iHomefinderConstants::AGENT_TEXT_OPTION), 'agentbiotextid', $agent_bio_editor_settings);
+				wp_editor(get_option(iHomefinderConstants::AGENT_TEXT_OPTION), "agentbiotextid", $agent_bio_editor_settings);
 
 			?>
-			<br/><br/>
+			<br /><br />
 
 			<p class="submit">
-			<input type="submit" class="button-primary" value="<?php _e('Save Changes') ?>" />
+			<input type="submit" class="button-primary" value="<?php _e("Save Changes") ?>" />
 			</p>
 
 		</form>
@@ -900,18 +870,18 @@ class iHomefinderAdmin {
 			http://www.facebook.com/
 			<input type="text" size="36" name="<?php echo(iHomefinderConstants::FACEBOOK_URL_OPTION)?>" value="<?php echo(get_option(iHomefinderConstants::FACEBOOK_URL_OPTION))?>" />
 
-			<br/>
+			<br />
 			<h3>LinkedIn</h3>
 			http://www.linkedin.com/
 			<input type="text" size="36" name="<?php echo(iHomefinderConstants::LINKEDIN_URL_OPTION)?>" value="<?php echo(get_option(iHomefinderConstants::LINKEDIN_URL_OPTION))?>" />
 
-			<br/>
+			<br />
 			<h3>Twitter</h3>
 			http://www.twitter.com/
 			<input type="text" size="36" name="<?php echo(iHomefinderConstants::TWITTER_URL_OPTION)?>" value="<?php echo(get_option(iHomefinderConstants::TWITTER_URL_OPTION))?>" />
 
 			<p class="submit">
-			<input type="submit" class="button-primary" value="<?php _e('Save Changes') ?>" />
+			<input type="submit" class="button-primary" value="<?php _e("Save Changes") ?>" />
 			</p>
 
 		</form>
@@ -926,16 +896,16 @@ class iHomefinderAdmin {
 		$cityZipList=$formData->getCityZipList();
 		$cityZipListJson=json_encode($cityZipList);
 
-		wp_enqueue_script('jquery');
-		wp_enqueue_script('jquery-ui-core');
-		wp_enqueue_script('jquery-ui-autocomplete', '', array('jquery-ui-widget', 'jquery-ui-position'), '1.8.6');
-		wp_enqueue_style('jquery-ui-autocomplete', plugins_url('css/jquery-ui-1.8.18.custom.css', __FILE__));
+		wp_enqueue_script("jquery");
+		wp_enqueue_script("jquery-ui-core");
+		wp_enqueue_script("jquery-ui-autocomplete", "", array("jquery-ui-widget", "jquery-ui-position"), "1.8.6");
+		wp_enqueue_style("jquery-ui-autocomplete", plugins_url("css/jquery-ui-1.8.18.custom.css", __FILE__));
 		?>
 		<script type="text/javascript">
 		function ihfRemoveSeoLink(button) {
 			//debugger;
-			var theButton=jQuery(button);
-			var theForm=theButton.closest("form");
+			var theButton = jQuery(button);
+			var theForm = theButton.closest("form");
 			theButton.parent().remove();
 			theForm.submit();
 		}
@@ -952,7 +922,7 @@ class iHomefinderAdmin {
 						//debugger;
 						var oneTerm=data[i];
 						//appending '' converts numbers to strings for the indexOf function call
-						var value=oneTerm.value + '';
+						var value=oneTerm.value + "";
 						value=value.toLowerCase();
 						if(value && value != null && value.indexOf(searchTerm) == 0) {
 							results.push(oneTerm);
@@ -962,120 +932,111 @@ class iHomefinderAdmin {
 				},
 				select: function(event, ui) {
 					//When an item is selected, set the text value for the link
-					jQuery('#ihfSeoLinksText').val(ui.item.label);
+					jQuery("#ihfSeoLinksText").val(ui.item.label);
 				}
 			});
 
 		});
 		</script>
 		<div class="wrap">
-		<h2>SEO City Links Setup</h2>
-		<p/>
-		Add city links for display in the SEO City Links widget.
-		<p/>
-		<form method="post" action="options.php" id="ihfSeoLinksForm">
-			<?php settings_fields(iHomefinderConstants::OPTION_GROUP_SEO_CITY_LINKS); ?>
-
-
-			<div style="float:left;width:220px;padding-right:15px;">
-			<div>
-				<label>Location:</label>
-			</div>
-			<input type="text" id="ihfSeoLinksAutoComplete"
-				name="<?php echo iHomefinderConstants::SEO_CITY_LINKS_SETTINGS . '[0][' . iHomefinderConstants::SEO_CITY_LINKS_CITY_ZIP . ']'?>"
-				value="Enter City - OR - Postal Code"
-				size="30"/>
-
-			</div>
-
-			<div style="float:left;width:220px;padding-right:15px;">
-			<div>
-				<label>Property Type:</label>
-			</div>
-			<select name="<?php echo iHomefinderConstants::SEO_CITY_LINKS_SETTINGS . '[0][' . iHomefinderConstants::SEO_CITY_LINKS_PROPERTY_TYPE . ']' ?>">
-			<?php
-				foreach ($propertyTypesList as $i => $value) {
-					echo "<option value='" . $propertyTypesList[$i]->propertyTypeCode . "'>" . $propertyTypesList[$i]->displayName . "</option>";
-				}
-			?>
-			</select>
-			</div>
-			<div style="clear:both;"></div>
-			<p/>
-			<div style="float:left;width:220px;padding-right:15px;">
-				<div style="float:left;width:80px;">
-					<label>Min Price:</label>
+			<h2>SEO City Links Setup</h2>
+			<p>Add city links for display in the SEO City Links widget.<p/>
+			<form method="post" action="options.php" id="ihfSeoLinksForm">
+				<?php settings_fields(iHomefinderConstants::OPTION_GROUP_SEO_CITY_LINKS); ?>
+				<div style="float:left; padding-right:15px;">
+					<div>
+						<label>Location:</label>
+					</div>
+					<input type="text" id="ihfSeoLinksAutoComplete"
+						name="<?php echo iHomefinderConstants::SEO_CITY_LINKS_SETTINGS . '[0][' . iHomefinderConstants::SEO_CITY_LINKS_CITY_ZIP . ']'?>"
+						placeholder="Enter City - OR - Postal Code"
+						style="width: 220px;"
+						autocomplete="off"
+						/>
 				</div>
-				<div style="float:left">
-					<input name="<?php echo iHomefinderConstants::SEO_CITY_LINKS_SETTINGS . '[0][' . iHomefinderConstants::SEO_CITY_LINKS_MIN_PRICE . ']'?>" type="text" size="10"/>
-				</div>
-			</div>
-			<div style="clear:both;"></div>
-			<div style="float:left;width:220px;padding-right:15px;">
-
-				<div style="float:left;width:80px;">
-					<label>Max Price:</label>
-				</div>
-				<div style="float:left">
-					<input name="<?php echo iHomefinderConstants::SEO_CITY_LINKS_SETTINGS . '[0][' . iHomefinderConstants::SEO_CITY_LINKS_MAX_PRICE . ']'?>" type="text" size="10"/>
+				<div style="float:left; padding-right:15px;">
+					<div>
+						<label>Property Type:</label>
+					</div>
+					<select
+						name="<?php echo iHomefinderConstants::SEO_CITY_LINKS_SETTINGS . '[0][' . iHomefinderConstants::SEO_CITY_LINKS_PROPERTY_TYPE . ']' ?>"
+						style="width: 220px;"
+					>
+						<?php
+						foreach ($propertyTypesList as $i => $value) {
+							echo "<option value='" . $propertyTypesList[$i]->propertyTypeCode . "'>" . $propertyTypesList[$i]->displayName . "</option>";
+						}
+						?>
+					</select>
 				</div>
 				<div style="clear:both;"></div>
-			</div>
-			<div style="clear:both;"></div>
-			<p/>
-			<div style="float:left;width:80px;">
-				<label>Link Text:</label>
-			</div>
-			<div style="float:left">
-				<input id="ihfSeoLinksText" name="<?php echo iHomefinderConstants::SEO_CITY_LINKS_SETTINGS . '[0][' . iHomefinderConstants::SEO_CITY_LINKS_TEXT. ']'?>" type="text" size="30"/>
-			</div>
-			<div style="clear:both;"></div>
-
-			<div style="padding-top: 20px">Link Configuration</div>
-			<div style="float:left;width:80px;">
-				<label>Link Width:</label>
-			</div>
-			<div style="float:left;width:80px;">
-				<input name="<?php echo(iHomefinderConstants::SEO_CITY_LINK_WIDTH)?>" type="text" size="3" value="<?php echo(get_option(iHomefinderConstants::SEO_CITY_LINK_WIDTH, '80'))?>"/>
-			</div>
-
-
-			<div style="clear:both;"></div>
-			<p class="submit">
-			<input type="submit" class="button-primary" value="<?php _e('Save Changes') ?>" />
-			</p/>
-
-			<p/>
-			The following links will display in the SEO City Links widget.  Click the X to remove an entry.
-			<p/>
-			<?php
-
-				$seoCityLinksSettings =get_option(iHomefinderConstants::SEO_CITY_LINKS_SETTINGS);
-				if($seoCityLinksSettings && is_array($seoCityLinksSettings)) {
-					sort($seoCityLinksSettings);
-					//save sorted array
-					update_option(iHomefinderConstants::SEO_CITY_LINKS_SETTINGS, $seoCityLinksSettings);
-					foreach ($seoCityLinksSettings as $i => $value) {
-						$index=$value[iHomefinderConstants::SEO_CITY_LINKS_TEXT ];
-						if($index) {
-							echo("<div>");
-							echo("<input type='button' class='button-secondary' value='X' onclick='ihfRemoveSeoLink(this);'/>");
-							echo("&nbsp;&nbsp;" . $index);
-							echo "<input type='hidden' name='" . iHomefinderConstants::SEO_CITY_LINKS_SETTINGS . '[' . $index . '][' . iHomefinderConstants::SEO_CITY_LINKS_TEXT . "]' value='" . $value[iHomefinderConstants::SEO_CITY_LINKS_TEXT ] . "'>";
-							echo "<input type='hidden' name='" . iHomefinderConstants::SEO_CITY_LINKS_SETTINGS . '[' . $index . '][' . iHomefinderConstants::SEO_CITY_LINKS_CITY_ZIP . "]' value='" . $value[iHomefinderConstants::SEO_CITY_LINKS_CITY_ZIP ] . "'>";
-							echo "<input type='hidden' name='" . iHomefinderConstants::SEO_CITY_LINKS_SETTINGS . '[' . $index . '][' . iHomefinderConstants::SEO_CITY_LINKS_PROPERTY_TYPE . "]' value='" . $value[iHomefinderConstants::SEO_CITY_LINKS_PROPERTY_TYPE ] . "'>";
-							echo "<input type='hidden' name='" . iHomefinderConstants::SEO_CITY_LINKS_SETTINGS . '[' . $index . '][' . iHomefinderConstants::SEO_CITY_LINKS_MIN_PRICE . "]' value='" . $value[iHomefinderConstants::SEO_CITY_LINKS_MIN_PRICE ] . "'>";
-							echo "<input type='hidden' name='" . iHomefinderConstants::SEO_CITY_LINKS_SETTINGS . '[' . $index . '][' . iHomefinderConstants::SEO_CITY_LINKS_MAX_PRICE . "]' value='" . $value[iHomefinderConstants::SEO_CITY_LINKS_MAX_PRICE ] . "'>";
-							echo("</div>");
+				<div style="float:left; padding-right:15px;">
+					<div>
+						<label>Min Price:</label>
+					</div>
+					<div>
+						<input
+							name="<?php echo iHomefinderConstants::SEO_CITY_LINKS_SETTINGS . '[0][' . iHomefinderConstants::SEO_CITY_LINKS_MIN_PRICE . ']'?>"
+							type="number"
+							style="width: 220px;"
+						/>
+					</div>
+				</div>
+				<div style="float:left; padding-right:15px;">
+					<div>
+						<label>Max Price:</label>
+					</div>
+					<div>
+						<input
+							name="<?php echo iHomefinderConstants::SEO_CITY_LINKS_SETTINGS . '[0][' . iHomefinderConstants::SEO_CITY_LINKS_MAX_PRICE . ']'?>"
+							type="number"
+							style="width: 220px;"
+						/>
+					</div>
+				</div>
+				<div style="clear:both;"></div>
+				<div>
+					<label>Link Text:</label>
+				</div>
+				<div>
+					<input
+						id="ihfSeoLinksText" name="<?php echo iHomefinderConstants::SEO_CITY_LINKS_SETTINGS . '[0][' . iHomefinderConstants::SEO_CITY_LINKS_TEXT. ']'?>"
+						type="text"
+						style="width: 458px;"
+						/>
+				</div>
+				<p class="submit">
+					<button type="submit" class="button-primary">Save Changes</button>
+				</p>
+				<p>The following links will display in the SEO City Links widget.  Click the &#x2715; to remove an entry.</p>
+				<?php
+					$seoCityLinksSettings = get_option(iHomefinderConstants::SEO_CITY_LINKS_SETTINGS);
+					if($seoCityLinksSettings && is_array($seoCityLinksSettings)) {
+						sort($seoCityLinksSettings);
+						//save sorted array
+						update_option(iHomefinderConstants::SEO_CITY_LINKS_SETTINGS, $seoCityLinksSettings);
+						foreach($seoCityLinksSettings as $i => $value) {
+							$index = $value[iHomefinderConstants::SEO_CITY_LINKS_TEXT];
+							if($index) {
+								?>
+								<div style="margin-bottom: 6px;">
+									<button class="button-secondary" onclick="ihfRemoveSeoLink(this);">
+										&#x2715;&nbsp;&nbsp;&nbsp;
+										<?php echo $index ?>
+									</button>
+									<input type="hidden" name="<?php echo iHomefinderConstants::SEO_CITY_LINKS_SETTINGS ?>[<?php echo $index ?>][<?php echo iHomefinderConstants::SEO_CITY_LINKS_TEXT ?>]" value="<?php echo $value[iHomefinderConstants::SEO_CITY_LINKS_TEXT] ?>">
+									<input type="hidden" name="<?php echo iHomefinderConstants::SEO_CITY_LINKS_SETTINGS ?>[<?php echo $index ?>][<?php echo iHomefinderConstants::SEO_CITY_LINKS_CITY_ZIP ?>]" value="<?php echo $value[iHomefinderConstants::SEO_CITY_LINKS_CITY_ZIP] ?>">
+									<input type="hidden" name="<?php echo iHomefinderConstants::SEO_CITY_LINKS_SETTINGS ?>[<?php echo $index ?>][<?php echo iHomefinderConstants::SEO_CITY_LINKS_PROPERTY_TYPE ?>]" value="<?php echo $value[iHomefinderConstants::SEO_CITY_LINKS_PROPERTY_TYPE] ?>">
+									<input type="hidden" name="<?php echo iHomefinderConstants::SEO_CITY_LINKS_SETTINGS ?>[<?php echo $index ?>][<?php echo iHomefinderConstants::SEO_CITY_LINKS_MIN_PRICE ?>]" value="<?php echo $value[iHomefinderConstants::SEO_CITY_LINKS_MIN_PRICE] ?>">
+									<input type="hidden" name="<?php echo iHomefinderConstants::SEO_CITY_LINKS_SETTINGS ?>[<?php echo $index ?>][<?php echo iHomefinderConstants::SEO_CITY_LINKS_MAX_PRICE ?>]" value="<?php echo $value[iHomefinderConstants::SEO_CITY_LINKS_TEXT] ?>">
+								</div>
+								<?php
+							}
 						}
 					}
-				}
-
-			?>
-		</form>
-
-		<p/>
-
+	
+				?>
+			</form>
 		</div>
 		<?php
 	}
@@ -1100,30 +1061,27 @@ class iHomefinderAdmin {
 
 		<form method="post" action="options.php">
 			<?php settings_fields(iHomefinderConstants::OPTION_GROUP_EMAIL_DISPLAY); ?>
-
 			<p class="submit">
-			<input type="submit" class="button-primary" value="<?php _e('Save Changes') ?>" />
+				<input type="submit" class="button-primary" value="<?php _e("Save Changes") ?>" />
 			</p>
-
 			<?php
 				//Check if we support default display which uses the logo and photo
 				//previously uploaded.
 				if(iHomefinderAdminEmailDisplay::getInstance()->includeDefaultDisplay()) {
-					echo('Default Logo ' . iHomefinderAdminEmailDisplay::getInstance()->getDefaultLogo());
+					echo("Default Logo " . iHomefinderAdminEmailDisplay::getInstance()->getDefaultLogo());
 				?>
 				
 				<input type="radio" name="<?php echo(iHomefinderConstants::EMAIL_DISPLAY_TYPE_OPTION)?>"
 					<?php if(iHomefinderAdminEmailDisplay::EMAIL_DISPLAY_TYPE_DEFAULT_VALUE == $emailDisplayType) {echo(" checked ");}?>
-					value="<?php echo(iHomefinderAdminEmailDisplay::EMAIL_DISPLAY_TYPE_DEFAULT_VALUE)?>"/>Use Agent Bio photo & Header logo<br/>
+					value="<?php echo(iHomefinderAdminEmailDisplay::EMAIL_DISPLAY_TYPE_DEFAULT_VALUE)?>"/>Use Agent Bio photo & Header logo<br />
 				<p/>
-				<?php }//end if ?>
+				<?php } ?>
 
 			<p/>
 
 			<input type="radio" name="<?php echo(iHomefinderConstants::EMAIL_DISPLAY_TYPE_OPTION)?>"
 				<?php if(iHomefinderAdminEmailDisplay::EMAIL_DISPLAY_TYPE_CUSTOM_IMAGES_VALUE == $emailDisplayType || empty($emailDisplayType)) {echo(" checked ");}?>
-				value="<?php echo(iHomefinderAdminEmailDisplay::EMAIL_DISPLAY_TYPE_CUSTOM_IMAGES_VALUE)?>"/>&nbsp;Basic Branding<br/>
-				
+				value="<?php echo(iHomefinderAdminEmailDisplay::EMAIL_DISPLAY_TYPE_CUSTOM_IMAGES_VALUE)?>"/>&nbsp;Basic Branding<br />
 			<p/>
 			Add the logo, photo and business information you would like displayed in your email branding.
 
@@ -1131,29 +1089,29 @@ class iHomefinderAdmin {
 			<?php if(get_option(iHomefinderConstants::EMAIL_PHOTO_OPTION)) {
 				?>
 				<img id="ihf_upload_agent_photo_image" src="<?php echo(get_option(iHomefinderConstants::EMAIL_PHOTO_OPTION))?>"
-					<?php if(!get_option(iHomefinderConstants::EMAIL_PHOTO_OPTION)) {echo(" style='display:none'");}?>/><br/>
+					<?php if(!get_option(iHomefinderConstants::EMAIL_PHOTO_OPTION)) {echo(" style='display:none'");}?>/><br />
 				<?php
 			}
 			?>
 			<input id="ihf_upload_agent_photo" type="text" size="36" name="<?php echo(iHomefinderConstants::EMAIL_PHOTO_OPTION)?>" value="<?php echo(get_option(iHomefinderConstants::EMAIL_PHOTO_OPTION))?>" />
 			<input id="ihf_upload_agent_photo_button" type="button" value="Upload Agent Photo" class="button-secondary"/>
-			<br/>
+			<br />
 			Enter an image URL or use an image from the Media Library
-			<br/><br/>
+			<br /><br />
 
 			<h3>Logo</h3>
 			<?php if(get_option(iHomefinderConstants::EMAIL_LOGO_OPTION)) {
 				?>
 				<img id="ihf_upload_email_logo_image" src="<?php echo(get_option(iHomefinderConstants::EMAIL_LOGO_OPTION))?>"
-					<?php if(!get_option(iHomefinderConstants::EMAIL_LOGO_OPTION)) {echo(" style='display:none'");}?>/><br/>
+					<?php if(!get_option(iHomefinderConstants::EMAIL_LOGO_OPTION)) {echo(" style='display:none'");}?>/><br />
 				<?php
 			}
 			?>
 			<input id="ihf_upload_email_logo" type="text" size="36" name="<?php echo(iHomefinderConstants::EMAIL_LOGO_OPTION)?>" value="<?php echo(get_option(iHomefinderConstants::EMAIL_LOGO_OPTION))?>" />
 			<input id="ihf_upload_email_logo_button" type="button" value="Upload Logo" class="button-secondary"/>
-			<br/>
+			<br />
 			Enter an image URL or use an image from the Media Library
-			<br/><br/>
+			<br /><br />
 			
 			<h3>Business Information</h3>
 			<div style="float:left;width:320px;">
@@ -1186,14 +1144,14 @@ class iHomefinderAdmin {
 			<div style="clear:both"></div>	 	
 				
 			<p class="submit">
-			<input type="submit" class="button-primary" value="<?php _e('Save Changes') ?>" />
+			<input type="submit" class="button-primary" value="<?php _e("Save Changes") ?>" />
 			</p>
 										
-			<br/>
+			<br />
 			<input type="radio" name="<?php echo(iHomefinderConstants::EMAIL_DISPLAY_TYPE_OPTION)?>"
 				<?php if(iHomefinderAdminEmailDisplay::EMAIL_DISPLAY_TYPE_CUSTOM_HTML_VALUE == $emailDisplayType) {echo(" checked ");}?>
 				value="<?php echo(iHomefinderAdminEmailDisplay::EMAIL_DISPLAY_TYPE_CUSTOM_HTML_VALUE)?>">&nbsp;Custom HTML
-			<br/>
+			<br />
 			
 			<p/>
 			Insert custom HTML for your email header and footer.
@@ -1201,38 +1159,38 @@ class iHomefinderAdmin {
 			<h3>Email Header</h3>
 			<?php
 				$email_header_editor_settings =  array (
-					'textarea_rows' => 15,
-					'media_buttons' => true,
-					'teeny'         => true,
-					'tinymce'       => true,
-					'textarea_name' => iHomefinderConstants::EMAIL_HEADER_OPTION
+					"textarea_rows" => 15,
+					"media_buttons" => true,
+					"teeny" => true,
+					"tinymce" => true,
+					"textarea_name" => iHomefinderConstants::EMAIL_HEADER_OPTION
 				);
-				$emailHeaderContent='';
+				$emailHeaderContent = "";
 				if($emailDisplayType == iHomefinderAdminEmailDisplay::EMAIL_DISPLAY_TYPE_CUSTOM_HTML_VALUE) {
 					$emailHeaderContent=get_option(iHomefinderConstants::EMAIL_HEADER_OPTION);
 				}
-				wp_editor($emailHeaderContent, 'emailheaderid', $email_header_editor_settings);
+				wp_editor($emailHeaderContent, "emailheaderid", $email_header_editor_settings);
 			?>
 
-			<br/>
+			<br />
 			<h3>Email Footer</h3>
 			<?php
 				$email_footer_editor_settings =  array (
-					'textarea_rows' => 15,
-					'media_buttons' => true,
-					'teeny'         => true,
-					'tinymce'       => true,
-					'textarea_name' => iHomefinderConstants::EMAIL_FOOTER_OPTION
+					"textarea_rows" => 15,
+					"media_buttons" => true,
+					"teeny"  => true,
+					"tinymce" => true,
+					"textarea_name" => iHomefinderConstants::EMAIL_FOOTER_OPTION
 				);
-				$emailFooterContent='';
+				$emailFooterContent="";
 				if($emailDisplayType == iHomefinderAdminEmailDisplay::EMAIL_DISPLAY_TYPE_CUSTOM_HTML_VALUE) {
 					$emailFooterContent=get_option(iHomefinderConstants::EMAIL_FOOTER_OPTION);
 				}
-				wp_editor($emailFooterContent, 'emailfooterid', $email_footer_editor_settings);
+				wp_editor($emailFooterContent, "emailfooterid", $email_footer_editor_settings);
 			?>
 
 			<p class="submit">
-			<input type="submit" class="button-primary" value="<?php _e('Save Changes') ?>" />
+			<input type="submit" class="button-primary" value="<?php _e("Save Changes") ?>" />
 			</p>
 
 		</form>
@@ -1242,8 +1200,8 @@ class iHomefinderAdmin {
 	}
 
 	public function adminConfigurationForm() {
-		if (!current_user_can('manage_options'))  {
-			wp_die(__('You do not have sufficient permissions to access this page.'));
+		if (!current_user_can("manage_options"))  {
+			wp_die("You do not have sufficient permissions to access this page.");
 		}
 
 		//On Update, push the CSS_OVERRIDE_OPTION to iHomefinder
@@ -1278,13 +1236,13 @@ class iHomefinderAdmin {
 						<td>
 							<?php $colorScheme=get_option(iHomefinderConstants::COLOR_SCHEME_OPTION) ?>
 							<select name="<?php echo iHomefinderConstants::COLOR_SCHEME_OPTION ?>">
-								<option value="gray" <?php if($colorScheme=='gray') {?>selected <?php }?>>Gray</option>
-								<option value="red" <?php if($colorScheme=='red') {?>selected <?php }?>>Red</option>
-								<option value="green" <?php if($colorScheme=='green') {?>selected <?php }?>>Green</option>
-								<option value="orange" <?php if($colorScheme=='orange') {?>selected <?php }?>>Orange</option>
-								<option value="blue" <?php if($colorScheme=='blue') {?>selected <?php }?>>Blue</option>
-								<option value="light_blue" <?php if($colorScheme=='light_blue') {?>selected <?php }?>>Light Blue</option>
-								<option value="blue_gradient" <?php if($colorScheme=='blue_gradient') {?>selected <?php }?>>Blue Gradient</option>
+								<option value="gray" <?php if($colorScheme=="gray") {?>selected <?php }?>>Gray</option>
+								<option value="red" <?php if($colorScheme=="red") {?>selected <?php }?>>Red</option>
+								<option value="green" <?php if($colorScheme=="green") {?>selected <?php }?>>Green</option>
+								<option value="orange" <?php if($colorScheme=="orange") {?>selected <?php }?>>Orange</option>
+								<option value="blue" <?php if($colorScheme=="blue") {?>selected <?php }?>>Blue</option>
+								<option value="light_blue" <?php if($colorScheme=="light_blue") {?>selected <?php }?>>Light Blue</option>
+								<option value="blue_gradient" <?php if($colorScheme=="blue_gradient") {?>selected <?php }?>>Blue Gradient</option>
 							</select>
 						</td>
 					</tr>
@@ -1298,7 +1256,7 @@ class iHomefinderAdmin {
 					</tr>
 				</table>
 				<p class="submit">
-					<input type="submit" class="button-primary" value="<?php _e('Save Changes') ?>" />
+					<input type="submit" class="button-primary" value="<?php _e("Save Changes") ?>" />
 				</p>
 			</form>
 		</div>
@@ -1306,231 +1264,197 @@ class iHomefinderAdmin {
 	}
 
 	private function updateCommunityPages($title, $cityZip, $propertyType, $bed, $bath, $minPrice, $maxPrice) {
-		$errorMessage="";
-		if($cityZip == null ||  $cityZip == '') {
-			$errorMessage .= 'Please select a location<br/>';
+		$errorMessage = null;
+		if($cityZip == null || $cityZip == "") {
+			$errorMessage .= "Please select a location<br />";
 		}
-		if($title == null ||  $title == '') {
-			$errorMessage .=  'Please enter a title';
+		if($title == null || $title == "") {
+			$errorMessage .=  "Please enter a title";
 		}
-		if($errorMessage == "") {
+		if(empty($errorMessage)) {
 			$shortCode=iHomefinderShortcodeDispatcher::getInstance()->buildSearchResultsShortCode($cityZip, $propertyType, $bed, $bath, $minPrice, $maxPrice);
-
 			$post = array(
-			  'comment_status' => 'closed' ,// 'closed' means no comments.
-			  'ping_status'    => 'closed', // 'closed' means pingbacks or trackbacks turned off
-			  'post_content'   =>  $shortCode, //The full text of the post.
-			  'post_name'      => $title, // The name (slug) for your post
-			  'post_status'    => 'publish',  //Set the status of the new post.
-			  'post_title'     => $title, //The title of your post.
-			  'post_type'      => 'page' //You may want to insert a regular post, page, link, a menu item or some custom post type
+			  "comment_status" => "closed" ,// "closed" means no comments.
+			  "ping_status" => "closed", // "closed" means pingbacks or trackbacks turned off
+			  "post_content" =>  $shortCode, //The full text of the post.
+			  "post_name" => $title, // The name (slug) for your post
+			  "post_status" => "publish",  //Set the status of the new post.
+			  "post_title" => $title, //The title of your post.
+			  "post_type" => "page" //You may want to insert a regular post, page, link, a menu item or some custom post type
 			);
-
 			$postId = wp_insert_post($post);
 			iHomefinderMenu::getInstance()->addPageToCommunityPages($postId);
-
 		}
-
 		return $errorMessage;
 	}
 
 	public function communityPagesForm() {
-
-		$errorMessage=false;
-
+		$errorMessage = false;
 		//On Update, push the CSS_OVERRIDE_OPTION to iHomefinder
 		if($this->isUpdated()) {
 			//call function here to pass the activation key to ihf and update the CSS Override value
-			$title=$_REQUEST["ihfPageTitle"];
-			$cityZip=$_REQUEST["cityZip"];
-			$propertyType=$_REQUEST["propertyType"];
-			$bed=$_REQUEST["bed"];
-			$bath=$_REQUEST["bath"];
-			$minPrice=$_REQUEST["minPrice"];
-			$maxPrice=$_REQUEST["maxPrice"];
-
-			$errorMessage=$this->updateCommunityPages($title, $cityZip, $propertyType, $bed, $bath, $minPrice, $maxPrice);
+			$title = $_REQUEST["ihfPageTitle"];
+			$cityZip = $_REQUEST["cityZip"];
+			$propertyType = $_REQUEST["propertyType"];
+			$bed = $_REQUEST["bed"];
+			$bath = $_REQUEST["bath"];
+			$minPrice = $_REQUEST["minPrice"];
+			$maxPrice = $_REQUEST["maxPrice"];
+			$errorMessage = $this->updateCommunityPages($title, $cityZip, $propertyType, $bed, $bath, $minPrice, $maxPrice);
 		}
-
-
-?>
+		?>
 		<div class="wrap">
-		<h2>Community Pages</h2>
-		<div style="float:left; padding-right: 40px;">
-			<h3>Create a new Community Page</h3>
-			<div>Enter search criteria to create a new page under the Community Pages menu.</div>
-
-			<?php
-				if($errorMessage) {
-					echo('<br/>' . $errorMessage . '<br/>');
-				}
-			?>
-			<form method="post">
-				<input type="hidden" name="updated" value="true"/>
-				<?php settings_fields(iHomefinderConstants::COMMUNITY_PAGES); ?>
-
-				<div style="margin: 10px;">
-
+			<h2>Community Pages</h2>
+			<div style="float:left; padding-right: 40px;">
+				<h3>Create a new Community Page</h3>
+				<div>Enter search criteria to create a new page under the Community Pages menu.</div>
+				<?php
+					if($errorMessage) {
+						echo "<br />" . $errorMessage . "<br />";
+					}
+				?>
+				<form method="post">
+					<input type="hidden" name="settings-updated" value="true"/>
+					<?php settings_fields(iHomefinderConstants::COMMUNITY_PAGES); ?>
+					<div style="margin: 10px;"></div>
+					<div style="float:left; margin: 10px;">
+						<b>Location:</b>
+						<br />
+						<div style="padding-bottom: 9px;">
+							<?php $this->createCityZipAutoComplete()?>
+						</div>
+						<b>Page Title:</b>
+						<br />
+						<div style="padding-bottom: 9px;">
+							<input type="text" id="ihfPageTitle" name="ihfPageTitle" style="width: 220px;" />
+						</div>
+						<b>Property Type:</b><br />
+						<div>
+							<?php $this->createPropertyTypeSelect()?>
+						</div>
+					</div>
+					<div style="float:left; margin: 10px;">
+						<b>Bed:</b>
+						<br />
+						<div style="padding-bottom: 9px;">
+							<input type="text" name="bed" style="width: 220px;" />
+						</div>
+						<b>Bath:</b>
+						<br />
+						<div style="padding-bottom: 9px;">
+							<input type="text" name="bath" style="width: 220px;" />
+						</div>
+						<b>Min Price:</b>
+						<br />
+						<div style="padding-bottom: 9px;">
+							<input type="text" name="minPrice" style="width: 220px;" />
+						</div>
+						<b>Max Price:</b>
+						<br />
+						<div style="padding-bottom: 9px;">
+							<input type="text" name="maxPrice" style="width: 220px;" />
+						</div>
+					</div>
+					<div style="clear:both;"></div>
+					<p class="submit">
+						<input type="submit" class="button-primary" value="<?php _e("Save") ?>" />
+					</p>
+				</form>
+			</div>
+			<div style="float: left">
+				<h3>Existing Community Pages</h3>
+				<div style="padding-bottom: 9px;">Click the page name to edit Community Page content.</div>
+				<div style="padding-bottom: 9px;">
+					Change or edit the links that appear within the
+					<a href="<?php echo site_url() ?>/wp-admin/nav-menus.php">Menus</a>
+					section.
 				</div>
-
-				<div  style="float:left; margin: 10px;">
-					<b>Location:</b><br/>
-					<div style="padding-bottom: 9px;"><?php $this->createCityZipAutoComplete()?></div>
-					<b>Page Title:</b><br/>
-					<div style="padding-bottom: 9px;"><input type="text" id="ihfPageTitle" name="ihfPageTitle"/></div>
-					<b>Property Type:</b><br/>
-					<div><?php $this->createPropertyTypeSelect()?></div>
-				</div>
-
-				<div  style="float:left; margin: 10px;">
-					<b>Bed:</b><br/>
-					<div><input type="text" name="bed" /></div>
-					<b>Bath:</b><br/>
-					<div><input type="text" name="bath" /></div>
-					<b>Min Price:</b><br/>
-					<div><input type="text" name="minPrice" /></div>
-					<b>Max Price:</b><br/>
-					<div><input type="text" name="maxPrice" /></div>
-
-				</div>
-				<div style="clear:both;"></div>
-				<p class="submit">
-				<input type="submit" class="button-primary" value="<?php _e('Save') ?>" />
-				</p>
-
-			</form>
-		</div>
-		<div style="float: left">
-			<h3>Existing Community Pages</h3>
-			<div style="padding-bottom: 9px;">Click the page name to edit Community Page content.</div>
-			<div style="padding-bottom: 9px;">Change or edit the links that appear within the <a href="<?php echo(site_url())?>/wp-admin/nav-menus.php">Menus</a> section.</div>
-			<?php
-
-				$communityPageMenuItems=iHomefinderMenu::getInstance()->getCommunityPagesMenuItems();
-				echo('<ul>');
-				foreach((array) $communityPageMenuItems as $key => $menu_item) {
-					echo('<li>');
-					echo('<a href="post.php?post=' . $menu_item->object_id . '&action=edit">');
-					echo($menu_item->title);
-					echo('</a>');
-					echo('</li>');
-				}
-				echo('</ul>');
-			?>
-
-		</div>
-
-		<div>
-
-		</div>
+				<?php
+					$communityPageMenuItems = (array) iHomefinderMenu::getInstance()->getCommunityPagesMenuItems();
+					?>
+					<ul>
+						<?php
+						foreach($communityPageMenuItems as $key => $menu_item) {
+							?>
+							<li>
+								<a href="post.php?post=<?php echo $menu_item->object_id ?>&action=edit">
+									<?php echo $menu_item->title; ?>
+								</a>
+							</li>
+							<?php
+						}
+						?>
+					</ul>
+					<?php
+				?>
+			</div>
 		</div>
 		<?php
 	}
 
 	public function adminOptionsPagesForm() {
-		$permissions=iHomefinderPermissions::getInstance();
+		$permissions = iHomefinderPermissions::getInstance();
 		if($this->isUpdated()) {
 			//call function here will re-activate the plugin and re-register the new URL patterns
 			$this->updateAuthenticationToken();
 		}
-		$pageConfig=iHomefinderAdminPageConfig::getInstance();
+		$pageConfig = iHomefinderAdminPageConfig::getInstance();
 		?>
 		<div class="wrap">
 			<h2>IDX Pages</h2>
-			<br/>
+			<br />
 			<div>
-
-			<form method="post" action="options.php">
-				<input type="submit" class="button-primary" value="<?php _e('Save Changes') ?>" />
-				<?php settings_fields(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG); ?>
-
-				<?php
-
-					$pageConfig->getDetailPageSetup();
-					echo('<p/>');
-
-					$pageConfig->getSearchPageSetup();
-					echo('<p/>');
-		
-					if($permissions->isMapSearchEnabled()) {
-						$pageConfig->getMapSearchPageSetup();
-						echo('<p/>');
-					}
-
-					$pageConfig->getAdvSearchPageSetup();
-					echo('<p/>');
-
-					if($permissions->isOrganizerEnabled()) {
-						$pageConfig->getOrganizerLoginPageSetup();
-						echo('<p/>');
-					}
-
-					if($permissions->isEmailUpdatesEnabled()) {
-						$pageConfig->getEmailAlertsPageSetup();
-						echo('<p/>');
-					}
-
-					if($permissions->isFeaturedPropertiesEnabled()) {
-						$pageConfig->getFeaturedPageSetup();
-						echo('<p/>');
-					}
-
-					if($permissions->isHotSheetEnabled()) {
-						$pageConfig->getHotsheetPageSetup();
-						echo('<p/>');
-					}
-
-					if($permissions->isContactFormEnabled()) {
-						$pageConfig->getContactFormPageSetup();
-						echo('<p/>');
-					}
-
-					if($permissions->isValuationEnabled()) {
-						$pageConfig->getValuationFormPageSetup();
-						echo('<p/>');
-					}
-
-					$pageConfig->getOpenHomeSearchFormPageSetup();
-					echo('<p/>');
-
-					if($permissions->isSupplementalListingsEnabled()) {
-						$pageConfig->getSupplementalListingPageSetup();
-						echo('<p/>');
-					}
-
-					if($permissions->isSoldPendingEnabled()) {
-						$pageConfig->getSoldFeaturedListingPageSetup();
-						echo('<p/>');
-
-						$pageConfig->getSoldDetailPageSetup();
-						echo('<p/>');
-					}
-
-					if($permissions->isOfficeEnabled()) {
-						$pageConfig->getOfficeListPageSetup();
-						echo('<p/>');
-
-						$pageConfig->getOfficeDetailPageSetup();
-						echo('<p/>');
-					}
-
-					if($permissions->isAgentBioEnabled()) {
-						$pageConfig->getAgentListPageSetup();
-						echo('<p/>');
-
-						$pageConfig->getAgentDetailPageSetup();
-						echo('<p/>');
-					}
-
-					$pageConfig->getDefaultPageSetup();
-
-				?>
-
-				<div>* Template selection is compatible only with select themes.</div>
-				<p class="submit">
-				<input type="submit" class="button-primary" value="<?php _e('Save Changes') ?>" />
-				</p>
-			</form>
+				<form method="post" action="options.php">
+					<input type="submit" class="button-primary" value="<?php _e("Save Changes") ?>" />
+					<?php settings_fields(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG); ?>
+					<?php
+						$pageConfig->getDetailPageSetup();
+						$pageConfig->getSearchPageSetup();
+						if($permissions->isMapSearchEnabled()) {
+							$pageConfig->getMapSearchPageSetup();
+						}
+						$pageConfig->getAdvSearchPageSetup();
+						if($permissions->isOrganizerEnabled()) {
+							$pageConfig->getOrganizerLoginPageSetup();
+						}
+						if($permissions->isEmailUpdatesEnabled()) {
+							$pageConfig->getEmailAlertsPageSetup();
+						}
+						if($permissions->isFeaturedPropertiesEnabled()) {
+							$pageConfig->getFeaturedPageSetup();
+						}
+						if($permissions->isHotSheetEnabled()) {
+							$pageConfig->getHotsheetPageSetup();
+						}
+						if($permissions->isContactFormEnabled()) {
+							$pageConfig->getContactFormPageSetup();
+						}
+						if($permissions->isValuationEnabled()) {
+							$pageConfig->getValuationFormPageSetup();
+						}
+						$pageConfig->getOpenHomeSearchFormPageSetup();
+						if($permissions->isSupplementalListingsEnabled()) {
+							$pageConfig->getSupplementalListingPageSetup();
+						}
+						if($permissions->isSoldPendingEnabled()) {
+							$pageConfig->getSoldFeaturedListingPageSetup();
+							$pageConfig->getSoldDetailPageSetup();
+						}
+						if($permissions->isOfficeEnabled()) {
+							$pageConfig->getOfficeListPageSetup();
+							$pageConfig->getOfficeDetailPageSetup();
+						}
+						if($permissions->isAgentBioEnabled()) {
+							$pageConfig->getAgentListPageSetup();
+							$pageConfig->getAgentDetailPageSetup();
+						}
+						$pageConfig->getDefaultPageSetup();
+					?>
+					<div>* Template selection is compatible only with select themes.</div>
+					<p class="submit">
+						<input type="submit" class="button-primary" value="<?php _e("Save Changes") ?>" />
+					</p>
+				</form>
 			</div>
 		</div>
 		<?php
@@ -1538,16 +1462,14 @@ class iHomefinderAdmin {
 
 
 	private function createCityZipAutoComplete() {
-		$formData=iHomefinderSearchFormFieldsUtility::getInstance()->getFormData();
-		$cityZipList=$formData->getCityZipList();
-		$cityZipListJson=json_encode($cityZipList);
-
-		wp_enqueue_script('jquery');
-		wp_enqueue_script('jquery-ui-core');
-		wp_enqueue_script('jquery-ui-autocomplete', '', array('jquery-ui-widget', 'jquery-ui-position'), '1.8.6');
-		wp_enqueue_style('jquery-ui-autocomplete', plugins_url('css/jquery-ui-1.8.18.custom.css', __FILE__));
+		$formData = iHomefinderSearchFormFieldsUtility::getInstance()->getFormData();
+		$cityZipList = $formData->getCityZipList();
+		$cityZipListJson = json_encode($cityZipList);
+		wp_enqueue_script("jquery");
+		wp_enqueue_script("jquery-ui-core");
+		wp_enqueue_script("jquery-ui-autocomplete", "", array("jquery-ui-widget", "jquery-ui-position"), "1.8.6");
+		wp_enqueue_style("jquery-ui-autocomplete", plugins_url("css/jquery-ui-1.8.18.custom.css", __FILE__));
 		?>
-
 		<script type="text/javascript">
 			jQuery(document).ready(function() {
 				jQuery("input#ihfCommunityPagesAutoComplete").focus(function() {jQuery("input#ihfCommunityPagesAutoComplete").val("");});
@@ -1560,7 +1482,7 @@ class iHomefinderAdmin {
 						var results=new Array();
 						for(var i=0; i<data.length;i++) {
 							var oneTerm=data[i];
-							var value=oneTerm.value + '';
+							var value=oneTerm.value + "";
 							value=value.toLowerCase();
 							if(value && value != null && value.indexOf(searchTerm) == 0) {
 								results.push(oneTerm);
@@ -1570,33 +1492,31 @@ class iHomefinderAdmin {
 					},
 					select: function(event, ui) {
 						//When an item is selected, set the text value for the link
-						jQuery('#ihfPageTitle').val(ui.item.label);
+						jQuery("#ihfPageTitle").val(ui.item.label);
 					},
 					selectFirst: true
 				});
 			});
 		</script>
-		<input type="text" id="ihfCommunityPagesAutoComplete"
-				name="cityZip"
-				value="Enter City - OR - Zipcode"
-				size="30"/>
+		<input type="text" id="ihfCommunityPagesAutoComplete" name="cityZip" placeholder="Enter City - OR - Postal Code" style="width: 220px;" />
 		<?php
 	}
 
 	private function createPropertyTypeSelect() {
-		$formData=iHomefinderSearchFormFieldsUtility::getInstance()->getFormData();
+		$formData = iHomefinderSearchFormFieldsUtility::getInstance()->getFormData();
 		if(isset($formData)) {
 			$propertyTypesList=$formData->getPropertyTypesList();
 			if(isset($propertyTypesList)) {
-				$selectText = "<SELECT id='propertyType' name='propertyType'>";
+				$selectText = "<select id='propertyType' name='propertyType' style='width: 220px;'>";
 				foreach ($propertyTypesList as $i => $value) {
 					$selectText .= "<option value='" . $propertyTypesList[$i]->propertyTypeCode . "'>";
 					$selectText .=  $propertyTypesList[$i]->displayName;
 					$selectText .=  "</option>";
 				}
-				$selectText .= "</SELECT>";
-				echo($selectText);
+				$selectText .= "</select>";
+				echo $selectText;
 			}
 		}
 	}
+	
 }

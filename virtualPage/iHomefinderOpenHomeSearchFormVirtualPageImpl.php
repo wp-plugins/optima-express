@@ -4,9 +4,6 @@ class iHomefinderOpenHomeSearchFormVirtualPageImpl extends iHomefinderAbstractVi
 	
 	private $path = "open-home-search";
 	private $title = "Open Home Search";
-
-	public function __construct() {
-	}
 	
 	public function getTitle() {
 		$customTitle = get_option(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_OPEN_HOME_SEARCH_FORM);
@@ -31,18 +28,15 @@ class iHomefinderOpenHomeSearchFormVirtualPageImpl extends iHomefinderAbstractVi
 	
 			
 	public function getContent() {
-		iHomefinderLogger::getInstance()->debug('Begin iHomefinderOpenHomeSearchFormPageImpl');
-		$requestData = 'method=handleRequest'
-			. '&viewType=json'
-			. '&requestType=open-home-search-form'
-			. '&phpStyle=true';
-		
-		$requestData = iHomefinderRequestor::getInstance()->addVarsToUrl($requestData, $_REQUEST);
-		$this->remoteResponse = iHomefinderRequestor::getInstance()->remoteGetRequest($requestData);
-		$body = iHomefinderRequestor::getInstance()->getContent($this->remoteResponse);
-		
-		iHomefinderLogger::getInstance()->debug('End iHomefinderOpenHomeSearchFormPageImpl');
-		iHomefinderLogger::getInstance()->debug($requestData);
+		$this->remoteRequest
+			->addParameter("method", "handleRequest")
+			->addParameter("viewType", "json")
+			->addParameter("requestType", "open-home-search-form")
+			->addParameter("phpStyle", true)
+		;
+		$this->remoteRequest->addParameters($_REQUEST);
+		$this->remoteResponse = $this->remoteRequest->remoteGetRequest();
+		$body = $this->remoteRequest->getContent($this->remoteResponse);
 		return $body;
 	}
 }

@@ -3,11 +3,9 @@
 class iHomefinderOrganizerEditSubscriberVirtualPageImpl extends iHomefinderAbstractVirtualPage {
 	
 	private $path = "property-organizer-edit-subscriber";	
-	public function __construct() {
-		
-	}
+	
 	public function getTitle() {
-		return "Organizer Help";
+		return "Organizer Profile";
 	}	
 
 	public function getPageTemplate() {
@@ -19,17 +17,15 @@ class iHomefinderOrganizerEditSubscriberVirtualPageImpl extends iHomefinderAbstr
 	}
 			
 	public function getContent() {
-		iHomefinderLogger::getInstance()->debug('Begin iHomefinderOrganizerEditSubscriberVirtualPageImpl');
-		
-		$requestData = 'method=handleRequest&viewType=json&requestType=property-organizer-edit-subscriber';
-		$requestData = iHomefinderRequestor::getInstance()->appendQueryVarIfNotEmpty($requestData, "phpStyle", "true");
-		$requestData = iHomefinderRequestor::getInstance()->addVarsToUrl($requestData, $_REQUEST);
-		$this->remoteResponse = iHomefinderRequestor::getInstance()->remoteGetRequest($requestData);
-		$body = iHomefinderRequestor::getInstance()->getContent($this->remoteResponse);
-		
-		iHomefinderLogger::getInstance()->debug($requestData);
-		iHomefinderLogger::getInstance()->debug('End iHomefinderOrganizerEditSubscriberVirtualPageImpl');
-		
+		$this->remoteRequest
+			->addParameter("method", "handleRequest")
+			->addParameter("viewType", "json")
+			->addParameter("requestType", "property-organizer-edit-subscriber")
+			->addParameter("phpStyle", true)
+		;
+		$this->remoteRequest->addParameters($_REQUEST);
+		$this->remoteResponse = $this->remoteRequest->remoteGetRequest();
+		$body = $this->remoteRequest->getContent($this->remoteResponse);
 		return $body;
 	}
 }

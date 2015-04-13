@@ -4,9 +4,6 @@ class iHomefinderOrganizerActivateSubscriberVirtualPageImpl extends iHomefinderA
 	
 	private $path = "property-organizer-activate";
 	
-	public function __construct() {
-		
-	}
 	public function getTitle() {
 		return "Subscriber Activation";
 	}		
@@ -20,19 +17,15 @@ class iHomefinderOrganizerActivateSubscriberVirtualPageImpl extends iHomefinderA
 	}
 	
 	public function getContent() {
-		iHomefinderLogger::getInstance()->debug('Begin iHomefinderOrganizerActivateSubscriberVirtualPageImpl');
+		$this->remoteRequest
+			->addParameter("method", "handleRequest")
+			->addParameter("viewType", "json")
+			->addParameter("requestType", "property-organizer-activate-subscriber")
+		;
+		$this->remoteRequest->addParameters($_REQUEST);
 		
-		$email=iHomefinderUtility::getInstance()->getQueryVar('email');
-		
-		$requestData = 'method=handleRequest&viewType=json&requestType=property-organizer-activate-subscriber';
-		$requestData = iHomefinderRequestor::getInstance()->addVarsToUrl($requestData, $_REQUEST);
-		
-		$this->remoteResponse = iHomefinderRequestor::getInstance()->remoteGetRequest($requestData);
-		$body = iHomefinderRequestor::getInstance()->getContent($this->remoteResponse);
-		
-		iHomefinderLogger::getInstance()->debug($requestData);
-		iHomefinderLogger::getInstance()->debug('End iHomefinderOrganizerActivateSubscriberVirtualPageImpl');
-		
+		$this->remoteResponse = $this->remoteRequest->remoteGetRequest();
+		$body = $this->remoteRequest->getContent($this->remoteResponse);
 		return $body;
 	}
 }

@@ -5,8 +5,16 @@
  */
 class iHomefinderCacheUtility {
 	
+	private static $instance;
+	
 	public function __construct() {
-		
+	}
+	
+	public static function getInstance() {
+		if(!isset(self::$instance)) {
+			self::$instance = new iHomefinderCacheUtility();
+		}
+		return self::$instance;
 	}
 	
 	public function getItem($key) {

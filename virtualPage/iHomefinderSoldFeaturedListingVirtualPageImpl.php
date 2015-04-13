@@ -2,11 +2,8 @@
 
 class iHomefinderSoldFeaturedListingVirtualPageImpl extends iHomefinderAbstractVirtualPage {
 	
-	private $path="sold-featured-listing";
-	private $title="Sold Properties";
-
-	public function __construct() {
-	}
+	private $path = "sold-featured-listing";
+	private $title = "Sold Properties";
 	
 	public function getTitle() {
 		$customTitle = get_option(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_SOLD_FEATURED);
@@ -32,19 +29,16 @@ class iHomefinderSoldFeaturedListingVirtualPageImpl extends iHomefinderAbstractV
 			
 	public function getContent() {
 		iHomefinderStateManager::getInstance()->saveLastSearch();
-		iHomefinderLogger::getInstance()->debug('Begin iHomefinderSoldFeaturedPageImpl');
-		$requestData = 'method=handleRequest'
-			. '&viewType=json'
-			. '&requestType=sold-featured-listing'
-			. '&phpStyle=true'
-			. '&includeSearchSummary=true';
-		
-		$requestData = iHomefinderRequestor::getInstance()->addVarsToUrl($requestData, $_REQUEST);
-		$this->remoteResponse = iHomefinderRequestor::getInstance()->remoteGetRequest($requestData);
-		$body = iHomefinderRequestor::getInstance()->getContent($this->remoteResponse);
-		
-		iHomefinderLogger::getInstance()->debug('End iHomefinderSoldFeaturedPageImpl');
-		iHomefinderLogger::getInstance()->debug($requestData);
+		$this->remoteRequest
+			->addParameter("method", "handleRequest")
+			->addParameter("viewType", "json")
+			->addParameter("requestType", "sold-featured-listing")
+			->addParameter("phpStyle", true)
+			->addParameter("includeSearchSummary", true)
+		;
+		$this->remoteRequest->addParameters($_REQUEST);
+		$this->remoteResponse = $this->remoteRequest->remoteGetRequest();
+		$body = $this->remoteRequest->getContent($this->remoteResponse);
 		return $body;
 	}
 }

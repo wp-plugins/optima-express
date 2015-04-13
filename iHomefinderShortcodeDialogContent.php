@@ -14,8 +14,8 @@ class iHomefinderShortcodeDialogContent {
 		return self::$instance;
 	}
 	
-	public function getShortCodeDialogContent() {
-		$ihfShortCodeDialog=new iHomefinderShortcodeDialog();
+	public function getShortcodeDialogContent() {
+		$shortcodeDialog = new iHomefinderShortcodeDialog();
 		?>
 		<div class="panel-body">
 			<ul class="nav nav-tabs" id="ihf-dialog-tabs">
@@ -28,205 +28,256 @@ class iHomefinderShortcodeDialogContent {
 				<li>
 					<a href="#IdxPages" data-toggle="tab">IDX Pages</a>
 				</li>
-				<?php if(iHomefinderPermissions::getInstance()->isAgentBioEnabled()) {?>
+				<?php if(iHomefinderPermissions::getInstance()->isAgentBioEnabled()) { ?>
 					<li>
 						<a href="#Broker" data-toggle="tab">Broker</a>
 					</li>
-				<?php }?>
+				<?php } ?>
 			</ul>
 			<div class="tab-content">
 				<div class="tab-pane fade in active" id="Listings">
-					<div class="row">
-						<h4></h4>
-						<div class="col-xs-4">
-							
-							<div class="form-group">
-								<div class="radio">
-									<label class="control-label">
-										<input name="shortcodeType" type="radio" onclick="jQuery('.listingGalleryMenu').show(); jQuery('.ihfMenu').hide();">
-										Listing Gallery
-									</label>
-								</div>
-								<div class="form-group listingGalleryMenu" style="display: none;">
-									<select class="form-control" name="header" onchange="jQuery('.ihfMenu').hide(); jQuery('#' + this.value).toggle();">
-										<option value="">Type</option>
-										<option value="featuredMenu">Featured Listings</option>
-										<?php if(iHomefinderPermissions::getInstance()->isAgentBioEnabled()) {?>
-											<option value="agentMenu">Agent Listing</option>
-										<?php }?>
-										<?php if(iHomefinderPermissions::getInstance()->isOfficeEnabled()) {?>
-											<option value="officeMenu">Office Listing</option>
-										<?php }?>
+					<h4></h4>
+					<div class="col-xs-4">
+						<div class="form-group">
+							<div class="radio">
+								<label class="control-label">
+									<input name="shortcodeType" type="radio" onclick="jQuery('.listingGalleryMenu').show(); jQuery('.ihfMenu').hide();">
+									Listing Gallery
+								</label>
+							</div>
+							<div class="form-group listingGalleryMenu" style="display: none;">
+								<select class="form-control" name="header" onchange="jQuery('.ihfMenu').hide(); jQuery('#' + this.value).toggle();">
+									<option value="">Type</option>
+									<option value="featuredMenu">Featured Listings</option>
+									<?php if(iHomefinderPermissions::getInstance()->isAgentBioEnabled()) { ?>
+										<option value="agentMenu">Agent Listing</option>
+									<?php } ?>
+									<?php if(iHomefinderPermissions::getInstance()->isOfficeEnabled()) { ?>
+										<option value="officeMenu">Office Listing</option>
+									<?php } ?>
+									<?php if(iHomefinderPermissions::getInstance()->isHotSheetEnabled()) { ?>
 										<option value="toppicksMenu">Saved Search</option>
-										<option value="searchMenu">Search</option>
-									</select>
-								</div>
-								<?php if(iHomefinderLayoutManager::getInstance()->supportsListingGallery()) {?>
-								<div class="radio">
+									<?php } ?>
+									<option value="searchMenu">Search</option>
+								</select>
+							</div>
+							<?php if(iHomefinderLayoutManager::getInstance()->supportsListingGallery()) { ?>
+							<div class="radio">
+								<label class="control-label">
+									<input name="shortcodeType" type="radio" onclick="jQuery('.listingGalleryMenu').hide(); jQuery('.ihfMenu').hide(); jQuery('#listingGalleryMenu').toggle();">
+									Gallery Slider
+								</label>
+							</div>
+							<?php } ?>
+						</div>
+					</div>
+					<div class="col-xs-8">
+						<div id="featuredMenu" style="display: none;" class="ihfMenu">
+							<form onsubmit="return false;" action="#">
+								<div class="checkbox">
 									<label class="control-label">
-										<input name="shortcodeType" type="radio" onclick="jQuery('.listingGalleryMenu').hide(); jQuery('.ihfMenu').hide(); jQuery('#listingGalleryMenu').toggle();">
-										Gallery Slider
+										<input type="checkbox" value="true" name="includeMap" />
+										Include Map
 									</label>
 								</div>
-								<?php }?>
-							</div>
+								<div class="form-group">
+									<label class="control-label">Sort</label>
+									<div>
+										<?php $shortcodeDialog->createSortSelect(true); ?>
+									</div>
+								</div>
+								<?php if(iHomefinderLayoutManager::getInstance()->supportsResultsDisplayType()) { ?>
+									<div class="form-group">
+										<label class="control-label">Display Type</label>
+										<div>
+											<select class="form-control" name="displayType">
+												<option value="">Default</option>
+												<option value="list">List</option>
+												<option value="grid">Grid</option>
+											</select>
+										</div>
+									</div>
+								<?php } ?>
+								<?php if(iHomefinderLayoutManager::getInstance()->supportsResultsResultsPerPage()) { ?>
+									<div class="form-group">
+										<label class="control-label">Results Per Page</label>
+										<div>
+											<input class="form-control" type="number" name="resultsPerPage" />
+										</div>
+									</div>
+								<?php } ?>
+								<div class="form-group">
+									<label class="control-label">Display Header</label>
+									<div>
+										<select class="form-control" name="header" required="required">
+											<option value="true">Yes</option>
+											<option value="false">No</option>
+										</select>
+									</div>
+								</div>
+								<input class="btn btn-default" type="button" name="insertFeatured" value="Insert" onclick="return IhfGalleryDialog.validateForm(this.form) && IhfGalleryDialog.insertFeaturedListings(this.form, '<?php echo(iHomefinderShortcodeDispatcher::getInstance()->getFeaturedShortcode()) ?>');" />
+							</form>
 						</div>
-						<div class="col-xs-8">
-							<div id="featuredMenu" style="display: none;" class="ihfMenu">
-								<form onsubmit="return false;" action="#">
-									<div class="checkbox">
-										<label class="control-label">
-											<input type="checkbox" value="true" name="includeMap" />
-											Include Map
-										</label>
+						<div id="toppicksMenu" style="display: none;" class="ihfMenu">
+							<form onsubmit="return false;" action="#">
+								<div class="form-group">
+									<label class="control-label">Saved Search</label>
+									<div>
+										<?php $shortcodeDialog->createTopPicksSelect(true); ?>
 									</div>
-									<div class="form-group">
-										<label class="control-label">Sort</label>
-										<div>
-											<?php $ihfShortCodeDialog->createSortSelect(true);?>
-										</div>
+								</div>
+								<div class="checkbox">
+									<label class="control-label">
+										<input type="checkbox" value="true" name="includeMap" />
+										Include Map
+									</label>
+								</div>
+								<div class="form-group">
+									<label class="control-label">Sort</label>
+									<div>
+										<?php $shortcodeDialog->createSortSelect(); ?>
 									</div>
+								</div>
+								<?php if(iHomefinderLayoutManager::getInstance()->supportsResultsDisplayType()) { ?>
 									<div class="form-group">
-										<label class="control-label">Display Header</label>
+										<label class="control-label">Display Type</label>
 										<div>
-											<select class="form-control" name="header" required="required">
-												<option value="true">Yes</option>
-												<option value="false">No</option>
+											<select class="form-control" name="displayType">
+												<option value="">Default</option>
+												<option value="list">List</option>
+												<option value="grid">Grid</option>
 											</select>
 										</div>
 									</div>
-									<input class="btn btn-default" type="button" name="insertFeatured" value="Insert" onclick="return IhfGalleryDialog.validateForm(this.form) && IhfGalleryDialog.insertFeaturedListings(this.form, '<?php echo(iHomefinderShortcodeDispatcher::getInstance()->getFeaturedShortcode()) ?>');" />
-								</form>
-							</div>
-							
-							
-							<div id="toppicksMenu" style="display: none;" class="ihfMenu">
-								<form onsubmit="return false;" action="#">
+								<?php } ?>
+								<?php if(iHomefinderLayoutManager::getInstance()->supportsResultsResultsPerPage()) { ?>
 									<div class="form-group">
-										<label class="control-label">Saved Search</label>
+										<label class="control-label">Results Per Page</label>
 										<div>
-											<?php $ihfShortCodeDialog->createTopPicksSelect(true); ?>
+											<input class="form-control" type="number" name="resultsPerPage" />
 										</div>
 									</div>
-									<div class="checkbox">
-										<label class="control-label">
-											<input type="checkbox" value="true" name="includeMap" />
-											Include Map
-										</label>
+								<?php } ?>
+								<div class="form-group">
+									<label class="control-label">Display Header</label>
+									<div>
+										<select class="form-control" name="header" required="required">
+											<option value="true">Yes</option>
+											<option value="false">No</option>
+										</select>
 									</div>
-									<div class="form-group">
-										<label class="control-label">Sort</label>
-										<div>
-											<?php $ihfShortCodeDialog->createSortSelect(); ?>
-										</div>
+								</div>
+								<input class="btn btn-default" type="button" name="insertToppicks" value="Insert" onclick="return IhfGalleryDialog.validateForm(this.form) && IhfGalleryDialog.insertToppicks(this.form, '<?php echo(iHomefinderShortcodeDispatcher::getInstance()->getToppicksShortCode()) ?>');" />
+							</form>
+						</div>
+						<div id="searchMenu" style="display: none;" class="ihfMenu">
+							<form onsubmit="return false;" action="#">
+								<div class="form-group">
+									<label class="control-label">Cities</label>
+									<div>
+										<?php $shortcodeDialog->createCitySelect(true); ?>
 									</div>
+								</div>
+								<div class="form-group">
+									<label class="control-label">Property Type</label>
+									<div>
+										<?php $shortcodeDialog->createPropertyTypeSelect(true); ?>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="control-label">Bed</label>
+									<div>
+										<input class="form-control" type="number" name="bed" />
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="control-label">Bath</label>
+									<div>
+										<input class="form-control" type="number" name="bath" />
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="control-label">Min Price</label>
+									<div>
+										<input class="form-control" type="number" name="minPrice" />
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="control-label">Max Price</label>
+									<div>
+										<input class="form-control" type="number" name="maxPrice" />
+									</div>
+								</div>
+								<div class="checkbox">
+									<label class="control-label">
+										<input type="checkbox" value="true" name="includeMap" />
+										Include Map
+									</label>
+								</div>
+								<div class="form-group">
+									<label class="control-label">Sort</label>
+									<div>
+										<?php $shortcodeDialog->createSortSelect(true); ?>
+									</div>
+								</div>
+								<?php if(iHomefinderLayoutManager::getInstance()->supportsResultsDisplayType()) { ?>
 									<div class="form-group">
-										<label class="control-label">Display Header</label>
+										<label class="control-label">Display Type</label>
 										<div>
-											<select class="form-control" name="header" required="required">
-												<option value="true">Yes</option>
-												<option value="false">No</option>
+											<select class="form-control" name="displayType">
+												<option value="">Default</option>
+												<option value="list">List</option>
+												<option value="grid">Grid</option>
 											</select>
 										</div>
 									</div>
-									<input class="btn btn-default" type="button" name="insertToppicks" value="Insert" onclick="return IhfGalleryDialog.validateForm(this.form) && IhfGalleryDialog.insertToppicks(this.form, '<?php echo(iHomefinderShortcodeDispatcher::getInstance()->getToppicksShortCode()) ?>');" />
-								</form>
-							</div>
-							
-							
-							<div id="searchMenu" style="display: none;" class="ihfMenu">
-								<form onsubmit="return false;" action="#">
+								<?php } ?>
+								<?php if(iHomefinderLayoutManager::getInstance()->supportsResultsResultsPerPage()) { ?>
 									<div class="form-group">
-										<label class="control-label">Cities</label>
+										<label class="control-label">Results Per Page</label>
 										<div>
-											<?php $ihfShortCodeDialog->createCitySelect(true); ?>
+											<input class="form-control" type="number" name="resultsPerPage" />
 										</div>
 									</div>
-									<div class="form-group">
-										<label class="control-label">Property Type</label>
-										<div>
-											<?php $ihfShortCodeDialog->createPropertyTypeSelect(true); ?>
-										</div>
+								<?php } ?>
+								<div class="form-group">
+									<label class="control-label">Display Header</label>
+									<div>
+										<select class="form-control" name="header" required="required">
+											<option value="true">Yes</option>
+											<option value="false">No</option>
+										</select>
 									</div>
-									<div class="form-group">
-										<label class="control-label">Bed</label>
-										<div>
-											<input class="form-control" type="number" name="bed" />
-										</div>
+								</div>
+								<input class="btn btn-default" type="button" name="insertSearchResults" value="Insert" onclick="return IhfGalleryDialog.validateForm(this.form) && IhfGalleryDialog.insertSearchResults(this.form, '<?php echo(iHomefinderShortcodeDispatcher::getInstance()->getSearchResultsShortcode()) ?>');" />
+							</form>
+						</div>
+						<div id="agentMenu" style="display: none;" class="ihfMenu">
+							<form onsubmit="return false;" action="#">
+								<div class="form-group">
+									<label class="control-label">Agent</label>
+									<div>
+										<?php $shortcodeDialog->createAgentSelect(true); ?>
 									</div>
-									<div class="form-group">
-										<label class="control-label">Bath</label>
-										<div>
-											<input class="form-control" type="number" name="bath" />
-										</div>
+								</div>
+								<input class="btn btn-default" type="button" name="insertAgentListings" value="Insert" onclick="return IhfGalleryDialog.validateForm(this.form) && IhfGalleryDialog.insertAgentListings(this.form, '<?php echo(iHomefinderShortcodeDispatcher::getInstance()->getAgentListingsShortcode()) ?>');" />
+							</form>
+						</div>
+						<div id="officeMenu" style="display: none;" class="ihfMenu">
+							<form onsubmit="return false;" action="#">
+								<div class="form-group">
+									<label class="control-label">Office</label>
+									<div>
+										<?php $shortcodeDialog->createOfficeSelect(true); ?>
 									</div>
-									<div class="form-group">
-										<label class="control-label">Min Price</label>
-										<div>
-											<input class="form-control" type="number" name="minPrice" />
-										</div>
-									</div>
-									<div class="form-group">
-										<label class="control-label">Max Price</label>
-										<div>
-											<input class="form-control" type="number" name="maxPrice" />
-										</div>
-									</div>
-									<div class="checkbox">
-										<label class="control-label">
-											<input type="checkbox" value="true" name="includeMap" />
-											Include Map
-										</label>
-									</div>
-									<div class="form-group">
-										<label class="control-label">Sort</label>
-										<div>
-											<?php $ihfShortCodeDialog->createSortSelect(true); ?>
-										</div>
-									</div>
-									<div class="form-group">
-										<label class="control-label">Display Header</label>
-										<div>
-											<select class="form-control" name="header" required="required">
-												<option value="true">Yes</option>
-												<option value="false">No</option>
-											</select>
-										</div>
-									</div>
-									<input class="btn btn-default" type="button" name="insertSearchResults" value="Insert" onclick="return IhfGalleryDialog.validateForm(this.form) && IhfGalleryDialog.insertSearchResults(this.form, '<?php echo(iHomefinderShortcodeDispatcher::getInstance()->getSearchResultsShortcode()) ?>');" />
-								</form>
-							</div>
-							
-							
-							<div id="agentMenu" style="display: none;" class="ihfMenu">
-								<form onsubmit="return false;" action="#">
-									<div class="form-group">
-										<label class="control-label">Agent</label>
-										<div>
-											<?php $ihfShortCodeDialog->createAgentSelect(true); ?>
-										</div>
-									</div>
-									<input class="btn btn-default" type="button" name="insertAgentListings" value="Insert" onclick="return IhfGalleryDialog.validateForm(this.form) && IhfGalleryDialog.insertAgentListings(this.form, '<?php echo(iHomefinderShortcodeDispatcher::getInstance()->getAgentListingsShortcode()) ?>');" />
-								</form>
-							</div>
-							
-							
-							<div id="officeMenu" style="display: none;" class="ihfMenu">
-								<form onsubmit="return false;" action="#">
-									<div class="form-group">
-										<label class="control-label">Office</label>
-										<div>
-											<?php $ihfShortCodeDialog->createOfficeSelect(true); ?>
-										</div>
-									</div>
-									<input class="btn btn-default" type="button" name="insertOfficeListings" value="Insert" onclick="return IhfGalleryDialog.validateForm(this.form) && IhfGalleryDialog.insertOfficeListings(this.form, '<?php echo(iHomefinderShortcodeDispatcher::getInstance()->getOfficeListingsShortcode()) ?>');" />
-								</form>
-							</div>
-							
-							
-							<div id="listingGalleryMenu" style="display: none;" class="ihfMenu">
-								<form onsubmit="return false;" action="#">
-									<div class="form-group">
+								</div>
+								<input class="btn btn-default" type="button" name="insertOfficeListings" value="Insert" onclick="return IhfGalleryDialog.validateForm(this.form) && IhfGalleryDialog.insertOfficeListings(this.form, '<?php echo(iHomefinderShortcodeDispatcher::getInstance()->getOfficeListingsShortcode()) ?>');" />
+							</form>
+						</div>
+						<div id="listingGalleryMenu" style="display: none;" class="ihfMenu">
+							<form onsubmit="return false;" action="#">
+								<div class="form-group">
+									<?php if(iHomefinderPermissions::getInstance()->isHotSheetEnabled()) { ?>
 										<label class="radio-inline">
 											<input type="radio" name="type" checked onclick="jQuery('#TopPicksSelect').hide(); jQuery('select#toppickId').prop('selectedIndex', 0); jQuery('select#toppickId').removeAttr('required');" />
 											Featured
@@ -235,81 +286,79 @@ class iHomefinderShortcodeDialogContent {
 											<input type="radio" name="type" onclick="jQuery('#TopPicksSelect').show(); jQuery('select#toppickId').attr('required', 'required');" />
 											Saved Search
 										</label>
-									</div>
-									<div id="TopPicksSelect" class="form-group" style="display: none;">
-											<?php $ihfShortCodeDialog->createTopPicksSelect(); ?>
-									</div>
-									<?php if(iHomefinderLayoutManager::getInstance()->supportsListingGalleryResponsiveness()) {?>
-										<div class="form-group">
-											<label class="control-label">Width</label>
-											<div class="checkbox">
-												<label class="control-label">
-													<input type="checkbox" name="fitToWidth" checked onchange="jQuery('#listingGalleryWidth').toggle();">
-													Fit to column
-												</label>
-											</div>
-											<div class="input-group" style="display: none;" id="listingGalleryWidth">
-												<input class="form-control" type="text" name="width" />
-												<span class="input-group-addon">px</span>
-											</div>
-										</div>
-									<?php } else {?>
-										<div class="form-group">
-											<label class="control-label">Width</label>
-											<div class="input-group">
-												<input class="form-control" type="number" name="width" required="required" />
-												<span class="input-group-addon">px</span>
-											</div>
-										</div>
-									<?php }?>
+									<?php } ?>
+								</div>
+								<div id="TopPicksSelect" class="form-group" style="display: none;">
+									<?php $shortcodeDialog->createTopPicksSelect(); ?>
+								</div>
+								<?php if(iHomefinderLayoutManager::getInstance()->supportsListingGalleryResponsiveness()) { ?>
 									<div class="form-group">
-										<label class="control-label">Height</label>
-										<div class="input-group">
-											<input class="form-control" type="number" name="height" placeholder="Default" />
+										<label class="control-label">Width</label>
+										<div class="checkbox">
+											<label class="control-label">
+												<input type="checkbox" name="fitToWidth" checked onchange="jQuery('#listingGalleryWidth').toggle();">
+												Fit to column
+											</label>
+										</div>
+										<div class="input-group" style="display: none;" id="listingGalleryWidth">
+											<input class="form-control" type="text" name="width" />
 											<span class="input-group-addon">px</span>
 										</div>
 									</div>
+								<?php } else { ?>
 									<div class="form-group">
-										<label class="control-label">Rows</label>
-										<div>
-											<input class="form-control" type="number" name="rows" required="required" />
+										<label class="control-label">Width</label>
+										<div class="input-group">
+											<input class="form-control" type="number" name="width" required="required" />
+											<span class="input-group-addon">px</span>
 										</div>
 									</div>
-									<div class="form-group">
-										<label class="control-label">Columns</label>
-										<div>
-											<input class="form-control" type="number" name="columns" required="required" />
-										</div>
+								<?php } ?>
+								<div class="form-group">
+									<label class="control-label">Height</label>
+									<div class="input-group">
+										<input class="form-control" type="number" name="height" placeholder="Default" />
+										<span class="input-group-addon">px</span>
 									</div>
-									<div class="form-group">
-										<label class="control-label">Effect</label>
-										<div>
-											<select class="form-control" name="effect" required="required">
-												<option value="slide">Slide</option>
-												<option value="fade">Fade</option>
-											</select>
-										</div>
+								</div>
+								<div class="form-group">
+									<label class="control-label">Rows</label>
+									<div>
+										<input class="form-control" type="number" name="rows" required="required" />
 									</div>
-									<div class="form-group">
-										<label class="control-label">Auto Advance</label>
-										<div>
-											<select class="form-control" name="auto" required="required">
-												<option value="true">Yes</option>
-												<option value="false">No</option>
-											</select>
-										</div>
+								</div>
+								<div class="form-group">
+									<label class="control-label">Columns</label>
+									<div>
+										<input class="form-control" type="number" name="columns" required="required" />
 									</div>
-									<div class="form-group">
-										<label class="control-label">Max. Results</label>
-										<div>
-											<input class="form-control" type="number" name="maxResults" value="25" />
-										</div>
+								</div>
+								<div class="form-group">
+									<label class="control-label">Effect</label>
+									<div>
+										<select class="form-control" name="effect" required="required">
+											<option value="slide">Slide</option>
+											<option value="fade">Fade</option>
+										</select>
 									</div>
-									<input class="btn btn-default" type="button" name="insertListingGallery" value="Insert" onclick="return IhfGalleryDialog.validateForm(this.form) && IhfGalleryDialog.insertListingGallery(this.form, '<?php echo(iHomefinderShortcodeDispatcher::getInstance()->getListingGalleryShortcode()) ?>');" />
-								</form>
-							</div>
-							
-							
+								</div>
+								<div class="form-group">
+									<label class="control-label">Auto Advance</label>
+									<div>
+										<select class="form-control" name="auto" required="required">
+											<option value="true">Yes</option>
+											<option value="false">No</option>
+										</select>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="control-label">Max. Results</label>
+									<div>
+										<input class="form-control" type="number" name="maxResults" value="25" />
+									</div>
+								</div>
+								<input class="btn btn-default" type="button" name="insertListingGallery" value="Insert" onclick="return IhfGalleryDialog.validateForm(this.form) && IhfGalleryDialog.insertListingGallery(this.form, '<?php echo(iHomefinderShortcodeDispatcher::getInstance()->getListingGalleryShortcode()) ?>');" />
+							</form>
 						</div>
 					</div>
 				</div>
@@ -323,36 +372,36 @@ class iHomefinderShortcodeDialogContent {
 									Quick Search
 								</label>
 							</div>
-							<?php if(iHomefinderPermissions::getInstance()->isMapSearchEnabled()) {?>
+							<?php if(iHomefinderPermissions::getInstance()->isMapSearchEnabled()) { ?>
 								<div class="radio">
 									<label class="control-label">
 										<input name="shortcodeType" type="radio" onclick="jQuery('.ihfMenu').hide(); jQuery('#mapSearchMenu').toggle();">
 										Map Search
 									</label>
 								</div>
-							<?php }?>
-							<?php if(iHomefinderPermissions::getInstance()->isSearchByAddressEnabled()) {?>
+							<?php } ?>
+							<?php if(iHomefinderPermissions::getInstance()->isSearchByAddressEnabled()) { ?>
 								<div class="radio">
 									<label class="control-label">
 										<input name="shortcodeType" type="radio" onclick="jQuery('.ihfMenu').hide(); jQuery('#searchByAddressMenu').toggle();">
 										Address Search
 									</label>
 								</div>
-							<?php }?>
-							<?php if(iHomefinderPermissions::getInstance()->isSearchByListingIdEnabled()) {?>
+							<?php } ?>
+							<?php if(iHomefinderPermissions::getInstance()->isSearchByListingIdEnabled()) { ?>
 								<div class="radio">
 									<label class="control-label">
 										<input name="shortcodeType" type="radio" onclick="jQuery('.ihfMenu').hide(); jQuery('#searchByListingIdMenu').toggle();">
 										Listing ID Search
 									</label>
 								</div>
-							<?php }?>
+							<?php } ?>
 						</div>
 					</div>
 					<div class="col-xs-8">
 						<div id="quickSearchMenu" style="display: none;" class="ihfMenu">
 							<form onsubmit="return false;" action="#">
-								<?php if(iHomefinderLayoutManager::getInstance()->supportsMultipleQuickSearchLayouts()) {?>
+								<?php if(iHomefinderLayoutManager::getInstance()->supportsMultipleQuickSearchLayouts()) { ?>
 									<div class="form-group">
 										<label class="control-label">Style</label>
 										<div>
@@ -364,8 +413,8 @@ class iHomefinderShortcodeDialogContent {
 											</select>
 										</div>
 									</div>
-								<?php }?>
-								<?php if(iHomefinderLayoutManager::getInstance()->supportsQuickSearchPropertyType()) {?>
+								<?php } ?>
+								<?php if(iHomefinderLayoutManager::getInstance()->supportsQuickSearchPropertyType()) { ?>
 									<div class="form-group">
 										<div class="checkbox">
 											<label class="control-label">
@@ -374,27 +423,27 @@ class iHomefinderShortcodeDialogContent {
 											</label>
 										</div>
 									</div>
-								<?php }?>
+								<?php } ?>
 								<input class="btn btn-default" type="button" name="insertQuickSearch" value="Insert" onclick="return IhfGalleryDialog.validateForm(this.form) && IhfGalleryDialog.insertQuickSearch(this.form, '<?php echo(iHomefinderShortcodeDispatcher::getInstance()->getQuickSearchShortcode()) ?>');" />
 							</form>
 						</div>
 						<div id="mapSearchMenu" style="display: none;" class="ihfMenu">
 							<form onsubmit="return false;" action="#">
-							<?php if(iHomefinderLayoutManager::getInstance()->supportsMapSearchResponsiveness()) {?>
+							<?php if(iHomefinderLayoutManager::getInstance()->supportsMapSearchResponsiveness()) { ?>
 									<div class="form-group">
 										<label class="control-label">Width</label>
-											<div class="checkbox">
-												<label class="control-label">
-													<input type="checkbox" name="fitToWidth" checked onchange="jQuery('#mapSearchWidth').toggle();">
-													Fit to column
-												</label>
-											</div>
-											<div class="input-group" style="display: none;" id="mapSearchWidth">
-												<input class="form-control" type="text" name="width" />
-												<span class="input-group-addon">px</span>
-											</div>
+										<div class="checkbox">
+											<label class="control-label">
+												<input type="checkbox" name="fitToWidth" checked onchange="jQuery('#mapSearchWidth').toggle();">
+												Fit to column
+											</label>
+										</div>
+										<div class="input-group" style="display: none;" id="mapSearchWidth">
+											<input class="form-control" type="text" name="width" />
+											<span class="input-group-addon">px</span>
+										</div>
 									</div>
-								<?php } else {?>
+								<?php } else { ?>
 									<div class="form-group">
 										<label class="control-label">Width</label>
 										<div class="input-group">
@@ -402,7 +451,7 @@ class iHomefinderShortcodeDialogContent {
 											<span class="input-group-addon">px</span>
 										</div>
 									</div>
-								<?php }?>
+								<?php } ?>
 								<div class="form-group">
 									<label class="control-label">Height</label>
 									<div class="input-group">
@@ -410,7 +459,7 @@ class iHomefinderShortcodeDialogContent {
 										<span class="input-group-addon">px</span>
 									</div>
 								</div>
-								<?php if(iHomefinderLayoutManager::getInstance()->supportsMapSearchCenterLatLong()) {?>
+								<?php if(iHomefinderLayoutManager::getInstance()->supportsMapSearchCenterLatLong()) { ?>
 									<div class="form-group">
 										<label class="control-label">Center Latitude</label>
 										<div>
@@ -423,15 +472,15 @@ class iHomefinderShortcodeDialogContent {
 											<input class="form-control" type="text" name="centerlong" />
 										</div>
 									</div>
-								<?php }?>
-								<?php if(iHomefinderLayoutManager::getInstance()->supportsMapSearchCenterAddress()) {?>
+								<?php } ?>
+								<?php if(iHomefinderLayoutManager::getInstance()->supportsMapSearchCenterAddress()) { ?>
 									<div class="form-group">
 										<label class="control-label">Center Address</label>
 										<div>
 											<input class="form-control" type="text" name="address" placeholder="e.g., 1900 Addison Street, Berkeley, CA" />
 										</div>
 									</div>
-								<?php }?>
+								<?php } ?>
 								<div class="form-group">
 									<label class="control-label">Zoom Level</label>
 									<div>
@@ -501,18 +550,22 @@ class iHomefinderShortcodeDialogContent {
 									Advanced Search Form
 								</label>
 							</div>
-							<div class="radio">
-								<label class="control-label">
-									<input name="shortcodeType" type="radio" onclick="jQuery('.ihfMenu').hide(); jQuery('#organizerLoginMenu').toggle();">
-									Property Organizer Login
-								</label>
-							</div>
-							<div class="radio">
-								<label class="control-label">
-									<input name="shortcodeType" type="radio" onclick="jQuery('.ihfMenu').hide(); jQuery('#valuationFormMenu').toggle();">
-									Valuation Form
-								</label>
-							</div>
+							<?php if(iHomefinderPermissions::getInstance()->isOrganizerEnabled()) { ?>
+								<div class="radio">
+									<label class="control-label">
+										<input name="shortcodeType" type="radio" onclick="jQuery('.ihfMenu').hide(); jQuery('#organizerLoginMenu').toggle();">
+										Property Organizer Login
+									</label>
+								</div>
+							<?php } ?>
+							<?php if(iHomefinderPermissions::getInstance()->isValuationEnabled()) { ?>
+								<div class="radio">
+									<label class="control-label">
+										<input name="shortcodeType" type="radio" onclick="jQuery('.ihfMenu').hide(); jQuery('#valuationFormMenu').toggle();">
+										Valuation Form
+									</label>
+								</div>
+							<?php } ?>
 						</div>
 					</div>
 					<div class="col-xs-8">
@@ -541,7 +594,7 @@ class iHomefinderShortcodeDialogContent {
 				<div class="tab-pane fade" id="Broker">
 					<h4></h4>
 					<div class="col-xs-5">
-						<?php if(iHomefinderPermissions::getInstance()->isAgentBioEnabled()) {?>
+						<?php if(iHomefinderPermissions::getInstance()->isAgentBioEnabled()) { ?>
 							<div class="form-group">
 								<div class="radio">
 									<label class="control-label">
@@ -550,7 +603,7 @@ class iHomefinderShortcodeDialogContent {
 									</label>
 								</div>
 							</div>
-						<?php }?>
+						<?php } ?>
 					</div>
 					<div class="col-xs-7">
 						<div id="agentDetailMenu" style="display: none;" class="ihfMenu">
@@ -558,7 +611,7 @@ class iHomefinderShortcodeDialogContent {
 								<div class="form-group">
 									<label class="control-label">Agent</label>
 									<div>
-										<?php $ihfShortCodeDialog->createAgentSelect(true); ?>
+										<?php $shortcodeDialog->createAgentSelect(true); ?>
 									</div>
 								</div>
 								<input class="btn btn-default" type="button" name="insertAgentDetail" value="Insert" onclick="return IhfGalleryDialog.validateForm(this.form) && IhfGalleryDialog.insertAgentDetail(this.form, '<?php echo(iHomefinderShortcodeDispatcher::getInstance()->getAgentDetailShortcode()) ?>');" />

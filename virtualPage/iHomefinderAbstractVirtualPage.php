@@ -3,6 +3,11 @@
 abstract class iHomefinderAbstractVirtualPage implements iHomefinderVirtualPageInterface {
 	
 	protected $remoteResponse;
+	protected $remoteRequest;
+	
+	public function __construct() {
+		$this->remoteRequest = new iHomefinderRequestor();
+	}
 	
 	public function getPageTemplate() {
 		return null;

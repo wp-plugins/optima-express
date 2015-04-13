@@ -1,57 +1,50 @@
 <?php
 
-/**
- * iHomefinderHotsheetListWidget Class
- */
 class iHomefinderHotsheetListWidget extends WP_Widget {
 
 	private $contextUtility;
 
 	public function __construct() {
-		$options=array('description'=>'List of Saved Search Pages');
-		parent::WP_Widget(
-			false,
-			$name = 'IDX: Saved Search Page List',
-			$widget_options=$options
-		);
+		$options=array("description"=>"List of Saved Search Pages");
+		parent::WP_Widget(false, $name = "IDX: Saved Search Page List", $widget_options=$options);
 		$this->contextUtility=iHomefinderWidgetContextUtility::getInstance();
 	}
-
-	/**
-	 * Used to create the widget for display in the blog.
-	 *
-	 * @see WP_Widget::widget
-	 */
+	
 	public function widget($args, $instance) {
-		
-		global $blog_id;
-		global $post;
-		
 		if($this->contextUtility->isEnabled($instance)) {
 		
-			$includeAll = filter_var($instance['includeAll'], FILTER_VALIDATE_BOOLEAN);
+			$includeAll = filter_var($instance["includeAll"], FILTER_VALIDATE_BOOLEAN);
 			
 			$before_widget = $args["before_widget"];
 			$after_widget = $args["after_widget"];
 			$before_title = $args["before_title"];
 			$after_title = $args["after_title"];
 			
-			$title = apply_filters('widget_title', $instance['title']);
+			$title = apply_filters("widget_title", $instance["title"]);
 			
-			$requestData = 'method=handleRequest&viewType=json&requestType=hotsheet-list';
-			$requestData = iHomefinderRequestor::getInstance()->appendQueryVarIfNotEmpty($requestData, "smallView", "true");
-			$requestData = iHomefinderRequestor::getInstance()->appendQueryVarIfNotEmpty($requestData, "phpStyle", "true");
+			$remoteRequest = new iHomefinderRequestor();
+				
+			$remoteRequest
+				->addParameter("method", "handleRequest")
+				->addParameter("viewType", "json")
+				->addParameter("requestType", "hotsheet-list")
+				->addParameter("smallView", true)
+				->addParameter("phpStyle", true)
+			;
+			
 			if($includeAll === false &&
 				array_key_exists("hotsheetIds", $instance) &&
 				is_array($instance["hotsheetIds"])
 			) {
+				$hotsheetIds = array();
 				foreach($instance["hotsheetIds"] as $index => $hotsheetId) {
-					$requestData = iHomefinderRequestor::getInstance()->appendQueryVarIfNotEmpty($requestData, "hotsheetIds", $hotsheetId);
+					$hotsheetIds[] = $hotsheetId;
 				}
+				$remoteRequest->addParameter("hotsheetIds", $hotsheetIds);
 			}
 			
-			$contentInfo = iHomefinderRequestor::getInstance()->remoteGetRequest($requestData, 3600);
-			$content = iHomefinderRequestor::getInstance()->getContent($contentInfo);
+			$contentInfo = $remoteRequest->remoteGetRequest(3600);
+			$content = $remoteRequest->getContent($contentInfo);
 			iHomefinderEnqueueResource::getInstance()->addToFooter($contentInfo->head);
 			
 			echo $before_widget;
@@ -60,9 +53,9 @@ class iHomefinderHotsheetListWidget extends WP_Widget {
 			}
 			
 			if(iHomefinderLayoutManager::getInstance()->hasExtraLineBreaksInWidget()) {
-				echo "<br/>";	
+				echo "<br />";	
 				echo $content;
-				echo "<br/>";
+				echo "<br />";
 			} else {
 				echo $content;
 			}
@@ -70,39 +63,28 @@ class iHomefinderHotsheetListWidget extends WP_Widget {
 			echo $after_widget;
 		}
 	}
-
-	/**
-	 *  Processes form submission in the admin area for configuring
-	 *  the widget.
-	 *
-	 *  @see WP_Widget::update
-	 */
+	
 	public function update($new_instance, $old_instance) {
 		$instance = $old_instance;
 		
-		$instance['title'] = strip_tags(stripslashes($new_instance['title']));
-		$instance['hotsheetIds'] = $new_instance['hotsheetIds'];
-		$instance['includeAll'] = $new_instance['includeAll'];
+		$instance["title"] = strip_tags(stripslashes($new_instance["title"]));
+		$instance["hotsheetIds"] = $new_instance["hotsheetIds"];
+		$instance["includeAll"] = $new_instance["includeAll"];
 		
 		//Add context related values.
 		$instance = $this->contextUtility->updateContext($new_instance, $instance);
 		
 		return $instance;
 	}
-
-	/**
-	 * Create the admin form, for adding the Widget to the blog.
-	 *
-	 *  @see WP_Widget::form
-	 */
+	
 	public function form($instance) {
 		
-		$title = esc_attr($instance['title']);
-		$hotsheetIds = $instance['hotsheetIds'];
+		$title = esc_attr($instance["title"]);
+		$hotsheetIds = $instance["hotsheetIds"];
 		
 		$includeAll = true;
-		if($instance['includeAll'] !== null) {
-			$includeAll = filter_var($instance['includeAll'], FILTER_VALIDATE_BOOLEAN);
+		if($instance["includeAll"] !== null) {
+			$includeAll = filter_var($instance["includeAll"], FILTER_VALIDATE_BOOLEAN);
 		}
 		
 		$galleryFormData = iHomefinderSearchFormFieldsUtility::getInstance()->getFormData();
@@ -110,14 +92,8 @@ class iHomefinderHotsheetListWidget extends WP_Widget {
 		
 		?>
 		<p>
-			<?php _e('Title:'); ?>
-			<input
-			class="widefat"
-			id="<?php echo $this->get_field_id('title'); ?>"
-			name="<?php echo $this->get_field_name('title'); ?>"
-			type="text"
-			value="<?php echo $title; ?>"
-			/>
+			<?php _e("Title:"); ?>
+			<input class="widefat" id="<?php echo $this->get_field_id("title"); ?>" name="<?php echo $this->get_field_name("title"); ?>" type="text" value="<?php echo $title; ?>" />
 		</p>
 		<p>
 			<?php
@@ -130,24 +106,12 @@ class iHomefinderHotsheetListWidget extends WP_Widget {
 			}
 			?>
 			<label>
-				<input
-				type="radio"
-				name="<?php echo $this->get_field_name('includeAll'); ?>"
-				value="true"
-				onclick="jQuery(this).closest('form').find('.hotsheetList').hide()"
-				<?php echo $includeAllTrueChecked ?>
-				/>
+				<input type="radio" name="<?php echo $this->get_field_name("includeAll"); ?>" value="true" onclick="jQuery(this).closest('form').find('.hotsheetList').hide()" <?php echo $includeAllTrueChecked ?> />
 				Show all Saved Search Pages
 			</label>
 			<br />
 			<label>
-				<input
-				type="radio"
-				name="<?php echo $this->get_field_name('includeAll'); ?>"
-				value="false"
-				onclick="jQuery(this).closest('form').find('.hotsheetList').show()"
-				<?php echo $includeAllFalseChecked ?>
-				/>
+				<input type="radio" name="<?php echo $this->get_field_name("includeAll"); ?>" value="false" onclick="jQuery(this).closest('form').find('.hotsheetList').show()" <?php echo $includeAllFalseChecked ?> />
 				Show Selected Saved Search Pages
 			</label>
 		</p>
@@ -157,17 +121,11 @@ class iHomefinderHotsheetListWidget extends WP_Widget {
 			$hotsheetListStyle = "display: none;";
 		}
 		?>
-		<p
-		class="hotsheetList"
-		style="<?php echo $hotsheetListStyle ?>"
-		>
+		<p class="hotsheetList" style="<?php echo $hotsheetListStyle ?>">
 			<label>Saved Search Pages:</label>
-			<select
-			class="widefat"
-			name="<?php echo $this->get_field_name('hotsheetIds'); ?>[]"
-			multiple="multiple">
+			<select class="widefat" name="<?php echo $this->get_field_name("hotsheetIds"); ?>[]" multiple="multiple">
 				<?php
-				foreach ($clientHotsheets as $index => $clientHotsheet) {
+				foreach($clientHotsheets as $index => $clientHotsheet) {
 					$hotsheetIdSelected = "";
 					if(is_array($hotsheetIds) && in_array($clientHotsheet->hotsheetId, $hotsheetIds)) {
 						$hotsheetIdSelected = "selected=\"selected\"";

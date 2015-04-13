@@ -5,7 +5,7 @@ class iHomefinderMenu {
 	private static $instance;
 	
 	private $communityPagesMenuItemName = "Communities";
-	private $defaultMenuName= "Optima Express";
+	private $defaultMenuName = "Optima Express";
 	
 	private function __construct() {
 	}
@@ -17,20 +17,20 @@ class iHomefinderMenu {
 		return self::$instance;
 	}		
 	
-	public function getOptimaExpressMenu() {
-		$menuName= $this->defaultMenuName;
-		$optimaExpressMenu = wp_get_nav_menu_object($menuName);
-		return $optimaExpressMenu;
+	public function getMenu() {
+		$menuName = $this->defaultMenuName;
+		$menu = wp_get_nav_menu_object($menuName);
+		return $menu;
 	}
 	
-	public function getOptimaExpressMenuId() {
-		$menuName= $this->defaultMenuName;
-		$optimaExpressMenu = wp_get_nav_menu_object($menuName);
-		return $optimaExpressMenu->term_id;
+	public function getMenuId() {
+		$menuName = $this->defaultMenuName;
+		$menu = wp_get_nav_menu_object($menuName);
+		return $menu->term_id;
 	}		
 	
 	/**
-	 * Creates or retrieves the Optima Express menu.  If the menu has
+	 * Creates or retrieves the Optima Express menu. If the menu has
 	 * not been created, it creates the menu with default values.
 	 * 
 	 * If the menu already exists, then we do not populate with the default urls,
@@ -38,20 +38,20 @@ class iHomefinderMenu {
 	 * 
 	 * @return Optima Express menu
 	 */		
-	public function updateOptimaExpressMenu() {
-		$optimaExpressMenu = $this->getOptimaExpressMenu();
-		if(!$optimaExpressMenu) {
-			$menuName= $this->defaultMenuName;
+	public function updateMenu() {
+		$menu = $this->getMenu();
+		if(!$menu) {
+			$menuName = $this->defaultMenuName;
 			$menuArgs = array(
-				'description' => $menuName . '  default menu',
-				'menu-name'   => $menuName);
+				"description" => $menuName . " default menu",
+				"menu-name" => $menuName);
 
-			$optimaExpressMenuId=wp_update_nav_menu_object(0, $menuArgs);
-			$optimaExpressMenu = wp_get_nav_menu_object($optimaExpressMenuId);
-			$this->addOptimaExpressMenuItems($optimaExpressMenu->term_id);
+			$menuId = wp_update_nav_menu_object(0, $menuArgs);
+			$menu = wp_get_nav_menu_object($menuId);
+			$this->addMenuItems($menu->term_id);
 		}
 
-		return $optimaExpressMenu;
+		return $menu;
 	}
 	
 	/**
@@ -62,9 +62,9 @@ class iHomefinderMenu {
 	 * all Community Pages menu items
 	 */
 	private function getCommunityPagesContainer() {
-		$optimaExpressMenu = $this->getOptimaExpressMenu();
-		$args=array('title' => $this->communityPagesMenuItemName);
-		$menuItems=wp_get_nav_menu_items($optimaExpressMenu->term_id, $args);
+		$menu = $this->getMenu();
+		$args = array("title" => $this->communityPagesMenuItemName);
+		$menuItems = wp_get_nav_menu_items($menu->term_id, $args);
 		foreach($menuItems as $oneMenuItem) {
 			if($oneMenuItem->title == $this->communityPagesMenuItemName) {
 				return $oneMenuItem;
@@ -74,25 +74,23 @@ class iHomefinderMenu {
 	}
 	
 	public function addCommunityPageMenuItem() {
-		$optimaExpressMenu = $this->getOptimaExpressMenu();
-		$communityPagesMenuItemId=$this->addOneOptimaExpressMenuItem($optimaExpressMenu->term_id, $this->communityPagesMenuItemName, "");
+		$menu = $this->getMenu();
+		$communityPagesMenuItemId = $this->addMenuItem($menu->term_id, $this->communityPagesMenuItemName, "");
 		return $communityPagesMenuItemId;
 	}
 	
 	public function addPageToCommunityPages($postId) {
-		 $menuID=iHomefinderMenu::getInstance()->getOptimaExpressMenuId();
-		 
-		 $communityPagesMenuItem=$this->getCommunityPagesContainer();
-		 $communityPagesMenuItemId=$communityPagesMenuItem->ID;
-		 
-		 $itemData =  array(
-			'menu-item-object-id' => $postId,
-			'menu-item-parent-id' => $communityPagesMenuItemId,
-			'menu-item-position'  => 2,
-			'menu-item-object' => 'page',
-			'menu-item-type'      => 'post_type',
-			'menu-item-status'    => 'publish');
-		 
+		 $menuID = iHomefinderMenu::getInstance()->getMenuId();
+		 $communityPagesMenuItem = $this->getCommunityPagesContainer();
+		 $communityPagesMenuItemId = $communityPagesMenuItem->ID;
+		 $itemData = array(
+			"menu-item-object-id" => $postId,
+			"menu-item-parent-id" => $communityPagesMenuItemId,
+			"menu-item-position" => 2,
+			"menu-item-object" => "page",
+			"menu-item-type" => "post_type",
+			"menu-item-status" => "publish"
+		 );
 		 wp_update_nav_menu_item($menuID, 0, $itemData);			
 	}
 	
@@ -100,105 +98,98 @@ class iHomefinderMenu {
 	 * Returns an array of menu items that are children of
 	 * the Community Pages menu item.
 	 * 
-	 * Used in admin to dispaly a list of Community Pages.
+	 * Used in admin to display a list of Community Pages.
 	 */
 	public function getCommunityPagesMenuItems() {
 		$communityPages = array();
-		
-		$optimaExpressMenu = $this->getOptimaExpressMenu();
-		
-		$communityPagesMenuItem=$this->getCommunityPagesContainer();
-		$communityPagesMenuItemId=$communityPagesMenuItem->ID;
-		
-		
-		
-		$menu_items = wp_get_nav_menu_items($optimaExpressMenu->term_id);
-
-		//var_dump($communityPagesMenuItemId);
-		
-		//var_dump($menu_items);
-		foreach ((array) $menu_items as $key => $menu_item) {
-			//var_dump($menu_item);
+		$menu = $this->getMenu();
+		$communityPagesMenuItem = $this->getCommunityPagesContainer();
+		$communityPagesMenuItemId = $communityPagesMenuItem->ID;
+		$menu_items = (array) wp_get_nav_menu_items($menu->term_id);
+		foreach ($menu_items as $key => $menu_item) {
 			if($menu_item->menu_item_parent == $communityPagesMenuItemId) {
-				$communityPages[]=$menu_item;
+				$communityPages[] = $menu_item;
 			}
 		}
 		return $communityPages;
 	}
 	
 	
-	private function addOptimaExpressMenuItems($optimaExpressMenuId) {
+	private function addMenuItems($menuId) {
 
 		//Home Link
-		$homeMenuItemId=$this->addOneOptimaExpressMenuItem($optimaExpressMenuId, 'Home', iHomefinderUrlFactory::getInstance()->getBaseUrl());
+		$homeMenuItemId = $this->addMenuItem($menuId, "Home", iHomefinderUrlFactory::getInstance()->getBaseUrl());
 
 		//Featured Listings Page
-		$featuredMenuItemId=$this->addOneOptimaExpressMenuItem($optimaExpressMenuId, 'Featured Listings', iHomefinderUrlFactory::getInstance()->getFeaturedSearchResultsUrl(true));
+		$featuredMenuItemId = $this->addMenuItem($menuId, "Featured Listings", iHomefinderUrlFactory::getInstance()->getFeaturedSearchResultsUrl(true));
 		
 		//Property Search secion
-		$findHomeMenuItemId=$this->addOneOptimaExpressMenuItem($optimaExpressMenuId, 'Property Search', "#");
-		$searchMenuItemId=$this->addOneOptimaExpressMenuItem($optimaExpressMenuId, 'Search', iHomefinderUrlFactory::getInstance()->getListingsSearchFormUrl(true), $findHomeMenuItemId);
+		$findHomeMenuItemId = $this->addMenuItem($menuId, "Property Search", "#");
+		$searchMenuItemId = $this->addMenuItem($menuId, "Search", iHomefinderUrlFactory::getInstance()->getListingsSearchFormUrl(true), $findHomeMenuItemId);
 
 		if(iHomefinderPermissions::getInstance()->isMapSearchEnabled()) {	
-			$mapSearchMenuItemId=$this->addOneOptimaExpressMenuItem($optimaExpressMenuId, 'Map Search',  iHomefinderUrlFactory::getInstance()->getMapSearchFormUrl(true), $findHomeMenuItemId);
+			$mapSearchMenuItemId = $this->addMenuItem($menuId, "Map Search", iHomefinderUrlFactory::getInstance()->getMapSearchFormUrl(true), $findHomeMenuItemId);
 		}
-			
 		
-		$openHomesMenuItemId=$this->addOneOptimaExpressMenuItem($optimaExpressMenuId, 'Open Homes', iHomefinderUrlFactory::getInstance()->getOpenHomeSearchFormUrl(true), $findHomeMenuItemId);
-		$advancedSearchMenuItemId=$this->addOneOptimaExpressMenuItem($optimaExpressMenuId, 'Advanced Search', iHomefinderUrlFactory::getInstance()->getListingsAdvancedSearchFormUrl(true), $findHomeMenuItemId);			
+		$openHomesMenuItemId = $this->addMenuItem($menuId, "Open Homes", iHomefinderUrlFactory::getInstance()->getOpenHomeSearchFormUrl(true), $findHomeMenuItemId);
+		$advancedSearchMenuItemId = $this->addMenuItem($menuId, "Advanced Search", iHomefinderUrlFactory::getInstance()->getListingsAdvancedSearchFormUrl(true), $findHomeMenuItemId);			
 		
 		//Email Alerts			
 		if(iHomefinderPermissions::getInstance()->isEmailUpdatesEnabled()) {		
 			if(iHomefinderPermissions::getInstance()->isOfficeEnabled()) {
 				//If office enabled, then add email alerts to the search menu.
-				$mapSearchMenuItemId=$this->addOneOptimaExpressMenuItem($optimaExpressMenuId, 'Email Alerts',  iHomefinderUrlFactory::getInstance()->getOrganizerEditSavedSearchUrl(true), $findHomeMenuItemId);
-			}
-			else{
-				$advancedSearchMenuItemId=$this->addOneOptimaExpressMenuItem($optimaExpressMenuId, 'Email Alerts', iHomefinderUrlFactory::getInstance()->getOrganizerEditSavedSearchUrl(true));
+				$mapSearchMenuItemId = $this->addMenuItem($menuId, "Email Alerts", iHomefinderUrlFactory::getInstance()->getOrganizerEditSavedSearchUrl(true), $findHomeMenuItemId);
+			} else {
+				$advancedSearchMenuItemId = $this->addMenuItem($menuId, "Email Alerts", iHomefinderUrlFactory::getInstance()->getOrganizerEditSavedSearchUrl(true));
 			}
 		}
 		
 		//Parent for Community Pages
 		if(iHomefinderPermissions::getInstance()->isCommunityPagesEnabled()) {		
-			$communityPagesMenuItemId=$this->addOneOptimaExpressMenuItem($optimaExpressMenuId, $this->communityPagesMenuItemName, "#");
+			$communityPagesMenuItemId = $this->addMenuItem($menuId, $this->communityPagesMenuItemName, "#");
 		}
 		
 		//Buyers and Sellers section
-		$buyersAndSellersMenuItemId=$this->addOneOptimaExpressMenuItem($optimaExpressMenuId, 'Buyers & Sellers', "#");
-		if(iHomefinderPermissions::getInstance()->isOrganizerEnabled()) {
-			$valuationMenuItemId=$this->addOneOptimaExpressMenuItem($optimaExpressMenuId, 'Property Organizer', iHomefinderUrlFactory::getInstance()->getOrganizerLoginUrl(true), $buyersAndSellersMenuItemId);
+		if(iHomefinderPermissions::getInstance()->isOrganizerEnabled() || iHomefinderPermissions::getInstance()->isValuationEnabled()) {
+			$buyersAndSellersMenuItemId = $this->addMenuItem($menuId, "Buyers & Sellers", "#");
+			if(iHomefinderPermissions::getInstance()->isOrganizerEnabled()) {
+				$valuationMenuItemId = $this->addMenuItem($menuId, "Property Organizer", iHomefinderUrlFactory::getInstance()->getOrganizerLoginUrl(true), $buyersAndSellersMenuItemId);
+			}
+			if(iHomefinderPermissions::getInstance()->isValuationEnabled()) {
+				$valuationMenuItemId = $this->addMenuItem($menuId, "Valuation Request", iHomefinderUrlFactory::getInstance()->getValuationFormUrl(true), $buyersAndSellersMenuItemId);
+			}
 		}
 		
-		$valuationMenuItemId=$this->addOneOptimaExpressMenuItem($optimaExpressMenuId, 'Valuation Request', iHomefinderUrlFactory::getInstance()->getValuationFormUrl(true), $buyersAndSellersMenuItemId);
-		
 		//Contact Page
-		$contactMenuItemId=$this->addOneOptimaExpressMenuItem($optimaExpressMenuId, 'Contact', iHomefinderUrlFactory::getInstance()->getContactFormUrl(true));
+		if(iHomefinderPermissions::getInstance()->isContactFormEnabled()) {
+			$contactMenuItemId = $this->addMenuItem($menuId, "Contact", iHomefinderUrlFactory::getInstance()->getContactFormUrl(true));
+		}
 		
 		if(iHomefinderPermissions::getInstance()->isOfficeEnabled()) {
 			//Add top level office linkg
-			$officeListMenuItemId=$this->addOneOptimaExpressMenuItem($optimaExpressMenuId, 'Our Team', iHomefinderUrlFactory::getInstance()->getOfficeListUrl(true));
+			$officeListMenuItemId = $this->addMenuItem($menuId, "Our Team", iHomefinderUrlFactory::getInstance()->getOfficeListUrl(true));
 		}			
 	}
 
-	private function addOneOptimaExpressMenuItem($menuId, $name, $url, $parentId=0) {
-		global $wpdb;
+	private function addMenuItem($menuId, $name, $url, $parentId = 0) {
 		//We build relative URLs that start with a slash.
-		$url=iHomefinderUrlFactory::getInstance()->makeRelativeUrl($url);
-		$menuItem=$this->buildOptimaExpressMenuItem($name, $url, $parentId);
-		$menuItemId=wp_update_nav_menu_item($menuId,0,$menuItem);
-		//$wpdb->insert($wpdb->term_relationships, array("object_id" => $menuItemId, "term_taxonomy_id" => $menuId), array("%d", "%d"));
+		if($url !== "#") {
+			$url = iHomefinderUrlFactory::getInstance()->makeRelativeUrl($url);
+		}
+		$menuItem = $this->buildMenuItem($name, $url, $parentId);
+		$menuItemId = wp_update_nav_menu_item($menuId, 0, $menuItem);
 		return $menuItemId;
 	}
 
-	private function buildOptimaExpressMenuItem($name, $url, $parentId = 0) {
+	private function buildMenuItem($name, $url, $parentId = 0) {
 		$menuItem = array(
-			'menu-item-parent-id' => $parentId,
-			'menu-item-type' => 'custom',
-			'menu-item-title' => $name,
-			'menu-item-url' => $url,
-			'menu-item-attr-title' => $name,
-			'menu-item-description' => $name,
-			'menu-item-status' => 'publish'
+			"menu-item-parent-id" => $parentId,
+			"menu-item-type" => "custom",
+			"menu-item-title" => $name,
+			"menu-item-url" => $url,
+			"menu-item-attr-title" => $name,
+			"menu-item-description" => $name,
+			"menu-item-status" => "publish"
 		);
 		return $menuItem;
 	}

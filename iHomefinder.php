@@ -3,7 +3,7 @@
 Plugin Name: Optima Express IDX Plugin
 Plugin URI: http://wordpress.org/extend/plugins/optima-express/
 Description: Adds MLS / IDX property search and listings to your site. Includes search and listing pages, widgets and shortcodes. Requires an IDX account from iHomefinder. Get a free trial account with sample IDX data, or a paid account with data from your MLS.
-Version: 2.5.4
+Version: 2.6.0
 Author: ihomefinder
 Author URI: http://www.ihomefinder.com
 License: GPL
@@ -27,6 +27,7 @@ include_once "iHomefinderRequestor.php";
 include_once "iHomefinderRewriteRules.php";
 include_once "iHomefinderSearchLinkInfo.php";
 include_once "iHomefinderSearchFormFieldsUtility.php";
+include_once "iHomefinderFormData.php";
 include_once "iHomefinderShortcodeDialog.php";
 include_once "iHomefinderShortcodeDialogContent.php";
 include_once "iHomefinderShortcodeDispatcher.php";
@@ -174,7 +175,7 @@ add_action("wp_ajax_ihf_save_search_subscriber_session", array(iHomefinderAjaxHa
 add_action("wp_ajax_ihf_area_autocomplete", array(iHomefinderAjaxHandler::getInstance(), "getAutocompleteMatches"));
 add_action("wp_ajax_ihf_contact_form_request", array(iHomefinderAjaxHandler::getInstance(), "contactFormRequest"));
 add_action("wp_ajax_ihf_send_password", array(iHomefinderAjaxHandler::getInstance(), "sendPassword"));
-add_action("wp_ajax_ihf_tiny_mce_shortcode_dialog", array(iHomefinderShortcodeDialogContent::getInstance(), "getShortCodeDialogContent"));
+add_action("wp_ajax_ihf_tiny_mce_shortcode_dialog", array(iHomefinderShortcodeDialogContent::getInstance(), "getShortcodeDialogContent"));
 
 //Disable canonical urls, because we use a single page to display all results
 //and Wordpress creates a single canonical url for all of the virtual urls

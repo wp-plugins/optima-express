@@ -9,9 +9,6 @@
  */
 class iHomefinderAgentOrOfficeListingsVirtualPageImpl extends iHomefinderAbstractVirtualPage {
 	
-	public function __construct() {			
-	}
-	
 	public function getTitle() {
 		return "";
 	}
@@ -20,32 +17,23 @@ class iHomefinderAgentOrOfficeListingsVirtualPageImpl extends iHomefinderAbstrac
 		return "";			
 	}
 	
-	/**
-	 * @see wp-content/plugins/OptimaExpress/virtualPage/iHomefinderVirtualPage::getPath()
-	 */
 	public function getPath() {
 		return "";
 	}
 			
 	public function getContent() {
 		iHomefinderStateManager::getInstance()->saveLastSearch();
-		iHomefinderLogger::getInstance()->debug('Begin iHomefinderAgentOrOfficeListingsVirtualPageImpl');
-		
-		$agentId  = iHomefinderUtility::getInstance()->getRequestVar('agentId');
-		$officeId = iHomefinderUtility::getInstance()->getRequestVar('officeId');	
-
-		$requestData = 'method=handleRequest'
-			. '&viewType=json'
-			. '&requestType=agent-or-office-listings';
-			
-		$requestData = iHomefinderRequestor::getInstance()->appendQueryVarIfNotEmpty($requestData, "agentId", $agentId);	
-		$requestData = iHomefinderRequestor::getInstance()->appendQueryVarIfNotEmpty($requestData, "officeId", $officeId);
-					
-		$this->remoteResponse = iHomefinderRequestor::getInstance()->remoteGetRequest($requestData);
-		$body = iHomefinderRequestor::getInstance()->getContent($this->remoteResponse);
-		
-		iHomefinderLogger::getInstance()->debug('End iHomefinderAgentOrOfficeListingsVirtualPageImpl');
-		iHomefinderLogger::getInstance()->debug($requestData);
+		$agentId  = iHomefinderUtility::getInstance()->getRequestVar("agentId");
+		$officeId = iHomefinderUtility::getInstance()->getRequestVar("officeId");
+		$this->remoteRequest
+			->addParameter("method", "handleRequest")
+			->addParameter("viewType", "json")
+			->addParameter("requestType", "agent-or-office-listings")
+			->addParameter("agentId", $agentId)
+			->addParameter("officeId", $officeId)
+		;		
+		$this->remoteResponse = $this->remoteRequest->remoteGetRequest();
+		$body = $this->remoteRequest->getContent($this->remoteResponse);
 		return $body;
 	}
 }

@@ -113,6 +113,22 @@ class iHomefinderLayoutManager {
 		return $result;
 	}
 	
+	public function supportsResultsDisplayType() {
+		$result=false;
+		if($this->isResponsive()) {
+			$result=true;
+		}
+		return $result;
+	}
+	
+	public function supportsResultsResultsPerPage() {
+		$result=false;
+		if($this->isResponsive()) {
+			$result=true;
+		}
+		return $result;
+	}
+	
 	/**
 	 * 
 	 * Legacy widgets were surrounded by <br> tags.

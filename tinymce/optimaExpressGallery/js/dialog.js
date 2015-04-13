@@ -1,226 +1,153 @@
 tinyMCEPopup.requireLangPack();
 
 var IhfGalleryDialog = {
-	init : function() {
+	init: function() {
 	},
-	
-	insertFeaturedListings : function(theForm, featuredShortCodeToken) {
-		// Insert the contents from the input into the document
-		var featuredShortCode = "[" + featuredShortCodeToken;
-		featuredShortCode += " sortBy=" + this.getFieldValue(theForm.sortBy);
-		featuredShortCode += " header=" + this.getFieldValue(theForm.header);
-		featuredShortCode += this.includeMap(theForm);
-		featuredShortCode += "]";
-		
-		tinyMCEPopup.editor.execCommand('mceInsertContent', false, featuredShortCode);
-		tinyMCEPopup.close();
+	insertFeaturedListings: function(theForm, shortcode) {
+		var parameters = {
+			sortBy: this.getFieldValue(theForm.sortBy),
+			displayType: this.getFieldValue(theForm.displayType),
+			resultsPerPage: this.getFieldValue(theForm.resultsPerPage),
+			header: this.getFieldValue(theForm.header),
+			includeMap: this.getFieldValue(theForm.includeMap)
+		};
+		this.buildShortcode(shortcode, parameters);
 	},
-	
-	insertToppicks : function(theForm, toppicksShortCodeToken) {
-		// Insert the contents from the input into the document
-		var toppicksShortCode = "[" + toppicksShortCodeToken;
-		toppicksShortCode += " id=" + this.getFieldValue(theForm.toppickId);
-		toppicksShortCode += " sortBy=" + this.getFieldValue(theForm.sortBy);
-		toppicksShortCode += " header=" + this.getFieldValue(theForm.header);
-		toppicksShortCode += this.includeMap(theForm);
-		toppicksShortCode += "]";
-		
-		tinyMCEPopup.editor.execCommand('mceInsertContent', false, toppicksShortCode);
-		tinyMCEPopup.close();
+	insertToppicks: function(theForm, shortcode) {
+		var parameters = {
+			id: this.getFieldValue(theForm.toppickId),
+			sortBy: this.getFieldValue(theForm.sortBy),
+			displayType: this.getFieldValue(theForm.displayType),
+			resultsPerPage: this.getFieldValue(theForm.resultsPerPage),
+			header: this.getFieldValue(theForm.header),
+			includeMap: this.getFieldValue(theForm.includeMap)
+		};
+		this.buildShortcode(shortcode, parameters);
 	},
-	
-	insertSearchResults : function(theForm, searchShortCodeToken) {		
-		// Insert the contents from the input into the document
-		var searchShortCode = "[" + searchShortCodeToken;
-		searchShortCode += " cityId=" + this.getFieldValue(theForm.cityId);
-		searchShortCode += " propertyType=" + this.getFieldValue(theForm.propertyType);
-		searchShortCode += " bed=" + this.getFieldValue(theForm.bed);
-		searchShortCode += " bath=" + this.getFieldValue(theForm.bath);
-		searchShortCode += " minPrice=" + this.getFieldValue(theForm.minPrice);
-		searchShortCode += " maxPrice=" + this.getFieldValue(theForm.maxPrice);
-		searchShortCode += " sortBy=" + this.getFieldValue(theForm.sortBy);
-		searchShortCode += " header=" + this.getFieldValue(theForm.header);
-		searchShortCode += this.includeMap(theForm);
-		searchShortCode += "]";
-		
-		tinyMCEPopup.editor.execCommand('mceInsertContent', false, searchShortCode);
-		tinyMCEPopup.close();
+	insertSearchResults: function(theForm, shortcode) {		
+		var parameters = {
+			cityId: this.getFieldValue(theForm.cityId),
+			propertyType: this.getFieldValue(theForm.propertyType),
+			bed: this.getFieldValue(theForm.bed),
+			bath: this.getFieldValue(theForm.bath),
+			minPrice: this.getFieldValue(theForm.minPrice),
+			maxPrice: this.getFieldValue(theForm.maxPrice),
+			sortBy: this.getFieldValue(theForm.sortBy),
+			displayType: this.getFieldValue(theForm.displayType),
+			resultsPerPage: this.getFieldValue(theForm.resultsPerPage),
+			header: this.getFieldValue(theForm.header),
+			includeMap: this.getFieldValue(theForm.includeMap)
+		};
+		this.buildShortcode(shortcode, parameters);
 	},
-	
-	insertListingGallery : function(theForm, listingGalleryShortCodeToken) {
-		// Insert the contents from the input into the document
-		var listingGalleryShortCode = "[" + listingGalleryShortCodeToken;
-		if(theForm.toppickId.value != '') {
-			listingGalleryShortCode += ' id=' + this.getFieldValue(theForm.toppickId);
+	insertListingGallery: function(theForm, shortcode) {
+		var parameters = {};
+		parameters["id"] = this.getFieldValue(theForm.toppickId);
+		if(theForm.fitToWidth == undefined || theForm.fitToWidth.checked == false) {
+			parameters["width"] = this.getFieldValue(theForm.width);
 		}
-		if(typeof theForm.fitToWidth == 'undefined' || theForm.fitToWidth.checked == false) {
-			listingGalleryShortCode += ' width=' + this.getFieldValue(theForm.width);
+		parameters["height"] = this.getFieldValue(theForm.height);
+		parameters["rows"] = this.getFieldValue(theForm.rows);
+		parameters["columns"] = this.getFieldValue(theForm.columns);
+		parameters["effect"] = this.getFieldValue(theForm.effect);
+		parameters["auto"] = this.getFieldValue(theForm.auto);
+		parameters["maxResults"] = this.getFieldValue(theForm.maxResults);
+		this.buildShortcode(shortcode, parameters);
+	},
+	insertQuickSearch: function(theForm, shortcode) {
+		var parameters = {
+			style: this.getFieldValue(theForm.style),
+			showPropertyType: this.getFieldValue(theForm.showPropertyType)
+		};
+		this.buildShortcode(shortcode, parameters);
+	},
+	insertSearchByAddress: function(theForm, shortcode) {
+		var parameters = {
+			style: this.getFieldValue(theForm.style)
+		};
+		this.buildShortcode(shortcode, parameters);
+	},
+	insertSearchByListingId: function(theForm, shortcode) {
+		this.buildShortcode(shortcode);
+	},
+	insertBasicSearch: function(theForm, shortcode) {
+		this.buildShortcode(shortcode);
+	},
+	insertAdvancedSearch: function(theForm, shortcode) {
+		this.buildShortcode(shortcode);
+	},
+	insertOrganizerLogin: function(theForm, shortcode) {
+		this.buildShortcode(shortcode);
+	},
+	insertValuationForm: function(theForm, shortcode) {
+		this.buildShortcode(shortcode);
+	},
+	insertMapSearch: function(theForm, shortcode) {
+		var parameters = {};
+		if(theForm.fitToWidth == undefined || theForm.fitToWidth.checked == false) {
+			parameters["width"] = this.getFieldValue(theForm.width);
 		}
-		if(this.getFieldValue(theForm.height) != '') {
-			listingGalleryShortCode += ' height=' + this.getFieldValue(theForm.height);
+		parameters["height"] = this.getFieldValue(theForm.height);
+		parameters["centerlat"] = this.getFieldValue(theForm.centerlat);
+		parameters["centerlong"] = this.getFieldValue(theForm.centerlong);
+		parameters["address"] = this.getFieldValue(theForm.address);
+		parameters["zoom"] = this.getFieldValue(theForm.zoom);
+		this.buildShortcode(shortcode, parameters);
+	},
+	insertAgentDetail: function(theForm, shortcode) {
+		var parameters = {
+			agentId: this.getFieldValue(theForm.agentId)
+		};
+		this.buildShortcode(shortcode, parameters);
+	},
+	insertAgentListings: function(theForm, shortcode) {
+		var parameters = {
+			agentId: this.getFieldValue(theForm.agentId)
+		};
+		this.buildShortcode(shortcode, parameters);
+	},
+	insertOfficeListings: function(theForm, shortcode) {
+		var parameters = {
+			officeId: this.getFieldValue(theForm.officeId)
+		};
+		this.buildShortcode(shortcode, parameters);
+	},
+	buildShortcode: function(shortcode, parameters) {
+		var result = "[" + shortcode;
+		if(parameters) {
+			for(var key in parameters) {
+				var value = parameters[key];
+				if(value != undefined && value != null && value.length != 0) {
+					result += ' ' + key + '="' + value + '"';
+				}
+			}
 		}
-		listingGalleryShortCode += ' rows=' + this.getFieldValue(theForm.rows);
-		listingGalleryShortCode += ' columns=' + this.getFieldValue(theForm.columns);
-		listingGalleryShortCode += ' effect=' + this.getFieldValue(theForm.effect);		
-		listingGalleryShortCode += ' auto=' + this.getFieldValue(theForm.auto);
-		listingGalleryShortCode += ' maxResults=' + this.getFieldValue(theForm.maxResults);
-		listingGalleryShortCode += "]";
-		
-		tinyMCEPopup.editor.execCommand('mceInsertContent', false, listingGalleryShortCode);
+		result += "]";
+		tinyMCEPopup.editor.execCommand('mceInsertContent', false, result);
 		tinyMCEPopup.close();
 	},
-	
-	insertQuickSearch : function(theForm, quickSearchShortCodeToken) {
-		// Insert the contents from the input into the document
-		var quickSearchShortCode = "[" + quickSearchShortCodeToken;
-		if(typeof theForm.style.value != 'undefined') {
-			quickSearchShortCode += ' style=' + this.getFieldValue(theForm.style);
+	getFieldValue: function(formField) {
+		var value = null;
+		if(formField != undefined) {
+			if(formField.type == "checkbox") {
+				value = formField.checked;
+			} else {
+				value = formField.value;
+			}
 		}
-		if(typeof theForm.showPropertyType != 'undefined') {
-			quickSearchShortCode += ' showPropertyType=' + theForm.showPropertyType.checked;
+		if (value === undefined || value === null || value.length === 0) {
+			return null;
+		} else {
+			return value;
 		}
-		quickSearchShortCode += "]";
-		tinyMCEPopup.editor.execCommand('mceInsertContent', false, quickSearchShortCode);
-		tinyMCEPopup.close();
 	},
-	
-	insertSearchByAddress : function(theForm, searchByAddressShortCodeToken) {
-		// Insert the contents from the input into the document
-		var searchByAddressShortCode = "[" + searchByAddressShortCodeToken;
-		searchByAddressShortCode += ' style=' + this.getFieldValue(theForm.style);
-		searchByAddressShortCode += "]";
-		
-		tinyMCEPopup.editor.execCommand('mceInsertContent', false, searchByAddressShortCode);
-		tinyMCEPopup.close();
-	},
-	
-	insertSearchByListingId : function(theForm, searchByListingIdShortCodeToken) {
-		// Insert the contents from the input into the document
-		var searchByListingIdShortCode = "[" + searchByListingIdShortCodeToken;
-		searchByListingIdShortCode += "]";
-		
-		tinyMCEPopup.editor.execCommand('mceInsertContent', false, searchByListingIdShortCode);
-		tinyMCEPopup.close();
-	},
-	
-	insertBasicSearch : function(theForm, basicSearchShortCodeToken) {
-		// Insert the contents from the input into the document
-		var basicSearchShortCode = "[" + basicSearchShortCodeToken;
-		basicSearchShortCode += "]";
-		
-		tinyMCEPopup.editor.execCommand('mceInsertContent', false, basicSearchShortCode);
-		tinyMCEPopup.close();
-	},
-	
-	insertAdvancedSearch : function(theForm, advancedSearchShortCodeToken) {
-		// Insert the contents from the input into the document
-		var advancedSearchShortCode = "[" + advancedSearchShortCodeToken;
-		advancedSearchShortCode += "]";
-		
-		tinyMCEPopup.editor.execCommand('mceInsertContent', false, advancedSearchShortCode);
-		tinyMCEPopup.close();
-	},
-	
-	insertOrganizerLogin : function(theForm, organizerLoginShortCodeToken) {
-		// Insert the contents from the input into the document
-		var organizerLoginShortCode = "[" + organizerLoginShortCodeToken;
-		organizerLoginShortCode += "]";
-		
-		tinyMCEPopup.editor.execCommand('mceInsertContent', false, organizerLoginShortCode);
-		tinyMCEPopup.close();
-	},
-	
-	insertValuationForm : function(theForm, valuationFormShortCodeToken) {
-		// Insert the contents from the input into the document
-		var valuationFormShortCode = "[" + valuationFormShortCodeToken;
-		valuationFormShortCode += "]";
-		
-		tinyMCEPopup.editor.execCommand('mceInsertContent', false, valuationFormShortCode);
-		tinyMCEPopup.close();
-	},
-	
-	insertMapSearch : function(theForm, mapSearchShortCodeToken) {
-		// Insert the contents from the input into the document
-		var mapSearchShortCode = "[" + mapSearchShortCodeToken;
-		if(typeof theForm.fitToWidth == 'undefined' || theForm.fitToWidth.checked == false) {
-			mapSearchShortCode += ' width=' + this.getFieldValue(theForm.width);
-		}
-		mapSearchShortCode += ' height=' + this.getFieldValue(theForm.height);
-		if(typeof theForm.centerlat != 'undefined') {
-			mapSearchShortCode += ' centerlat=' + this.getFieldValue(theForm.centerlat);
-		}
-		if(typeof theForm.centerlong != 'undefined') {
-			mapSearchShortCode += ' centerlong=' + this.getFieldValue(theForm.centerlong);
-		}
-		if(typeof theForm.address != 'undefined') {
-			mapSearchShortCode += ' address="' + this.getFieldValue(theForm.address) + '"';
-		}
-		mapSearchShortCode += ' zoom=' + this.getFieldValue(theForm.zoom);
-		mapSearchShortCode += "]";
-		
-		tinyMCEPopup.editor.execCommand('mceInsertContent', false, mapSearchShortCode);
-		tinyMCEPopup.close();
-	},
-	
-	insertAgentDetail : function(theForm, agentDetailShortCodeToken) {
-		// Insert the contents from the input into the document
-		var agentDetailShortCodeToken = "[" + agentDetailShortCodeToken;
-		agentDetailShortCodeToken += " agentId=" + this.getFieldValue(theForm.agentId);
-		agentDetailShortCodeToken += "]";
-		
-		tinyMCEPopup.editor.execCommand('mceInsertContent', false, agentDetailShortCodeToken);
-		tinyMCEPopup.close();
-	},
-
-	insertAgentListings : function(theForm, agentListingsShortCodeToken) {
-		// Insert the contents from the input into the document
-		var agentListingsShortCodeToken = "[" + agentListingsShortCodeToken;
-		agentListingsShortCodeToken += " agentId=" + this.getFieldValue(theForm.agentId);
-		agentListingsShortCodeToken += "]";
-		
-		tinyMCEPopup.editor.execCommand('mceInsertContent', false, agentListingsShortCodeToken);
-		tinyMCEPopup.close();
-	},
-	
-	insertOfficeListings : function(theForm, officeListingsShortCodeToken) {
-		// Insert the contents from the input into the document
-		var officeListingsShortCodeToken = "[" + officeListingsShortCodeToken;
-		officeListingsShortCodeToken += " officeId=" + this.getFieldValue(theForm.officeId);
-		officeListingsShortCodeToken += "]";
-		
-		tinyMCEPopup.editor.execCommand('mceInsertContent', false, officeListingsShortCodeToken);
-		tinyMCEPopup.close();
-	},	
-
-	includeMap: function(theForm) {
-		if(theForm.includeMap && theForm.includeMap.checked) {
-			return " includeMap=true";
-		}
-		return " includeMap=false";
-	},
-
-	getFieldValue : function(formField) {
-		var value = formField.value;
-		if (this.isEmpty(value)) {
-			value = "";
-		}
-		return value;
-	},
-		
-	isEmpty: function(value) {
-		if (value === null || value.length === 0) {
-			return true;
-		}
-		return false;
-	},
-	
 	validateForm: function(theForm) {
 		returnValue = true;
 		nodeList = theForm.querySelectorAll('input,select,textarea');
 		for (var i = 0, node; node = nodeList[i]; i++) {
 			parent = node.parentNode;
-			parent.className = parent.className.replace(' has-error', '');
-			if (node.getAttribute('required') && node.value == '') {
+			parent.className = parent.className.replace(' has-error', "");
+			if (node.getAttribute('required') && node.value == "") {
 				parent.className = parent.className + ' has-error';
 				returnValue = false;
 			}

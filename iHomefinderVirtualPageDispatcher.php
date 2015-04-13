@@ -119,11 +119,11 @@ class iHomefinderVirtualPageDispatcher {
 		$this->init();
 		if($this->initialized) {
 			$virtualPageTemplate = $this->virtualPage->getPageTemplate();
-			if(iHomefinderUtility::getInstance()->isStringEmpty($virtualPageTemplate)) {
+			if(empty($virtualPageTemplate)) {
 				$virtualPageTemplate = iHomefinderVirtualPageHelper::getInstance()->getDefaultTemplate();
 			}
 			//If the $virtualPageTemplate is NOT empty, then reset $pageTemplate
-			if(!iHomefinderUtility::getInstance()->isStringEmpty($virtualPageTemplate)) {
+			if(!empty($virtualPageTemplate)) {
 				$templates = array($virtualPageTemplate);
 				//gets the disk location of the template
 				$pageTemplate = locate_template($templates); 

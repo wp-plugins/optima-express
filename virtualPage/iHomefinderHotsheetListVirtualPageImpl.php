@@ -4,9 +4,6 @@ class iHomefinderHotsheetListVirtualPageImpl extends iHomefinderAbstractVirtualP
 	
 	private $path = "homes-for-sale-toppicks";
 	
-	public function __construct() {
-		
-	}
 	public function getTitle() {
 		return "Saved Search Pages";
 	}
@@ -20,16 +17,13 @@ class iHomefinderHotsheetListVirtualPageImpl extends iHomefinderAbstractVirtualP
 	}
 			
 	public function getContent() {
-		iHomefinderLogger::getInstance()->debug('Begin iHomefinderHotsheetListVirtualPageImpl');
-		$requestData = 'method=handleRequest'
-			. '&viewType=json'
-			. '&requestType=hotsheet-list';
-										
-		$this->remoteResponse = iHomefinderRequestor::getInstance()->remoteGetRequest($requestData);
-		$body = iHomefinderRequestor::getInstance()->getContent($this->remoteResponse);
-		
-		iHomefinderLogger::getInstance()->debug('End iHomefinderHotsheetListVirtualPageImpl');
-		iHomefinderLogger::getInstance()->debug($requestData);
+		$this->remoteRequest
+			->addParameter("method", "handleRequest")
+			->addParameter("viewType", "json")
+			->addParameter("requestType", "hotsheet-list")
+		;
+		$this->remoteResponse = $this->remoteRequest->remoteGetRequest();
+		$body = $this->remoteRequest->getContent($this->remoteResponse);
 		return $body;
 	}
 }
