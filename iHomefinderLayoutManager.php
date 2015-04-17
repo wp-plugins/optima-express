@@ -1,10 +1,7 @@
 <?php
 
 /**
- * This class is handle rules related to 
- * different virtual page layouts
- *
- * @author ihomefinder
+ * This class is handle rules related to different virtual page layouts
  */
 class iHomefinderLayoutManager {
 
@@ -15,9 +12,9 @@ class iHomefinderLayoutManager {
 	}
 	
 	public function isResponsive() {
-		$result=false;
+		$result = false;
 		if($this->getLayoutType() == iHomefinderConstants::OPTION_LAYOUT_TYPE_RESPONSIVE) {
-			$result=true;
+			$result = true;
 		}
 		return $result;
 	}
@@ -34,13 +31,13 @@ class iHomefinderLayoutManager {
 
 	public static function getInstance() {
 		if(!isset(self::$instance)) {
-			self::$instance = new iHomefinderLayoutManager();
+			self::$instance = new self();
 		}
 		return self::$instance;
 	}
 	
 	public function getExternalUrl() {
-		$result = '';
+		$result = "";
 		if($this->isResponsive()) {
 			$result = iHomefinderConstants::RESPONSIVE_EXTERNAL_URL;
 		}
@@ -51,80 +48,80 @@ class iHomefinderLayoutManager {
 	}
 	
 	public function supportsMultipleQuickSearchLayouts() {
-		$result=false;
+		$result = false;
 		if($this->isResponsive()) {
-			$result=true;
+			$result = true;
 		}
 		return $result;
 	}
 	
 	public function supportsQuickSearchPropertyType() {
-		$result=false;
+		$result = false;
 		if($this->isResponsive()) {
-			$result=true;
+			$result = true;
 		}
 		return $result;
 	}
 	
 	public function supportsMapSearchCenterLatLong() {
-		$result=false;
+		$result = false;
 		if($this->isResponsive()) {
-			$result=false;
+			$result = false;
 		} else {
-			$result=true;
+			$result = true;
 		}
 		return $result;
 	}
 	
 	public function supportsMapSearchCenterAddress() {
-		$result=false;
+		$result = false;
 		if($this->isResponsive()) {
-			$result=true;
+			$result = true;
 		}
 		return $result;
 	}
 	
 	public function supportsMapSearchResponsiveness() {
-		$result=false;
+		$result = false;
 		if($this->isResponsive()) {
-			$result=true;
+			$result = true;
 		}
 		return $result;
 	}
 	
 	public function supportsColorScheme() {
-		$result=false;
+		$result = false;
 		if($this->isResponsive()) {
-			$result=true;
+			$result = true;
 		}
 		return $result;
 	}
 	
 	public function supportsListingGallery() {
-		$result=true;
+		$result = true;
 		return $result;
 	}
 	
 	public function supportsListingGalleryResponsiveness() {
-		$result=false;
+		$result = false;
 		if($this->isResponsive()) {
-			$result=true;
+			$result = true;
 		}
 		return $result;
 	}
 	
 	public function supportsResultsDisplayType() {
-		$result=false;
+		$result = false;
 		if($this->isResponsive()) {
-			$result=true;
+			$result = true;
 		}
 		return $result;
 	}
 	
 	public function supportsResultsResultsPerPage() {
-		$result=false;
+		$result = false;
 		if($this->isResponsive()) {
-			$result=true;
+			$result = true;
 		}
 		return $result;
 	}
@@ -137,17 +134,17 @@ class iHomefinderLayoutManager {
 	 * @return boolean
 	 */
 	public function hasExtraLineBreaksInWidget() {
-		$result=true;
+		$result = true;
 		if($this->isResponsive()) {
-			$result=false;
+			$result = false;
 		}
 		return $result;
 	}
 	
 	public function hasItemInSearchFormData() {
-		$result=false;
+		$result = false;
 		if($this->isResponsive()) {
-			$result=true;
+			$result = true;
 		}
 		return $result;
 	}
@@ -158,9 +155,9 @@ class iHomefinderLayoutManager {
 	 */
 
 	public function supportsMapSearchWithMultipleWidths() {
-		$result=false;
+		$result = false;
 		if($this->isResponsive()) {
-			$result=true;
+			$result = true;
 		}
 		return $result;
 	}
@@ -171,9 +168,9 @@ class iHomefinderLayoutManager {
 	 * The legacy version uses the QuickSearchVirtualPage
 	 */
 	public function supportsQuickSearchVirtualPage() {
-		$result=true;
+		$result = true;
 		if($this->isResponsive()) {
-			$result=false;
+			$result = false;
 		}
 		return $result;			
 	}
@@ -183,9 +180,9 @@ class iHomefinderLayoutManager {
 	 * We need to kill the session on java servers for subscriber logout
 	 */
 	public function isSubscriberSessionOnJavaServers() {
-		$result=false;
+		$result = false;
 		if($this->isResponsive()) {
-			$result=true;
+			$result = true;
 		}
 		return $result;
 	}

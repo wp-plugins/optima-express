@@ -26,7 +26,7 @@ class iHomefinderVirtualPageDispatcher {
 
 	public static function getInstance() {
 		if(!isset(self::$instance)) {
-			self::$instance = new iHomefinderVirtualPageDispatcher();
+			self::$instance = new self();
 		}
 		return self::$instance;
 	}
@@ -61,7 +61,7 @@ class iHomefinderVirtualPageDispatcher {
 	}
 	
 	/**
-	 * Cleanup state after filtering.  This fixes an issue
+	 * Cleanup state after filtering. This fixes an issue
 	 * where widgets display different loop content, such
 	 * as featured posts.
 	 */
@@ -73,8 +73,8 @@ class iHomefinderVirtualPageDispatcher {
 	 * We identify iHomefinder requests based on the query_var
 	 * iHomefinderConstants::IHF_TYPE_URL_VAR.
 	 * Set the proper title and update the posts array to contain only
-	 * a single posts.  This will get updated in another action later
-	 * during processing.  We cannot set the post content here, because
+	 * a single posts. This will get updated in another action later
+	 * during processing. We cannot set the post content here, because
 	 * Wordpress does some odd formatting of the post_content, if we
 	 * add it here (see the getContent method below, where content is properly set)
 	 *
@@ -84,7 +84,7 @@ class iHomefinderVirtualPageDispatcher {
 		$this->init();
 		if($this->initialized) {
 			$_postArray['post_title'] = $this->title;
-			//This value will get replaced with remote content.  If it is not replaced, then an error
+			//This value will get replaced with remote content. If it is not replaced, then an error
 			//has occurred and we leave the following default text.
 			$_postArray['post_content'] = $this->content;
 			$_postArray['post_excerpt'] = $this->excerpt;

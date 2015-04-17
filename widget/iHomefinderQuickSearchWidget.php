@@ -32,8 +32,8 @@ class iHomefinderQuickSearchWidget extends WP_Widget {
 					->addParameter("style", $instance['style'])
 					->addParameter("showPropertyType", $instance['showPropertyType'])
 				;
-				
-				$contentInfo = $remoteRequest->remoteGetRequest(86400);
+				$remoteRequest->setCacheExpiration(60*60*24);
+				$contentInfo = $remoteRequest->remoteGetRequest();
 				$content = $remoteRequest->getContent($contentInfo);
 				iHomefinderEnqueueResource::getInstance()->addToFooter($contentInfo->head);
 				

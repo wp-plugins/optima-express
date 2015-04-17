@@ -10,7 +10,7 @@ class iHomefinderTinyMceManager {
 	
 	public static function getInstance() {
 		if(!isset(self::$instance)) {
-			self::$instance = new iHomefinderTinyMceManager();
+			self::$instance = new self();
 		}
 		return self::$instance;		
 	}		

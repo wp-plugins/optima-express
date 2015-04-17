@@ -43,7 +43,8 @@ class iHomefinderHotsheetListWidget extends WP_Widget {
 				$remoteRequest->addParameter("hotsheetIds", $hotsheetIds);
 			}
 			
-			$contentInfo = $remoteRequest->remoteGetRequest(3600);
+			$remoteRequest->setCacheExpiration(60*60);
+			$contentInfo = $remoteRequest->remoteGetRequest();
 			$content = $remoteRequest->getContent($contentInfo);
 			iHomefinderEnqueueResource::getInstance()->addToFooter($contentInfo->head);
 			

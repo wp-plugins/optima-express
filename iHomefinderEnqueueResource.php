@@ -12,7 +12,7 @@ class iHomefinderEnqueueResource {
 	
 	public static function getInstance() {
 		if(!isset(self::$instance)) {
-			self::$instance = new iHomefinderEnqueueResource();
+			self::$instance = new self();
 		}
 		return self::$instance;
 	}

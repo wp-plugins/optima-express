@@ -15,7 +15,7 @@ class iHomefinderSearchFormFieldsUtility {
 
 	public static function getInstance() {
 		if(!isset(self::$instance)) {
-			self::$instance = new iHomefinderSearchFormFieldsUtility();
+			self::$instance = new self();
 		}
 		return self::$instance;
 	}
@@ -59,12 +59,12 @@ class iHomefinderSearchFormFieldsUtility {
 		return $this->formData;
 	 }	
 
-	 /**
-	  * This function was added to convert our xml based array into a proper
-	  * php array for use in admin search forms.
-	  * @param unknown_type $from
-	  */
-	 private function convertItemValues($fromValue) {
+	/**
+	 * This function was added to convert our xml based array into a proper
+	 * php array for use in admin search forms.
+	 * @param unknown_type $from
+	 */
+	private function convertItemValues($fromValue) {
 		if(iHomefinderLayoutManager::getInstance()->hasItemInSearchFormData()) {
 			$result = array();
 			foreach($fromValue->item as $element) {
@@ -74,5 +74,5 @@ class iHomefinderSearchFormFieldsUtility {
 			$result = $fromValue;
 		}
 		return $result;
-	 }
+	}
 }

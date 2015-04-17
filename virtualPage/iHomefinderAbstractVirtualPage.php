@@ -18,7 +18,11 @@ abstract class iHomefinderAbstractVirtualPage implements iHomefinderVirtualPageI
 	}
 	
 	public function getHead() {
-		return $this->remoteResponse->head;
+		$result = null;
+		if(property_exists($this->remoteResponse, "head")) {
+			$result = $this->remoteResponse->head;
+		}
+		return $result;
 	}
 	
 	public function getTitle() {
@@ -30,7 +34,11 @@ abstract class iHomefinderAbstractVirtualPage implements iHomefinderVirtualPageI
 	}
 	
 	public function getMetaTags() {
-		return $this->remoteResponse->metatags;
+		$result = null;
+		if(property_exists($this->remoteResponse, "metatags")) {
+			$result = $this->remoteResponse->metatags;
+		}
+		return $result;
 	}
 	
 }

@@ -118,7 +118,7 @@ class iHomefinderVirtualPageHelper {
 
 	public static function getInstance() {
 		if(!isset(self::$instance)) {
-			self::$instance = new iHomefinderVirtualPageHelper();
+			self::$instance = new self();
 		}
 		return self::$instance;
 	}

@@ -25,7 +25,7 @@ class iHomefinderAjaxHandler {
 
 	public static function getInstance() {
 		if(!isset(self::$instance)) {
-			self::$instance = new iHomefinderAjaxHandler();
+			self::$instance = new self();
 		}
 		return self::$instance;
 	}

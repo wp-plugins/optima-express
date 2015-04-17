@@ -26,8 +26,8 @@ class iHomefinderSearchByAddressWidget extends WP_Widget {
 				->addParameter("phpStyle", true)
 				->addParameter("style", $instance["style"])
 			;
-		
-			$contentInfo = $remoteRequest->remoteGetRequest(86400);
+			$remoteRequest->setCacheExpiration(60*60*24);
+			$contentInfo = $remoteRequest->remoteGetRequest();
 			$content = $remoteRequest->getContent($contentInfo);
 			iHomefinderEnqueueResource::getInstance()->addToFooter($contentInfo->head);
 		

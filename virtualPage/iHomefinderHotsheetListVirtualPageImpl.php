@@ -13,7 +13,7 @@ class iHomefinderHotsheetListVirtualPageImpl extends iHomefinderAbstractVirtualP
 	}
 	
 	public function getPath() {
-		return  $this->path;
+		return $this->path;
 	}
 			
 	public function getContent() {
@@ -22,6 +22,7 @@ class iHomefinderHotsheetListVirtualPageImpl extends iHomefinderAbstractVirtualP
 			->addParameter("viewType", "json")
 			->addParameter("requestType", "hotsheet-list")
 		;
+		$this->remoteRequest->setCacheExpiration(60*60);
 		$this->remoteResponse = $this->remoteRequest->remoteGetRequest();
 		$body = $this->remoteRequest->getContent($this->remoteResponse);
 		return $body;

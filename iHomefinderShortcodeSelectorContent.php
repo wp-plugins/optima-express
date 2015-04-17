@@ -1,6 +1,6 @@
 <?php
 
-class iHomefinderShortcodeDialogContent {
+class iHomefinderShortcodeSelectorContent {
 
 	private static $instance;
 
@@ -9,13 +9,12 @@ class iHomefinderShortcodeDialogContent {
 
 	public static function getInstance() {
 		if(!isset(self::$instance)) {
-			self::$instance = new iHomefinderShortcodeDialogContent();
+			self::$instance = new self();
 		}
 		return self::$instance;
 	}
 	
-	public function getShortcodeDialogContent() {
-		$shortcodeDialog = new iHomefinderShortcodeDialog();
+	public function getShortcodeSelectorContent() {
 		?>
 		<div class="panel-body">
 			<ul class="nav nav-tabs" id="ihf-dialog-tabs">
@@ -62,12 +61,12 @@ class iHomefinderShortcodeDialogContent {
 								</select>
 							</div>
 							<?php if(iHomefinderLayoutManager::getInstance()->supportsListingGallery()) { ?>
-							<div class="radio">
-								<label class="control-label">
-									<input name="shortcodeType" type="radio" onclick="jQuery('.listingGalleryMenu').hide(); jQuery('.ihfMenu').hide(); jQuery('#listingGalleryMenu').toggle();">
-									Gallery Slider
-								</label>
-							</div>
+								<div class="radio">
+									<label class="control-label">
+										<input name="shortcodeType" type="radio" onclick="jQuery('.listingGalleryMenu').hide(); jQuery('.ihfMenu').hide(); jQuery('#listingGalleryMenu').toggle();">
+										Gallery Slider
+									</label>
+								</div>
 							<?php } ?>
 						</div>
 					</div>
@@ -83,18 +82,14 @@ class iHomefinderShortcodeDialogContent {
 								<div class="form-group">
 									<label class="control-label">Sort</label>
 									<div>
-										<?php $shortcodeDialog->createSortSelect(true); ?>
+										<?php $this->createSortSelect(true); ?>
 									</div>
 								</div>
 								<?php if(iHomefinderLayoutManager::getInstance()->supportsResultsDisplayType()) { ?>
 									<div class="form-group">
 										<label class="control-label">Display Type</label>
 										<div>
-											<select class="form-control" name="displayType">
-												<option value="">Default</option>
-												<option value="list">List</option>
-												<option value="grid">Grid</option>
-											</select>
+											<?php $this->createDisplayTypeSelect(); ?>
 										</div>
 									</div>
 								<?php } ?>
@@ -109,10 +104,7 @@ class iHomefinderShortcodeDialogContent {
 								<div class="form-group">
 									<label class="control-label">Display Header</label>
 									<div>
-										<select class="form-control" name="header" required="required">
-											<option value="true">Yes</option>
-											<option value="false">No</option>
-										</select>
+										<?php $this->createHeaderSelect(true); ?>
 									</div>
 								</div>
 								<input class="btn btn-default" type="button" name="insertFeatured" value="Insert" onclick="return IhfGalleryDialog.validateForm(this.form) && IhfGalleryDialog.insertFeaturedListings(this.form, '<?php echo(iHomefinderShortcodeDispatcher::getInstance()->getFeaturedShortcode()) ?>');" />
@@ -123,7 +115,7 @@ class iHomefinderShortcodeDialogContent {
 								<div class="form-group">
 									<label class="control-label">Saved Search</label>
 									<div>
-										<?php $shortcodeDialog->createTopPicksSelect(true); ?>
+										<?php $this->createTopPicksSelect(true); ?>
 									</div>
 								</div>
 								<div class="checkbox">
@@ -135,18 +127,14 @@ class iHomefinderShortcodeDialogContent {
 								<div class="form-group">
 									<label class="control-label">Sort</label>
 									<div>
-										<?php $shortcodeDialog->createSortSelect(); ?>
+										<?php $this->createSortSelect(); ?>
 									</div>
 								</div>
 								<?php if(iHomefinderLayoutManager::getInstance()->supportsResultsDisplayType()) { ?>
 									<div class="form-group">
 										<label class="control-label">Display Type</label>
 										<div>
-											<select class="form-control" name="displayType">
-												<option value="">Default</option>
-												<option value="list">List</option>
-												<option value="grid">Grid</option>
-											</select>
+											<?php $this->createDisplayTypeSelect(); ?>
 										</div>
 									</div>
 								<?php } ?>
@@ -161,10 +149,7 @@ class iHomefinderShortcodeDialogContent {
 								<div class="form-group">
 									<label class="control-label">Display Header</label>
 									<div>
-										<select class="form-control" name="header" required="required">
-											<option value="true">Yes</option>
-											<option value="false">No</option>
-										</select>
+										<?php $this->createHeaderSelect(true); ?>
 									</div>
 								</div>
 								<input class="btn btn-default" type="button" name="insertToppicks" value="Insert" onclick="return IhfGalleryDialog.validateForm(this.form) && IhfGalleryDialog.insertToppicks(this.form, '<?php echo(iHomefinderShortcodeDispatcher::getInstance()->getToppicksShortCode()) ?>');" />
@@ -175,13 +160,13 @@ class iHomefinderShortcodeDialogContent {
 								<div class="form-group">
 									<label class="control-label">Cities</label>
 									<div>
-										<?php $shortcodeDialog->createCitySelect(true); ?>
+										<?php $this->createCitySelect(true); ?>
 									</div>
 								</div>
 								<div class="form-group">
 									<label class="control-label">Property Type</label>
 									<div>
-										<?php $shortcodeDialog->createPropertyTypeSelect(true); ?>
+										<?php $this->createPropertyTypeSelect(true); ?>
 									</div>
 								</div>
 								<div class="form-group">
@@ -217,18 +202,14 @@ class iHomefinderShortcodeDialogContent {
 								<div class="form-group">
 									<label class="control-label">Sort</label>
 									<div>
-										<?php $shortcodeDialog->createSortSelect(true); ?>
+										<?php $this->createSortSelect(true); ?>
 									</div>
 								</div>
 								<?php if(iHomefinderLayoutManager::getInstance()->supportsResultsDisplayType()) { ?>
 									<div class="form-group">
 										<label class="control-label">Display Type</label>
 										<div>
-											<select class="form-control" name="displayType">
-												<option value="">Default</option>
-												<option value="list">List</option>
-												<option value="grid">Grid</option>
-											</select>
+											<?php $this->createDisplayTypeSelect(); ?>
 										</div>
 									</div>
 								<?php } ?>
@@ -243,10 +224,7 @@ class iHomefinderShortcodeDialogContent {
 								<div class="form-group">
 									<label class="control-label">Display Header</label>
 									<div>
-										<select class="form-control" name="header" required="required">
-											<option value="true">Yes</option>
-											<option value="false">No</option>
-										</select>
+										<?php $this->createHeaderSelect(true); ?>
 									</div>
 								</div>
 								<input class="btn btn-default" type="button" name="insertSearchResults" value="Insert" onclick="return IhfGalleryDialog.validateForm(this.form) && IhfGalleryDialog.insertSearchResults(this.form, '<?php echo(iHomefinderShortcodeDispatcher::getInstance()->getSearchResultsShortcode()) ?>');" />
@@ -257,7 +235,7 @@ class iHomefinderShortcodeDialogContent {
 								<div class="form-group">
 									<label class="control-label">Agent</label>
 									<div>
-										<?php $shortcodeDialog->createAgentSelect(true); ?>
+										<?php $this->createAgentSelect(true); ?>
 									</div>
 								</div>
 								<input class="btn btn-default" type="button" name="insertAgentListings" value="Insert" onclick="return IhfGalleryDialog.validateForm(this.form) && IhfGalleryDialog.insertAgentListings(this.form, '<?php echo(iHomefinderShortcodeDispatcher::getInstance()->getAgentListingsShortcode()) ?>');" />
@@ -268,7 +246,7 @@ class iHomefinderShortcodeDialogContent {
 								<div class="form-group">
 									<label class="control-label">Office</label>
 									<div>
-										<?php $shortcodeDialog->createOfficeSelect(true); ?>
+										<?php $this->createOfficeSelect(true); ?>
 									</div>
 								</div>
 								<input class="btn btn-default" type="button" name="insertOfficeListings" value="Insert" onclick="return IhfGalleryDialog.validateForm(this.form) && IhfGalleryDialog.insertOfficeListings(this.form, '<?php echo(iHomefinderShortcodeDispatcher::getInstance()->getOfficeListingsShortcode()) ?>');" />
@@ -289,7 +267,7 @@ class iHomefinderShortcodeDialogContent {
 									<?php } ?>
 								</div>
 								<div id="TopPicksSelect" class="form-group" style="display: none;">
-									<?php $shortcodeDialog->createTopPicksSelect(); ?>
+									<?php $this->createTopPicksSelect(); ?>
 								</div>
 								<?php if(iHomefinderLayoutManager::getInstance()->supportsListingGalleryResponsiveness()) { ?>
 									<div class="form-group">
@@ -611,7 +589,7 @@ class iHomefinderShortcodeDialogContent {
 								<div class="form-group">
 									<label class="control-label">Agent</label>
 									<div>
-										<?php $shortcodeDialog->createAgentSelect(true); ?>
+										<?php $this->createAgentSelect(true); ?>
 									</div>
 								</div>
 								<input class="btn btn-default" type="button" name="insertAgentDetail" value="Insert" onclick="return IhfGalleryDialog.validateForm(this.form) && IhfGalleryDialog.insertAgentDetail(this.form, '<?php echo(iHomefinderShortcodeDispatcher::getInstance()->getAgentDetailShortcode()) ?>');" />
@@ -621,7 +599,138 @@ class iHomefinderShortcodeDialogContent {
 				</div>
 			</div>
 		</div>
-	<?php
-	die(); //don't remove
+		<?php
+		die(); //don't remove
 	}
+	
+	private function createAgentSelect($required = false) {
+		$values = iHomefinderSearchFormFieldsUtility::getInstance()->getFormData()->getAgentList();
+		?>
+		<select class="form-control" id="agentId" name="agentId"
+			<?php if($required === true) { ?>
+				required="required"
+			<?php } ?>
+		>
+			<option value="">Select One</option>
+			<?php foreach($values as $index => $value) { ?>
+				<option value="<?php echo $value->agentId ?>">
+					<?php echo $value->agentName ?>
+				</option>
+			<?php } ?>
+		</select>
+		<?php
+	}
+	
+	private function createOfficeSelect($required = false) {
+		$values = iHomefinderSearchFormFieldsUtility::getInstance()->getFormData()->getOfficeList();
+		?>
+		<select class="form-control" id="officeId" name="officeId"
+			<?php if($required === true) { ?>
+				required="required"
+			<?php } ?>
+		>
+			<option value="">Select One</option>
+			<?php foreach($values as $index => $value) { ?>
+				<option value="<?php echo $value->officeId ?>">
+					<?php echo $value->officeName ?>
+				</option>
+			<?php } ?>
+		</select>
+		<?php
+	}
+	
+	private function createTopPicksSelect($required = false) {
+		$values = iHomefinderSearchFormFieldsUtility::getInstance()->getFormData()->getHotsheetList();
+		?>
+		<select class="form-control" id="toppickId" name="toppickId"
+			<?php if($required === true) { ?>
+				required="required"
+			<?php } ?>
+		>
+			<option value="">Select One</option>
+			<?php foreach($values as $index => $value) { ?>
+				<option value="<?php echo $value->hotsheetId ?>">
+					<?php echo $value->displayName ?>
+				</option>
+			<?php } ?>
+		</select>
+		<?php
+	}
+	
+	private function createCitySelect($required = false) {
+		$values = iHomefinderSearchFormFieldsUtility::getInstance()->getFormData()->getCitiesList();
+		?>
+		<select class="form-control" id="cityId" name="cityId"
+			<?php if($required === true) { ?>
+				required="required"
+			<?php } ?>
+		>
+			<option value="">Select One</option>
+			<?php foreach($values as $index => $value) { ?>
+				<option value="<?php echo $value->cityId ?>">
+					<?php echo $value->displayName ?>
+				</option>
+			<?php } ?>
+		</select>
+		<?php
+	}
+	
+	private function createPropertyTypeSelect($required = false) {
+		$values = iHomefinderSearchFormFieldsUtility::getInstance()->getFormData()->getPropertyTypesList();
+		?>
+		<select class="form-control" id="propertyType" name="propertyType"
+			<?php if($required === true) { ?>
+				required="required"
+			<?php } ?>
+		>
+			<option value="">Select One</option>
+			<?php foreach($values as $index => $value) { ?>
+				<option value="<?php echo $value->propertyTypeCode ?>">
+					<?php echo $value->displayName ?>
+				</option>
+			<?php } ?>
+		</select>
+		<?php
+	}
+	
+	private function createSortSelect($required = false) {
+		?>
+		<select class="form-control" id="sortBy" name="sortBy"
+			<?php if($required === true) { ?>
+				required="required"
+			<?php } ?>
+		>
+			<option value="pd">Price Descending</option>
+			<option value="pa">Price Ascending</option>
+		</select>
+		<?php
+	}
+	
+	private function createDisplayTypeSelect($required = false) {
+		?>
+		<select class="form-control" id="displayType" name="displayType"
+			<?php if($required === true) { ?>
+				required="required"
+			<?php } ?>
+		>
+			<option value="">Default</option>
+			<option value="list">List</option>
+			<option value="grid">Grid</option>
+		</select>
+		<?php
+	}
+	
+	private function createHeaderSelect($required = false) {
+		?>
+			<select class="form-control" id="sortBy" name="sortBy"
+				<?php if($required === true) { ?>
+					required="required"
+				<?php } ?>
+			>
+				<option value="true">Yes</option>
+				<option value="false">No</option>
+			</select>
+			<?php
+		}
+	
 }

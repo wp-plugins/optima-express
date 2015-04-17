@@ -74,7 +74,7 @@ class iHomefinderPermissions {
 	
 	public static function getInstance() {
 		if(!isset(self::$instance)) {
-			self::$instance = new iHomefinderPermissions();
+			self::$instance = new self();
 		}
 		return self::$instance;		
 	}	

@@ -58,7 +58,7 @@ class iHomefinderStateManager {
 
 	public static function getInstance() {
 		if(!isset(self::$instance)) {
-			self::$instance = new iHomefinderStateManager();
+			self::$instance = new self();
 		}
 		return self::$instance;
 	}
@@ -75,8 +75,8 @@ class iHomefinderStateManager {
 		
 		$isWebCrawler=iHomefinderUtility::getInstance()->isWebCrawler();
 		if(empty($this->uniqueId) && !$this->isWebCrawler()) {
-			$this->uniqueId= uniqid();
-			$expireTime=time()+60*60*24*365*5; /* expire in 5 years */
+			$this->uniqueId = uniqid();
+			$expireTime = time()+60*60*24*365*5; /* expire in 5 years */
 			setcookie($this->identifierCookieName, $this->uniqueId, $expireTime, "/");
 		}
 					
@@ -95,7 +95,7 @@ class iHomefinderStateManager {
 		else{
 			$this->leadCaptureId = $this->getLeadCaptureId();
 			if($this->leadCaptureId != null) {
-				$expireTime=time()+60*60*24*365*5; /* expire in 5 years */
+				$expireTime = time()+60*60*24*365*5; /* expire in 5 years */
 				setcookie($this->getLeadCaptureKey(), $this->leadCaptureId, $expireTime, "/");
 			}
 		}		
@@ -118,7 +118,7 @@ class iHomefinderStateManager {
 	}
 	
 	private function getStateValue($cacheKey) {
-		$value='';
+		$value = '';
 		if($this->isSessionsEnabled()) {
 			if(array_key_exists($cacheKey, $_SESSION)) {
 				$value = unserialize($_SESSION[$cacheKey]);
@@ -177,7 +177,7 @@ class iHomefinderStateManager {
 	}
 
 	public function setSearchContext($value) {
-		$this->searchContext=$value;
+		$this->searchContext = $value;
 	}
 
 	/**
@@ -208,7 +208,7 @@ class iHomefinderStateManager {
 		
 		if($this->leadCaptureId == null) {
 			if(!$this->isWebCrawler()) {
-				$cacheKey=$this->getLeadCaptureKey();
+				$cacheKey = $this->getLeadCaptureKey();
 				$this->leadCaptureId = $this->getStateValue($cacheKey);					
 			}
 		}
@@ -250,10 +250,10 @@ class iHomefinderStateManager {
 	}
 	
 	public function getCurrentUrl() {
-		$currentUrl="";
+		$currentUrl = "";
 		if(!$this->isWebCrawler()) {
-			$host=$_SERVER['HTTP_HOST'];
-			$requestUri=$_SERVER['REQUEST_URI'];	
+			$host = $_SERVER['HTTP_HOST'];
+			$requestUri = $_SERVER['REQUEST_URI'];	
 			$currentUrl = "http://" . $host . $requestUri;	
 		}
 		return $currentUrl;	
@@ -266,9 +266,9 @@ class iHomefinderStateManager {
 	 */
 	public function saveLastSearch() {
 		if(!$this->isWebCrawler()) {
-			$lastSearch=$this->getCurrentUrl();
+			$lastSearch = $this->getCurrentUrl();
 			$lastSearch = str_replace("newSearch=true&", "", $lastSearch);
-			$cacheKey=$this->getLastSearchKey();
+			$cacheKey = $this->getLastSearchKey();
 			$this->saveStateValue($cacheKey, $lastSearch);
 		}
 		return;
@@ -276,37 +276,37 @@ class iHomefinderStateManager {
 	
 
 	public function getLastSearch() {
-		$lastSearch="";
+		$lastSearch = "";
 		if(!$this->isWebCrawler()) {
-			$cacheKey=$this->getLastSearchKey();
+			$cacheKey = $this->getLastSearchKey();
 			$lastSearch = $this->getStateValue($cacheKey);
 		}
 		return $lastSearch;
 	}
 
 	private function getLastSearchQueryString() {
-		$queryString="";
+		$queryString = "";
 		if(!$this->isWebCrawler()) {
 			$lastSearch = $this->getLastSearch();
 			$searchArray = explode('?', $lastSearch);
 			if(isset($searchArray) && is_array($searchArray) && count($searchArray) > 1) {
-				$queryString=$searchArray[1];
+				$queryString = $searchArray[1];
 			}
 		}
 		return $queryString;
 	}
 
 	public function getLastSearchQuery() {
-		$lastSearchQueryString=$this->getLastSearchQueryString();
+		$lastSearchQueryString = $this->getLastSearchQueryString();
 		if($lastSearchQueryString != null && trim($lastSearchQueryString) != '') {
-			$lastSearchNameValueArray=explode("&", $lastSearchQueryString);	
+			$lastSearchNameValueArray = explode("&", $lastSearchQueryString);	
 		}		
-		$lastSearchArray=array();
+		$lastSearchArray = array();
 		if(isset($lastSearchNameValueArray) && count($lastSearchNameValueArray) > 0) {
 			foreach ($lastSearchNameValueArray as $value) {
-				$nameValue=explode("=", $value);
+				$nameValue = explode("=", $value);
 				if(count($nameValue) == 2) {
-					$lastSearchArray[$nameValue[0]]= $nameValue[1];
+					$lastSearchArray[$nameValue[0]] = $nameValue[1];
 				}
 			}
 		}
@@ -314,10 +314,10 @@ class iHomefinderStateManager {
 	}
 
 	public function deleteSubscriberLogin() {
-		$cacheKey=$this->getSubscriberInfoKey();
+		$cacheKey = $this->getSubscriberInfoKey();
 		if($this->isSessionsEnabled()) {
 			if(array_key_exists($cacheKey, $_SESSION)) {
-				$_SESSION[$cacheKey]=null;	
+				$_SESSION[$cacheKey] = null;	
 			}
 		}else{
 			delete_transient($cacheKey);
@@ -325,30 +325,27 @@ class iHomefinderStateManager {
 		
 	}
 
-	public function saveSubscriberLogin($subscriberInfo) {
+	public function saveSubscriberLogin($subscriber) {
 		if(!$this->isWebCrawler()) {
-			$cacheKey=$this->getSubscriberInfoKey();
-			$this->saveStateValue($cacheKey, $subscriberInfo);
+			$cacheKey = $this->getSubscriberInfoKey();
+			$this->saveStateValue($cacheKey, $subscriber);
 		}
 	}
 
 	public function getCurrentSubscriber() {
-		$cacheKey=$this->getSubscriberInfoKey();
+		$subscriber = null;
 		if(!$this->isWebCrawler()) {
-			$subscriberInfo=$this->getStateValue($cacheKey);
-
-			if(!is_null($subscriberInfo) && $subscriberInfo != false) {
-				if($subscriberInfo->getId() == null || "" == trim($subscriberInfo->getId())) {
-					$subscriberInfo=null;
-				}
+			$cacheKey = $this->getSubscriberInfoKey();
+			$subscriber = $this->getStateValue($cacheKey);
+			if(is_null($subscriber) || !$subscriber instanceof iHomefinderSubscriber) {
+				$subscriber = null;
 			}
 		}
-
-		return $subscriberInfo;
+		return $subscriber;
 	}
 
 	public function isLoggedIn() {
-		$result=false;
+		$result = false;
 		if($this->getCurrentSubscriber() != null) {
 			$result = true;
 		}
@@ -356,23 +353,22 @@ class iHomefinderStateManager {
 	}
 
 	public function getSearchSummary() {
-		$result=array();
-		$cacheKey=$this->getSearchSummaryKey();
-		$result=$this->getStateValue($cacheKey);
+		$cacheKey = $this->getSearchSummaryKey();
+		$result = $this->getStateValue($cacheKey);
 		return $result;
 	}
 
 	public function saveSearchSummary($searchSummary) {
 		
 		if(!$this->isWebCrawler()) {
-			$searchSummaryArray=(array) $searchSummary;				
+			$searchSummaryArray = (array) $searchSummary;				
 			$cacheKey = $this->getSearchSummaryKey();
 			$this->saveStateValue($cacheKey, $searchSummaryArray);
 		}
 	}
 	
 	public function setCurrentListingInfo($listingInfo) {
-		$this->listingInfo=$listingInfo;
+		$this->listingInfo = $listingInfo;
 	}
 
 	public function getCurrentListingInfo() {
@@ -389,7 +385,7 @@ class iHomefinderStateManager {
 	public function createRememberMeCookie() {
 		$leadCaptureUserId = $this->getLeadCaptureId();
 		if(leadCaptureUserId != null && !$this->isWebCrawler()) {
-			$expireTime=time()+60*60*24*365*5; /* expire in 5 years */
+			$expireTime = time()+60*60*24*365*5; /* expire in 5 years */
 			setcookie($this->rememberMeCookieName, $leadCaptureUserId, $expireTime, "/");
 		}
 	}

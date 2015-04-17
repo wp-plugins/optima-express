@@ -26,7 +26,8 @@ class iHomefinderContactFormWidget extends WP_Widget {
 				->addParameter("phpStyle", true)
 			;
 			
-			$contentInfo = $remoteRequest->remoteGetRequest(3600);
+			$remoteRequest->setCacheExpiration(60*60);
+			$contentInfo = $remoteRequest->remoteGetRequest();
 			$content = $remoteRequest->getContent($contentInfo);
 			iHomefinderEnqueueResource::getInstance()->addToFooter($contentInfo->head);
 			
@@ -51,10 +52,8 @@ class iHomefinderContactFormWidget extends WP_Widget {
 	public function update($new_instance, $old_instance) {
 		$instance = $old_instance;
 		$instance["title"] = strip_tags(stripslashes($new_instance["title"]));
-		
 		//Add context related values.
 		$instance = $this->contextUtility->updateContext($new_instance, $instance);
-		
 		return $instance;
 	}
 	

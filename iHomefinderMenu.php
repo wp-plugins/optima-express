@@ -12,7 +12,7 @@ class iHomefinderMenu {
 
 	public static function getInstance() {
 		if(!isset(self::$instance)) {
-			self::$instance = new iHomefinderMenu();
+			self::$instance = new self();
 		}
 		return self::$instance;
 	}		

@@ -51,7 +51,8 @@ class iHomefinderPropertiesGallery extends WP_Widget {
 				->addParameter("hotSheetId", $hotSheetId)
 				->addParameter("smallView", true)
 			;
-			$contentInfo = $remoteRequest->remoteGetRequest(1800);
+			$remoteRequest->setCacheExpiration(60*30);
+			$contentInfo = $remoteRequest->remoteGetRequest();
 			$content = $remoteRequest->getContent($contentInfo);
 			iHomefinderEnqueueResource::getInstance()->addToFooter($contentInfo->head);
 			echo $before_widget;
@@ -88,7 +89,8 @@ class iHomefinderPropertiesGallery extends WP_Widget {
 				->addParameter("numListingsLimit", $numListingsLimit)
 				->addParameter("smallView", "true")
 			;
-			$contentInfo = $remoteRequest->remoteGetRequest(1800);
+			$remoteRequest->setCacheExpiration(60*30);
+			$contentInfo = $remoteRequest->remoteGetRequest();
 			$content = $remoteRequest->getContent($contentInfo);
 			iHomefinderEnqueueResource::getInstance()->addToFooter($contentInfo->head);
 			echo $before_widget;
@@ -168,7 +170,8 @@ class iHomefinderPropertiesGallery extends WP_Widget {
 				->addParameter("numListingsLimit", $numListingsLimit)
 				->addParameter("smallView", true)
 			;
-			$contentInfo = $remoteRequest->remoteGetRequest(1800);
+			$remoteRequest->setCacheExpiration(60*30);
+			$contentInfo = $remoteRequest->remoteGetRequest();
 			$content = $remoteRequest->getContent($contentInfo);
 			iHomefinderEnqueueResource::getInstance()->addToFooter($contentInfo->head);
 			echo $before_widget;

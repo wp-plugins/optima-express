@@ -45,6 +45,7 @@ class iHomefinderAgentDetailVirtualPageImpl extends iHomefinderAbstractVirtualPa
 		if($agentId != null && is_numeric($agentId)) {
 			$this->remoteRequest->addParameter("agentID", $agentId);
 		}
+		$this->remoteRequest->setCacheExpiration(60*60);
 		$this->remoteResponse = $this->remoteRequest->remoteGetRequest();
 		$body = $this->remoteRequest->getContent($this->remoteResponse);
 		

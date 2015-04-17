@@ -28,8 +28,8 @@ class iHomefinderSearchByListingIdWidget extends WP_Widget {
 			if(array_key_exists("style", $instance)) {
 				$remoteRequest->addParameter("style", $instance["style"]);
 			}
-			
-			$contentInfo = $remoteRequest->remoteGetRequest(86400);
+			$remoteRequest->setCacheExpiration(60*60*24);
+			$contentInfo = $remoteRequest->remoteGetRequest();
 			$content = $remoteRequest->getContent($contentInfo);
 			iHomefinderEnqueueResource::getInstance()->addToFooter($contentInfo->head);
 			
