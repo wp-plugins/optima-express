@@ -25,6 +25,7 @@ class iHomefinderQuickSearchFormVirtualPageImpl extends iHomefinderAbstractVirtu
 			->addParameter("includeJQuery", false)
 			->addParameter("includeJQueryUI", false)
 		;
+		$this->remoteRequest->setCacheExpiration(60*60*24);
 		$this->remoteResponse = $this->remoteRequest->remoteGetRequest();
 		$body = $this->remoteRequest->getContent($this->remoteResponse);
 		return $body;

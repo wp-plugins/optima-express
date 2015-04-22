@@ -11,11 +11,9 @@ class iHomefinderHotsheetVirtualPageImpl extends iHomefinderAbstractVirtualPage 
 		$customTitle = get_option(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_HOTSHEET);
 		if($customTitle != null && "" != $customTitle) {
 			$this->title=$customTitle;
-		}
-		else{
+		} else {
 			$this->title = $this->defaultTitle;
 		}
-
 		return $this->title;
 	}
 
@@ -53,6 +51,7 @@ class iHomefinderHotsheetVirtualPageImpl extends iHomefinderAbstractVirtualPage 
 		if($this->getTitle() == "") {
 			$this->remoteRequest->addParameter("includeDisplayName", false);
 		}
+		$this->remoteRequest->setCacheExpiration(60*60);
 		$this->remoteResponse = $this->remoteRequest->remoteGetRequest();
 		$body = $this->remoteRequest->getContent($this->remoteResponse);
 		if(isset($this->remoteResponse) && isset($this->remoteResponse->title)) {

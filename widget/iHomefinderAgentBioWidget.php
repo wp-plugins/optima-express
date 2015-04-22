@@ -83,17 +83,21 @@ class iHomefinderAgentBioWidget extends WP_Widget {
 		$displayType = esc_attr($instance["displayType"]);
 		?>
 		<p>
-			<?php _e("Display Type:"); ?>
-			<select name="<?php echo $this->get_field_name("displayType"); ?>">
-				<option value="<?php echo iHomefinderAgentBioWidget::STANDARD_DISPLAY_TYPE ?>">Standard</option>
-				<option value="<?php echo iHomefinderAgentBioWidget::NARROW_DISPLAY_TYPE ?>" <?php if($displayType == iHomefinderAgentBioWidget::NARROW_DISPLAY_TYPE) {echo "selected";} ?>>Narrow</option>
-			</select>
+			<label>
+				Display Type:
+				<select class="widefat" name="<?php echo $this->get_field_name("displayType"); ?>">
+					<option value="<?php echo self::STANDARD_DISPLAY_TYPE ?>">Standard</option>
+					<option value="<?php echo self::NARROW_DISPLAY_TYPE ?>" <?php if($displayType == self::NARROW_DISPLAY_TYPE) {echo "selected";} ?>>Narrow</option>
+				</select>
+			</label>
 		</p>
 		<?php 
 		$bioConfigurationUrl = site_url();
 		$bioConfigurationUrl .= "/wp-admin/admin.php?page=ihf-bio-page";
 		?>
-		<a href="<?php echo $bioConfigurationUrl ?>">Configure Bio</a>
+		<p>
+			<a href="<?php echo $bioConfigurationUrl ?>">Configure Bio</a>
+		</p>
 		<?php
 	}
   

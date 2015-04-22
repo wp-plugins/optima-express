@@ -11,8 +11,7 @@ class iHomefinderListingDetailVirtualPageImpl extends iHomefinderAbstractVirtual
 		$customTitle = get_option(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_DETAIL);				
 		if($customTitle != null && "" != $customTitle) {
 			$this->title=$customTitle;
-		}
-		else{
+		} else {
 			$this->title = $this->defaultTitle;
 		}
 
@@ -69,11 +68,9 @@ class iHomefinderListingDetailVirtualPageImpl extends iHomefinderAbstractVirtual
 		if($previousSearchUrl == null || trim($previousSearchUrl) == "") {
 			$previousSearchUrl= iHomefinderUrlFactory::getInstance()->getListingsSearchFormUrl(true);
 			$previousSearchUrl="<a href=\"" . $previousSearchUrl . "\">&lt;&nbsp;New Search</a>";
-		}
-		else if($isMapSearch !== false) {
+		} elseif($isMapSearch !== false) {
 			$previousSearchUrl="<a href=\"" . $previousSearchUrl . "\">&lt;&nbsp;Return To Map Search</a>";
-		}
-		else{
+		} else {
 			$previousSearchUrl="<a href=\"" . $previousSearchUrl . "\">&lt;&nbsp;Return To Results</a>";
 		}
 

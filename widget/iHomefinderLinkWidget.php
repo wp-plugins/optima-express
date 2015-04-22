@@ -82,7 +82,9 @@ class iHomefinderLinkWidget extends WP_Widget {
 		$cityLinksConfigurationUrl = site_url();
 		$cityLinksConfigurationUrl .= "/wp-admin/admin.php?page=ihf-seo-city-links-page";
 		?>
-		<a href="<?php echo $cityLinksConfigurationUrl ?>">Configure City Links</a>
+		<p>
+			<a href="<?php echo $cityLinksConfigurationUrl ?>">Configure City Links</a>
+		</p>
 		<?php
 	}
 	

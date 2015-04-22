@@ -33,7 +33,7 @@ class iHomefinderShortcodeDispatcher {
 
 	public static function getInstance() {
 		if(!isset(self::$instance)) {
-			self::$instance = new iHomefinderShortcodeDispatcher();
+			self::$instance = new self();
 		}
 		return self::$instance;
 	}
@@ -287,6 +287,7 @@ class iHomefinderShortcodeDispatcher {
 			->addParameter("style", $this->getAttribute($attributes, "style"))
 			->addParameter("showPropertyType", $this->getAttribute($attributes, "showPropertyType"))
 		;
+		$remoteRequest->setCacheExpiration(60*60);
 		$contentInfo = $remoteRequest->remoteGetRequest();
 		$content = $remoteRequest->getContent($contentInfo);
 		iHomefinderEnqueueResource::getInstance()->addToFooter($contentInfo->head);
@@ -304,6 +305,7 @@ class iHomefinderShortcodeDispatcher {
 			->addParameter("includeJQueryUI", false)
 			->addParameter("style", $this->getAttribute($attributes, "style"))
 		;
+		$remoteRequest->setCacheExpiration(60*60);
 		$contentInfo = $remoteRequest->remoteGetRequest();
 		$content = $remoteRequest->getContent($contentInfo);
 		iHomefinderEnqueueResource::getInstance()->addToFooter($contentInfo->head);
@@ -320,6 +322,7 @@ class iHomefinderShortcodeDispatcher {
 			->addParameter("includeJQuery", false)
 			->addParameter("includeJQueryUI", false)
 		;
+		$remoteRequest->setCacheExpiration(60*60);
 		$contentInfo = $remoteRequest->remoteGetRequest();
 		$content = $remoteRequest->getContent($contentInfo);
 		iHomefinderEnqueueResource::getInstance()->addToFooter($contentInfo->head);
@@ -340,6 +343,7 @@ class iHomefinderShortcodeDispatcher {
 			->addParameter("address", $this->getAttribute($attributes, "address"))
 			->addParameter("zoom", $this->getAttribute($attributes, "zoom"))
 		;
+		$remoteRequest->setCacheExpiration(60*60);
 		$contentInfo = $remoteRequest->remoteGetRequest();
 		$content = $remoteRequest->getContent($contentInfo);
 		iHomefinderEnqueueResource::getInstance()->addToFooter($contentInfo->head);
@@ -350,7 +354,7 @@ class iHomefinderShortcodeDispatcher {
 		iHomefinderStateManager::getInstance()->saveLastSearch();
 		if($this->getAttribute($attributes, "id") != null) {
 			$hotsheetId = $this->getAttribute($attributes, "id");
-		} else if($this->getAttribute($attributes, "hotsheetId") != null) {
+		} elseif($this->getAttribute($attributes, "hotsheetId") != null) {
 			$hotsheetId = $this->getAttribute($attributes, "hotsheetId");
 		}
 		$remoteRequest = new iHomefinderRequestor();
@@ -367,6 +371,7 @@ class iHomefinderShortcodeDispatcher {
 			->addParameter("auto", $this->getAttribute($attributes, "auto"))
 			->addParameter("maxResults", $this->getAttribute($attributes, "maxResults"))
 		;
+		$remoteRequest->setCacheExpiration(60*60);
 		$contentInfo = $remoteRequest->remoteGetRequest();
 		$content = $remoteRequest->getContent($contentInfo);
 		iHomefinderEnqueueResource::getInstance()->addToFooter($contentInfo->head);
@@ -379,7 +384,7 @@ class iHomefinderShortcodeDispatcher {
 	public function getAttribute($attributes, $key) {
 		$result = null;
 		$lowerKey = strtolower($key);
-		if(array_key_exists($lowerKey, $attributes)) {
+		if(is_array($attributes) && array_key_exists($lowerKey, $attributes)) {
 			$result = $attributes[$lowerKey];
 		}
 		return $result;

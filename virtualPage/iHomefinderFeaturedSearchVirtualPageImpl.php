@@ -36,6 +36,7 @@ class iHomefinderFeaturedSearchVirtualPageImpl extends iHomefinderAbstractVirtua
 			->addParameter("includeSearchSummary", true)
 		;
 		$this->remoteRequest->addParameters($_REQUEST);
+		$this->remoteRequest->setCacheExpiration(60*60);
 		$this->remoteResponse = $this->remoteRequest->remoteGetRequest();			
 		$body = $this->remoteRequest->getContent($this->remoteResponse);
 		return $body;

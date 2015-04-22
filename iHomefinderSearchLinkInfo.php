@@ -1,6 +1,7 @@
 <?php
 
 class iHomefinderSearchLinkInfo {
+	
 	private $linkText;
 	private $cityZip;
 	private $propertyType;
@@ -8,12 +9,12 @@ class iHomefinderSearchLinkInfo {
 	private $maxPrice;
 	private $zip;
 
-	public function __construct($linkText,$cityZip, $propertyType, $minPrice, $maxPrice) {
-		$this->linkText=$linkText;
-		$this->cityZip=$cityZip;
-		$this->propertyType=$propertyType;
-		$this->minPrice=$minPrice;
-		$this->maxPrice=$maxPrice;
+	public function __construct($linkText, $cityZip, $propertyType, $minPrice, $maxPrice) {
+		$this->linkText = $linkText;
+		$this->cityZip = $cityZip;
+		$this->propertyType = $propertyType;
+		$this->minPrice = $minPrice;
+		$this->maxPrice = $maxPrice;
 	}
 	
 	public function getLinkText() {
@@ -33,30 +34,28 @@ class iHomefinderSearchLinkInfo {
 	}
 	
 	public function getCity() {
-		$city=null;
+		$city = null;
 		if(!$this->hasPostalCode()) {
 			if($this->hasState()) {
 				//chop off the state from the array of parts.
 				//state is the last part
-				$cityState=$this->getCityZip();
-				$statePosition=strrpos($cityState, ",");
-				$city=substr($cityState, 0, $statePosition);
-			}
-			else{
-				$city= $this->getCityZip();
+				$cityState = $this->getCityZip();
+				$statePosition = strrpos($cityState, ",");
+				$city = substr($cityState, 0, $statePosition);
+			} else {
+				$city = $this->getCityZip();
 			}
 		}
 		return $city;
 	}
 	
 	public function getState() {
-		$state=null;
+		$state = null;
 		if($this->hasState()) {
-			$cityState=$this->getCityZip();
-			$statePosition=strrpos($cityState, ",") + 1;
-			$state=substr($cityState, $statePosition);
+			$cityState = $this->getCityZip();
+			$statePosition = strrpos($cityState, ",") + 1;
+			$state = substr($cityState, $statePosition);
 		}
-		
 		return $state;
 	}
 	
@@ -70,7 +69,7 @@ class iHomefinderSearchLinkInfo {
 	public static function compare($a, $b) {
 		$al = strtolower($a->linkText);
 		$bl = strtolower($b->linkText);
-		if ($al == $bl) {
+		if($al == $bl) {
 			return 0;
 		}
 		return ($al > $bl) ? +1 : -1;
@@ -87,19 +86,19 @@ class iHomefinderSearchLinkInfo {
 		
 		//Canadian Postal Code
 		if(preg_match("/^([a-zA-Z]\d[a-zA-z]()?\d[a-zA-Z]\d)$/", $this->cityZip) == 1) {
-			$result=true;
-		}  
+			$result = true;
+		}
 
 		return $result;
 	}
 	
 	public function hasState() {
-		$result=false;
+		$result = false;
 		//ends with a value like ", CA" or ",CA"
 		if(preg_match("/,\s*[a-zA-Z]{2}$/", $this->cityZip) == 1) {
-			$result=true;
+			$result = true;
 		} 
-		return $result;   		
+		return $result;
 	}
 	
 	private function getCityZipParts() {

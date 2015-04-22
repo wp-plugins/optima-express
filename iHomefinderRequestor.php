@@ -3,61 +3,60 @@
 class iHomefinderRequestor {
 	
 	private $parameters = array();
+	private $cacheExpiration = 0;
 	
 	public function __construct() {
 		
 	}
 	
-	public function remoteGetRequest($cacheExpiration = 0) {
-		$url = iHomefinderLayoutManager::getInstance()->getExternalUrl();
+	public function remoteGetRequest() {
 		
-		//append the jsessionid to the end of the url
-		if(!strpos(strtolower($url), ";jsessionid=")) {
-			$ihfSessionId = iHomefinderStateManager::getInstance()->getIhfSessionId();
-			$url = $url . ";jsessionid=" . $ihfSessionId;
-		}
-		
-		$authenticationToken = iHomefinderAdmin::getInstance()->getAuthenticationToken();
-		$this->addParameter("authenticationToken", $authenticationToken);
-		
-		//We don"t try to get subscriber information for ajax requests
-		//because of cookie related complications.
-		if(!strpos(strtolower($url), "subscriberid=")) {
+		//only add user specific info if the request is not cacheable
+		if(!$this->isCacheable()) {
+			
+			//add subscriber id to the reqest parameters
 			$subscriber = iHomefinderStateManager::getInstance()->getCurrentSubscriber();
-			if(!is_null($subscriber) && "" != $subscriber) {
+			if($subscriber !== null) {
 				$subscriberId = $subscriber->getId();
 				$this->addParameter("subscriberId", $subscriberId);
 			}
-		}
-					
-		//If the url does not have the lead capture id then try to add it
-		$urlHasLeadCapture = strrpos($url, "leadCaptureId=");
-		if($urlHasLeadCapture == false) {
-			$leadCaptureId = iHomefinderStateManager::getInstance()->getLeadCaptureId();
-			if(!is_null($leadCaptureId) && "" != $leadCaptureId) {
-				$this->addParameter("leadCaptureId", $leadCaptureId);
-			}
-		}
 			
-		$this->addParameter("version", iHomefinderConstants::VERSION);
-		$userAgent = $_SERVER["HTTP_USER_AGENT"];
-		if($userAgent != null) {
-			$userAgent = urlencode($userAgent);
-			$this->addParameter("uagent", $userAgent);	
+			//add lead capture id to the reqest parameters
+			$leadCaptureId = iHomefinderStateManager::getInstance()->getLeadCaptureId();
+			$this->addParameter("leadCaptureId", $leadCaptureId);
+			
+			//add user agent to the reqest parameters
+			if(array_key_exists("HTTP_USER_AGENT", $_SERVER)) {
+				$userAgent = $_SERVER["HTTP_USER_AGENT"];
+				$this->addParameter("uagent", $userAgent);
+			}
+			
+			//if remember me cookie add it to the reqest parameters
+			if(array_key_exists("ihf_rmuser", $_COOKIE)) {
+				$this->addParameter("rmuser", true);
+			}
+			
 		}
+		
+		//add authentication token to the reqest parameters
+		$authenticationToken = iHomefinderAdmin::getInstance()->getAuthenticationToken();
+		$this->addParameter("authenticationToken", $authenticationToken);
+		
+		//add the plugin version to the reqest parameters
+		$this->addParameter("version", iHomefinderConstants::VERSION);
 		
 		$this->addParameter("loadJQuery", false);
 		$this->addParameter("leadCaptureSupport", true);
-		//if rememberme cookie is set then append variable to url
-		if(isSet($_COOKIE["ihf_rmuser"])) {
-			$this->addParameter("rmuser", true);
-		}
 		
-		$url = iHomefinderUtility::getInstance()->buildUrl($url, $this->parameters);
+		$externalUrl = iHomefinderLayoutManager::getInstance()->getExternalUrl();
 		
-		$ihfid = site_url() . ";" . "WordpressPlugin";
-		$wp_version = get_bloginfo("version");
-		$ihfUserInfo = "WordPress/" . $wp_version . "; " . get_bloginfo("url");
+		//add jsession id to the end of the url
+		$sessionId = iHomefinderStateManager::getInstance()->getIhfSessionId();
+		$requestUrl = $externalUrl . ";jsessionid=" . $sessionId;
+		$requestUrl = iHomefinderUtility::getInstance()->buildUrl($requestUrl, $this->getParameters());
+		
+		$ihfid = iHomefinderUrlFactory::getInstance()->getBaseUrl() . ";" . "WordpressPlugin";
+		$ihfUserInfo = "WordPress/" . get_bloginfo("version") . "; " . iHomefinderUrlFactory::getInstance()->getBaseUrl();
 		//modified user-agent in the request header to pass original user-agent
 		//This information is used by spring-mobile library to determine 
 		//if request came from mobile devices
@@ -69,14 +68,28 @@ class iHomefinderRequestor {
 			"timeout" => "200",
 			"ihfid" => $ihfid,
 			"ihfUserInfo" => $ihfUserInfo,
-			"user-agent" => $userAgent
 		);
 		
-		iHomefinderLogger::getInstance()->debug("ihfUrl: " . $url);
-		iHomefinderLogger::getInstance()->debug("before request");
-		$response = wp_remote_get($url, $requestArgs);
-		iHomefinderLogger::getInstance()->debug("after request");
-		iHomefinderLogger::getInstance()->debugDumpVar($response);
+		if(isset($userAgent)) {
+			$requestArgs["user-agent"] = $userAgent;
+		}
+		
+		$response = null;
+		if($this->isCacheable()) {
+			$response = iHomefinderCacheUtility::getInstance()->getItem($this->getParameters());
+		}
+		
+		if($response === null) {
+			iHomefinderLogger::getInstance()->debug("ihfUrl: " . $requestUrl);
+			iHomefinderLogger::getInstance()->debugDumpVar($requestArgs);
+			iHomefinderLogger::getInstance()->debug("before request");
+			$response = wp_remote_get($requestUrl, $requestArgs);
+			iHomefinderLogger::getInstance()->debug("after request");
+			iHomefinderLogger::getInstance()->debugDumpVar($response);
+			if(!is_wp_error($response) && $this->isCacheable() && $response["response"]["code"] < 400) {
+				iHomefinderCacheUtility::getInstance()->updateItem($this->getParameters(), $response, $this->getCacheExpiration());
+			}
+		}
 		
 		if(is_wp_error($response)) {
 			$contentInfo = null;
@@ -99,55 +112,60 @@ class iHomefinderRequestor {
 			}
 		}
 		
-		//Save the leadCaptureId, if we get it back.
-		if(isset($contentInfo->leadCaptureId) && !empty($contentInfo->leadCaptureId)) {
-			iHomefinderStateManager::getInstance()->saveLeadCaptureId($contentInfo->leadCaptureId);
-		}
 		
-		if(isset($contentInfo->ihfSessionId)) {
-			iHomefinderStateManager::getInstance()->saveIhfSessionId($contentInfo->ihfSessionId);
-		}
-		
-		if(isset($contentInfo->searchContext)) {
-			iHomefinderStateManager::getInstance()->setSearchContext($contentInfo->searchContext);
-		}
-
-		if(isset($contentInfo->listingInfo)) {
-			$listingInfo = $contentInfo->listingInfo;
-			$listingNumber = "";
-			$listingAddress = "";
-			$boardId = "";
-			$clientPropertyId = "";
-			$sold = "false";
+		if(!$this->isError($contentInfo) && !$this->isCacheable()) {
 			
-			$hasListingInfo = false;
-			if(isset($listingInfo->listingNumber) && isset($listingInfo->boardId)) {
-				$listingNumber = $listingInfo->listingNumber;
-				$boardId = $listingInfo->boardId;
-				$hasListingInfo = true;
-				if(isset($listingInfo->clientPropertyId)) {
-					$clientPropertyId = $listingInfo->clientPropertyId;
-				}
-				if(isset($listingInfo->listingAddress)) {
-					$listingAddress = $listingInfo->listingAddress;
-				}
-				if(isset($listingInfo->sold)) {
-					$sold = $listingInfo->sold;
-				}
-				$listingInfo = new iHomefinderListingInfo($listingNumber, $boardId, $listingAddress, $clientPropertyId, $sold);
-				iHomefinderStateManager::getInstance()->setCurrentListingInfo($listingInfo);					
+			//Save the leadCaptureId, if we get it back.
+			if(property_exists($contentInfo, "leadCaptureId") && !empty($contentInfo->leadCaptureId)) {
+				iHomefinderStateManager::getInstance()->saveLeadCaptureId($contentInfo->leadCaptureId);
 			}
-		}
 			
-		if(!$this->isError($contentInfo) && isset($contentInfo->subscriberInfo)) {
-			$subscriberData = $contentInfo->subscriberInfo;
-			$subscriberInfo = iHomefinderSubscriber::getInstance($subscriberData->subscriberId,$subscriberData->name, $subscriberData->email);
-			iHomefinderStateManager::getInstance()->saveSubscriberLogin($subscriberInfo);
-		}
-		
-		if(!$this->isError($contentInfo) && isset($contentInfo->searchSummary)) {
-			$searchSummary = $contentInfo->searchSummary;
-			iHomefinderStateManager::getInstance()->saveSearchSummary($searchSummary);
+			if(property_exists($contentInfo, "ihfSessionId")) {
+				iHomefinderStateManager::getInstance()->saveIhfSessionId($contentInfo->ihfSessionId);
+			}
+			
+			if(property_exists($contentInfo, "searchContext")) {
+				iHomefinderStateManager::getInstance()->setSearchContext($contentInfo->searchContext);
+			}
+			
+			if(property_exists($contentInfo, "listingInfo")) {
+				$listingInfo = $contentInfo->listingInfo;
+				$listingNumber = "";
+				$listingAddress = "";
+				$boardId = "";
+				$clientPropertyId = "";
+				$sold = "false";
+					
+				$hasListingInfo = false;
+				if(property_exists($listingInfo, "listingNumber") && property_exists($listingInfo, "boardId")) {
+					$listingNumber = $listingInfo->listingNumber;
+					$boardId = $listingInfo->boardId;
+					$hasListingInfo = true;
+					if(property_exists($listingInfo, "clientPropertyId")) {
+						$clientPropertyId = $listingInfo->clientPropertyId;
+					}
+					if(property_exists($listingInfo, "listingAddress")) {
+						$listingAddress = $listingInfo->listingAddress;
+					}
+					if(property_exists($listingInfo, "sold")) {
+						$sold = $listingInfo->sold;
+					}
+					$listingInfo = new iHomefinderListingInfo($listingNumber, $boardId, $listingAddress, $clientPropertyId, $sold);
+					iHomefinderStateManager::getInstance()->setCurrentListingInfo($listingInfo);
+				}
+			}
+				
+			if(property_exists($contentInfo, "subscriberInfo")) {
+				$subscriberInfo = $contentInfo->subscriberInfo;
+				$subscriber = new iHomefinderSubscriber($subscriberInfo->subscriberId, $subscriberInfo->name, $subscriberInfo->email);
+				iHomefinderStateManager::getInstance()->saveSubscriberLogin($subscriber);
+			}
+			
+			if(property_exists($contentInfo, "searchSummary")) {
+				$searchSummary = $contentInfo->searchSummary;
+				iHomefinderStateManager::getInstance()->saveSearchSummary($searchSummary);
+			}
+			
 		}
 			
 		return $contentInfo;
@@ -158,10 +176,9 @@ class iHomefinderRequestor {
 	 */
 	public function remotePostRequest() {
 		
-		$url = iHomefinderLayoutManager::getInstance()->getExternalUrl();
-		$ihfid = site_url() . ";" . "WordpressPlugin";
-		$wp_version = get_bloginfo("version");
-		$ihfUserInfo = "WordPress/" . $wp_version . "; " . get_bloginfo("url");
+		$requestUrl = iHomefinderLayoutManager::getInstance()->getExternalUrl();
+		$ihfid = iHomefinderUrlFactory::getInstance()->getBaseUrl() . ";" . "WordpressPlugin";
+		$ihfUserInfo = "WordPress/" . get_bloginfo("version") . "; " . iHomefinderUrlFactory::getInstance()->getBaseUrl();
 		//modified user-agent in the request header to pass original user-agent
 		//This information is used by spring-mobile library to determine
 		//if request came from mobile devices
@@ -174,20 +191,18 @@ class iHomefinderRequestor {
 			$userAgent = urlencode($userAgent);
 		}
 		
-		$data = $this->parameters;
-		
 		$requestArgs = array(
 			"timeout" => "200",
-			"body" => $data,
+			"body" => $this->getParameters(),
 			"ihfid" => $ihfid,
 			"ihfUserInfo" => $ihfUserInfo,
 			"user-agent" => $userAgent
 		);
 		
-		iHomefinderLogger::getInstance()->debug("ihfUrl: " . $url);
-		iHomefinderLogger::getInstance()->debugDumpVar($data);
+		iHomefinderLogger::getInstance()->debug("ihfUrl: " . $requestUrl);
+		iHomefinderLogger::getInstance()->debugDumpVar($requestArgs);
 		iHomefinderLogger::getInstance()->debug("before request");
-		$response = wp_remote_post($url, $requestArgs);
+		$response = wp_remote_post($requestUrl, $requestArgs);
 		iHomefinderLogger::getInstance()->debug("after request");
 		iHomefinderLogger::getInstance()->debugDumpVar($response);
 		
@@ -204,8 +219,7 @@ class iHomefinderRequestor {
 				$contentType = wp_remote_retrieve_header($response, "content-type");
 				if($contentType != null && $contentType == "text/xml;charset=UTF-8") {
 					$contentInfo = simplexml_load_string($responseBody, null, LIBXML_NOCDATA);	
-				}
-				else{
+				} else {
 					$contentInfo = json_decode($responseBody);
 				}
 			}
@@ -231,11 +245,11 @@ class iHomefinderRequestor {
 		$content = "";
 		if(is_null($contentInfo)) {
 			//We could reach this code, if the iHomefinder services are down.
-			$content = "<br />Sorry we are experiencing system issues.  Please try again.<br />";
-		} else if (property_exists($contentInfo, "error")) {
+			$content = "<br />Sorry we are experiencing system issues. Please try again.<br />";
+		} elseif(property_exists($contentInfo, "error")) {
 			//Report the error from iHomefinder
 			$content = "<br />" . $contentInfo->error . "<br />";
-		} else if(property_exists($contentInfo, "view")) {
+		} elseif(property_exists($contentInfo, "view")) {
 			//success, display the view
 			$content = html_entity_decode($contentInfo->view, null, "UTF-8");
 		}
@@ -266,6 +280,26 @@ class iHomefinderRequestor {
 			$this->addParameter($name, $value);
 		}
 		return $this;
+	}
+	
+	public function getParameters() {
+		return $this->parameters;
+	}
+	
+	public function setCacheExpiration($cacheExpiration) {
+		$this->cacheExpiration = $cacheExpiration;
+	}
+	
+	public function getCacheExpiration() {
+		return $this->cacheExpiration;
+	}
+	
+	public function isCacheable() {
+		$result = false;
+		if(is_int($this->cacheExpiration) && $this->cacheExpiration > 0) {
+			$result = true;
+		}
+		return $result;
 	}
 	
 }

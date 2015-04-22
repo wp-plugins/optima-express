@@ -1,10 +1,5 @@
 <?php
 
-/**
- *
- *
- * @author ihomefinder
- */
 class iHomefinderUtility {
 
 	private static $instance;
@@ -14,7 +9,7 @@ class iHomefinderUtility {
 
 	public static function getInstance() {
 		if(!isset(self::$instance)) {
-			self::$instance = new iHomefinderUtility();
+			self::$instance = new self();
 		}
 		return self::$instance;
 	}
@@ -74,9 +69,9 @@ class iHomefinderUtility {
 				if(is_array($values)) {
 					foreach($values as $value) {
 						if($paramValue != null) {
-							$paramValue .=  ",";
+							$paramValue .= ",";
 						}
-						$paramValue .=  $value;
+						$paramValue .= $value;
 					}
 				} else {
 					$paramValue = $values;

@@ -9,7 +9,7 @@ class iHomefinderLogger {
 	
 	public static function getInstance() {
 		if(!isset(self::$instance)) {
-			self::$instance = new iHomefinderLogger();
+			self::$instance = new self();
 		}
 		return self::$instance;		
 	}
@@ -21,11 +21,9 @@ class iHomefinderLogger {
 			if($debugValue && $debugValue === 'true') {
 				$debug=true;
 			}						
-		}
-		else if(iHomefinderConstants::DEBUG) {
+		} elseif(iHomefinderConstants::DEBUG) {
 			$debug=true;
 		}
-
 		return $debug;				
 	}
 	

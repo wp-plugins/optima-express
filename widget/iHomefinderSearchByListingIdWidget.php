@@ -28,8 +28,8 @@ class iHomefinderSearchByListingIdWidget extends WP_Widget {
 			if(array_key_exists("style", $instance)) {
 				$remoteRequest->addParameter("style", $instance["style"]);
 			}
-			
-			$contentInfo = $remoteRequest->remoteGetRequest(86400);
+			$remoteRequest->setCacheExpiration(60*60*24);
+			$contentInfo = $remoteRequest->remoteGetRequest();
 			$content = $remoteRequest->getContent($contentInfo);
 			iHomefinderEnqueueResource::getInstance()->addToFooter($contentInfo->head);
 			
@@ -64,8 +64,10 @@ class iHomefinderSearchByListingIdWidget extends WP_Widget {
 		$title = esc_attr($instance["title"]);
 		?>
 		<p>
-			<?php _e("Title:"); ?>
-			<input class="widefat" id="<?php echo $this->get_field_id("title"); ?>" name="<?php echo $this->get_field_name("title"); ?>" type="text" value="<?php echo $title; ?>" />
+			<label>
+				Title:
+				<input class="widefat" id="<?php echo $this->get_field_id("title"); ?>" name="<?php echo $this->get_field_name("title"); ?>" type="text" value="<?php echo $title; ?>" />
+			</label>
 		</p>
 		<?php
 		$this->contextUtility->getPageSelector($this, $instance, iHomefinderConstants::SEARCH_OTHER_WIDGET_TYPE);

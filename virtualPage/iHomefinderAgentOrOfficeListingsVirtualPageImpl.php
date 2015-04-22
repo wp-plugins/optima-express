@@ -23,7 +23,7 @@ class iHomefinderAgentOrOfficeListingsVirtualPageImpl extends iHomefinderAbstrac
 			
 	public function getContent() {
 		iHomefinderStateManager::getInstance()->saveLastSearch();
-		$agentId  = iHomefinderUtility::getInstance()->getRequestVar("agentId");
+		$agentId = iHomefinderUtility::getInstance()->getRequestVar("agentId");
 		$officeId = iHomefinderUtility::getInstance()->getRequestVar("officeId");
 		$this->remoteRequest
 			->addParameter("method", "handleRequest")

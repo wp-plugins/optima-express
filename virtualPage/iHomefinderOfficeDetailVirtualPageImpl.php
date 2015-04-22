@@ -10,11 +10,9 @@ class iHomefinderOfficeDetailVirtualPageImpl extends iHomefinderAbstractVirtualP
 		$customTitle = get_option(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_OFFICE_DETAIL);
 		if($customTitle != null && "" != $customTitle) {
 			$this->title=$customTitle;
-		}
-		else{
+		} else {
 			$this->title = $this->defaultTitle;
 		}
-
 		return $this->title;
 	}
 
@@ -43,6 +41,7 @@ class iHomefinderOfficeDetailVirtualPageImpl extends iHomefinderAbstractVirtualP
 			$this->remoteRequest->addParameter("officeID", $officeId);
 		}
 		$this->remoteRequest->addParameters($_REQUEST);
+		$this->remoteRequest->setCacheExpiration(60*60);
 		$this->remoteResponse = $this->remoteRequest->remoteGetRequest();
 		$body = $this->remoteRequest->getContent($this->remoteResponse);
 		if(property_exists($this->remoteResponse, "title")) {

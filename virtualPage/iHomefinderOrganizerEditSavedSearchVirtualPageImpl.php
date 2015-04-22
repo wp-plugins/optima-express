@@ -28,7 +28,7 @@ class iHomefinderOrganizerEditSavedSearchVirtualPageImpl extends iHomefinderAbst
 		$this->remoteResponse = $this->remoteRequest->remoteGetRequest();
 		$body = $this->remoteRequest->getContent($this->remoteResponse);
 		$subscriberSessionOnJavaServers = iHomefinderLayoutManager::getInstance()->isSubscriberSessionOnJavaServers();
-		if (!$subscriberSessionOnJavaServers) {
+		if(!$subscriberSessionOnJavaServers) {
 			if(iHomefinderStateManager::getInstance()->isLoggedIn()) {
 				$redirectUrl=iHomefinderUrlFactory::getInstance()->getOrganizerViewSavedSearchListUrl(true);
 				//redirect to the list of saved searches to avoid double posting the request

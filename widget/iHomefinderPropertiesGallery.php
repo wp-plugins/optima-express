@@ -51,19 +51,19 @@ class iHomefinderPropertiesGallery extends WP_Widget {
 				->addParameter("hotSheetId", $hotSheetId)
 				->addParameter("smallView", true)
 			;
-			$contentInfo = $remoteRequest->remoteGetRequest(1800);
+			$remoteRequest->setCacheExpiration(60*30);
+			$contentInfo = $remoteRequest->remoteGetRequest();
 			$content = $remoteRequest->getContent($contentInfo);
 			iHomefinderEnqueueResource::getInstance()->addToFooter($contentInfo->head);
 			echo $before_widget;
-			if ($title) {
+			if($title) {
 				echo $before_title . $title . $after_title;
 			}
 			if(iHomefinderLayoutManager::getInstance()->hasExtraLineBreaksInWidget()) {
 				echo "<br />";	
 				echo $content;
 				echo "<br />";
-			}
-			else{
+			} else {
 				echo $content;
 			}
 			echo "<a href='" . $linkUrl. "'>" . $linkText . "</a>";
@@ -88,11 +88,12 @@ class iHomefinderPropertiesGallery extends WP_Widget {
 				->addParameter("numListingsLimit", $numListingsLimit)
 				->addParameter("smallView", "true")
 			;
-			$contentInfo = $remoteRequest->remoteGetRequest(1800);
+			$remoteRequest->setCacheExpiration(60*30);
+			$contentInfo = $remoteRequest->remoteGetRequest();
 			$content = $remoteRequest->getContent($contentInfo);
 			iHomefinderEnqueueResource::getInstance()->addToFooter($contentInfo->head);
 			echo $before_widget;
-			if ($title) {
+			if($title) {
 				echo $before_title . $title . $after_title;
 			}
 			echo "<br />" . $content . "<br />";
@@ -168,7 +169,8 @@ class iHomefinderPropertiesGallery extends WP_Widget {
 				->addParameter("numListingsLimit", $numListingsLimit)
 				->addParameter("smallView", true)
 			;
-			$contentInfo = $remoteRequest->remoteGetRequest(1800);
+			$remoteRequest->setCacheExpiration(60*30);
+			$contentInfo = $remoteRequest->remoteGetRequest();
 			$content = $remoteRequest->getContent($contentInfo);
 			iHomefinderEnqueueResource::getInstance()->addToFooter($contentInfo->head);
 			echo $before_widget;
@@ -220,57 +222,49 @@ class iHomefinderPropertiesGallery extends WP_Widget {
 		$propertyTypesList = $formData->getPropertyTypesList();
 	
 		?>
-
 		<script type="text/javascript">
 			function togglePropertyFormFields(current_radio) {
-				if (current_radio == "hotSheet") {
-					jQuery("div.widgetName").show();
-					jQuery("div.linkText").show();
-					jQuery("div.hotSheet").show();
-					jQuery("div.numberProperties").show();
-					jQuery("div.namedSearch").hide();
-				}
-				else if (current_radio == "namedSearch") {
-					jQuery("div.widgetName").show();
-					jQuery("div.linkText").show();
-					jQuery("div.namedSearch").show();
-					jQuery("div.hotSheet").hide();
-					jQuery("div.numberProperties").show();
-				}
-				else if (current_radio == "linkSearch") {
-					jQuery("div.widgetName").hide();
-					jQuery("div.linkText").show();
-					jQuery("div.namedSearch").show();
-					jQuery("div.hotSheet").hide();
-					jQuery("div.numberProperties").hide();
-				}
-				else if (current_radio == "featuredListing") {
-					jQuery("div.numberProperties").show();
-					jQuery("div.widgetName").show();
-					jQuery("div.linkText").show();
-					jQuery("div.namedSearch").hide();
-					jQuery("div.hotSheet").hide();
+				if(current_radio == "hotSheet") {
+					jQuery(".widgetName").show();
+					jQuery(".linkText").show();
+					jQuery(".hotSheet").show();
+					jQuery(".numberProperties").show();
+					jQuery(".namedSearch").hide();
+				} else if(current_radio == "namedSearch") {
+					jQuery(".widgetName").show();
+					jQuery(".linkText").show();
+					jQuery(".namedSearch").show();
+					jQuery(".hotSheet").hide();
+					jQuery(".numberProperties").show();
+				} else if(current_radio == "linkSearch") {
+					jQuery(".widgetName").hide();
+					jQuery(".linkText").show();
+					jQuery(".namedSearch").show();
+					jQuery(".hotSheet").hide();
+					jQuery(".numberProperties").hide();
+				} else if(current_radio == "featuredListing") {
+					jQuery(".numberProperties").show();
+					jQuery(".widgetName").show();
+					jQuery(".linkText").show();
+					jQuery(".namedSearch").hide();
+					jQuery(".hotSheet").hide();
 				}
 			}
 		</script>
-		<div>
+		<p>
 			Gallery type:<br />
 			<?php
 				//set selected gallery type
 				if($galleryType == null || $galleryType == "") {
 					if(iHomefinderPermissions::getInstance()->isNamedSearchEnabled()) {
 						$galleryType = "namedSearch";
-					}
-					else if(iHomefinderPermissions::getInstance()->isLinkSearchEnabled()) {
+					} elseif(iHomefinderPermissions::getInstance()->isLinkSearchEnabled()) {
 						$galleryType = "linkSearch";
-					}
-					else if(iHomefinderPermissions::getInstance()->isHotSheetEnabled()) {
+					} elseif(iHomefinderPermissions::getInstance()->isHotSheetEnabled()) {
 						$galleryType = "hotSheet";
-					}
-					else if(iHomefinderPermissions::getInstance()->isFeaturedPropertiesEnabled()) {
+					} elseif(iHomefinderPermissions::getInstance()->isFeaturedPropertiesEnabled()) {
 						$galleryType = "featuredListing";
-					}
-					else{
+					} else {
 						$galleryType = "";
 					}
 				}
@@ -281,111 +275,135 @@ class iHomefinderPropertiesGallery extends WP_Widget {
 					Featured Properties Gallery
 				</label>
 				<br />
-			<?php }?>
+			<?php } ?>
 			<?php if(iHomefinderPermissions::getInstance()->isHotSheetEnabled()) { ?>
 				<label>
 					<input onclick="togglePropertyFormFields(this.value);" <?php if($galleryType == 'hotSheet') echo 'checked="checked"'; ?> class="galtype" type="radio" class="galtype" value="hotSheet" name="<?php echo $this->get_field_name('galleryType'); ?>" />
 					Saved Search Page Gallery
 				</label>
 				<br />
-			<?php }?>
+			<?php } ?>
 			<?php if(iHomefinderPermissions::getInstance()->isNamedSearchEnabled()) { ?>
 				<label>
 					<input onclick="togglePropertyFormFields(this.value);" <?php if($galleryType == 'namedSearch') echo 'checked="checked"'; ?> class="galtype" type="radio" class="galtype" value="namedSearch" name="<?php echo $this->get_field_name('galleryType'); ?>" />
 					Dynamic Search Gallery
 				</label>
 				<br />
-			<?php }?>
+			<?php } ?>
 			<?php if(iHomefinderPermissions::getInstance()->isLinkSearchEnabled()) { ?>
 				<label>
 					<input onclick="togglePropertyFormFields(this.value);" <?php if($galleryType == 'linkSearch') echo 'checked="checked"'; ?> class="galtype" type="radio" class="galtype" value="linkSearch" name="<?php echo $this->get_field_name('galleryType'); ?>" />
 					Dynamic Search Link
 				</label>
-			<?php }?>
-		</div>
-
-		<div id="widgetName" class="widgetName" <?php if($galleryType == 'linkSearch') echo 'style="display:none;"'; ?>>
-			<label>Gallery Title:</label>
-			<input class="widefat" type="text" value="<?php echo $name; ?>" name="<?php echo $this->get_field_name('name'); ?>" />
-		</div>
-
-		<div id="numberProperties" class="numberProperties" <?php if($galleryType == 'linkSearch') echo 'style="display:none;"'; ?>>
-			<label>Number of Properties Shown:</label>
-			<select name="<?php echo $this->get_field_name('propertiesShown'); ?>">
-			<?php for($i=1; $i<11; $i+=1) { ?>
-				<option
-					value="<?php echo $i ?>";
-					<?php if($propertiesShown == $i) {echo "selected";} ?>
-				>
-					<?php echo $i ?>
-				</option>
 			<?php } ?>
-			</select>
-		</div>
-		<div id="linkText" class="linkText">
-			<label>Link Text:</label>
-			<input class="widefat" type="text" value="<?php echo $linkText; ?>" name="<?php echo $this->get_field_name('linkText'); ?>" />
-		</div>
-
-		<div id="hotSheet" class="hotSheet" <?php if($galleryType != 'hotSheet') echo 'style="display:none;"'; ?>>
-			<label>Saved Search Pages:</label>
-			
-			<select name="<?php echo $this->get_field_name('hotSheetId'); ?>">
-			<?php
-				
-			foreach ($hotsheetsList as $i => $value) {
-							echo "<option value='" . (string) $hotsheetsList[$i]->hotsheetId . "'";
-							if($hotsheetsList[$i]->hotsheetId == $hotSheetId) {
+		</p>
+		<p id="widgetName" class="widgetName" <?php if($galleryType == 'linkSearch') echo 'style="display:none;"'; ?>>
+			<label>
+				Gallery Title:
+				<input class="widefat" type="text" value="<?php echo $name; ?>" name="<?php echo $this->get_field_name('name'); ?>" />
+			</label>
+		</p>
+		<p id="numberProperties" class="numberProperties" <?php if($galleryType == 'linkSearch') echo 'style="display:none;"'; ?>>
+			<label>
+				Number of Properties Shown:
+				<select class="widefat" name="<?php echo $this->get_field_name('propertiesShown'); ?>">
+					<?php for($i=1; $i<11; $i+=1) { ?>
+						<option
+							value="<?php echo $i; ?>"
+							<?php if($propertiesShown == $i) {echo "selected";} ?>
+						>
+							<?php echo $i; ?>
+						</option>
+					<?php } ?>
+				</select>
+			</label>
+		</p>
+		<p id="linkText" class="linkText">
+			<label>
+				Link Text:
+				<input class="widefat" type="text" value="<?php echo $linkText; ?>" name="<?php echo $this->get_field_name('linkText'); ?>" />
+			</label>
+		</p>
+		<p id="hotSheet" class="hotSheet" <?php if($galleryType != 'hotSheet') echo 'style="display:none;"'; ?>>
+			<label>
+				Saved Search Pages:
+				<select class="widefat" name="<?php echo $this->get_field_name('hotSheetId'); ?>">
+					<?php
+					foreach ($hotsheetsList as $i => $value) {
+						echo "<option value='" . (string) $hotsheetsList[$i]->hotsheetId . "'";
+						if($hotsheetsList[$i]->hotsheetId == $hotSheetId) {
+							echo " selected='true'";
+						}
+						echo ">" . (string) $hotsheetsList[$i]->displayName . "</option>";
+					}
+					?>
+				</select>
+			</label>
+		</p>
+		<div id="namedSearch" class="namedSearch" <?php if($galleryType != 'namedSearch' && $galleryType != 'linkSearch') echo 'style="display:none;"'; ?>>
+			<p>
+				<label>
+					City:
+					<select class="widefat" style="height: 100px;" name="<?php echo $this->get_field_name('cityId'); ?>" size="5">
+						<?php
+						foreach ($citiesList as $i => $value) {
+							echo "<option value='" . $citiesList[$i]->cityId . "'";
+							if($citiesList[$i]->cityId == $cityId) {
 								echo " selected='true'";
 							}
-						echo ">" . (string) $hotsheetsList[$i]->displayName . "</option>";
-			}
-			?>
-			</select>
-		</div>
-
-		<div id="namedSearch" class="namedSearch" <?php if($galleryType != 'namedSearch' && $galleryType != 'linkSearch') echo 'style="display:none;"'; ?>>
-			<label>City:</label><br />
-			<select name="<?php echo $this->get_field_name('cityId'); ?>" size="5" style="height: 100px;">
-				<?php
-				foreach ($citiesList as $i => $value) {
-					echo "<option value='" . $citiesList[$i]->cityId . "'";
-					if($citiesList[$i]->cityId == $cityId) {
-						echo " selected='true'";
-					}
-					echo ">" . $citiesList[$i]->displayName . "</option>";
-				}
-				?>
-			</select>
-			<br />
-			<label>Property Type:</label><br />
-			<select name="<?php echo $this->get_field_name('propertyType'); ?>" >
-				<?php
-				foreach ($propertyTypesList as $i => $value) {
-					echo"<option value='" . (string) $propertyTypesList[$i]->propertyTypeCode . "'";
-					if($propertyTypesList[$i]->propertyTypeCode == $propertyType) {
-						echo " selected='true'";
-					}
-					echo ">" . (string) $propertyTypesList[$i]->displayName . "</option>";
-				}
-				?>
-			</select>
-			<br />
-			<label>Bed:</label><br />
-			<input class="widefat" type="text" value="<?php echo $bed; ?>" name="<?php echo $this->get_field_name('bed'); ?>" />
-			<br />
-			<label>Bath:</label><br />
-			<input class="widefat" type="text" value="<?php echo $bath; ?>" name="<?php echo $this->get_field_name('bath'); ?>" />
-			<br />
-			<label>Minimum Price:</label><br />
-			<input class="widefat" type="text" value="<?php echo $minPrice; ?>" name="<?php echo $this->get_field_name('minPrice'); ?>" />
-			<br />
-			<label>Maximum Price:</label><br />
-			<input class="widefat" type="text" value="<?php echo $maxPrice; ?>" name="<?php echo $this->get_field_name('maxPrice'); ?>" />
+							echo ">" . $citiesList[$i]->displayName . "</option>";
+						}
+						?>
+					</select>
+				</label>
+			</p>
+			<p>
+				<label>
+					Property Type:
+					<select class="widefat" name="<?php echo $this->get_field_name('propertyType'); ?>" >
+						<?php
+						foreach ($propertyTypesList as $i => $value) {
+							echo"<option value='" . (string) $propertyTypesList[$i]->propertyTypeCode . "'";
+							if($propertyTypesList[$i]->propertyTypeCode == $propertyType) {
+								echo " selected='true'";
+							}
+							echo ">" . (string) $propertyTypesList[$i]->displayName . "</option>";
+						}
+						?>
+					</select>
+				</label>
+			</p>
+			<p>
+				<label>
+					Bed:
+					<input class="widefat" type="number" value="<?php echo $bed; ?>" name="<?php echo $this->get_field_name('bed'); ?>" />
+				</label>
+			</p>
+			<p>
+				<label>
+					Bath:
+					<input class="widefat" type="number" value="<?php echo $bath; ?>" name="<?php echo $this->get_field_name('bath'); ?>" />
+				</label>
+			</p>
+			<p>
+				<label>
+					Minimum Price:
+					<input class="widefat" type="number" value="<?php echo $minPrice; ?>" name="<?php echo $this->get_field_name('minPrice'); ?>" />
+				</label>
+			</p>
+			<p>
+				<label>
+					Maximum Price:
+					<input class="widefat" type="number" value="<?php echo $maxPrice; ?>" name="<?php echo $this->get_field_name('maxPrice'); ?>" />
+				</label>
+			</p>
 		</div>
 		<?php 
 		//The following call echos a select context for pages to display.
-		echo ($this->contextUtility->getPageSelector($this, $instance, iHomefinderConstants::GALLERY_WIDGET_TYPE));
+		echo $this->contextUtility->getPageSelector($this, $instance, iHomefinderConstants::GALLERY_WIDGET_TYPE);
+		?>
+		<br />
+		<?php
 	}
 
 }
