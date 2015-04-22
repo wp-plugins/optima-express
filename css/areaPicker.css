@@ -49,7 +49,9 @@
 	background:#999;
 }
 
-
+.ihf-one-selectedArea.disabled {
+    opacity: .5;
+}
 
 .autocompleteMessage{
   margin: 3px 0px 15px 3px;
@@ -175,6 +177,12 @@
 
 .areaPickerExpandAllRow{
   border-bottom:1px solid #f0f0f0;
+}
+
+.areaPickerExpandAllElement div {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 .areaPickerAutoCompleteSubAreaElement{

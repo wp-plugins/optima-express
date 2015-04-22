@@ -21,11 +21,9 @@ class iHomefinderLogger {
 			if($debugValue && $debugValue === 'true') {
 				$debug=true;
 			}						
-		}
-		else if(iHomefinderConstants::DEBUG) {
+		} elseif(iHomefinderConstants::DEBUG) {
 			$debug=true;
 		}
-
 		return $debug;				
 	}
 	

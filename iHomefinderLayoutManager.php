@@ -40,8 +40,7 @@ class iHomefinderLayoutManager {
 		$result = "";
 		if($this->isResponsive()) {
 			$result = iHomefinderConstants::RESPONSIVE_EXTERNAL_URL;
-		}
-		else{
+		} else {
 			$result = iHomefinderConstants::LEGACY_EXTERNAL_URL;
 		}
 		return $result;

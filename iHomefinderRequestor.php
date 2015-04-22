@@ -5,10 +5,8 @@ class iHomefinderRequestor {
 	private $parameters = array();
 	private $cacheExpiration = 0;
 	
-	private $cacheUtility = "";
-	
 	public function __construct() {
-		$this->cacheUtility = iHomefinderCacheUtility::getInstance();
+		
 	}
 	
 	public function remoteGetRequest() {
@@ -78,8 +76,7 @@ class iHomefinderRequestor {
 		
 		$response = null;
 		if($this->isCacheable()) {
-			$response = $this->cacheUtility->getItem($this->getParameters());
-			//var_dump($response);
+			$response = iHomefinderCacheUtility::getInstance()->getItem($this->getParameters());
 		}
 		
 		if($response === null) {
@@ -89,8 +86,8 @@ class iHomefinderRequestor {
 			$response = wp_remote_get($requestUrl, $requestArgs);
 			iHomefinderLogger::getInstance()->debug("after request");
 			iHomefinderLogger::getInstance()->debugDumpVar($response);
-			if(!is_wp_error($response) && $this->isCacheable()) {
-				$this->cacheUtility->updateItem($this->getParameters(), $response, $this->getCacheExpiration());
+			if(!is_wp_error($response) && $this->isCacheable() && $response["response"]["code"] < 400) {
+				iHomefinderCacheUtility::getInstance()->updateItem($this->getParameters(), $response, $this->getCacheExpiration());
 			}
 		}
 		
@@ -115,55 +112,60 @@ class iHomefinderRequestor {
 			}
 		}
 		
-		//Save the leadCaptureId, if we get it back.
-		if(property_exists($contentInfo, "leadCaptureId") && !empty($contentInfo->leadCaptureId)) {
-			iHomefinderStateManager::getInstance()->saveLeadCaptureId($contentInfo->leadCaptureId);
-		}
 		
-		if(property_exists($contentInfo, "ihfSessionId")) {
-			iHomefinderStateManager::getInstance()->saveIhfSessionId($contentInfo->ihfSessionId);
-		}
-		
-		if(property_exists($contentInfo, "searchContext")) {
-			iHomefinderStateManager::getInstance()->setSearchContext($contentInfo->searchContext);
-		}
-
-		if(property_exists($contentInfo, "listingInfo")) {
-			$listingInfo = $contentInfo->listingInfo;
-			$listingNumber = "";
-			$listingAddress = "";
-			$boardId = "";
-			$clientPropertyId = "";
-			$sold = "false";
+		if(!$this->isError($contentInfo) && !$this->isCacheable()) {
 			
-			$hasListingInfo = false;
-			if(property_exists($listingInfo, "listingNumber") && property_exists($listingInfo, "boardId")) {
-				$listingNumber = $listingInfo->listingNumber;
-				$boardId = $listingInfo->boardId;
-				$hasListingInfo = true;
-				if(property_exists($listingInfo, "clientPropertyId")) {
-					$clientPropertyId = $listingInfo->clientPropertyId;
-				}
-				if(property_exists($listingInfo, "listingAddress")) {
-					$listingAddress = $listingInfo->listingAddress;
-				}
-				if(property_exists($listingInfo, "sold")) {
-					$sold = $listingInfo->sold;
-				}
-				$listingInfo = new iHomefinderListingInfo($listingNumber, $boardId, $listingAddress, $clientPropertyId, $sold);
-				iHomefinderStateManager::getInstance()->setCurrentListingInfo($listingInfo);					
+			//Save the leadCaptureId, if we get it back.
+			if(property_exists($contentInfo, "leadCaptureId") && !empty($contentInfo->leadCaptureId)) {
+				iHomefinderStateManager::getInstance()->saveLeadCaptureId($contentInfo->leadCaptureId);
 			}
-		}
 			
-		if(!$this->isError($contentInfo) && property_exists($contentInfo, "subscriberInfo")) {
-			$subscriberInfo = $contentInfo->subscriberInfo;
-			$subscriber = new iHomefinderSubscriber($subscriberInfo->subscriberId, $subscriberInfo->name, $subscriberInfo->email);
-			iHomefinderStateManager::getInstance()->saveSubscriberLogin($subscriber);
-		}
-		
-		if(!$this->isError($contentInfo) && property_exists($contentInfo, "searchSummary")) {
-			$searchSummary = $contentInfo->searchSummary;
-			iHomefinderStateManager::getInstance()->saveSearchSummary($searchSummary);
+			if(property_exists($contentInfo, "ihfSessionId")) {
+				iHomefinderStateManager::getInstance()->saveIhfSessionId($contentInfo->ihfSessionId);
+			}
+			
+			if(property_exists($contentInfo, "searchContext")) {
+				iHomefinderStateManager::getInstance()->setSearchContext($contentInfo->searchContext);
+			}
+			
+			if(property_exists($contentInfo, "listingInfo")) {
+				$listingInfo = $contentInfo->listingInfo;
+				$listingNumber = "";
+				$listingAddress = "";
+				$boardId = "";
+				$clientPropertyId = "";
+				$sold = "false";
+					
+				$hasListingInfo = false;
+				if(property_exists($listingInfo, "listingNumber") && property_exists($listingInfo, "boardId")) {
+					$listingNumber = $listingInfo->listingNumber;
+					$boardId = $listingInfo->boardId;
+					$hasListingInfo = true;
+					if(property_exists($listingInfo, "clientPropertyId")) {
+						$clientPropertyId = $listingInfo->clientPropertyId;
+					}
+					if(property_exists($listingInfo, "listingAddress")) {
+						$listingAddress = $listingInfo->listingAddress;
+					}
+					if(property_exists($listingInfo, "sold")) {
+						$sold = $listingInfo->sold;
+					}
+					$listingInfo = new iHomefinderListingInfo($listingNumber, $boardId, $listingAddress, $clientPropertyId, $sold);
+					iHomefinderStateManager::getInstance()->setCurrentListingInfo($listingInfo);
+				}
+			}
+				
+			if(property_exists($contentInfo, "subscriberInfo")) {
+				$subscriberInfo = $contentInfo->subscriberInfo;
+				$subscriber = new iHomefinderSubscriber($subscriberInfo->subscriberId, $subscriberInfo->name, $subscriberInfo->email);
+				iHomefinderStateManager::getInstance()->saveSubscriberLogin($subscriber);
+			}
+			
+			if(property_exists($contentInfo, "searchSummary")) {
+				$searchSummary = $contentInfo->searchSummary;
+				iHomefinderStateManager::getInstance()->saveSearchSummary($searchSummary);
+			}
+			
 		}
 			
 		return $contentInfo;
@@ -244,10 +246,10 @@ class iHomefinderRequestor {
 		if(is_null($contentInfo)) {
 			//We could reach this code, if the iHomefinder services are down.
 			$content = "<br />Sorry we are experiencing system issues. Please try again.<br />";
-		} else if(property_exists($contentInfo, "error")) {
+		} elseif(property_exists($contentInfo, "error")) {
 			//Report the error from iHomefinder
 			$content = "<br />" . $contentInfo->error . "<br />";
-		} else if(property_exists($contentInfo, "view")) {
+		} elseif(property_exists($contentInfo, "view")) {
 			//success, display the view
 			$content = html_entity_decode($contentInfo->view, null, "UTF-8");
 		}

@@ -42,8 +42,7 @@ class iHomefinderSearchLinkInfo {
 				$cityState = $this->getCityZip();
 				$statePosition = strrpos($cityState, ",");
 				$city = substr($cityState, 0, $statePosition);
-			}
-			else{
+			} else {
 				$city = $this->getCityZip();
 			}
 		}
@@ -57,7 +56,6 @@ class iHomefinderSearchLinkInfo {
 			$statePosition = strrpos($cityState, ",") + 1;
 			$state = substr($cityState, $statePosition);
 		}
-		
 		return $state;
 	}
 	
@@ -71,7 +69,7 @@ class iHomefinderSearchLinkInfo {
 	public static function compare($a, $b) {
 		$al = strtolower($a->linkText);
 		$bl = strtolower($b->linkText);
-		if ($al == $bl) {
+		if($al == $bl) {
 			return 0;
 		}
 		return ($al > $bl) ? +1 : -1;

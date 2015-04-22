@@ -118,7 +118,7 @@ class iHomefinderAutoloader {
 		return self::$instance;
 	}
 	
-	function load($className) {
+	public function load($className) {
 		if(array_key_exists($className, $this->classes)) {
 			//var_dump("including " . $className);
 			include $this->classes[$className];

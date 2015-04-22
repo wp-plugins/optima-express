@@ -1,15 +1,17 @@
 <?php
-
 /**
- * iHomefinder plugin related constants. These are used in many different classes.
+ * iHomefinder plugin related constants.  These are used in many
+ * different classes.
+ *
+ * @author ihomefinder
  */
-interface iHomefinderConstants {
+interface iHomefinderConstants{
 
-	const VERSION = "2.6.0";
+	const VERSION = "2.6.1";
 	const VERSION_NAME = "Optima Express";
-	const LEGACY_EXTERNAL_URL = "http://demo2.idxre.com/services/wordpress";
-	const RESPONSIVE_EXTERNAL_URL = "http://java.jroncskevitz.ihomefinder.com/service/wordpress";
-	const CONTROL_PANEL_EXTERNAL_URL = "http://demo2.idxre.com/idx/guid";
+	const LEGACY_EXTERNAL_URL = "http://www.idxre.com/services/wordpress";
+	const RESPONSIVE_EXTERNAL_URL = "http://www.idxhome.com/service/wordpress";
+	const CONTROL_PANEL_EXTERNAL_URL = "http://www.idxre.com/idx/guid";
 
 	//Group for Activation related options
 	//Also used as menu slug for the Activate Menu

@@ -11,11 +11,9 @@ class iHomefinderHotsheetVirtualPageImpl extends iHomefinderAbstractVirtualPage 
 		$customTitle = get_option(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_HOTSHEET);
 		if($customTitle != null && "" != $customTitle) {
 			$this->title=$customTitle;
-		}
-		else{
+		} else {
 			$this->title = $this->defaultTitle;
 		}
-
 		return $this->title;
 	}
 

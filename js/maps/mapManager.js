@@ -437,7 +437,7 @@ var MapManager = function( containerId ) {
 	 this.getGeoData = function( request, onSuccess ) {
 		var searchTerm = jQuery.trim( request.term );
 		var self = this;
-		var url = '//www.mapquestapi.com/geocoding/v1/address?key=' + this.MAPQUEST_KEY + '&location=' + searchTerm;
+		var url = '//www.mapquestapi.com/geocoding/v1/address?key=' + this.MAPQUEST_KEY + '&location=' + encodeURIComponent(searchTerm);
 		this.abortAjaxRequest();
 		this.ajaxRequest = jQuery.ajax({
 			type: 'GET',
@@ -513,7 +513,7 @@ var MapManager = function( containerId ) {
 	 * @returns LatLng object
 	 */
 	this.geocodeAddress = function( address, onSuccess ) {
-		var url = '//www.mapquestapi.com/geocoding/v1/address?key=' + this.MAPQUEST_KEY + '&location=' + address;
+		var url = '//www.mapquestapi.com/geocoding/v1/address?key=' + this.MAPQUEST_KEY + '&location=' + encodeURIComponent(address);
 		this.abortAjaxRequest();
 		this.ajaxRequest = jQuery.ajax({
 			type: 'GET',
@@ -618,6 +618,9 @@ var MapManager = function( containerId ) {
 		listings,
 		context
 	) {
+		if(!listings.length > 0) {
+			return;
+		}
 		this.containerId = containerId;
 		var self = this;
 		var getInvalidListing = function() {

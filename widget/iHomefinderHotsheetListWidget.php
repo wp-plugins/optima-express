@@ -49,7 +49,7 @@ class iHomefinderHotsheetListWidget extends WP_Widget {
 			iHomefinderEnqueueResource::getInstance()->addToFooter($contentInfo->head);
 			
 			echo $before_widget;
-			if ($title) {
+			if($title) {
 				echo $before_title . $title . $after_title;
 			}
 			
@@ -93,8 +93,10 @@ class iHomefinderHotsheetListWidget extends WP_Widget {
 		
 		?>
 		<p>
-			<?php _e("Title:"); ?>
-			<input class="widefat" id="<?php echo $this->get_field_id("title"); ?>" name="<?php echo $this->get_field_name("title"); ?>" type="text" value="<?php echo $title; ?>" />
+			<label>
+				Title:
+				<input class="widefat" id="<?php echo $this->get_field_id("title"); ?>" name="<?php echo $this->get_field_name("title"); ?>" type="text" value="<?php echo $title; ?>" />
+			</label>
 		</p>
 		<p>
 			<?php
@@ -123,25 +125,30 @@ class iHomefinderHotsheetListWidget extends WP_Widget {
 		}
 		?>
 		<p class="hotsheetList" style="<?php echo $hotsheetListStyle ?>">
-			<label>Saved Search Pages:</label>
-			<select class="widefat" name="<?php echo $this->get_field_name("hotsheetIds"); ?>[]" multiple="multiple">
-				<?php
-				foreach($clientHotsheets as $index => $clientHotsheet) {
-					$hotsheetIdSelected = "";
-					if(is_array($hotsheetIds) && in_array($clientHotsheet->hotsheetId, $hotsheetIds)) {
-						$hotsheetIdSelected = "selected=\"selected\"";
+			<label>
+				Saved Search Pages:
+				<select class="widefat" name="<?php echo $this->get_field_name("hotsheetIds"); ?>[]" multiple="multiple">
+					<?php
+					foreach($clientHotsheets as $index => $clientHotsheet) {
+						$hotsheetIdSelected = "";
+						if(is_array($hotsheetIds) && in_array($clientHotsheet->hotsheetId, $hotsheetIds)) {
+							$hotsheetIdSelected = "selected=\"selected\"";
+						}
+						?>
+						<option value="<?php echo $clientHotsheet->hotsheetId ?>" <?php echo $hotsheetIdSelected ?>>
+							<?php echo $clientHotsheet->displayName ?>
+						</option>
+						<?php
 					}
 					?>
-					<option value="<?php echo $clientHotsheet->hotsheetId ?>" <?php echo $hotsheetIdSelected ?>>
-						<?php echo $clientHotsheet->displayName ?>
-					</option>
-					<?php
-				}
-				?>
-			</select>
+				</select>
+			</label>
 		</p>
 		<?php
 		$this->contextUtility->getPageSelector($this, $instance, iHomefinderConstants::SEARCH_OTHER_WIDGET_TYPE);
+		?>
+		<br />
+		<?php
 	}
 
 }

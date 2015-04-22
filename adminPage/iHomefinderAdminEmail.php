@@ -242,7 +242,7 @@ class iHomefinderAdminEmail extends iHomefinderAdminAbstractPage {
 				//Use the agent photo and office logo that were previoulsy uploaded
 				$agentPhoto = get_option(iHomefinderConstants::AGENT_PHOTO_OPTION);
 				$logo = $this->getDefaultLogo();
-				$result = $this->getBasicEmailHeader($agentPhoto, $logo);
+				$result = $this->getBasicEmailHeader($agentPhoto, $logo, null, null, null, null, null);
 				break;
 		}
 	
@@ -273,7 +273,7 @@ class iHomefinderAdminEmail extends iHomefinderAdminAbstractPage {
 				//Use the agent photo and office logo that were previoulsy uploaded
 				$agentPhoto = get_option(iHomefinderConstants::AGENT_PHOTO_OPTION);
 				$logo = $this->getDefaultLogo();
-				$result = $this->getBasicEmailFooter($agentPhoto, $logo);
+				$result = $this->getBasicEmailFooter($agentPhoto, $logo, null, null, null, null, null);
 				break;
 		}
 		return $result;
@@ -287,27 +287,27 @@ class iHomefinderAdminEmail extends iHomefinderAdminAbstractPage {
 			$agentPhotoSize = getimagesize($agentPhoto);
 			$agentPhotoHeight = $agentPhotoSize[1];
 			if($agentPhotoHeight > 142) {
-				$result .= "<img src='" . $agentPhoto . "' height='142px'/>";
+				$result .= "<img src='" . $agentPhoto . "' height='142px' />";
 			} else {
-				$result .= "<img src='" . $agentPhoto . "'/>";
+				$result .= "<img src='" . $agentPhoto . "' />";
 			}
 		}
 		$result .=	"</td>";
 		$result .= "<td>";
 		$result .= "<font face='Arial, Helvetica, sans-serif'>";
-		if($name) {
+		if($name != null) {
 			$result .= "<b>" . $name . "</b><br/>";
 		}
-		if($company) {
+		if($company != null) {
 			$result .= "<b>" . $company . "</b><br/><br/>";
 		}
-		if($address1) {
+		if($address1 != null) {
 			$result .= $address1 . "<br/>";
 		}
-		if($address2) {
+		if($address2 != null) {
 			$result .= $address2 . "<br/>";
 		}
-		if($phone) {
+		if($phone != null) {
 			$result .= $phone . "<br/>";
 		}
 		$result .= "</font>";
@@ -317,9 +317,8 @@ class iHomefinderAdminEmail extends iHomefinderAdminAbstractPage {
 			$logoSize = getimagesize($logo);
 			$logoHeight = $logoSize[1];
 			if($logoHeight > 142) {
-				$result .= "<img src='" . $logo . "' height='142px'/>";
-			}
-			else{
+				$result .= "<img src='" . $logo . "' height='142px' />";
+			} else {
 				$result .= "<img src='" . $logo . "'/>";
 			}
 		}
@@ -338,22 +337,21 @@ class iHomefinderAdminEmail extends iHomefinderAdminAbstractPage {
 		$result .= "<table width='100%' cellpadding='10' cellspacing='0' border='0' bgcolor='#dedede'><tr>";
 		$result .= "<td align='right'>";
 		$result .= "<font face='Arial, Helvetica, sans-serif'>";
-		if($name) {
+		if($name != null) {
 			$result .= "<b>" . $name . "</b><br/>";
 		}
-		if($company) {
+		if($company != null) {
 			$result .= "<b>" . $company . "</b><br/><br/>";
 		}
-		if($address1) {
+		if($address1 != null) {
 			$result .= $address1 . "<br/>";
 		}
-		if($address2) {
+		if($address2 != null) {
 			$result .= $address2 . "<br/>";
 		}
-		if($phone) {
+		if($phone != null) {
 			$result .= $phone . "<br/>";
 		}
-	
 		$result .= "</font>";
 		$result .= "</td>";
 		$result .= "</tr></table>";

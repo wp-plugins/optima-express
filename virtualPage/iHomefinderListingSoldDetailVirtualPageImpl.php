@@ -11,11 +11,9 @@ class iHomefinderListingSoldDetailVirtualPageImpl extends iHomefinderAbstractVir
 		$customTitle = get_option(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_SOLD_DETAIL);				
 		if($customTitle != null && "" != $customTitle) {
 			$this->title=$customTitle;
-		}
-		else{
+		} else {
 			$this->title = $this->defaultTitle;
 		}
-
 		return $this->title;
 	}
 	
@@ -56,18 +54,14 @@ class iHomefinderListingSoldDetailVirtualPageImpl extends iHomefinderAbstractVir
 	}
 	
 	private function getPreviousSearchLink() {
-
 		$previousSearchUrl=iHomefinderStateManager::getInstance()->getLastSearch();
-
 		//If previous search does not exist, then use an empty search form
 		if($previousSearchUrl == null || trim($previousSearchUrl) == "") {
 			$previousSearchUrl= iHomefinderUrlFactory::getInstance()->getListingsSearchFormUrl(true);
 			$previousSearchUrl="<a href=\"" . $previousSearchUrl . "\">&lt;&nbsp;New Search</a>";
-		}
-		else{
+		} else {
 			$previousSearchUrl="<a href=\"" . $previousSearchUrl . "\">&lt;&nbsp;Return To Results</a>";
 		}
-
 		return $previousSearchUrl;
 	}
 	

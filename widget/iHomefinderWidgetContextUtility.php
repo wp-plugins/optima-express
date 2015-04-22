@@ -51,37 +51,31 @@ class iHomefinderWidgetContextUtility {
 			//always display the widget for non Optima Express pages
 			//this will not work if using shortcodes
 			$result = true;	
-		}
-		else if(!array_key_exists(iHomefinderVirtualPageFactory::LISTING_DETAIL, $widgetInstance)) {
+		} elseif(!array_key_exists(iHomefinderVirtualPageFactory::LISTING_DETAIL, $widgetInstance)) {
 			//If the widget instance does not have the listing detail key, then we have a plugin
 			//That has been upgraded, but the user did not update the widget. In this case
 			//we default to the previous behavior of displaying the widget on all pages.
 			$result = true;				
-		}
-		else if(array_key_exists($type, $widgetInstance) && $widgetInstance[$type] == "true") {
+		} elseif(array_key_exists($type, $widgetInstance) && $widgetInstance[$type] == "true") {
 			//We have enabled the type for this widget
 			//see iHomefinderVirtualPageFactory for valid types
 			$result = true;				
-		}
-		else{
+		} else {
 			//Special cases that are not covered specifically by type
 			if($widgetInstance[iHomefinderVirtualPageFactory::HOTSHEET_SEARCH_RESULTS] == "true") {	
 				//If set to display with Hotsheet, then also display in the Hotsheet list.
 				if($type == iHomefinderVirtualPageFactory::HOTSHEET_LIST) {
 					$result = "true";
 				}
-			}
-			else if($widgetInstance[iHomefinderVirtualPageFactory::ORGANIZER_LOGIN] == "true") {
+			} elseif($widgetInstance[iHomefinderVirtualPageFactory::ORGANIZER_LOGIN] == "true") {
 				//If set to display for Organizer, then enabled for saved listings and search
 				if($type == iHomefinderVirtualPageFactory::ORGANIZER_VIEW_SAVED_LISTING_LIST) {
 					$result = "true";
-				}
-				else if($type == iHomefinderVirtualPageFactory::ORGANIZER_EDIT_SAVED_SEARCH) {
+				} elseif($type == iHomefinderVirtualPageFactory::ORGANIZER_EDIT_SAVED_SEARCH) {
 					$result = "true";
 				}
-			}
-			//Email Alerts page
-			else if($widgetInstance[iHomefinderVirtualPageFactory::ORGANIZER_EDIT_SAVED_SEARCH] == "true") {
+			} elseif($widgetInstance[iHomefinderVirtualPageFactory::ORGANIZER_EDIT_SAVED_SEARCH] == "true") {
+				//Email Alerts page
 				if($type == iHomefinderVirtualPageFactory::ORGANIZER_EMAIL_UPDATES_CONFIRMATION) {
 					$result = "true";
 				}
@@ -158,28 +152,23 @@ class iHomefinderWidgetContextUtility {
 	public function getPageSelector($widget, $instance, $widgetType) {
 		//cannot use $this->id in the function name, b/c it has characters
 		//that are not allowed for JavaScript functions
-		$uniqueId = uniqid();
-		$selectAllFunction = "selectAll" . $uniqueId . "Function";
 		$selectAllCheckbox = "selectAllCheckbox" . $widget->id;
 		$selectAllCheckboxDiv = "selectAllContainer" . $widget->id;
-		$selectAllCheckboxReset = "selectAllCheckboxReset" . $uniqueId . "Function";	
 		
 		//this is false if the user has upgraded from 1.1.1 to 1.1.2
 		//because the widget instance does not have the listing detail field
 		$hasPageSelector = array_key_exists(iHomefinderVirtualPageFactory::LISTING_DETAIL, $instance);		
 		?>
-		<br />
-		<br />
-		<label>Display widget on selected IDX pages:</label>
-		<br />
-		<br />
-		<input
-			id="<?php echo $selectAllCheckbox ?>"
-			type="checkbox"
-			<?php if(!$hasPageSelector) {echo "checked='checked'";}?>
-			onclick="selectAllCheckboxes('<?php echo $selectAllCheckbox ?>', '<?php echo $selectAllCheckboxDiv ?>');"
-		/>
-		Select All &nbsp;&nbsp;
+		<p>Display widget on selected IDX pages:</p>
+		<label>
+			<input
+				id="<?php echo $selectAllCheckbox ?>"
+				type="checkbox"
+				<?php if(!$hasPageSelector) {echo "checked='checked'";} ?>
+				onclick="selectAllCheckboxes('<?php echo $selectAllCheckbox ?>', '<?php echo $selectAllCheckboxDiv ?>');"
+			/>
+			Select All &nbsp;&nbsp;
+		</label>
 		<br/>
 		<div id="<?php echo $selectAllCheckboxDiv ?>">	
 			<?php
@@ -194,22 +183,22 @@ class iHomefinderWidgetContextUtility {
 				//field. This situation may occur when upgrading
 				//this plugin from 1.1.1 to 1.1.2
 				$fieldValue = "true";
-				if($hasPageSelector) {
+				if($hasPageSelector && array_key_exists("pageType", $instance)) {
 					$fieldValue = $instance[$pageType];
 				}
 				?>
 				<input id="<?php echo $fieldId ?>"
-				  name="<?php echo $fieldName ?>"
-				  type="checkbox" 
-				  onclick="selectAllCheckboxesReset('<?php echo $selectAllCheckbox ?>', '<?php echo $selectAllCheckboxDiv ?>')"
-				  <?php if($fieldValue == "true") {echo "checked='checked'";}?>
-				  <?php if(!$hasPageSelector) {echo "checked='checked'";}?>
-				  />
+					name="<?php echo $fieldName ?>"
+					type="checkbox" 
+					onclick="selectAllCheckboxesReset('<?php echo $selectAllCheckbox ?>', '<?php echo $selectAllCheckboxDiv ?>')"
+					<?php if($fieldValue == "true") {echo "checked='checked'";} ?>
+					<?php if(!$hasPageSelector) {echo "checked='checked'";} ?>
+				/>
 				<label for="<?php echo $fieldId ?>">
 					<?php echo $label ?>
 				</label>
 				<br/>
-			<?php }?>
+			<?php } ?>
 		</div>
 		<?php
 	}

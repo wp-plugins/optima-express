@@ -37,7 +37,7 @@ class iHomefinderMoreInfoWidget extends WP_Widget {
 			$title = apply_filters("widget_title", $instance["title"]);
 			
 			echo $before_widget;
-			if ($title) {
+			if($title) {
 				echo $before_title . $title . $after_title;
 			}
 			echo $content;
@@ -55,8 +55,10 @@ class iHomefinderMoreInfoWidget extends WP_Widget {
 		$title = esc_attr($instance["title"]);
 		?>
 		<p>
-			<?php _e("Title:"); ?>
-			<input class="widefat" id="<?php echo $this->get_field_id("title"); ?>" name="<?php echo $this->get_field_name("title"); ?>" type="text" value="<?php echo $title; ?>" />
+			<label>
+				Title:
+				<input class="widefat" id="<?php echo $this->get_field_id("title"); ?>" name="<?php echo $this->get_field_name("title"); ?>" type="text" value="<?php echo $title; ?>" />
+			</label>
 		</p>
 		<?php      
 	}

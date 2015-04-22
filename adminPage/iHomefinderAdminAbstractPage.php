@@ -9,7 +9,7 @@ abstract class iHomefinderAdminAbstractPage implements iHomefinderAdminPageInter
 	}
 	
 	public function getPage() {
-		if (!current_user_can("manage_options")) {
+		if(!current_user_can("manage_options")) {
 			wp_die("You do not have sufficient permissions to access this page.");
 		}
 		if($this->isUpdated()) {

@@ -52,7 +52,9 @@ class iHomefinderSocialWidget extends WP_Widget {
 		$socialConfigurationUrl = site_url();
 		$socialConfigurationUrl .= "/wp-admin/admin.php?page=ihf-social-page";
 		?>
-		<a href="<?php echo $socialConfigurationUrl ?>">Configure Social Links</a>
+		<p>
+			<a href="<?php echo $socialConfigurationUrl ?>">Configure Social Links</a>
+		</p>
 		<?php
 	}
 	

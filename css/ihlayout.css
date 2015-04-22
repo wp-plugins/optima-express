@@ -1133,6 +1133,10 @@ input[type=number] {
 	color:#fff;
 	text-decoration:none;
 }
+#ihf-main-container .ihf-grid-result-price a:visited, #ihf-main-container .ihf-grid-result-price a:active, #ihf-main-container .ihf-grid-result-price a:hover {
+	color:#fff;
+	text-decoration:none;
+}
 
 .ihf-grid-result-address {
 	white-space: nowrap;

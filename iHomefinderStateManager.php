@@ -91,8 +91,7 @@ class iHomefinderStateManager {
 		 */
 		if(array_key_exists($this->getLeadCaptureKey(), $_COOKIE)) {
 			$this->leadCaptureId = $_COOKIE[$this->getLeadCaptureKey()];
-		}
-		else{
+		} else {
 			$this->leadCaptureId = $this->getLeadCaptureId();
 			if($this->leadCaptureId != null) {
 				$expireTime = time()+60*60*24*365*5; /* expire in 5 years */
@@ -319,7 +318,7 @@ class iHomefinderStateManager {
 			if(array_key_exists($cacheKey, $_SESSION)) {
 				$_SESSION[$cacheKey] = null;	
 			}
-		}else{
+		} else {
 			delete_transient($cacheKey);
 		}
 		

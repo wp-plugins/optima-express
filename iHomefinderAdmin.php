@@ -23,7 +23,7 @@ class iHomefinderAdmin {
 		
 		//Check for valid plugin registration
 		//Do not check for registration on the registration page.
-		if ($pageName != iHomefinderConstants::OPTION_ACTIVATE && !get_option(iHomefinderConstants::AUTHENTICATION_TOKEN_OPTION)) {
+		if($pageName != iHomefinderConstants::OPTION_ACTIVATE && !get_option(iHomefinderConstants::AUTHENTICATION_TOKEN_OPTION)) {
 			?>
 			<style type="text/css">
 				.green-bar {
@@ -55,7 +55,7 @@ class iHomefinderAdmin {
 			$plugins = get_plugins();
 			
 			//check if permalink structure is set
-			if (get_option("permalink_structure") == "") {
+			if(get_option("permalink_structure") == "") {
 				$errors[] = "<p><a href='options-permalink.php'>WordPress permalink settings are set as default (Error 404)</a></p>";					
 			}
 			
@@ -81,9 +81,9 @@ class iHomefinderAdmin {
 					$compatibilityPluginArray=$compatibility["Plugin"];
 													
 					//loop through plugin array
-					foreach ($plugins as $pluginPath => $plugin) {
+					foreach($plugins as $pluginPath => $plugin) {
 						//check if plugin is active
-						if (is_plugin_active($pluginPath) == true) {
+						if(is_plugin_active($pluginPath) == true) {
 							//get plugin name
 							$pluginName = $plugin["Name"];	
 							if(array_key_exists($pluginName, $compatibilityPluginArray)) {
@@ -95,7 +95,7 @@ class iHomefinderAdmin {
 						}
 					}
 						
-					if (function_exists("wp_get_theme")) {
+					if(function_exists("wp_get_theme")) {
 						//get current wordpress theme as string
 						$theme = wp_get_theme();	
 						$themeName=$theme["Name"];
@@ -110,7 +110,7 @@ class iHomefinderAdmin {
 				}
 					
 				//check error count
-				if (count($errors) > 0) {
+				if(count($errors) > 0) {
 					?>
 					<div class="error">
 						<div style="">
@@ -123,7 +123,7 @@ class iHomefinderAdmin {
 						</div>
 						<div style="clear: both;">
 							<?php
-							foreach ($errors as $error) {
+							foreach($errors as $error) {
 								echo $error;
 							}
 							?>
@@ -398,7 +398,7 @@ class iHomefinderAdmin {
 
 	public function addScripts() {
 		//Used for the Bio Page for image uploads
-		if (isset($_GET["page"]) && ($_GET["page"] == iHomefinderConstants::BIO_PAGE || $_GET["page"] == iHomefinderConstants::EMAIL_BRANDING_PAGE)) {
+		if(isset($_GET["page"]) && ($_GET["page"] == iHomefinderConstants::BIO_PAGE || $_GET["page"] == iHomefinderConstants::EMAIL_BRANDING_PAGE)) {
 			wp_enqueue_script("jquery"); // include jQuery
 			wp_register_script("bioInformation", plugins_url("/optima-express/js/bioInformation.js"), array("jquery","editor","media-upload","thickbox"));
 			wp_enqueue_style("thickbox");

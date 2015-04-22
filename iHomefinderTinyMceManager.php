@@ -1,5 +1,4 @@
 <?php
-
 class iHomefinderTinyMceManager {
 	
 	private static $instance;
@@ -12,17 +11,17 @@ class iHomefinderTinyMceManager {
 		if(!isset(self::$instance)) {
 			self::$instance = new self();
 		}
-		return self::$instance;		
-	}		
+		return self::$instance;
+	}
 	
-	public function addButtons() {			
-		if (!current_user_can("edit_posts") && !current_user_can("edit_pages")) {
+	public function addButtons() {
+		if(!current_user_can("edit_posts") && !current_user_can("edit_pages")) {
 			return;
 		}
-		if (get_user_option("rich_editing") == "true") {
-			add_filter("mce_external_plugins", array($this,"addTinymcePlugins"));
-			add_filter("mce_buttons", array($this,"registerButtons"));
-			add_action("in_admin_footer", array($this,"addTinymceVariables"));
+		if(get_user_option("rich_editing") == "true") {
+			add_filter("mce_external_plugins", array($this, "addTinyMcePlugins"));
+			add_filter("mce_buttons", array($this, "registerButtons"));
+			add_action("in_admin_footer", array($this, "addTinyMceVariables"));
 		}
 	}
 	
@@ -42,11 +41,10 @@ class iHomefinderTinyMceManager {
 				"optimaExpressBaseUrl": "<?php echo(plugins_url("/", __FILE__))?>",
 				"ihfAdminAjaxUrl": "<?php echo(admin_url("admin-ajax.php")) ?>"
 			};
-		
 		</script>
-		<?php 
+		<?php
 	}
-
+	
 	/**
 	 * Used for TinyMCE to register buttons
 	 */
@@ -55,16 +53,16 @@ class iHomefinderTinyMceManager {
 		$buttons[] = "optimaExpressGallery";
 		return $buttons;
 	}
-
+	
 	/**
 	 * Load the TinyMCE plugin : editor_plugin.js (wp2.5)
 	 * Note the url variable is configured in WordPress
 	 */
-	public function addTinymcePlugins($plugin_array) {
+	public function addTinyMcePlugins($plugin_array) {
 		$baseUrl = iHomefinderUrlFactory::getInstance()->getBaseUrl();
-		$optimaExpressGalleryPluginUrl=plugins_url("/tinymce/optimaExpressGallery/editor_plugin.js", __FILE__);
-		$plugin_array["optimaExpressGallery"] = $optimaExpressGalleryPluginUrl;						
+		$optimaExpressGalleryPluginUrl = plugins_url("/tinymce/optimaExpressGallery/editor_plugin.js", __FILE__);
+		$plugin_array["optimaExpressGallery"] = $optimaExpressGalleryPluginUrl;
 		return $plugin_array;
 	}
-
+	
 }

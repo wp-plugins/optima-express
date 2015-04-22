@@ -354,7 +354,7 @@ class iHomefinderShortcodeDispatcher {
 		iHomefinderStateManager::getInstance()->saveLastSearch();
 		if($this->getAttribute($attributes, "id") != null) {
 			$hotsheetId = $this->getAttribute($attributes, "id");
-		} else if($this->getAttribute($attributes, "hotsheetId") != null) {
+		} elseif($this->getAttribute($attributes, "hotsheetId") != null) {
 			$hotsheetId = $this->getAttribute($attributes, "hotsheetId");
 		}
 		$remoteRequest = new iHomefinderRequestor();

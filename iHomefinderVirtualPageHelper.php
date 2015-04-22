@@ -125,84 +125,84 @@ class iHomefinderVirtualPageHelper {
 	
 	public function registerOptions() {
 		//Virtual Page settings
-		register_setting(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_DEFAULT);
+		register_setting(self::OPTION_VIRTUAL_PAGE_CONFIG, self::OPTION_VIRTUAL_PAGE_TEMPLATE_DEFAULT);
 		
-		register_setting(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_DETAIL);
-		register_setting(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_DETAIL);
-		register_setting(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_DETAIL);
+		register_setting(self::OPTION_VIRTUAL_PAGE_CONFIG, self::OPTION_VIRTUAL_PAGE_TITLE_DETAIL);
+		register_setting(self::OPTION_VIRTUAL_PAGE_CONFIG, self::OPTION_VIRTUAL_PAGE_TEMPLATE_DETAIL);
+		register_setting(self::OPTION_VIRTUAL_PAGE_CONFIG, self::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_DETAIL);
 		
-		register_setting(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_SEARCH);
-		register_setting(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_SEARCH);
-		register_setting(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_SEARCH);
+		register_setting(self::OPTION_VIRTUAL_PAGE_CONFIG, self::OPTION_VIRTUAL_PAGE_TITLE_SEARCH);
+		register_setting(self::OPTION_VIRTUAL_PAGE_CONFIG, self::OPTION_VIRTUAL_PAGE_TEMPLATE_SEARCH);
+		register_setting(self::OPTION_VIRTUAL_PAGE_CONFIG, self::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_SEARCH);
 
-		register_setting(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_MAP_SEARCH);
-		register_setting(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_MAP_SEARCH);
-		register_setting(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_MAP_SEARCH);
+		register_setting(self::OPTION_VIRTUAL_PAGE_CONFIG, self::OPTION_VIRTUAL_PAGE_TITLE_MAP_SEARCH);
+		register_setting(self::OPTION_VIRTUAL_PAGE_CONFIG, self::OPTION_VIRTUAL_PAGE_TEMPLATE_MAP_SEARCH);
+		register_setting(self::OPTION_VIRTUAL_PAGE_CONFIG, self::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_MAP_SEARCH);
 		
-		register_setting(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_ADV_SEARCH);
-		register_setting(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_ADV_SEARCH);
-		register_setting(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_ADV_SEARCH);
+		register_setting(self::OPTION_VIRTUAL_PAGE_CONFIG, self::OPTION_VIRTUAL_PAGE_TITLE_ADV_SEARCH);
+		register_setting(self::OPTION_VIRTUAL_PAGE_CONFIG, self::OPTION_VIRTUAL_PAGE_TEMPLATE_ADV_SEARCH);
+		register_setting(self::OPTION_VIRTUAL_PAGE_CONFIG, self::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_ADV_SEARCH);
 		
-		register_setting(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_ORG_LOGIN);
-		register_setting(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_ORG_LOGIN);
-		register_setting(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_ORG_LOGIN);
+		register_setting(self::OPTION_VIRTUAL_PAGE_CONFIG, self::OPTION_VIRTUAL_PAGE_TITLE_ORG_LOGIN);
+		register_setting(self::OPTION_VIRTUAL_PAGE_CONFIG, self::OPTION_VIRTUAL_PAGE_TEMPLATE_ORG_LOGIN);
+		register_setting(self::OPTION_VIRTUAL_PAGE_CONFIG, self::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_ORG_LOGIN);
 		
-		register_setting(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_EMAIL_UPDATES);
-		register_setting(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_EMAIL_UPDATES);
-		register_setting(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_EMAIL_UPDATES);
+		register_setting(self::OPTION_VIRTUAL_PAGE_CONFIG, self::OPTION_VIRTUAL_PAGE_TITLE_EMAIL_UPDATES);
+		register_setting(self::OPTION_VIRTUAL_PAGE_CONFIG, self::OPTION_VIRTUAL_PAGE_TEMPLATE_EMAIL_UPDATES);
+		register_setting(self::OPTION_VIRTUAL_PAGE_CONFIG, self::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_EMAIL_UPDATES);
 		
-		register_setting(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_FEATURED);
-		register_setting(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_FEATURED);
-		register_setting(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_FEATURED);
+		register_setting(self::OPTION_VIRTUAL_PAGE_CONFIG, self::OPTION_VIRTUAL_PAGE_TITLE_FEATURED);
+		register_setting(self::OPTION_VIRTUAL_PAGE_CONFIG, self::OPTION_VIRTUAL_PAGE_TEMPLATE_FEATURED);
+		register_setting(self::OPTION_VIRTUAL_PAGE_CONFIG, self::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_FEATURED);
 		
-		register_setting(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_HOTSHEET);
-		register_setting(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_HOTSHEET);
-		register_setting(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_HOTSHEET);
+		register_setting(self::OPTION_VIRTUAL_PAGE_CONFIG, self::OPTION_VIRTUAL_PAGE_TITLE_HOTSHEET);
+		register_setting(self::OPTION_VIRTUAL_PAGE_CONFIG, self::OPTION_VIRTUAL_PAGE_TEMPLATE_HOTSHEET);
+		register_setting(self::OPTION_VIRTUAL_PAGE_CONFIG, self::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_HOTSHEET);
 
-		register_setting(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_CONTACT_FORM);
-		register_setting(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_CONTACT_FORM);
-		register_setting(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_CONTACT_FORM);
+		register_setting(self::OPTION_VIRTUAL_PAGE_CONFIG, self::OPTION_VIRTUAL_PAGE_TITLE_CONTACT_FORM);
+		register_setting(self::OPTION_VIRTUAL_PAGE_CONFIG, self::OPTION_VIRTUAL_PAGE_TEMPLATE_CONTACT_FORM);
+		register_setting(self::OPTION_VIRTUAL_PAGE_CONFIG, self::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_CONTACT_FORM);
 
-		register_setting(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_VALUATION_FORM);
-		register_setting(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_VALUATION_FORM);
-		register_setting(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_VALUATION_FORM);
+		register_setting(self::OPTION_VIRTUAL_PAGE_CONFIG, self::OPTION_VIRTUAL_PAGE_TITLE_VALUATION_FORM);
+		register_setting(self::OPTION_VIRTUAL_PAGE_CONFIG, self::OPTION_VIRTUAL_PAGE_TEMPLATE_VALUATION_FORM);
+		register_setting(self::OPTION_VIRTUAL_PAGE_CONFIG, self::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_VALUATION_FORM);
 
-		register_setting(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_OPEN_HOME_SEARCH_FORM);
-		register_setting(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_OPEN_HOME_SEARCH_FORM);
-		register_setting(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_OPEN_HOME_SEARCH_FORM);
+		register_setting(self::OPTION_VIRTUAL_PAGE_CONFIG, self::OPTION_VIRTUAL_PAGE_TITLE_OPEN_HOME_SEARCH_FORM);
+		register_setting(self::OPTION_VIRTUAL_PAGE_CONFIG, self::OPTION_VIRTUAL_PAGE_TEMPLATE_OPEN_HOME_SEARCH_FORM);
+		register_setting(self::OPTION_VIRTUAL_PAGE_CONFIG, self::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_OPEN_HOME_SEARCH_FORM);
 
-		register_setting(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_SUPPLEMENTAL_LISTING);
-		register_setting(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_SUPPLEMENTAL_LISTING);
-		register_setting(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_SUPPLEMENTAL_LISTING);
+		register_setting(self::OPTION_VIRTUAL_PAGE_CONFIG, self::OPTION_VIRTUAL_PAGE_TITLE_SUPPLEMENTAL_LISTING);
+		register_setting(self::OPTION_VIRTUAL_PAGE_CONFIG, self::OPTION_VIRTUAL_PAGE_TEMPLATE_SUPPLEMENTAL_LISTING);
+		register_setting(self::OPTION_VIRTUAL_PAGE_CONFIG, self::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_SUPPLEMENTAL_LISTING);
 		
-		register_setting(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_SOLD_FEATURED);
-		register_setting(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_SOLD_FEATURED);
-		register_setting(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_SOLD_FEATURED);
+		register_setting(self::OPTION_VIRTUAL_PAGE_CONFIG, self::OPTION_VIRTUAL_PAGE_TITLE_SOLD_FEATURED);
+		register_setting(self::OPTION_VIRTUAL_PAGE_CONFIG, self::OPTION_VIRTUAL_PAGE_TEMPLATE_SOLD_FEATURED);
+		register_setting(self::OPTION_VIRTUAL_PAGE_CONFIG, self::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_SOLD_FEATURED);
 
-		register_setting(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_SOLD_DETAIL);
-		register_setting(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_SOLD_DETAIL);
-		register_setting(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_SOLD_DETAIL);
+		register_setting(self::OPTION_VIRTUAL_PAGE_CONFIG, self::OPTION_VIRTUAL_PAGE_TITLE_SOLD_DETAIL);
+		register_setting(self::OPTION_VIRTUAL_PAGE_CONFIG, self::OPTION_VIRTUAL_PAGE_TEMPLATE_SOLD_DETAIL);
+		register_setting(self::OPTION_VIRTUAL_PAGE_CONFIG, self::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_SOLD_DETAIL);
 
-		register_setting(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_OFFICE_LIST);
-		register_setting(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_OFFICE_LIST);
-		register_setting(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_OFFICE_LIST);
+		register_setting(self::OPTION_VIRTUAL_PAGE_CONFIG, self::OPTION_VIRTUAL_PAGE_TITLE_OFFICE_LIST);
+		register_setting(self::OPTION_VIRTUAL_PAGE_CONFIG, self::OPTION_VIRTUAL_PAGE_TEMPLATE_OFFICE_LIST);
+		register_setting(self::OPTION_VIRTUAL_PAGE_CONFIG, self::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_OFFICE_LIST);
 		
-		register_setting(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_OFFICE_DETAIL);
-		register_setting(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_OFFICE_DETAIL);
-		register_setting(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_OFFICE_DETAIL);
+		register_setting(self::OPTION_VIRTUAL_PAGE_CONFIG, self::OPTION_VIRTUAL_PAGE_TITLE_OFFICE_DETAIL);
+		register_setting(self::OPTION_VIRTUAL_PAGE_CONFIG, self::OPTION_VIRTUAL_PAGE_TEMPLATE_OFFICE_DETAIL);
+		register_setting(self::OPTION_VIRTUAL_PAGE_CONFIG, self::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_OFFICE_DETAIL);
 
-		register_setting(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_AGENT_LIST);
-		register_setting(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_AGENT_LIST);
-		register_setting(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_AGENT_LIST);
+		register_setting(self::OPTION_VIRTUAL_PAGE_CONFIG, self::OPTION_VIRTUAL_PAGE_TITLE_AGENT_LIST);
+		register_setting(self::OPTION_VIRTUAL_PAGE_CONFIG, self::OPTION_VIRTUAL_PAGE_TEMPLATE_AGENT_LIST);
+		register_setting(self::OPTION_VIRTUAL_PAGE_CONFIG, self::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_AGENT_LIST);
 		
-		register_setting(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_AGENT_DETAIL);
-		register_setting(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_AGENT_DETAIL);
-		register_setting(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_AGENT_DETAIL);
+		register_setting(self::OPTION_VIRTUAL_PAGE_CONFIG, self::OPTION_VIRTUAL_PAGE_TITLE_AGENT_DETAIL);
+		register_setting(self::OPTION_VIRTUAL_PAGE_CONFIG, self::OPTION_VIRTUAL_PAGE_TEMPLATE_AGENT_DETAIL);
+		register_setting(self::OPTION_VIRTUAL_PAGE_CONFIG, self::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_AGENT_DETAIL);
 		
 	}
 	
 	public function getDefaultTemplate() {
-		$defaultTemplate = get_option(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_DEFAULT);
+		$defaultTemplate = get_option(self::OPTION_VIRTUAL_PAGE_TEMPLATE_DEFAULT);
 		return $defaultTemplate;
 	}
 	

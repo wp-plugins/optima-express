@@ -9,23 +9,23 @@
 class iHomefinderPermissions {	
 	
 	//Names of options in the database
-	private $emailUpdatesOptionName = "ihf_email_updates_enabled";
-	private $saveListingOptionName = "ihf_save_listing_enabled";
-	private $hotSheetOptionName = "ihf_hotsheet_enabled";
-	private $featuredPropertiesOptionName = "ihf_featured_properties_enabled";
-	private $organizerOptionName = "ihf_organizer_enabled";
-	private $galleryShortcodesOptionName = "ihf_gallery_shortcodes_enabled";
-	private $officeOptionName = "ihf_office_enabled";
-	private $agentBioOptionName = "ihf_agent_bio_enabled";
-	private $soldPendingOptionName = "ihf_sold_pending_enabled";
-	private $valuationOptionName = "ihf_valuation_enabled";
-	private $contactFormOptionName = "ihf_contact_form_enabled";
-	private $supplementalListingsOptionName = "ihf_supplemental_listings_enabled";
-	private $mapSearchOptionName = "ihf_map_search_enabled";
-	private $seoCityLinksOptionName = "ihf_seo_city_links_enabled";
-	private $communityPagesOptionName = "ihf_community_pages_enabled";
-	private $pendingAccountOptionName = "ihf_pending_account";
-	private $activeTrialAccountOptionName = "ihf_active_trial_account";
+	const EMAIL_UPDATES_OPTION = "ihf_email_updates_enabled";
+	const SAVE_LISTING_OPTION= "ihf_save_listing_enabled";
+	const HOTSHEET_OPTION = "ihf_hotsheet_enabled";
+	const FEATURED_PROPERTIES_OPTION = "ihf_featured_properties_enabled";
+	const ORGANIZER_OPTION = "ihf_organizer_enabled";
+	const GALLERY_SHORTCODES_OPTION = "ihf_gallery_shortcodes_enabled";
+	const OFFICE_OPTION = "ihf_office_enabled";
+	const AGENT_BIO_OPTION = "ihf_agent_bio_enabled";
+	const SOLD_PENDING_OPTION = "ihf_sold_pending_enabled";
+	const VALUATION_OPTION = "ihf_valuation_enabled";
+	const CONTACT_FORM_OPTION = "ihf_contact_form_enabled";
+	const SUPPLEMENTAL_LISTINGS_OPTION = "ihf_supplemental_listings_enabled";
+	const MAP_SEARCH_OPTION = "ihf_map_search_enabled";
+	const SEO_CITY_LINKS_OPTION = "ihf_seo_city_links_enabled";
+	const COMMUNITY_PAGES_OPTION = "ihf_community_pages_enabled";
+	const PENDING_ACCOUNT_OPTION = "ihf_pending_account";
+	const ACTIVE_TRIAL_ACCOUNT_OPTION = "ihf_active_trial_account";
 	
 	private $officeEnabled = false;
 	private $agentBioEnabled = false;
@@ -44,32 +44,31 @@ class iHomefinderPermissions {
 	private $communityPagesEnabled = false;
 	private $seoCityLinksEnabled = false;
 	private $galleryShortCodesEnabled = false;
-	
 	private $pendingAccount = false;
 	private $activeTrialAccount = false;
 	
 	private static $instance;
 	
 	private function __construct() {
-		$this->emailUpdatesEnabled = get_option($this->emailUpdatesOptionName, false);
-		$this->saveListingEnabled = get_option($this->saveListingOptionName, false);
-		$this->hotSheetEnabled = get_option($this->hotSheetOptionName, false);
+		$this->emailUpdatesEnabled = get_option(self::EMAIL_UPDATES_OPTION, false);
+		$this->saveListingEnabled = get_option(self::SAVE_LISTING_OPTION, false);
+		$this->hotSheetEnabled = get_option(self::HOTSHEET_OPTION, false);
 		$this->linkSearchEnabled = $this->isHotSheetEnabled();
 		$this->namedSearchEnabled = $this->isHotSheetEnabled();
-		$this->featuredPropertiesEnabled = get_option($this->featuredPropertiesOptionName, false);
-		$this->organizerEnabled = get_option($this->organizerOptionName, false);
-		$this->galleryShortCodesEnabled = get_option($this->galleryShortcodesOptionName, false);
-		$this->officeEnabled = get_option($this->officeOptionName, false);
-		$this->agentBioEnabled = get_option($this->agentBioOptionName, false);
-		$this->soldPendingEnabled = get_option($this->soldPendingOptionName, false);
-		$this->valuationEnabled = get_option($this->valuationOptionName, false);
-		$this->contactFormEnabled = get_option($this->contactFormOptionName, false);
-		$this->supplementalListingsEnabled = get_option($this->supplementalListingsOptionName, false);
-		$this->mapSearchEnabled = get_option($this->mapSearchOptionName, false);
-		$this->communityPagesEnabled = get_option($this->communityPagesOptionName, false);
-		$this->seoCityLinksEnabled = get_option($this->seoCityLinksOptionName, false);
-		$this->pendingAccount = get_option($this->pendingAccountOptionName);
-		$this->activeTrialAccount = get_option($this->activeTrialAccountOptionName);
+		$this->featuredPropertiesEnabled = get_option(self::FEATURED_PROPERTIES_OPTION, false);
+		$this->organizerEnabled = get_option(self::ORGANIZER_OPTION, false);
+		$this->galleryShortCodesEnabled = get_option(self::GALLERY_SHORTCODES_OPTION, false);
+		$this->officeEnabled = get_option(self::OFFICE_OPTION, false);
+		$this->agentBioEnabled = get_option(self::AGENT_BIO_OPTION, false);
+		$this->soldPendingEnabled = get_option(self::SOLD_PENDING_OPTION, false);
+		$this->valuationEnabled = get_option(self::VALUATION_OPTION, false);
+		$this->contactFormEnabled = get_option(self::CONTACT_FORM_OPTION, false);
+		$this->supplementalListingsEnabled = get_option(self::SUPPLEMENTAL_LISTINGS_OPTION, false);
+		$this->mapSearchEnabled = get_option(self::MAP_SEARCH_OPTION, false);
+		$this->communityPagesEnabled = get_option(self::COMMUNITY_PAGES_OPTION, false);
+		$this->seoCityLinksEnabled = get_option(self::SEO_CITY_LINKS_OPTION, false);
+		$this->pendingAccount = get_option(self::PENDING_ACCOUNT_OPTION);
+		$this->activeTrialAccount = get_option(self::ACTIVE_TRIAL_ACCOUNT_OPTION);
 	}
 	
 	public static function getInstance() {
@@ -80,23 +79,23 @@ class iHomefinderPermissions {
 	}	
 	
 	public function initialize($permissions) {
-		update_option($this->emailUpdatesOptionName, strval($permissions->emailUpdates));
-		update_option($this->saveListingOptionName, strval($permissions->saveListing));
-		update_option($this->hotSheetOptionName, strval($permissions->hotSheet));
-		update_option($this->featuredPropertiesOptionName, strval($permissions->featuredProperties));
-		update_option($this->organizerOptionName, strval($permissions->organizer));
-		update_option($this->galleryShortcodesOptionName, strval($permissions->hotSheet));
-		update_option($this->officeOptionName, strval($permissions->office));
-		update_option($this->agentBioOptionName, strval($permissions->agentBio));
-		update_option($this->soldPendingOptionName, strval($permissions->soldPending));
-		update_option($this->valuationOptionName, strval($permissions->valuation));
-		update_option($this->contactFormOptionName, strval($permissions->contactForm));
-		update_option($this->supplementalListingsOptionName, strval($permissions->supplementalListings));
-		update_option($this->communityPagesOptionName, strval($permissions->communityPages));
-		update_option($this->seoCityLinksOptionName, strval($permissions->seoCityLinks));
-		update_option($this->mapSearchOptionName, strval($permissions->mapSearch));
-		update_option($this->pendingAccountOptionName, strval($permissions->pendingAccount));
-		update_option($this->activeTrialAccountOptionName, strval($permissions->activeTrialAccount));
+		update_option(self::EMAIL_UPDATES_OPTION, strval($permissions->emailUpdates));
+		update_option(self::SAVE_LISTING_OPTION, strval($permissions->saveListing));
+		update_option(self::HOTSHEET_OPTION, strval($permissions->hotSheet));
+		update_option(self::FEATURED_PROPERTIES_OPTION, strval($permissions->featuredProperties));
+		update_option(self::ORGANIZER_OPTION, strval($permissions->organizer));
+		update_option(self::GALLERY_SHORTCODES_OPTION, strval($permissions->hotSheet));
+		update_option(self::OFFICE_OPTION, strval($permissions->office));
+		update_option(self::AGENT_BIO_OPTION, strval($permissions->agentBio));
+		update_option(self::SOLD_PENDING_OPTION, strval($permissions->soldPending));
+		update_option(self::VALUATION_OPTION, strval($permissions->valuation));
+		update_option(self::CONTACT_FORM_OPTION, strval($permissions->contactForm));
+		update_option(self::SUPPLEMENTAL_LISTINGS_OPTION, strval($permissions->supplementalListings));
+		update_option(self::COMMUNITY_PAGES_OPTION, strval($permissions->communityPages));
+		update_option(self::SEO_CITY_LINKS_OPTION, strval($permissions->seoCityLinks));
+		update_option(self::MAP_SEARCH_OPTION, strval($permissions->mapSearch));
+		update_option(self::PENDING_ACCOUNT_OPTION, strval($permissions->pendingAccount));
+		update_option(self::ACTIVE_TRIAL_ACCOUNT_OPTION, strval($permissions->activeTrialAccount));
 		
 		$this->emailUpdatesEnabled = $permissions->emailUpdates;
 		$this->saveListingEnabled = $permissions->saveListing;
