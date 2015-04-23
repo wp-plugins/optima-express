@@ -722,7 +722,7 @@ class iHomefinderShortcodeSelectorContent {
 	
 	private function createHeaderSelect($required = false) {
 		?>
-			<select class="form-control" id="sortBy" name="sortBy"
+			<select class="form-control" id="header" name="header"
 				<?php if($required === true) { ?>
 					required="required"
 				<?php } ?>

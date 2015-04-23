@@ -83,6 +83,20 @@ class iHomefinderAdminSeoCityLinks extends iHomefinderAdminAbstractPage {
 							/>
 						</td>
 					</tr>
+					<tr>
+						<th>
+							<label for="linkWidth">Link Width</label>
+						</th>
+						<td>
+							<input
+								id="linkWidth"
+								class="regular-text"
+								name="<?php echo(IHomefinderConstants::SEO_CITY_LINK_WIDTH)?>"
+								type="number"
+								value="<?php echo get_option(IHomefinderConstants::SEO_CITY_LINK_WIDTH, 80); ?>"
+							/>
+						</td>
+					</tr>
 				</tbody>
 			</table>
 			<p class="submit">

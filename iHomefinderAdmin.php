@@ -39,8 +39,9 @@ class iHomefinderAdmin {
 				}
 			</style>
 			<p class="green-bar">
-			<a href="admin.php?page=<?php echo iHomefinderConstants::OPTION_ACTIVATE ?>" class="button button-primary">Activate Your Optima Express Account</a>
-			&nbsp;&nbsp;&nbsp;Get an unlimited free trial or paid subscription for your MLS</p>
+				<a href="admin.php?page=<?php echo iHomefinderConstants::OPTION_ACTIVATE ?>" class="button button-primary">Activate Your Optima Express Account</a>
+				&nbsp;&nbsp;&nbsp;Get an unlimited free trial or paid subscription for your MLS
+			</p>
 			<?php
 		}
 		
@@ -194,20 +195,11 @@ class iHomefinderAdmin {
 		$authenticationToken = get_option(iHomefinderConstants::AUTHENTICATION_TOKEN_OPTION);
 		return $authenticationToken;
 	}
-
+	
 	public function previouslyActivated() {
 		return get_option(iHomefinderConstants::IS_ACTIVATED_OPTION);
 	}
-
-	private function createOneLink($name, $url, $description) {
-		$link = array(
-			"link_url" => $url,
-			"link_name" => $name,
-			"link_description" => $description
-		);
-		wp_insert_link($link);
-	}
-
+	
 	private function activate($activationToken) {
 		$urlFactory = iHomefinderUrlFactory::getInstance();
 		$ajaxBaseUrl = urlencode($urlFactory->getAjaxBaseUrl());

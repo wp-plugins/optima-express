@@ -22,6 +22,7 @@ class iHomefinderLinkWidget extends WP_Widget {
 	 * @see WP_Widget::widget
 	 */
 	public function widget($args, $instance) {
+		$linkWidth = get_option(IHomefinderConstants::SEO_CITY_LINK_WIDTH);
 		//sets vars like $before_widget from $args
 		extract($args);
 		
@@ -46,8 +47,14 @@ class iHomefinderLinkWidget extends WP_Widget {
 					$searchLinkInfo = new iHomefinderSearchLinkInfo($linkText, $cityZip, $propertyType, $minPrice, $maxPrice);
 					$linkUrl = $this->createLinkUrl($searchLinkInfo);		
 					?>
-					<div class="ihf-seo-link">
-						<a href="<?php echo $linkUrl ?>"><?php echo $searchLinkInfo->getLinkText() ?></a>
+					<div class="ihf-seo-link" style="
+						<?php if(!is_null($linkWidth) && !empty($linkWidth)) { ?> 
+							width: <?php echo $linkWidth; ?>px;
+						<?php } ?>
+					">
+						<a href="<?php echo $linkUrl ?>">
+							<?php echo $searchLinkInfo->getLinkText(); ?>
+						</a>
 					</div>
 					<?php
 				}

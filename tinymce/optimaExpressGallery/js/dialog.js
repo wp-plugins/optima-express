@@ -24,7 +24,7 @@ var IhfGalleryDialog = {
 		};
 		this.buildShortcode(shortcode, parameters);
 	},
-	insertSearchResults: function(theForm, shortcode) {		
+	insertSearchResults: function(theForm, shortcode) {
 		var parameters = {
 			cityId: this.getFieldValue(theForm.cityId),
 			propertyType: this.getFieldValue(theForm.propertyType),
