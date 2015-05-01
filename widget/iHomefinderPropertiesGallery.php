@@ -5,8 +5,13 @@ class iHomefinderPropertiesGallery extends WP_Widget {
 	private $contextUtility;
 	
 	public function __construct() {
-		$options = array("description" => "Display a list of properties.");
-		parent::WP_Widget(false, $name = "IDX: Property Gallery",  $widget_options = $options);
+		parent::__construct(
+			false,
+			"IDX: Property Gallery",
+			array(
+				"description" => "Display a list of properties."
+			)
+		);
 		$this->contextUtility = iHomefinderWidgetContextUtility::getInstance();
 	}
 	

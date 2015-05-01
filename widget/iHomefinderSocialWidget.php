@@ -3,8 +3,13 @@
 class iHomefinderSocialWidget extends WP_Widget {
 	
 	public function __construct() {
-		$options=array("description" => "Displays an social links.");
-		parent::WP_Widget(false, $name = "IDX: Social", $widget_options = $options);
+		parent::__construct(
+			false,
+			"IDX: Social",
+			array(
+				"description" => "Displays an social links."
+			)
+		);
 	}
 	
 	public function widget($args, $instance) {
@@ -49,11 +54,10 @@ class iHomefinderSocialWidget extends WP_Widget {
 	}
 	
 	public function form($instance) {
-		$socialConfigurationUrl = site_url();
-		$socialConfigurationUrl .= "/wp-admin/admin.php?page=ihf-social-page";
+		$configurationUrl = admin_url("admin.php?page=" . iHomefinderConstants::SOCIAL_PAGE);
 		?>
 		<p>
-			<a href="<?php echo $socialConfigurationUrl ?>">Configure Social Links</a>
+			<a href="<?php echo $configurationUrl ?>">Configure Social Links</a>
 		</p>
 		<?php
 	}

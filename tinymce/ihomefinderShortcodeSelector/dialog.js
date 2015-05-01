@@ -118,12 +118,12 @@ var IhfGalleryDialog = {
 			for(var key in parameters) {
 				var value = parameters[key];
 				if(value != undefined && value != null && value.length != 0) {
-					result += ' ' + key + '="' + value + '"';
+					result += " " + key + "=\"" + value + "\"";
 				}
 			}
 		}
 		result += "]";
-		tinyMCEPopup.editor.execCommand('mceInsertContent', false, result);
+		tinyMCEPopup.editor.execCommand("mceInsertContent", false, result);
 		tinyMCEPopup.close();
 	},
 	getFieldValue: function(formField) {
@@ -142,17 +142,16 @@ var IhfGalleryDialog = {
 		}
 	},
 	validateForm: function(theForm) {
-		returnValue = true;
-		nodeList = theForm.querySelectorAll('input,select,textarea');
-		for (var i = 0, node; node = nodeList[i]; i++) {
-			parent = node.parentNode;
-			parent.className = parent.className.replace(' has-error', "");
-			if (node.getAttribute('required') && node.value == "") {
-				parent.className = parent.className + ' has-error';
-				returnValue = false;
+		result = true;
+		jQuery(theForm).find("input,select,textarea").each(function() {
+			var field = jQuery(this);
+			field.parent().removeClass("has-error");
+			if(field.attr("required") && field.val() == "") {
+				field.parent().addClass("has-error");
+				result = false;
 			}
-		}
-		return returnValue;
+		});
+		return result;
 	}
 }
 

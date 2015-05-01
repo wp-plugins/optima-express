@@ -17,7 +17,7 @@ class iHomefinderOrganizerDeleteSavedListingVirtualPageImpl extends iHomefinderA
 	}
 	
 	public function getContent() {
-		$savedListingId = iHomefinderUtility::getInstance()->getQueryVar("savedListingID");		
+		$savedListingId = iHomefinderUtility::getInstance()->getQueryVar("savedListingId");		
 		$this->remoteRequest
 			->addParameter("method", "handleRequest")
 			->addParameter("viewType", "json")

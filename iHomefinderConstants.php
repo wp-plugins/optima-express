@@ -9,9 +9,9 @@ interface iHomefinderConstants{
 
 	const VERSION = "2.6.1";
 	const VERSION_NAME = "Optima Express";
-	const LEGACY_EXTERNAL_URL = "http://www.idxre.com/services/wordpress";
+	const LEGACY_EXTERNAL_URL = "http://wwww.idxre.com/services/wordpress";
 	const RESPONSIVE_EXTERNAL_URL = "http://www.idxhome.com/service/wordpress";
-	const CONTROL_PANEL_EXTERNAL_URL = "http://www.idxre.com/idx/guid";
+	const CONTROL_PANEL_EXTERNAL_URL = "http://wwww.idxre.com/idx/guid";
 
 	//Group for Activation related options
 	//Also used as menu slug for the Activate Menu
@@ -129,7 +129,7 @@ interface iHomefinderConstants{
 
 	//Used throughout the application to discover iHomefinder requests
 	//and used to determin the proper filter to execute.
-	const IHF_TYPE_URL_VAR = 'ihf-type';
+	const IHF_TYPE_URL_VAR = "ihf-type";
 	
 	// Used to set the widget context.
 	// A search widget should not display on a search related virtual page

@@ -32,8 +32,8 @@ class iHomefinderListingDetailVirtualPageImpl extends iHomefinderAbstractVirtual
 	}
 
 	public function getContent() {
-		$listingNumber = iHomefinderUtility::getInstance()->getQueryVar("ln");
-		$boardId = iHomefinderUtility::getInstance()->getQueryVar("bid");
+		$listingNumber = iHomefinderUtility::getInstance()->getQueryVar("listingNumber");
+		$boardId = iHomefinderUtility::getInstance()->getQueryVar("boardId");
 		$this->remoteRequest
 			->addParameter("ln", $listingNumber)
 			->addParameter("bid", $boardId)

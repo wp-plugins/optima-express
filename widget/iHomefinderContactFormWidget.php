@@ -5,8 +5,13 @@ class iHomefinderContactFormWidget extends WP_Widget {
 	private $contextUtility;
 
 	public function __construct() {
-		$options = array("description" => "Contact form.");
-		parent::WP_Widget(false, $name = "IDX: Contact Form", $widget_options = $options);
+		parent::__construct(
+			false,
+			"IDX: Contact Form",
+			array(
+				"description" => "Contact form."
+			)
+		);
 		$this->contextUtility = iHomefinderWidgetContextUtility::getInstance();
 	}
 	
@@ -68,5 +73,8 @@ class iHomefinderContactFormWidget extends WP_Widget {
 		</p>
 		<?php
 		$this->contextUtility->getPageSelector($this, $instance, iHomefinderConstants::CONTACT_WIDGET_TYPE);
+		?>
+		<br />
+		<?php
 	}
 }

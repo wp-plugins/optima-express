@@ -111,6 +111,9 @@ class iHomefinderAdminSeoCityLinks extends iHomefinderAdminAbstractPage {
 					update_option(iHomefinderConstants::SEO_CITY_LINKS_SETTINGS, $seoCityLinksSettings);
 					foreach($seoCityLinksSettings as $i => $value) {
 						$index = $value[iHomefinderConstants::SEO_CITY_LINKS_TEXT];
+						//strip out non-numeric characters
+						$value[iHomefinderConstants::SEO_CITY_LINKS_MIN_PRICE] = preg_replace("/[^0-9]/", "", $value[iHomefinderConstants::SEO_CITY_LINKS_MIN_PRICE]);
+						$value[iHomefinderConstants::SEO_CITY_LINKS_MAX_PRICE] = preg_replace("/[^0-9]/", "", $value[iHomefinderConstants::SEO_CITY_LINKS_MAX_PRICE]);
 						if($index) {
 							?>
 							<div style="margin-bottom: 6px;">

@@ -6,21 +6,15 @@
 class iHomefinderLinkWidget extends WP_Widget {
 	
 	public function __construct() {
-		$options = array(
-			"description" => "Displays a list of Homes For Sale links in the choosen cities from Themes Options - SEO indexing tool."
-		);
-		parent::WP_Widget(
+		parent::__construct(
 			false,
-			$name = "IDX: SEO City Links",
-			$widget_options = $options
+			"IDX: SEO City Links",
+			array(
+				"description" => "Displays a list of Homes For Sale links in the choosen cities from Themes Options - SEO indexing tool."
+			)
 		);
 	}
-
-	/**
-	 * Used to create the widget for display in the blog.
-	 *
-	 * @see WP_Widget::widget
-	 */
+	
 	public function widget($args, $instance) {
 		$linkWidth = get_option(IHomefinderConstants::SEO_CITY_LINK_WIDTH);
 		//sets vars like $before_widget from $args
@@ -68,29 +62,17 @@ class iHomefinderLinkWidget extends WP_Widget {
 		echo $after_title;
 		echo $after_widget;
 	}
-
-	/**
-	 *  Processes form submission in the admin area for configuring
-	 *  the widget.
-	 *
-	 *  @see WP_Widget::update
-	 */
+	
 	public function update($new_instance, $old_instance) {
 		$instance = $new_instance;
 		return $instance;
 	}
-
-	/**
-	 * Create the admin form, for adding the Widget to the blog.
-	 *
-	 *  @see WP_Widget::form
-	 */
+	
 	public function form($instance) {
-		$cityLinksConfigurationUrl = site_url();
-		$cityLinksConfigurationUrl .= "/wp-admin/admin.php?page=ihf-seo-city-links-page";
+		$configurationUrl = admin_url("admin.php?page=" . iHomefinderConstants::SEO_CITY_LINKS_PAGE);
 		?>
 		<p>
-			<a href="<?php echo $cityLinksConfigurationUrl ?>">Configure City Links</a>
+			<a href="<?php echo $configurationUrl ?>">Configure City Links</a>
 		</p>
 		<?php
 	}

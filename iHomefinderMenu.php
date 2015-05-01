@@ -174,7 +174,7 @@ class iHomefinderMenu {
 	private function addMenuItem($menuId, $name, $url, $parentId = 0) {
 		//We build relative URLs that start with a slash.
 		if($url !== "#") {
-			$url = iHomefinderUrlFactory::getInstance()->makeRelativeUrl($url);
+			$url = $this->makeRelativeUrl($url);
 		}
 		$menuItem = $this->buildMenuItem($name, $url, $parentId);
 		$menuItemId = wp_update_nav_menu_item($menuId, 0, $menuItem);
@@ -192,5 +192,18 @@ class iHomefinderMenu {
 			"menu-item-status" => "publish"
 		);
 		return $menuItem;
+	}
+	
+	private function makeRelativeUrl($url) {
+		$urlParts = parse_url($url);
+		$value = $urlParts["path"];
+		$query = $urlParts["query"];
+		if($query) {
+			$value .= "?" . $query;
+		}
+		if($value == null || $value == "") {
+			$value = "/";
+		}
+		return $value;
 	}
 }

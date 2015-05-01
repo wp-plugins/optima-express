@@ -3,8 +3,13 @@
 class iHomefinderMoreInfoWidget extends WP_Widget {
 
 	public function __construct() {
-		$options = array("description"=>"Displays a More Information form on listing detail virtual pages.");
-		parent::WP_Widget(false,  $name = "IDX: More Info",  $widget_options=$options);
+		parent::__construct(
+			false,
+			$name = "IDX: More Info",
+			array(
+				"description" => "Displays a More Information form on listing detail virtual pages."
+			)
+		);
 	}
 	
 	function widget($args, $instance) {

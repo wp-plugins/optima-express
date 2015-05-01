@@ -5,8 +5,13 @@ class iHomefinderSearchByAddressWidget extends WP_Widget {
 	private $contextUtility;
 
 	public function __construct() {
-		$options=array("description" => "Search by Address form.");
-		parent::WP_Widget(false, $name = "IDX: Address Search", $widget_options = $options);
+		parent::__construct(
+			false,
+			"IDX: Address Search",
+			array(
+				"description" => "Search by Address form."
+			)
+		);
 		$this->contextUtility = iHomefinderWidgetContextUtility::getInstance();
 	}
 	
@@ -72,6 +77,9 @@ class iHomefinderSearchByAddressWidget extends WP_Widget {
 		</p>
 		<?php
 		$this->contextUtility->getPageSelector($this, $instance, iHomefinderConstants::SEARCH_OTHER_WIDGET_TYPE);
+		?>
+		<br />
+		<?php
 	}
 	
 }

@@ -6,8 +6,13 @@ class iHomefinderAgentBioWidget extends WP_Widget {
 	const NARROW_DISPLAY_TYPE = "narrow";
 	
 	public function __construct() {
-		$options = array("description" => "Displays an agent bio.");
-		parent::WP_Widget(false, $name = "IDX: Agent Bio", $widget_options = $options);
+		parent::__construct(
+			false,
+			"IDX: Agent Bio",
+			array(
+				"description" => "Displays an agent bio."
+			)
+		);
 	}
 	
 	public function widget($args, $instance) {
@@ -91,12 +96,11 @@ class iHomefinderAgentBioWidget extends WP_Widget {
 				</select>
 			</label>
 		</p>
-		<?php 
-		$bioConfigurationUrl = site_url();
-		$bioConfigurationUrl .= "/wp-admin/admin.php?page=ihf-bio-page";
+		<?php
+		$configurationUrl = admin_url("admin.php?page=" . iHomefinderConstants::BIO_PAGE);
 		?>
 		<p>
-			<a href="<?php echo $bioConfigurationUrl ?>">Configure Bio</a>
+			<a href="<?php echo $configurationUrl ?>">Configure Bio</a>
 		</p>
 		<?php
 	}

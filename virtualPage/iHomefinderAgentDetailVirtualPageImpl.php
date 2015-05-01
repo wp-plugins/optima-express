@@ -39,7 +39,7 @@ class iHomefinderAgentDetailVirtualPageImpl extends iHomefinderAbstractVirtualPa
 			->addParameter("phpStyle", true)
 			->addParameter("includeSearchSummary", false)
 		;
-		$agentId = iHomefinderUtility::getInstance()->getQueryVar("agentID");
+		$agentId = iHomefinderUtility::getInstance()->getQueryVar("agentId");
 		if($agentId != null && is_numeric($agentId)) {
 			$this->remoteRequest->addParameter("agentID", $agentId);
 		}

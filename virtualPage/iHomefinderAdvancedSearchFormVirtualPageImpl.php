@@ -28,7 +28,7 @@ class iHomefinderAdvancedSearchFormVirtualPageImpl extends iHomefinderAbstractVi
 	}
 	
 	public function getContent() {
-		$boardId=iHomefinderUtility::getInstance()->getQueryVar("bid");
+		$boardId = iHomefinderUtility::getInstance()->getQueryVar("boardId");
 		$this->remoteRequest
 			->addParameter("method", "handleRequest")
 			->addParameter("viewType", "json")

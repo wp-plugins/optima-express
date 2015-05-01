@@ -5,9 +5,14 @@ class iHomefinderHotsheetListWidget extends WP_Widget {
 	private $contextUtility;
 
 	public function __construct() {
-		$options=array("description"=>"List of Saved Search Pages");
-		parent::WP_Widget(false, $name = "IDX: Saved Search Page List", $widget_options=$options);
-		$this->contextUtility=iHomefinderWidgetContextUtility::getInstance();
+		parent::__construct(
+			false,
+			"IDX: Saved Search Page List",
+			array(
+				"description" => "List of Saved Search Pages"
+			)
+		);
+		$this->contextUtility = iHomefinderWidgetContextUtility::getInstance();
 	}
 	
 	public function widget($args, $instance) {

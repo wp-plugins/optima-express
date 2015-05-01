@@ -22,7 +22,6 @@ class iHomefinderUrlFactory {
 	}
 
 	/**
-	 *
 	 * Gets the base URL for this blog
 	 */
 	public function getBaseUrl() {
@@ -33,31 +32,17 @@ class iHomefinderUrlFactory {
 	 * This is a Wordpress standard for AJAX handling.
 	 */
 	public function getAjaxBaseUrl() {
-		$currentBlogAddress = site_url();
-		return $currentBlogAddress . "/wp-admin/admin-ajax.php";
+		return admin_url("admin-ajax.php");
 	}
 	
 	/**
-	 * $includeBaseUrl is false when called from iHomefinderRewriteRules
+	 * @param includeBaseUrl is false when called from iHomefinderRewriteRules
 	 */
 	private function prependBaseUrl($path, $includeBaseUrl) {
 		if($includeBaseUrl) {
 			$path = $this->getBaseUrl() . "/" . $path . "/";
 		}
 		return $path;
-	}
-	
-	public function makeRelativeUrl($url) {
-		$urlParts = parse_url($url);
-		$value = $urlParts["path"];
-		$query = $urlParts["query"];
-		if($query) {
-			$value .= "?" . $query;
-		}
-		if($value == null || $value == "") {
-			$value = "/";
-		}
-		return $value;
 	}
 
 	public function getListingsSearchResultsUrl($includeBaseUrl = true) {

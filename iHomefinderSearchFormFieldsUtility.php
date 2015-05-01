@@ -30,6 +30,7 @@ class iHomefinderSearchFormFieldsUtility {
 			->addParameter("viewType", "json")
 			->addParameter("requestType", "search-form-lists")
 		;
+		$remoteRequest->setCacheExpiration(60*60);
 		$response = $remoteRequest->remoteGetRequest();
 		$hotsheetsList = array();
 		$citiesList = array();

@@ -20,15 +20,19 @@ class iHomefinderSearchLinkInfo {
 	public function getLinkText() {
 		return $this->linkText;
 	}
+	
 	public function getCityZip() {
 		return $this->cityZip;
 	}
+	
 	public function getPropertyType() {
 		return $this->propertyType;
 	}
+	
 	public function getMinPrice() {
 		return $this->minPrice;
 	}
+	
 	public function getMaxPrice() {
 		return $this->maxPrice;
 	}

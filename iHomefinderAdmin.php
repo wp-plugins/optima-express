@@ -66,7 +66,7 @@ class iHomefinderAdmin {
 				->addParameter("viewType", "json")
 				->addParameter("requestType", "compatibility-check")
 			;
-			
+			$remoteRequest->setCacheExpiration(60*60*24);
 			$contentInfo = $remoteRequest->remoteGetRequest();
 			
 			if(empty($contentInfo) === false) {
@@ -202,48 +202,48 @@ class iHomefinderAdmin {
 	
 	private function activate($activationToken) {
 		$urlFactory = iHomefinderUrlFactory::getInstance();
-		$ajaxBaseUrl = urlencode($urlFactory->getAjaxBaseUrl());
-		$listingsSearchResultsUrl = urlencode($urlFactory->getListingsSearchResultsUrl(true));
-		$listingsSearchFormUrl = urlencode($urlFactory->getListingsSearchFormUrl(true));
-		$listingDetailUrl = urlencode($urlFactory->getListingDetailUrl(true));
-		$featuredSearchResultsUrl = urlencode($urlFactory->getFeaturedSearchResultsUrl(true));
-		$hotsheetSearchResultsUrl = urlencode($urlFactory->getHotsheetSearchResultsUrl(true));
-		$organizerLoginUrl = urlencode($urlFactory->getOrganizerLoginUrl(true));
-		$organizerLogoutUrl = urlencode($urlFactory->getOrganizerLogoutUrl(true));
-		$organizerLoginSubmitUrl = urlencode($urlFactory->getOrganizerLoginSubmitUrl(true));
-		$organizerEditSavedSearchUrl = urlencode($urlFactory->getOrganizerEditSavedSearchUrl(true));
-		$organizerEditSavedSearchSubmitUrl = urlencode($urlFactory->getOrganizerEditSavedSearchSubmitUrl(true));
-		$organizerDeleteSavedSearchSubmitUrl = urlencode($urlFactory->getOrganizerDeleteSavedSearchSubmitUrl(true));
-		$organizerViewSavedSearchUrl = urlencode($urlFactory->getOrganizerViewSavedSearchUrl(true));
-		$organizerViewSavedSearchListUrl = urlencode($urlFactory->getOrganizerViewSavedSearchListUrl(true));
-		$organizerViewSavedListingListUrl = urlencode($urlFactory->getOrganizerViewSavedListingListUrl(true));
-		$organizerDeleteSavedListingUrl = urlencode($urlFactory->getOrganizerDeleteSavedListingUrl(true));
-		$organizerResendConfirmationEmailUrl = urlencode($urlFactory->getOrganizerResendConfirmationEmailUrl(true));
-		$organizerActivateSubscriberUrl = urlencode($urlFactory->getOrganizerActivateSubscriberUrl(true));
-		$organizerSendSubscriberPasswordUrl = urlencode($urlFactory->getOrganizerSendSubscriberPasswordUrl(true));
-		$listingsAdvancedSearchFormUrl = urlencode($urlFactory->getListingsAdvancedSearchFormUrl(true));
-		$organizerHelpUrl = urlencode($urlFactory->getOrganizerHelpUrl(true));
-		$organizerEditSubscriberUrl = urlencode($urlFactory->getOrganizerEditSubscriberUrl(true));
-		$contactFormUrl = urlencode($urlFactory->getContactFormUrl(true));
-		$valuationFormUrl = urlencode($urlFactory->getValuationFormUrl(true));
-		$listingSoldDetailUrl = urlencode($urlFactory->getListingSoldDetailUrl(true));
-		$openHomeSearchFormUrl = urlencode($urlFactory->getOpenHomeSearchFormUrl(true));
-		$soldFeaturedListingUrl = urlencode($urlFactory->getSoldFeaturedListingUrl(true));
-		$supplementalListingUrl = urlencode($urlFactory->getSupplementalListingUrl(true));
-		$listingSearchByAddressResultsUrl = urlencode($urlFactory->getListingSearchByAddressResultsUrl(true));
-		$listingSearchByListingIdResultsUrl = urlencode($urlFactory->getListingSearchByListingIdResultsUrl(true));
-		$officeListUrl = urlencode($urlFactory->getOfficeListUrl(true));
-		$officeDetailUrl = urlencode($urlFactory->getOfficeDetailUrl(true));
-		$agentBioListUrl = urlencode($urlFactory->getAgentListUrl(true));
-		$agentBioDetailUrl = urlencode($urlFactory->getAgentDetailUrl(true));
-		$mapSearchUrl = urlencode($urlFactory->getMapSearchFormUrl(true));
-		$cssOverride = urlencode(get_option(iHomefinderConstants::CSS_OVERRIDE_OPTION));
-		$layoutType = urlencode(iHomefinderLayoutManager::getInstance()->getLayoutType());
-		$colorScheme = urlencode(iHomefinderLayoutManager::getInstance()->getColorScheme());
+		$ajaxBaseUrl = $urlFactory->getAjaxBaseUrl();
+		$listingsSearchResultsUrl = $urlFactory->getListingsSearchResultsUrl(true);
+		$listingsSearchFormUrl = $urlFactory->getListingsSearchFormUrl(true);
+		$listingDetailUrl = $urlFactory->getListingDetailUrl(true);
+		$featuredSearchResultsUrl = $urlFactory->getFeaturedSearchResultsUrl(true);
+		$hotsheetSearchResultsUrl = $urlFactory->getHotsheetSearchResultsUrl(true);
+		$organizerLoginUrl = $urlFactory->getOrganizerLoginUrl(true);
+		$organizerLogoutUrl = $urlFactory->getOrganizerLogoutUrl(true);
+		$organizerLoginSubmitUrl = $urlFactory->getOrganizerLoginSubmitUrl(true);
+		$organizerEditSavedSearchUrl = $urlFactory->getOrganizerEditSavedSearchUrl(true);
+		$organizerEditSavedSearchSubmitUrl = $urlFactory->getOrganizerEditSavedSearchSubmitUrl(true);
+		$organizerDeleteSavedSearchSubmitUrl = $urlFactory->getOrganizerDeleteSavedSearchSubmitUrl(true);
+		$organizerViewSavedSearchUrl = $urlFactory->getOrganizerViewSavedSearchUrl(true);
+		$organizerViewSavedSearchListUrl = $urlFactory->getOrganizerViewSavedSearchListUrl(true);
+		$organizerViewSavedListingListUrl = $urlFactory->getOrganizerViewSavedListingListUrl(true);
+		$organizerDeleteSavedListingUrl = $urlFactory->getOrganizerDeleteSavedListingUrl(true);
+		$organizerResendConfirmationEmailUrl = $urlFactory->getOrganizerResendConfirmationEmailUrl(true);
+		$organizerActivateSubscriberUrl = $urlFactory->getOrganizerActivateSubscriberUrl(true);
+		$organizerSendSubscriberPasswordUrl = $urlFactory->getOrganizerSendSubscriberPasswordUrl(true);
+		$listingsAdvancedSearchFormUrl = $urlFactory->getListingsAdvancedSearchFormUrl(true);
+		$organizerHelpUrl = $urlFactory->getOrganizerHelpUrl(true);
+		$organizerEditSubscriberUrl = $urlFactory->getOrganizerEditSubscriberUrl(true);
+		$contactFormUrl = $urlFactory->getContactFormUrl(true);
+		$valuationFormUrl = $urlFactory->getValuationFormUrl(true);
+		$listingSoldDetailUrl = $urlFactory->getListingSoldDetailUrl(true);
+		$openHomeSearchFormUrl = $urlFactory->getOpenHomeSearchFormUrl(true);
+		$soldFeaturedListingUrl = $urlFactory->getSoldFeaturedListingUrl(true);
+		$supplementalListingUrl = $urlFactory->getSupplementalListingUrl(true);
+		$listingSearchByAddressResultsUrl = $urlFactory->getListingSearchByAddressResultsUrl(true);
+		$listingSearchByListingIdResultsUrl = $urlFactory->getListingSearchByListingIdResultsUrl(true);
+		$officeListUrl = $urlFactory->getOfficeListUrl(true);
+		$officeDetailUrl = $urlFactory->getOfficeDetailUrl(true);
+		$agentBioListUrl = $urlFactory->getAgentListUrl(true);
+		$agentBioDetailUrl = $urlFactory->getAgentDetailUrl(true);
+		$mapSearchUrl = $urlFactory->getMapSearchFormUrl(true);
+		$cssOverride = get_option(iHomefinderConstants::CSS_OVERRIDE_OPTION);
+		$layoutType = iHomefinderLayoutManager::getInstance()->getLayoutType();
+		$colorScheme = iHomefinderLayoutManager::getInstance()->getColorScheme();
 		$mobileSiteYn = get_option(iHomefinderConstants::OPTION_MOBILE_SITE_YN);
 		$emailDisplayType = get_option(iHomefinderConstants::EMAIL_DISPLAY_TYPE_OPTION);
-		$emailHeader = urlencode(iHomefinderAdminEmail::getInstance()->getHeader());
-		$emailFooter = urlencode(iHomefinderAdminEmail::getInstance()->getFooter());
+		$emailHeader = iHomefinderAdminEmail::getInstance()->getHeader();
+		$emailFooter = iHomefinderAdminEmail::getInstance()->getFooter();
 		$emailPhotoUrl = get_option(iHomefinderConstants::EMAIL_PHOTO_OPTION);
 		$emailLogoUrl = get_option(iHomefinderConstants::EMAIL_LOGO_OPTION);
 		$emailName = get_option(iHomefinderConstants::EMAIL_NAME_OPTION);

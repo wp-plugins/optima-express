@@ -110,14 +110,14 @@ class iHomefinderAdminCommunityPages extends iHomefinderAdminAbstractPage {
 			<div style="padding-bottom: 9px;">Click the page name to edit Community Page content.</div>
 			<div style="padding-bottom: 9px;">
 				Change or edit the links that appear within the
-				<a href="<?php echo site_url() ?>/wp-admin/nav-menus.php">Menus</a>
+				<a href="<?php echo admin_url("/nav-menus.php"); ?>">Menus</a>
 				section.
 			</div>
 			<?php $communityPageMenuItems = (array) iHomefinderMenu::getInstance()->getCommunityPagesMenuItems(); ?>
 			<ul>
 				<?php foreach($communityPageMenuItems as $key => $menu_item) { ?>
 					<li>
-						<a href="post.php?post=<?php echo $menu_item->object_id ?>&action=edit">
+						<a href="<?php echo get_edit_post_link($menu_item->object_id); ?>">
 							<?php echo $menu_item->title; ?>
 						</a>
 					</li>
