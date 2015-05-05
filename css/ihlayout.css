@@ -1240,3 +1240,8 @@ input[type=number] {
 	border-right:1px solid #ccc;
 }
 
+#ihf-main-container .alert-neutral {
+    color: #747474;
+    background-color: #EEEEEE;
+    border-color: #E5E5E5;
+}

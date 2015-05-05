@@ -138,7 +138,7 @@ class iHomefinderShortcodeDispatcher {
 
 	public function getAgentDetail($attributes) {
 		$virtualPage = iHomefinderVirtualPageFactory::getInstance()->getVirtualPage(iHomefinderVirtualPageFactory::AGENT_DETAIL);
-		$_REQUEST["agentID"] = $this->getAttribute($attributes, "agentID");
+		$_REQUEST["agentID"] = $this->getAttribute($attributes, "agentId");
 		$content = $virtualPage->getContent();
 		iHomefinderEnqueueResource::getInstance()->addToFooter($virtualPage->getHead());
 		return $content;
@@ -173,7 +173,7 @@ class iHomefinderShortcodeDispatcher {
 	
 	public function getAgentListings($attributes) {
 		$virtualPage = iHomefinderVirtualPageFactory::getInstance()->getVirtualPage(iHomefinderVirtualPageFactory::AGENT_OR_OFFICE_LISTINGS);
-		$_REQUEST["agentId"] = $this->getAttribute($attributes, "agentID");
+		$_REQUEST["agentId"] = $this->getAttribute($attributes, "agentId");
 		$content = $virtualPage->getContent();
 		iHomefinderEnqueueResource::getInstance()->addToFooter($virtualPage->getHead());
 		return $content;

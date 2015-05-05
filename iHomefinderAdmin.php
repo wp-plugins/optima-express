@@ -23,7 +23,7 @@ class iHomefinderAdmin {
 		
 		//Check for valid plugin registration
 		//Do not check for registration on the registration page.
-		if($pageName != iHomefinderConstants::OPTION_ACTIVATE && !get_option(iHomefinderConstants::AUTHENTICATION_TOKEN_OPTION)) {
+		if($pageName != iHomefinderConstants::OPTION_ACTIVATE && !$this->isActivated()) {
 			?>
 			<style type="text/css">
 				.green-bar {
@@ -39,8 +39,9 @@ class iHomefinderAdmin {
 				}
 			</style>
 			<p class="green-bar">
-			<a href="admin.php?page=<?php echo iHomefinderConstants::OPTION_ACTIVATE ?>" class="button button-primary">Activate Your Optima Express Account</a>
-			&nbsp;&nbsp;&nbsp;Get an unlimited free trial or paid subscription for your MLS</p>
+				<a href="admin.php?page=<?php echo iHomefinderConstants::OPTION_ACTIVATE ?>" class="button button-primary">Activate Your Optima Express Account</a>
+				&nbsp;&nbsp;&nbsp;Get an unlimited free trial or paid subscription for your MLS
+			</p>
 			<?php
 		}
 		
@@ -65,7 +66,7 @@ class iHomefinderAdmin {
 				->addParameter("viewType", "json")
 				->addParameter("requestType", "compatibility-check")
 			;
-			
+			$remoteRequest->setCacheExpiration(60*60*24);
 			$contentInfo = $remoteRequest->remoteGetRequest();
 			
 			if(empty($contentInfo) === false) {
@@ -191,23 +192,23 @@ class iHomefinderAdmin {
 	 * from the activationToken.
 	 */
 	public function getAuthenticationToken() {
-		$authenticationToken = get_option(iHomefinderConstants::AUTHENTICATION_TOKEN_OPTION);
+		$authenticationToken = get_option(iHomefinderConstants::AUTHENTICATION_TOKEN_OPTION, null);
 		return $authenticationToken;
 	}
-
+	
 	public function previouslyActivated() {
-		return get_option(iHomefinderConstants::IS_ACTIVATED_OPTION);
+		return get_option(iHomefinderConstants::IS_ACTIVATED_OPTION, false);
 	}
-
-	private function createOneLink($name, $url, $description) {
-		$link = array(
-			"link_url" => $url,
-			"link_name" => $name,
-			"link_description" => $description
-		);
-		wp_insert_link($link);
+	
+	public function isActivated() {
+		$result = false;
+		$authenticationToken = $this->getAuthenticationToken();
+		if(!empty($authenticationToken)) {
+			$result = true;
+		}
+		return $result;
 	}
-
+	
 	private function activate($activationToken) {
 		$urlFactory = iHomefinderUrlFactory::getInstance();
 		$ajaxBaseUrl = urlencode($urlFactory->getAjaxBaseUrl());
@@ -245,21 +246,21 @@ class iHomefinderAdmin {
 		$agentBioListUrl = urlencode($urlFactory->getAgentListUrl(true));
 		$agentBioDetailUrl = urlencode($urlFactory->getAgentDetailUrl(true));
 		$mapSearchUrl = urlencode($urlFactory->getMapSearchFormUrl(true));
-		$cssOverride = urlencode(get_option(iHomefinderConstants::CSS_OVERRIDE_OPTION));
+		$cssOverride = urlencode(get_option(iHomefinderConstants::CSS_OVERRIDE_OPTION, null));
 		$layoutType = urlencode(iHomefinderLayoutManager::getInstance()->getLayoutType());
 		$colorScheme = urlencode(iHomefinderLayoutManager::getInstance()->getColorScheme());
-		$mobileSiteYn = get_option(iHomefinderConstants::OPTION_MOBILE_SITE_YN);
-		$emailDisplayType = get_option(iHomefinderConstants::EMAIL_DISPLAY_TYPE_OPTION);
+		$mobileSiteYn = get_option(iHomefinderConstants::OPTION_MOBILE_SITE_YN, null);
+		$emailDisplayType = get_option(iHomefinderConstants::EMAIL_DISPLAY_TYPE_OPTION, null);
 		$emailHeader = urlencode(iHomefinderAdminEmail::getInstance()->getHeader());
 		$emailFooter = urlencode(iHomefinderAdminEmail::getInstance()->getFooter());
-		$emailPhotoUrl = get_option(iHomefinderConstants::EMAIL_PHOTO_OPTION);
-		$emailLogoUrl = get_option(iHomefinderConstants::EMAIL_LOGO_OPTION);
-		$emailName = get_option(iHomefinderConstants::EMAIL_NAME_OPTION);
-		$emailCompany = get_option(iHomefinderConstants::EMAIL_COMPANY_OPTION);
-		$emailPhone = get_option(iHomefinderConstants::EMAIL_PHONE_OPTION);
-		$emailAddressLine1 = get_option(iHomefinderConstants::EMAIL_ADDRESS_LINE1_OPTION);
-		$emailAddressLine2 = get_option(iHomefinderConstants::EMAIL_ADDRESS_LINE2_OPTION);
-		
+		$emailPhotoUrl = get_option(iHomefinderConstants::EMAIL_PHOTO_OPTION, null);
+		$emailLogoUrl = get_option(iHomefinderConstants::EMAIL_LOGO_OPTION, null);
+		$emailName = get_option(iHomefinderConstants::EMAIL_NAME_OPTION, null);
+		$emailCompany = get_option(iHomefinderConstants::EMAIL_COMPANY_OPTION, null);
+		$emailPhone = get_option(iHomefinderConstants::EMAIL_PHONE_OPTION, null);
+		$emailAddressLine1 = get_option(iHomefinderConstants::EMAIL_ADDRESS_LINE1_OPTION, null);
+		$emailAddressLine2 = get_option(iHomefinderConstants::EMAIL_ADDRESS_LINE2_OPTION, null);
+				
 		$emailBrandingType = null;
 		switch($emailDisplayType) {
 			case iHomefinderAdminEmail::EMAIL_DISPLAY_TYPE_CUSTOM_IMAGES_VALUE;
@@ -397,12 +398,27 @@ class iHomefinderAdmin {
 	}
 
 	public function addScripts() {
-		//Used for the Bio Page for image uploads
-		if(isset($_GET["page"]) && ($_GET["page"] == iHomefinderConstants::BIO_PAGE || $_GET["page"] == iHomefinderConstants::EMAIL_BRANDING_PAGE)) {
-			wp_enqueue_script("jquery"); // include jQuery
-			wp_register_script("bioInformation", plugins_url("/optima-express/js/bioInformation.js"), array("jquery","editor","media-upload","thickbox"));
-			wp_enqueue_style("thickbox");
-			wp_enqueue_script("bioInformation"); // include script.js
+		$pages = array(
+			iHomefinderConstants::OPTION_ACTIVATE,
+			iHomefinderConstants::OPTION_IDX_CONTROL_PANEL,
+			iHomefinderConstants::OPTION_PAGES,
+			iHomefinderConstants::OPTION_CONFIG_PAGE,
+			iHomefinderConstants::BIO_PAGE,
+			iHomefinderConstants::SOCIAL_PAGE,
+			iHomefinderConstants::EMAIL_BRANDING_PAGE,
+			iHomefinderConstants::COMMUNITY_PAGES,
+			iHomefinderConstants::SEO_CITY_LINKS_PAGE
+		);
+		if(array_key_exists("page", $_GET)) {
+			$page = $_GET["page"];
+			$foo = array_search($page, $pages);
+			if($foo !== false && $foo >= 0) {
+				wp_enqueue_script("jquery");
+				wp_enqueue_script("jquery-ui-core");
+				wp_enqueue_script("jquery-ui-autocomplete", "", array("jquery-ui-widget", "jquery-ui-position"), "1.8.6");
+				wp_enqueue_style("thickbox");
+				wp_enqueue_script("oe-dashboard", plugins_url("js/dashboard.js", __FILE__), array("jquery", "editor", "media-upload", "thickbox"), iHomefinderConstants::VERSION);
+			}
 		}
 	}
 	

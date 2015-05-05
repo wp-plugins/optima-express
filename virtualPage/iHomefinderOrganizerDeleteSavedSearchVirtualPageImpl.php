@@ -17,10 +17,7 @@ class iHomefinderOrganizerDeleteSavedSearchVirtualPageImpl extends iHomefinderAb
 	}
 
 	public function getContent() {
-		$searchProfileId = iHomefinderUtility::getInstance()->getQueryVar("searchProfileID");
-		if(empty($searchProfileId)) {
-			$searchProfileId = iHomefinderUtility::getInstance()->getQueryVar("searchProfileId");
-		}
+		$searchProfileId = iHomefinderUtility::getInstance()->getQueryVar("searchProfileId");
 		$this->remoteRequest
 			->addParameter("method", "handleRequest")
 			->addParameter("viewType", "json")

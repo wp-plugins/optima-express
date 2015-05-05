@@ -36,7 +36,7 @@ class iHomefinderOfficeDetailVirtualPageImpl extends iHomefinderAbstractVirtualP
 			->addParameter("requestType", "office-detail")
 			->addParameter("phpStyle", true)
 		;
-		$officeId = iHomefinderUtility::getInstance()->getQueryVar("officeID");
+		$officeId = iHomefinderUtility::getInstance()->getQueryVar("officeId");
 		if(is_numeric($officeId)) {
 			$this->remoteRequest->addParameter("officeID", $officeId);
 		}

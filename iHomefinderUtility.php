@@ -15,9 +15,7 @@ class iHomefinderUtility {
 	}
 
 	public function getQueryVar($name) {
-		global $wp;
-		$result = $this->getVarFromArray($name, $wp->query_vars);
-		return $result;
+		return get_query_var($name, null);
 	}
 
 	public function getRequestVar($name) {
@@ -101,8 +99,8 @@ class iHomefinderUtility {
 				$prevBoardAndListingNumber = explode("|", $searchSummaryObject->previousId);
 				$result["prevBoardId"] = $prevBoardAndListingNumber[0];					
 				$result["prevListingNumber"] = $prevBoardAndListingNumber[1];
-				$result["prevAddress"] = urlencode($searchSummaryPrevious->address);
-				$result["prevStatus"] = urlencode($searchSummaryPrevious->status);
+				$result["prevAddress"] = $searchSummaryPrevious->address;
+				$result["prevStatus"] = $searchSummaryPrevious->status;
 			}
 			
 			if(isset($searchSummaryObject->nextId)) {
@@ -110,8 +108,8 @@ class iHomefinderUtility {
 				$nextBoardAndListingNumber = explode("|", $searchSummaryObject->nextId);
 				$result["nextBoardId"] = $nextBoardAndListingNumber[0];					
 				$result["nextListingNumber"] = $nextBoardAndListingNumber[1];
-				$result["nextAddress"] = urlencode($searchSummaryNext->address);
-				$result["nextStatus"] = urlencode($searchSummaryNext->status);
+				$result["nextAddress"] = $searchSummaryNext->address;
+				$result["nextStatus"] = $searchSummaryNext->status;
 			}
 		}
 		

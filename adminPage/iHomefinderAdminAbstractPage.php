@@ -16,6 +16,22 @@ abstract class iHomefinderAdminAbstractPage implements iHomefinderAdminPageInter
 			$this->admin->updateAuthenticationToken();
 		}
 		?>
+		<style type="text/css">
+			select.regular-text {
+				width: 25em;
+			}
+			.form-table.condensed td,
+			.form-table.condensed th {
+				padding: 10px 0px 10px 0px;
+			}
+			.button-large-ihf {
+				height: 54px !important;
+				text-align: center;
+				font: 14px arial !important;
+				padding-top: 10px !important;
+				margin-right: 15px !important;
+			}
+		</style>
 		<div class="wrap">
 			<?php
 			$this->getContent();
@@ -38,10 +54,10 @@ abstract class iHomefinderAdminAbstractPage implements iHomefinderAdminPageInter
 	}
 	
 	protected function showErrorMessages($errors) {
-		if($errors != null && count($errors > 0)) {
+		if($this->hasErrors($errors)) {
 			?>
 			<div class="error">
-				<?php foreach ($errors as $error) { ?>
+				<?php foreach($errors as $error) { ?>
 					<p>
 						<?php echo $error; ?>
 					</p>
@@ -49,6 +65,11 @@ abstract class iHomefinderAdminAbstractPage implements iHomefinderAdminPageInter
 			</div>
 			<?php
 		}
+	}
+	
+	protected function hasErrors($errors) {
+		$hasErrors = $errors !== null && count($errors) > 0;
+		return $hasErrors;
 	}
 	
 }

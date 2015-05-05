@@ -3,7 +3,7 @@
 Plugin Name: Optima Express IDX Plugin
 Plugin URI: http://wordpress.org/extend/plugins/optima-express/
 Description: Adds MLS / IDX property search and listings to your site. Includes search and listing pages, widgets and shortcodes. Requires an IDX account from iHomefinder. Get a free trial account with sample IDX data, or a paid account with data from your MLS.
-Version: 2.6.1
+Version: 2.6.2
 Author: ihomefinder
 Author URI: http://www.ihomefinder.com
 License: GPL
@@ -21,6 +21,10 @@ register_deactivation_hook(__FILE__, array(iHomefinderInstaller::getInstance(), 
 //Runs just before the auto upgrader installs the plugin
 add_filter("upgrader_post_install", array(iHomefinderInstaller::getInstance(), "upgrade"), 10, 2);
 
+//uncomment during development, so rule changes can be viewed.
+//in production this should not run, because it is a slow operation.
+//add_action("init", array(IHomefinderRewriteRules::getInstance(), "flushRules"));
+
 //Rewrite Rules
 add_action("init", array(iHomefinderRewriteRules::getInstance(), "initialize"), 1);
 
@@ -32,7 +36,7 @@ if(is_admin()) {
 	add_action("admin_init", array(iHomefinderWidgetContextUtility::getInstance(), "loadWidgetJavascript"));
 	//Adds functionality to the text editor for pages and posts
 	//Add buttons to text editor and initialize short codes
-	add_action("admin_init", array(iHomefinderTinyMceManager::getInstance(), "addButtons"));	
+	add_action("admin_init", array(iHomefinderShortcodeSelector::getInstance(), "addButtons"));	
 	//Remember the users state in the application (subscriber info and last search)
 	add_action("admin_init", array(iHomefinderStateManager::getInstance(), "initialize"), 5);
 	//add error check
@@ -127,7 +131,7 @@ add_action("wp_ajax_ihf_save_search_subscriber_session", array(iHomefinderAjaxHa
 add_action("wp_ajax_ihf_area_autocomplete", array(iHomefinderAjaxHandler::getInstance(), "getAutocompleteMatches"));
 add_action("wp_ajax_ihf_contact_form_request", array(iHomefinderAjaxHandler::getInstance(), "contactFormRequest"));
 add_action("wp_ajax_ihf_send_password", array(iHomefinderAjaxHandler::getInstance(), "sendPassword"));
-add_action("wp_ajax_ihf_tiny_mce_shortcode_dialog", array(iHomefinderShortcodeSelectorContent::getInstance(), "getShortcodeSelectorContent"));
+add_action("wp_ajax_ihf_tiny_mce_shortcode_dialog", array(iHomefinderShortcodeSelector::getInstance(), "getShortcodeSelectorContent"));
 
 //Disable canonical urls, because we use a single page to display all results
 //and WordPress creates a single canonical url for all of the virtual urls

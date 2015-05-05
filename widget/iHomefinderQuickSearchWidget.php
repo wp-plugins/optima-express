@@ -5,24 +5,24 @@ class iHomefinderQuickSearchWidget extends WP_Widget {
 	private $contextUtility;
 	
 	public function __construct() {
-		$options=array("description"=>"Property Search form.");
-		parent::WP_Widget(false,
-						   $name = "IDX: Quick Search",
-						   $widget_options=$options);
-		$this->contextUtility=iHomefinderWidgetContextUtility::getInstance();
+		parent::__construct(
+			false,
+			"IDX: Quick Search",
+			array(
+				"description" => "Property Search form."
+			)
+		);
+		$this->contextUtility = iHomefinderWidgetContextUtility::getInstance();
 	}
 	
 	public function widget($args, $instance) {
-		//Do not display the search widget on the search form page
-		
-		$type = get_query_var(iHomefinderConstants::IHF_TYPE_URL_VAR);
 		if(!iHomefinderStateManager::getInstance()->isSearchContext()) {
 			if($this->contextUtility->isEnabled($instance)) {
 				extract($args);
 				$title = apply_filters("widget_title", $instance["title"]);
 				
 				$remoteRequest = new iHomefinderRequestor();
-					
+				
 				$remoteRequest
 					->addParameter("method", "handleRequest")
 					->addParameter("viewType", "json")
@@ -49,7 +49,7 @@ class iHomefinderQuickSearchWidget extends WP_Widget {
 				} else {
 					echo $content;
 				}
-	
+				
 				echo $after_widget;
 			}
 		}

@@ -28,74 +28,57 @@ class iHomefinderEnqueueResource {
 	
 	
 	public function loadJavaScript() {
-		wp_register_script("ihf-areaPicker-js", plugins_url("js/areaPicker.js" , __FILE__), "jquery");
-		wp_register_script("chosen-js", plugins_url("js/chosen/chosen.jquery.js" , __FILE__), "jquery");
-		wp_register_script("ihf-chosen-js", plugins_url("js/chosen/ihf-chosen.js" , __FILE__), "chosen-js");
-		wp_register_script("ihf-bootstrap", plugins_url("js/bootstrap-libs/bootstrap.min.js" , __FILE__), "jquery");
-		wp_register_script("jquery-validation", plugins_url("js/jquery-libs/jquery.validate.min.js" , __FILE__), "jquery");
-		wp_register_script("jquery-validation-additional-methods", plugins_url("js/jquery-libs/additional-methods.min.js" , __FILE__), "jquery");
-		wp_register_script("jquery-touchSwipe", plugins_url("js/jquery-libs/jquery.touchSwipe.min-1.6.4.js" , __FILE__), "jquery");
-		wp_register_script("jquery-cycle2", plugins_url("js/jquery-libs/jquery.cycle2.min.js" , __FILE__), "jquery");
-		wp_register_script("leaflet", plugins_url("js/leaflet-0.7.3/leaflet.js", __FILE__), "jquery");
-		wp_register_script("leaflet-markercluster", plugins_url("js/maps/leaflet.markercluster.js", __FILE__), "leaflet");
-		wp_register_script("ihf-map-manager", plugins_url("js/maps/mapManager.js", __FILE__), "leaflet");
-		wp_enqueue_script("ihf-areaPicker-js");
-		wp_enqueue_script("chosen-js");
-		wp_enqueue_script("ihf-chosen-js");
-		wp_enqueue_script("ihf-bootstrap");
-		wp_enqueue_script("jquery-validation");
-		wp_enqueue_script("jquery-validation-additional-methods");
-		wp_enqueue_script("jquery-touchSwipe");
-		wp_enqueue_script("jquery-cycle2");
-		wp_enqueue_script("leaflet");
-		wp_enqueue_script("leaflet-markercluster");
-		wp_enqueue_script("ihf-map-manager");
+		$this->enqueueScript("ihf-areaPicker-js", "js/areaPicker.js");
+		$this->enqueueScript("chosen-js", "js/chosen/chosen.jquery.js");
+		$this->enqueueScript("ihf-chosen-js", "js/chosen/ihf-chosen.js");
+		$this->enqueueScript("ihf-bootstrap", "js/bootstrap-libs/bootstrap.min.js");
+		$this->enqueueScript("jquery-validation", "js/jquery-libs/jquery.validate.min.js");
+		$this->enqueueScript("jquery-validation-additional-methods", "js/jquery-libs/additional-methods.min.js");
+		$this->enqueueScript("jquery-touchSwipe", "js/jquery-libs/jquery.touchSwipe.min-1.6.4.js");
+		$this->enqueueScript("jquery-cycle2", "js/jquery-libs/jquery.cycle2.min.js");
+		$this->enqueueScript("leaflet", "js/leaflet-0.7.3/leaflet.js");
+		$this->enqueueScript("leaflet-markercluster", "js/maps/leaflet.markercluster.js");
+		$this->enqueueScript("ihf-map-manager", "js/maps/mapManager.js");
+	}
+	
+	private function enqueueScript($handle, $src) {
+		wp_enqueue_script($handle, plugins_url($src, __FILE__), array("jquery"), iHomefinderConstants::VERSION);
 	}
 	
 	public function loadCSS() {
-		wp_register_style("ihf-bootstrap", plugins_url("css/bootstrap/ihf-bootstrap-3.css" , __FILE__));
-		wp_register_style("ihf-areaPicker", plugins_url("css/areaPicker.css" , __FILE__));
-		wp_register_style("ihf-chosen", plugins_url("css/chosen.css" , __FILE__));
-		wp_register_style("ihf-layout", plugins_url("css/ihlayout.css" , __FILE__));
-		wp_register_style("ihf-lib-override", plugins_url("css/ih-lib-override.css" , __FILE__));
-		wp_register_style("leaflet", plugins_url("js/leaflet-0.7.3/leaflet.css", __FILE__));
-		wp_register_style("ihf-map", plugins_url("css/ihf-map.css", __FILE__));
-		wp_register_style("ihf-layout-red", plugins_url("css/ihlayout-red.css" , __FILE__));
-		wp_register_style("ihf-layout-green", plugins_url("css/ihlayout-green.css" , __FILE__));
-		wp_register_style("ihf-layout-orange", plugins_url("css/ihlayout-orange.css" , __FILE__));
-		wp_register_style("ihf-layout-blue", plugins_url("css/ihlayout-blue.css" , __FILE__));
-		wp_register_style("ihf-layout-light-blue", plugins_url("css/ihlayout-lightblue.css" , __FILE__));
-		wp_register_style("ihf-layout-blue-gradient", plugins_url("css/ihlayout-blue-gradient.css" , __FILE__));
-		wp_enqueue_style("ihf-bootstrap");
-		wp_enqueue_style("ihf-areaPicker");
-		wp_enqueue_style("ihf-chosen");
-		wp_enqueue_style("ihf-layout");
-		wp_enqueue_style("ihf-lib-override");
-		wp_enqueue_style("leaflet");
-		wp_enqueue_style("ihf-map");
+		$this->enqueueStyle("ihf-bootstrap", "css/bootstrap/ihf-bootstrap-3.css");
+		$this->enqueueStyle("ihf-areaPicker", "css/areaPicker.css");
+		$this->enqueueStyle("ihf-chosen", "css/chosen.css");
+		$this->enqueueStyle("ihf-layout", "css/ihlayout.css");
+		$this->enqueueStyle("ihf-lib-override", "css/ih-lib-override.css");
+		$this->enqueueStyle("leaflet", "js/leaflet-0.7.3/leaflet.css");
+		$this->enqueueStyle("ihf-map", "css/ihf-map.css");
 		$colorScheme = iHomefinderLayoutManager::getInstance()->getColorScheme();
 		switch($colorScheme) {
 			case "red":
-				wp_enqueue_style("ihf-layout-red");
+				$this->enqueueStyle("ihf-layout-red", "css/ihlayout-red.css");
 				break;
 			case "green":
-				wp_enqueue_style("ihf-layout-green");
+				$this->enqueueStyle("ihf-layout-green", "css/ihlayout-green.css");
 				break;
 			case "orange":
-				wp_enqueue_style("ihf-layout-orange");
+					$this->enqueueStyle("ihf-layout-orange", "css/ihlayout-orange.css");
 				break;
 			case "blue":
-				wp_enqueue_style("ihf-layout-blue");
+				$this->enqueueStyle("ihf-layout-blue", "css/ihlayout-blue.css");
 				break;
 			case "light_blue":
-				wp_enqueue_style("ihf-layout-light-blue");
+				$this->enqueueStyle("ihf-layout-light-blue", "css/ihlayout-lightblue.css");
 				break;
 			case "blue_gradient":
-				wp_enqueue_style("ihf-layout-blue-gradient");
+				$this->enqueueStyle("ihf-layout-blue-gradient", "css/ihlayout-blue-gradient.css");
 				break;
 		}
-		wp_register_style("jquery-ui", plugins_url("css/jquery-ui-1.10.3.custom.min.css" , __FILE__));		
-		wp_enqueue_style("jquery-ui");	
+		$this->enqueueStyle("jquery-ui", "css/jquery-ui-1.10.3.custom.min.css");		
+	}
+	
+	private function enqueueStyle($handle, $src) {
+		wp_enqueue_style($handle, plugins_url($src, __FILE__), null, iHomefinderConstants::VERSION);
 	}
 	
 	public function addCustomCSS() {

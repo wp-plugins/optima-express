@@ -5,9 +5,14 @@ class iHomefinderSearchByListingIdWidget extends WP_Widget {
 	private $contextUtility;
 
 	public function __construct() {
-		$options=array("description"=>"Search by Listing ID form.");
-		parent::WP_Widget(false, $name = "IDX: Listing ID Search", $widget_options = $options);
-		$this->contextUtility=iHomefinderWidgetContextUtility::getInstance();
+		parent::__construct(
+			false,
+			"IDX: Listing ID Search",
+			array(
+				"description" => "Search by Listing ID form."
+			)
+		);
+		$this->contextUtility = iHomefinderWidgetContextUtility::getInstance();
 	}
 	
 	public function widget($args, $instance) {
@@ -71,6 +76,9 @@ class iHomefinderSearchByListingIdWidget extends WP_Widget {
 		</p>
 		<?php
 		$this->contextUtility->getPageSelector($this, $instance, iHomefinderConstants::SEARCH_OTHER_WIDGET_TYPE);
+		?>
+		<br />
+		<?php
 	}
 	
 }
