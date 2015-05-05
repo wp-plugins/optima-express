@@ -70,7 +70,7 @@ class iHomefinderAdminBio extends iHomefinderAdminAbstractPage {
 					</tr>
 					<tr>
 						<th>
-							<label id="<?php echo iHomefinderConstants::AGENT_LICENSE_INFO_OPTION ?>" for="">License Info</label>
+							<label for="<?php echo iHomefinderConstants::AGENT_LICENSE_INFO_OPTION ?>">License Info</label>
 						</th>
 						<td>
 							<input id="<?php echo iHomefinderConstants::AGENT_LICENSE_INFO_OPTION ?>" class="regular-text" type="text" name="<?php echo iHomefinderConstants::AGENT_LICENSE_INFO_OPTION ?>" value="<?php echo get_option(iHomefinderConstants::AGENT_LICENSE_INFO_OPTION) ?>" />

@@ -12,7 +12,6 @@ class iHomefinderAdminCommunityPages extends iHomefinderAdminAbstractPage {
 	}
 	
 	protected function getContent() {
-		$errors = null;
 		//On Update, push the CSS_OVERRIDE_OPTION to iHomefinder
 		if($this->isUpdated()) {
 			//call function here to pass the activation key to ihf and update the CSS Override value
@@ -23,24 +22,17 @@ class iHomefinderAdminCommunityPages extends iHomefinderAdminAbstractPage {
 			$bath = $_REQUEST["bath"];
 			$minPrice = $_REQUEST["minPrice"];
 			$maxPrice = $_REQUEST["maxPrice"];
-			$errors = $this->updateCommunityPages($title, $cityZip, $propertyType, $bed, $bath, $minPrice, $maxPrice);
+			$this->updateCommunityPages($title, $cityZip, $propertyType, $bed, $bath, $minPrice, $maxPrice);
 		}
 		?>
-		<style type="text/css">
-			.form-table td,
-			.form-table th {
-				padding: 10px 0px 10px 0px;
-			}
-		</style>
 		<h2>Community Pages</h2>
-		<?php $this->showErrorMessages($errors) ?>
 		<div style="float:left; padding-right: 40px;">
 			<h3>Create a new Community Page</h3>
 			<div>Enter search criteria to create a new page under the Community Pages menu.</div>
 			<form method="post">
 				<input type="hidden" name="settings-updated" value="true" />
 				<?php settings_fields(iHomefinderConstants::COMMUNITY_PAGES); ?>
-				<table class="form-table">
+				<table class="form-table condensed">
 					<tbody>
 						<tr>
 							<th>
@@ -55,7 +47,7 @@ class iHomefinderAdminCommunityPages extends iHomefinderAdminAbstractPage {
 								<label for="title">Page Title</label>
 							</th>
 							<td>
-								<input class="regular-text" type="text" id="title" name="title" />
+								<input class="regular-text" type="text" id="title" name="title" required="required" />
 							</td>
 						</tr>
 						<tr>
@@ -128,27 +120,18 @@ class iHomefinderAdminCommunityPages extends iHomefinderAdminAbstractPage {
 	}
 	
 	private function updateCommunityPages($title, $cityZip, $propertyType, $bed, $bath, $minPrice, $maxPrice) {
-		$errors = array();
-		if($cityZip == null || $cityZip == "") {
-			$errors[] = "Please select a location";
-		}
-		if($title == null || $title == "") {
-			$errors[] = "Please enter a title";
-		}
-		if(empty($errors)) {
-			$shortCode = iHomefinderShortcodeDispatcher::getInstance()->buildSearchResultsShortCode($cityZip, $propertyType, $bed, $bath, $minPrice, $maxPrice);
-			$post = array(
-				"comment_status" => "closed" ,// "closed" means no comments.
-				"ping_status" => "closed", // "closed" means pingbacks or trackbacks turned off
-				"post_content" => $shortCode, //The full text of the post.
-				"post_name" => $title, // The name (slug) for your post
-				"post_status" => "publish", //Set the status of the new post.
-				"post_title" => $title, //The title of your post.
-				"post_type" => "page" //You may want to insert a regular post, page, link, a menu item or some custom post type
-			);
-			$postId = wp_insert_post($post);
-			iHomefinderMenu::getInstance()->addPageToCommunityPages($postId);
-		}
+		$shortCode = iHomefinderShortcodeDispatcher::getInstance()->buildSearchResultsShortCode($cityZip, $propertyType, $bed, $bath, $minPrice, $maxPrice);
+		$post = array(
+			"comment_status" => "closed",
+			"ping_status" => "closed",
+			"post_content" => $shortCode,
+			"post_name" => $title,
+			"post_status" => "publish",
+			"post_title" => $title,
+			"post_type" => "page"
+		);
+		$postId = wp_insert_post($post);
+		iHomefinderMenu::getInstance()->addPageToCommunityPages($postId);
 		return $errors;
 	}
 	
@@ -156,10 +139,6 @@ class iHomefinderAdminCommunityPages extends iHomefinderAdminAbstractPage {
 		$formData = iHomefinderSearchFormFieldsUtility::getInstance()->getFormData();
 		$cityZipList = $formData->getCityZipList();
 		$cityZipListJson = json_encode($cityZipList);
-		wp_enqueue_script("jquery");
-		wp_enqueue_script("jquery-ui-core");
-		wp_enqueue_script("jquery-ui-autocomplete", "", array("jquery-ui-widget", "jquery-ui-position"), "1.8.6");
-		wp_enqueue_style("jquery-ui-autocomplete", plugins_url("css/jquery-ui-1.8.18.custom.css", __FILE__));
 		?>
 		<script type="text/javascript">
 			jQuery(document).ready(function() {
@@ -191,7 +170,7 @@ class iHomefinderAdminCommunityPages extends iHomefinderAdminAbstractPage {
 				});
 			});
 		</script>
-		<input id="location" class="regular-text" type="text" name="cityZip" placeholder="Enter City - OR - Postal Code" />
+		<input id="location" class="regular-text" type="text" name="cityZip" placeholder="Enter City - OR - Postal Code" required="required" />
 		<?php
 	}
 	
@@ -201,7 +180,7 @@ class iHomefinderAdminCommunityPages extends iHomefinderAdminAbstractPage {
 			$propertyTypesList = $formData->getPropertyTypesList();
 			if(isset($propertyTypesList)) {
 				?>
-				<select id="propertyType" name="propertyType" style="width: 100%;">
+				<select id="propertyType" class="regular-text" name="propertyType">
 					<?php foreach ($propertyTypesList as $i => $value) { ?>
 						<option value="<?php echo $propertyTypesList[$i]->propertyTypeCode ?>">
 							<?php echo $propertyTypesList[$i]->displayName; ?>

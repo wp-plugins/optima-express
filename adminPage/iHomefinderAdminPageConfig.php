@@ -81,8 +81,8 @@ class iHomefinderAdminPageConfig extends iHomefinderAdminAbstractPage {
 					<b>Theme Template*:</b>
 				</td>
 				<td>
-					<select name="<?php echo iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_DEFAULT ?>">
-						<option value='default'><?php _e('Default Template'); ?></option>
+					<select style="width: 250px;" name="<?php echo iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_DEFAULT ?>">
+						<option value="default">Default Template</option>
 						<?php page_template_dropdown($selectedTemplate); ?>
 					</select>
 				</td>
@@ -127,7 +127,7 @@ class iHomefinderAdminPageConfig extends iHomefinderAdminAbstractPage {
 			iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_DETAIL,
 			iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_DETAIL,
 			"(If empty, the property address will be the title)",
-			"%ADDRESS%/%LISTING_NUMBER%/%LISTING_PROVIDER%"
+			"%ADDRESS%/%LISTING_NUMBER%/%LISTING_PROVIDER%/"
 		); 			
 	}
 	
@@ -146,7 +146,7 @@ class iHomefinderAdminPageConfig extends iHomefinderAdminAbstractPage {
 			iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_SOLD_DETAIL,
 			iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_SOLD_DETAIL,
 			"(If empty, the property address will be the title)",
-			"%ADDRESS%/%LISTING_NUMBER%/%LISTING_PROVIDER%"
+			"%ADDRESS%/%LISTING_NUMBER%/%LISTING_PROVIDER%/"
 		); 			
 	}
 
@@ -307,8 +307,8 @@ class iHomefinderAdminPageConfig extends iHomefinderAdminAbstractPage {
 			$urlFactory->getOfficeDetailUrl(false),
 			iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_OFFICE_DETAIL,
 			iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_OFFICE_DETAIL,
-			"(If the title is blank, the office name will be used for the title)",
-			"%OFFICE_NAME%/%OFFICE_ID%"
+			"(If empty, the office name will be used for the title)",
+			"%OFFICE_NAME%/%OFFICE_ID%/"
 		); 				
 	}
 			
@@ -333,8 +333,8 @@ class iHomefinderAdminPageConfig extends iHomefinderAdminAbstractPage {
 			$urlFactory->getAgentDetailUrl(false),
 			iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_AGENT_DETAIL,
 			iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_AGENT_DETAIL,
-			"(If the title is blank, the agent name will be used for the title)",
-			"%AGENT_NAME%/%AGENT_ID%"
+			"(If empty, the agent name will be used for the title)",
+			"%AGENT_NAME%/%AGENT_ID%/"
 		); 				
 	}
 
@@ -365,6 +365,7 @@ class iHomefinderAdminPageConfig extends iHomefinderAdminAbstractPage {
 				</td>
 			</tr>
 		</table>
+		<br />
 		<?php
 		$this->getPageSetup(
 			"Saved Search Page",
@@ -374,7 +375,7 @@ class iHomefinderAdminPageConfig extends iHomefinderAdminAbstractPage {
 			iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_HOTSHEET,
 			iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_HOTSHEET,
 			"(If empty, the name of the Saved Search Page will be the title)",
-			"%SAVED_SEARCH_PAGE_NAME%/%SAVED_SEARCH_ID%"
+			"%SAVED_SEARCH_PAGE_NAME%/%SAVED_SEARCH_ID%/"
 		);
 	}
 	
@@ -415,12 +416,12 @@ class iHomefinderAdminPageConfig extends iHomefinderAdminAbstractPage {
 				<td>
 					<div id="<?php echo $permalinkId ?>Container">
 						<?php echo $urlFactory->getBaseUrl() ?>/<span id="<?php echo $permalinkId ?>Text"><?php echo $currentUrl ?></span>/<?php if($extraPermalinkText != null) {echo $extraPermalinkText;} ?>
-						<input id="<?php echo $permalinkId ?>EditButton" type="button" value="Edit">
+						<input id="<?php echo $permalinkId ?>EditButton" type="button" value="Edit" />
 					</div>
 					<div id="<?php echo $permalinkId ?>Edit" style="display: none;" >
 						<?php echo $urlFactory->getBaseUrl() ?>/
 						<input type="text" id="<?php echo $permalinkId ?>" name="<?php echo $permalinkId ?>" value="<?php echo $currentUrl ?>" />/<?php if($extraPermalinkText != null) {echo $extraPermalinkText;} ?>
-						<input id="<?php echo $permalinkId ?>DoneButton" type="button" value="Done">
+						<input id="<?php echo $permalinkId ?>DoneButton" type="button" value="Done" />
 					</div>
 				</td>
 			</tr>
@@ -429,7 +430,7 @@ class iHomefinderAdminPageConfig extends iHomefinderAdminAbstractPage {
 					<b>Title:</b>
 				</td>
 				<td>
-					<input type="text" name="<?php echo $titleOption ?>" value="<?php echo $virtualPage->getTitle() ?>" />
+					<input style="width: 250px;" type="text" name="<?php echo $titleOption ?>" value="<?php echo $virtualPage->getTitle() ?>" />
 					<?php if($extraTitleText != null) {echo $extraTitleText;} ?>
 				</td>
 			</tr>
@@ -438,16 +439,16 @@ class iHomefinderAdminPageConfig extends iHomefinderAdminAbstractPage {
 					<b>Theme Template*:</b>
 				</td>
 				<td>
-					<select name="<?php echo $templateOption ?>">
+					<select style="width: 250px;" name="<?php echo $templateOption ?>">
 						<option value='default'><?php _e('Default Template'); ?></option>
 						<?php page_template_dropdown($virtualPage->getPageTemplate()); ?>
 					</select>
 				</td>
 			</tr>
 		</table>
-
-	<?php
-		$this->permalinkJavascript($permalinkId, $urlFactory);
+		<?php $this->permalinkJavascript($permalinkId, $urlFactory); ?>
+		<br />
+		<?php
 	}
 	
 }

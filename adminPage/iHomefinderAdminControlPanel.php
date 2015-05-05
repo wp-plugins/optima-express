@@ -12,12 +12,13 @@ class iHomefinderAdminControlPanel extends iHomefinderAdminAbstractPage {
 	}
 	
 	protected function getContent() {
-		if(get_option(iHomefinderConstants::AUTHENTICATION_TOKEN_OPTION) != "") {
+		if($this->admin->isActivated()) {
+			$url = iHomefinderConstants::CONTROL_PANEL_EXTERNAL_URL . "/z.cfm?w=" . get_option(iHomefinderConstants::ACTIVATION_TOKEN_OPTION);
 			?>
 			<h2>Your IDX Control Panel will open in a new window.</h2>
-			<p>If a new window does not open, please enable pop-ups for this site.</p>
+			<p>If a new window does not open, please enable pop-ups for this site or <a href="<?php echo $url ?>" target="_blank">click here</a>.</p>
 			<script type="text/javascript">
-				window.open("<?php echo iHomefinderConstants::CONTROL_PANEL_EXTERNAL_URL; ?>/z.cfm?w=<?php echo get_option(iHomefinderConstants::ACTIVATION_TOKEN_OPTION) ?>");
+				window.open("<?php echo $url ?>");
 			</script>
 			<?php
 		}

@@ -23,7 +23,7 @@ class iHomefinderAdmin {
 		
 		//Check for valid plugin registration
 		//Do not check for registration on the registration page.
-		if($pageName != iHomefinderConstants::OPTION_ACTIVATE && !get_option(iHomefinderConstants::AUTHENTICATION_TOKEN_OPTION)) {
+		if($pageName != iHomefinderConstants::OPTION_ACTIVATE && !$this->isActivated()) {
 			?>
 			<style type="text/css">
 				.green-bar {
@@ -192,66 +192,75 @@ class iHomefinderAdmin {
 	 * from the activationToken.
 	 */
 	public function getAuthenticationToken() {
-		$authenticationToken = get_option(iHomefinderConstants::AUTHENTICATION_TOKEN_OPTION);
+		$authenticationToken = get_option(iHomefinderConstants::AUTHENTICATION_TOKEN_OPTION, null);
 		return $authenticationToken;
 	}
 	
 	public function previouslyActivated() {
-		return get_option(iHomefinderConstants::IS_ACTIVATED_OPTION);
+		return get_option(iHomefinderConstants::IS_ACTIVATED_OPTION, false);
+	}
+	
+	public function isActivated() {
+		$result = false;
+		$authenticationToken = $this->getAuthenticationToken();
+		if(!empty($authenticationToken)) {
+			$result = true;
+		}
+		return $result;
 	}
 	
 	private function activate($activationToken) {
 		$urlFactory = iHomefinderUrlFactory::getInstance();
-		$ajaxBaseUrl = $urlFactory->getAjaxBaseUrl();
-		$listingsSearchResultsUrl = $urlFactory->getListingsSearchResultsUrl(true);
-		$listingsSearchFormUrl = $urlFactory->getListingsSearchFormUrl(true);
-		$listingDetailUrl = $urlFactory->getListingDetailUrl(true);
-		$featuredSearchResultsUrl = $urlFactory->getFeaturedSearchResultsUrl(true);
-		$hotsheetSearchResultsUrl = $urlFactory->getHotsheetSearchResultsUrl(true);
-		$organizerLoginUrl = $urlFactory->getOrganizerLoginUrl(true);
-		$organizerLogoutUrl = $urlFactory->getOrganizerLogoutUrl(true);
-		$organizerLoginSubmitUrl = $urlFactory->getOrganizerLoginSubmitUrl(true);
-		$organizerEditSavedSearchUrl = $urlFactory->getOrganizerEditSavedSearchUrl(true);
-		$organizerEditSavedSearchSubmitUrl = $urlFactory->getOrganizerEditSavedSearchSubmitUrl(true);
-		$organizerDeleteSavedSearchSubmitUrl = $urlFactory->getOrganizerDeleteSavedSearchSubmitUrl(true);
-		$organizerViewSavedSearchUrl = $urlFactory->getOrganizerViewSavedSearchUrl(true);
-		$organizerViewSavedSearchListUrl = $urlFactory->getOrganizerViewSavedSearchListUrl(true);
-		$organizerViewSavedListingListUrl = $urlFactory->getOrganizerViewSavedListingListUrl(true);
-		$organizerDeleteSavedListingUrl = $urlFactory->getOrganizerDeleteSavedListingUrl(true);
-		$organizerResendConfirmationEmailUrl = $urlFactory->getOrganizerResendConfirmationEmailUrl(true);
-		$organizerActivateSubscriberUrl = $urlFactory->getOrganizerActivateSubscriberUrl(true);
-		$organizerSendSubscriberPasswordUrl = $urlFactory->getOrganizerSendSubscriberPasswordUrl(true);
-		$listingsAdvancedSearchFormUrl = $urlFactory->getListingsAdvancedSearchFormUrl(true);
-		$organizerHelpUrl = $urlFactory->getOrganizerHelpUrl(true);
-		$organizerEditSubscriberUrl = $urlFactory->getOrganizerEditSubscriberUrl(true);
-		$contactFormUrl = $urlFactory->getContactFormUrl(true);
-		$valuationFormUrl = $urlFactory->getValuationFormUrl(true);
-		$listingSoldDetailUrl = $urlFactory->getListingSoldDetailUrl(true);
-		$openHomeSearchFormUrl = $urlFactory->getOpenHomeSearchFormUrl(true);
-		$soldFeaturedListingUrl = $urlFactory->getSoldFeaturedListingUrl(true);
-		$supplementalListingUrl = $urlFactory->getSupplementalListingUrl(true);
-		$listingSearchByAddressResultsUrl = $urlFactory->getListingSearchByAddressResultsUrl(true);
-		$listingSearchByListingIdResultsUrl = $urlFactory->getListingSearchByListingIdResultsUrl(true);
-		$officeListUrl = $urlFactory->getOfficeListUrl(true);
-		$officeDetailUrl = $urlFactory->getOfficeDetailUrl(true);
-		$agentBioListUrl = $urlFactory->getAgentListUrl(true);
-		$agentBioDetailUrl = $urlFactory->getAgentDetailUrl(true);
-		$mapSearchUrl = $urlFactory->getMapSearchFormUrl(true);
-		$cssOverride = get_option(iHomefinderConstants::CSS_OVERRIDE_OPTION);
-		$layoutType = iHomefinderLayoutManager::getInstance()->getLayoutType();
-		$colorScheme = iHomefinderLayoutManager::getInstance()->getColorScheme();
-		$mobileSiteYn = get_option(iHomefinderConstants::OPTION_MOBILE_SITE_YN);
-		$emailDisplayType = get_option(iHomefinderConstants::EMAIL_DISPLAY_TYPE_OPTION);
-		$emailHeader = iHomefinderAdminEmail::getInstance()->getHeader();
-		$emailFooter = iHomefinderAdminEmail::getInstance()->getFooter();
-		$emailPhotoUrl = get_option(iHomefinderConstants::EMAIL_PHOTO_OPTION);
-		$emailLogoUrl = get_option(iHomefinderConstants::EMAIL_LOGO_OPTION);
-		$emailName = get_option(iHomefinderConstants::EMAIL_NAME_OPTION);
-		$emailCompany = get_option(iHomefinderConstants::EMAIL_COMPANY_OPTION);
-		$emailPhone = get_option(iHomefinderConstants::EMAIL_PHONE_OPTION);
-		$emailAddressLine1 = get_option(iHomefinderConstants::EMAIL_ADDRESS_LINE1_OPTION);
-		$emailAddressLine2 = get_option(iHomefinderConstants::EMAIL_ADDRESS_LINE2_OPTION);
-		
+		$ajaxBaseUrl = urlencode($urlFactory->getAjaxBaseUrl());
+		$listingsSearchResultsUrl = urlencode($urlFactory->getListingsSearchResultsUrl(true));
+		$listingsSearchFormUrl = urlencode($urlFactory->getListingsSearchFormUrl(true));
+		$listingDetailUrl = urlencode($urlFactory->getListingDetailUrl(true));
+		$featuredSearchResultsUrl = urlencode($urlFactory->getFeaturedSearchResultsUrl(true));
+		$hotsheetSearchResultsUrl = urlencode($urlFactory->getHotsheetSearchResultsUrl(true));
+		$organizerLoginUrl = urlencode($urlFactory->getOrganizerLoginUrl(true));
+		$organizerLogoutUrl = urlencode($urlFactory->getOrganizerLogoutUrl(true));
+		$organizerLoginSubmitUrl = urlencode($urlFactory->getOrganizerLoginSubmitUrl(true));
+		$organizerEditSavedSearchUrl = urlencode($urlFactory->getOrganizerEditSavedSearchUrl(true));
+		$organizerEditSavedSearchSubmitUrl = urlencode($urlFactory->getOrganizerEditSavedSearchSubmitUrl(true));
+		$organizerDeleteSavedSearchSubmitUrl = urlencode($urlFactory->getOrganizerDeleteSavedSearchSubmitUrl(true));
+		$organizerViewSavedSearchUrl = urlencode($urlFactory->getOrganizerViewSavedSearchUrl(true));
+		$organizerViewSavedSearchListUrl = urlencode($urlFactory->getOrganizerViewSavedSearchListUrl(true));
+		$organizerViewSavedListingListUrl = urlencode($urlFactory->getOrganizerViewSavedListingListUrl(true));
+		$organizerDeleteSavedListingUrl = urlencode($urlFactory->getOrganizerDeleteSavedListingUrl(true));
+		$organizerResendConfirmationEmailUrl = urlencode($urlFactory->getOrganizerResendConfirmationEmailUrl(true));
+		$organizerActivateSubscriberUrl = urlencode($urlFactory->getOrganizerActivateSubscriberUrl(true));
+		$organizerSendSubscriberPasswordUrl = urlencode($urlFactory->getOrganizerSendSubscriberPasswordUrl(true));
+		$listingsAdvancedSearchFormUrl = urlencode($urlFactory->getListingsAdvancedSearchFormUrl(true));
+		$organizerHelpUrl = urlencode($urlFactory->getOrganizerHelpUrl(true));
+		$organizerEditSubscriberUrl = urlencode($urlFactory->getOrganizerEditSubscriberUrl(true));
+		$contactFormUrl = urlencode($urlFactory->getContactFormUrl(true));
+		$valuationFormUrl = urlencode($urlFactory->getValuationFormUrl(true));
+		$listingSoldDetailUrl = urlencode($urlFactory->getListingSoldDetailUrl(true));
+		$openHomeSearchFormUrl = urlencode($urlFactory->getOpenHomeSearchFormUrl(true));
+		$soldFeaturedListingUrl = urlencode($urlFactory->getSoldFeaturedListingUrl(true));
+		$supplementalListingUrl = urlencode($urlFactory->getSupplementalListingUrl(true));
+		$listingSearchByAddressResultsUrl = urlencode($urlFactory->getListingSearchByAddressResultsUrl(true));
+		$listingSearchByListingIdResultsUrl = urlencode($urlFactory->getListingSearchByListingIdResultsUrl(true));
+		$officeListUrl = urlencode($urlFactory->getOfficeListUrl(true));
+		$officeDetailUrl = urlencode($urlFactory->getOfficeDetailUrl(true));
+		$agentBioListUrl = urlencode($urlFactory->getAgentListUrl(true));
+		$agentBioDetailUrl = urlencode($urlFactory->getAgentDetailUrl(true));
+		$mapSearchUrl = urlencode($urlFactory->getMapSearchFormUrl(true));
+		$cssOverride = urlencode(get_option(iHomefinderConstants::CSS_OVERRIDE_OPTION, null));
+		$layoutType = urlencode(iHomefinderLayoutManager::getInstance()->getLayoutType());
+		$colorScheme = urlencode(iHomefinderLayoutManager::getInstance()->getColorScheme());
+		$mobileSiteYn = get_option(iHomefinderConstants::OPTION_MOBILE_SITE_YN, null);
+		$emailDisplayType = get_option(iHomefinderConstants::EMAIL_DISPLAY_TYPE_OPTION, null);
+		$emailHeader = urlencode(iHomefinderAdminEmail::getInstance()->getHeader());
+		$emailFooter = urlencode(iHomefinderAdminEmail::getInstance()->getFooter());
+		$emailPhotoUrl = get_option(iHomefinderConstants::EMAIL_PHOTO_OPTION, null);
+		$emailLogoUrl = get_option(iHomefinderConstants::EMAIL_LOGO_OPTION, null);
+		$emailName = get_option(iHomefinderConstants::EMAIL_NAME_OPTION, null);
+		$emailCompany = get_option(iHomefinderConstants::EMAIL_COMPANY_OPTION, null);
+		$emailPhone = get_option(iHomefinderConstants::EMAIL_PHONE_OPTION, null);
+		$emailAddressLine1 = get_option(iHomefinderConstants::EMAIL_ADDRESS_LINE1_OPTION, null);
+		$emailAddressLine2 = get_option(iHomefinderConstants::EMAIL_ADDRESS_LINE2_OPTION, null);
+				
 		$emailBrandingType = null;
 		switch($emailDisplayType) {
 			case iHomefinderAdminEmail::EMAIL_DISPLAY_TYPE_CUSTOM_IMAGES_VALUE;
@@ -389,12 +398,27 @@ class iHomefinderAdmin {
 	}
 
 	public function addScripts() {
-		//Used for the Bio Page for image uploads
-		if(isset($_GET["page"]) && ($_GET["page"] == iHomefinderConstants::BIO_PAGE || $_GET["page"] == iHomefinderConstants::EMAIL_BRANDING_PAGE)) {
-			wp_enqueue_script("jquery"); // include jQuery
-			wp_register_script("bioInformation", plugins_url("/optima-express/js/bioInformation.js"), array("jquery","editor","media-upload","thickbox"));
-			wp_enqueue_style("thickbox");
-			wp_enqueue_script("bioInformation"); // include script.js
+		$pages = array(
+			iHomefinderConstants::OPTION_ACTIVATE,
+			iHomefinderConstants::OPTION_IDX_CONTROL_PANEL,
+			iHomefinderConstants::OPTION_PAGES,
+			iHomefinderConstants::OPTION_CONFIG_PAGE,
+			iHomefinderConstants::BIO_PAGE,
+			iHomefinderConstants::SOCIAL_PAGE,
+			iHomefinderConstants::EMAIL_BRANDING_PAGE,
+			iHomefinderConstants::COMMUNITY_PAGES,
+			iHomefinderConstants::SEO_CITY_LINKS_PAGE
+		);
+		if(array_key_exists("page", $_GET)) {
+			$page = $_GET["page"];
+			$foo = array_search($page, $pages);
+			if($foo !== false && $foo >= 0) {
+				wp_enqueue_script("jquery");
+				wp_enqueue_script("jquery-ui-core");
+				wp_enqueue_script("jquery-ui-autocomplete", "", array("jquery-ui-widget", "jquery-ui-position"), "1.8.6");
+				wp_enqueue_style("thickbox");
+				wp_enqueue_script("oe-dashboard", plugins_url("js/dashboard.js", __FILE__), array("jquery", "editor", "media-upload", "thickbox"), iHomefinderConstants::VERSION);
+			}
 		}
 	}
 	

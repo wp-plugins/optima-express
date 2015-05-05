@@ -20,12 +20,12 @@ class iHomefinderLayoutManager {
 	}
 	
 	public function getLayoutType() {
-		$result = get_option(iHomefinderConstants::OPTION_LAYOUT_TYPE);
+		$result = get_option(iHomefinderConstants::OPTION_LAYOUT_TYPE, null);
 		return $result;
 	}
 
 	public function getColorScheme() {
-		$result = get_option(iHomefinderConstants::COLOR_SCHEME_OPTION);
+		$result = get_option(iHomefinderConstants::COLOR_SCHEME_OPTION, null);
 		return $result;
 	}
 

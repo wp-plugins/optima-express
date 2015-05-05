@@ -13,20 +13,11 @@ class iHomefinderAdminSeoCityLinks extends iHomefinderAdminAbstractPage {
 	
 	protected function getContent() {
 		?>
-		<style type="text/css">
-			.form-table td,
-			.form-table th {
-				padding: 10px 0px 10px 0px;
-			}
-			.form-table select {
-				width: 25em;
-			}
-		</style>
 		<h2>SEO City Links Setup</h2>
 		<p>Add city links for display in the SEO City Links widget.<p/>
 		<form method="post" action="options.php" id="ihfSeoLinksForm">
 			<?php settings_fields(iHomefinderConstants::OPTION_GROUP_SEO_CITY_LINKS); ?>
-			<table class="form-table">
+			<table class="form-table condensed">
 				<tbody>
 					<tr>
 						<th>
@@ -80,6 +71,7 @@ class iHomefinderAdminSeoCityLinks extends iHomefinderAdminAbstractPage {
 								class="regular-text"
 								name="<?php echo iHomefinderConstants::SEO_CITY_LINKS_SETTINGS . '[0][' . iHomefinderConstants::SEO_CITY_LINKS_TEXT. ']' ?>"
 								type="text"
+								required="required"
 							/>
 						</td>
 					</tr>
@@ -102,10 +94,12 @@ class iHomefinderAdminSeoCityLinks extends iHomefinderAdminAbstractPage {
 			<p class="submit">
 				<button type="submit" class="button-primary">Save</button>
 			</p>
-			<p>The following links will display in the SEO City Links widget. Click the &#x2715; to remove an entry.</p>
 			<?php
-				$seoCityLinksSettings = get_option(iHomefinderConstants::SEO_CITY_LINKS_SETTINGS);
-				if($seoCityLinksSettings && is_array($seoCityLinksSettings)) {
+				$seoCityLinksSettings = get_option(iHomefinderConstants::SEO_CITY_LINKS_SETTINGS, null);
+				if(!empty($seoCityLinksSettings) && is_array($seoCityLinksSettings) && count($seoCityLinksSettings) > 0) {
+					?>
+					<p>The following links will display in the SEO City Links widget. Click the &#x2715; to remove an entry.</p>
+					<?php
 					sort($seoCityLinksSettings);
 					//save sorted array
 					update_option(iHomefinderConstants::SEO_CITY_LINKS_SETTINGS, $seoCityLinksSettings);
@@ -141,10 +135,6 @@ class iHomefinderAdminSeoCityLinks extends iHomefinderAdminAbstractPage {
 		$propertyTypesList = $formData->getPropertyTypesList();
 		$cityZipList = $formData->getCityZipList();
 		$cityZipListJson = json_encode($cityZipList);
-		wp_enqueue_script("jquery");
-		wp_enqueue_script("jquery-ui-core");
-		wp_enqueue_script("jquery-ui-autocomplete", "", array("jquery-ui-widget", "jquery-ui-position"), "1.8.6");
-		wp_enqueue_style("jquery-ui-autocomplete", plugins_url("css/jquery-ui-1.8.18.custom.css", __FILE__));
 		?>
 		<script type="text/javascript">
 			function ihfRemoveSeoLink(button) {
@@ -187,10 +177,11 @@ class iHomefinderAdminSeoCityLinks extends iHomefinderAdminAbstractPage {
 		<input
 			id="location"
 			class="regular-text"
-			type="text"
 			name="<?php echo iHomefinderConstants::SEO_CITY_LINKS_SETTINGS . '[0][' . iHomefinderConstants::SEO_CITY_LINKS_CITY_ZIP . ']'?>"
+			type="text"
 			placeholder="Enter City - OR - Postal Code"
 			autocomplete="off"
+			required="required"
 		/>
 		<?php
 	}
@@ -203,9 +194,10 @@ class iHomefinderAdminSeoCityLinks extends iHomefinderAdminAbstractPage {
 				?>
 				<select
 					id="propertyType"
+					class="regular-text"
 					name="<?php echo iHomefinderConstants::SEO_CITY_LINKS_SETTINGS . '[0][' . iHomefinderConstants::SEO_CITY_LINKS_PROPERTY_TYPE . ']' ?>"
 				>
-					<?php foreach ($propertyTypesList as $i => $value) { ?>
+					<?php foreach($propertyTypesList as $i => $value) { ?>
 						<option value="<?php echo $propertyTypesList[$i]->propertyTypeCode ?>">
 							<?php echo $propertyTypesList[$i]->displayName ?>
 						</option>

@@ -209,13 +209,11 @@ class iHomefinderRequestor {
 		if(is_wp_error($response)) {
 			$contentInfo = null;
 		} else {
+			$responseBody = wp_remote_retrieve_body($response);
 			if($response["response"]["code"] >= 400) {
-				$responseBody = wp_remote_retrieve_body($response);
 				$contentInfo = new stdClass();
 				$contentInfo->view = $responseBody;
 			} else {
-				$responseBody = wp_remote_retrieve_body($response);
-				
 				$contentType = wp_remote_retrieve_header($response, "content-type");
 				if($contentType != null && $contentType == "text/xml;charset=UTF-8") {
 					$contentInfo = simplexml_load_string($responseBody, null, LIBXML_NOCDATA);	
