@@ -253,7 +253,8 @@ class iHomefinderPermissions {
 	
 	public function isOmnipressSite() {
 		$result = false;
-		if(get_option("clientId")) {
+		$clientId = get_option("clientId", null);
+		if(!empty($clientId)) {
 			$result = true;
 		}
 		return $result;

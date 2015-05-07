@@ -82,9 +82,9 @@ class iHomefinderEnqueueResource {
 	}
 	
 	public function addCustomCSS() {
-		$cssOverride = get_option(iHomefinderConstants::CSS_OVERRIDE_OPTION);
-		if(isset($cssOverride) && !empty($cssOverride)) {
-			echo "<style type='text/css'>" . $cssOverride . "</style>";
+		$cssOverride = get_option(iHomefinderConstants::CSS_OVERRIDE_OPTION, null);
+		if(!empty($cssOverride)) {
+			echo "<style type=\"text/css\">" . $cssOverride . "</style>";
 		}
 	}
 	

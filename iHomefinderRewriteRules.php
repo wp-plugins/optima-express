@@ -14,7 +14,7 @@
  * @author ihomefinder
  *
  */
-class iHomefinderRewriteRules{
+class iHomefinderRewriteRules {
 
 	private static $instance;
 	private $urlFactory;
@@ -58,6 +58,10 @@ class iHomefinderRewriteRules{
 		$this->setRewriteRules("index.php/");
 	}
 	
+	/**
+	 * @param string $type
+	 * @param string $pattern
+	 */
 	private function addRule($type, $pattern) {
 		$matches = array();
 		preg_match_all("/\{(.*?)\}/", $pattern, $matches);
@@ -75,6 +79,12 @@ class iHomefinderRewriteRules{
 		add_rewrite_rule($regex, $redirect, "top");
 	}
 	
+	/**
+	 * WordPress reserves some names (name, term, page) in /wp-includes/class-wp.php
+	 * ($public_query_vars, $private_query_vars) that should not be used
+	 * 
+	 * @param string $name
+	 */
 	private function addQueryVar($name) {
 		global $wp;
 		$wp->add_query_var($name);
@@ -107,11 +117,7 @@ class iHomefinderRewriteRules{
 		);
 		$this->addRule(
 			iHomefinderVirtualPageFactory::OFFICE_DETAIL,
-			$matchRulePrefix . $this->urlFactory->getOfficeDetailUrl(false) . "/{name}/{officeId}"
-		);
-		$this->addRule(
-			iHomefinderVirtualPageFactory::AGENT_LIST,
-			$matchRulePrefix . $this->urlFactory->getAgentListUrl(false) . "/{officeId}"
+			$matchRulePrefix . $this->urlFactory->getOfficeDetailUrl(false) . "/{officeName}/{officeId}"
 		);
 		$this->addRule(
 			iHomefinderVirtualPageFactory::AGENT_LIST,
@@ -119,7 +125,7 @@ class iHomefinderRewriteRules{
 		);
 		$this->addRule(
 			iHomefinderVirtualPageFactory::AGENT_DETAIL,
-			$matchRulePrefix . $this->urlFactory->getAgentDetailUrl(false) . "/{name}/{agentId}"
+			$matchRulePrefix . $this->urlFactory->getAgentDetailUrl(false) . "/{agentName}/{agentId}"
 		);
 		$this->addRule(
 			iHomefinderVirtualPageFactory::CONTACT_FORM,
@@ -227,7 +233,7 @@ class iHomefinderRewriteRules{
 		);
 		$this->addRule(
 			iHomefinderVirtualPageFactory::HOTSHEET_SEARCH_RESULTS,
-			$matchRulePrefix . $this->urlFactory->getHotsheetSearchResultsUrl(false) . "/{name}/{hotSheetId}"
+			$matchRulePrefix . $this->urlFactory->getHotsheetSearchResultsUrl(false) . "/{hotSheetName}/{hotSheetId}"
 		);
 		$this->addRule(
 			iHomefinderVirtualPageFactory::HOTSHEET_SEARCH_RESULTS,

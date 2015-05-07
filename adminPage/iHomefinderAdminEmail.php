@@ -154,7 +154,7 @@ class iHomefinderAdminEmail extends iHomefinderAdminAbstractPage {
 						</tr>
 						<tr>
 							<th>
-								<label id="<?php echo iHomefinderConstants::EMAIL_PHONE_OPTION ?>" for="">Phone</label>
+								<label for="<?php echo iHomefinderConstants::EMAIL_PHONE_OPTION ?>" for="">Phone</label>
 							</th>
 							<td>
 								<input id="<?php echo iHomefinderConstants::EMAIL_PHONE_OPTION ?>" class="regular-text" type="text" name="<?php echo iHomefinderConstants::EMAIL_PHONE_OPTION ?>" value="<?php echo get_option(iHomefinderConstants::EMAIL_PHONE_OPTION) ?>" />
