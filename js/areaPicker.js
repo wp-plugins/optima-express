@@ -92,7 +92,8 @@
 			areaPickerClearAll: jQuery("#areaPickerClearAll"),
 			isPhpStyle: "false",
 			autocompleteRequestUrl: null,
-			searchType: "basic"
+			searchType: "basic",
+			restrictCitySearchToCustomList:"false"
 		}, options);
 
 		/**
@@ -130,6 +131,15 @@
 			}
 			var autocompleteRequestUrl = settings.autocompleteRequestUrl;
 			var searchType = settings.searchType;
+			var restrictCitySearchToCustomList = false;
+			if(settings.restrictCitySearchToCustomList.toLowerCase() === "true"){
+				restrictCitySearchToCustomList = true;
+			}
+			if(restrictCitySearchToCustomList){
+				customAreaListToggle.hide();
+				customAreaListToggleMoreAreasText ="";
+				customAreaListToggleLessAreasText ="";
+			}
 
 			if (enabledItems !== null && enabledItems.areas !== undefined) {
 				allItemsEnabled = false;
@@ -527,13 +537,21 @@
 						toggleCustomAreaStatusAjax();
 						
 						// Show more/less links
-						customAreaListToggle.show();
-						customAreaListToggle.unbind("click");
-						customAreaListToggle.click(function(event) {
-							loadAreasForAjaxRequests(false);
-						});
+						showCustomAreaText();
+				
 
 					});
+			}
+			var showCustomAreaText = function(){
+				if(restrictCitySearchToCustomList){
+					customAreaListToggle.hide();
+				}else{
+					customAreaListToggle.show();
+					customAreaListToggle.unbind("click");
+					customAreaListToggle.click(function(event) {
+					loadAreasForAjaxRequests(false);
+					});
+				}
 			}
 
 			// Find an array of values that match the typed text
@@ -541,7 +559,8 @@
 				//only try to match 2 or more characters typed.
 				if (searchTerm !== null && searchTerm.length >= autocompleteTextLength) {
 					var data = {
-						term: searchTerm
+						term: searchTerm,
+						onlyCustomAreasIfAvailable: restrictCitySearchToCustomList
 					};
 					var propertyType = jQuery("[name='propertyType']").val();
 					//only city / zip is available for non SFR, CND or advanced searches
@@ -555,7 +574,7 @@
 					}
 					var self = this;
 					var url = autocompleteRequestUrl;
-					jQuery.ajax({
+						jQuery.ajax({
 							type: 'GET',
 							url: url,
 							data: data,
