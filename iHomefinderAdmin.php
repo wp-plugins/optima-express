@@ -45,21 +45,13 @@ class iHomefinderAdmin {
 			<?php
 		}
 		
-		if(array_key_exists(iHomefinderConstants::COMPATIBILITY_CHECK_ENABLED, $_REQUEST) && $_REQUEST[iHomefinderConstants::COMPATIBILITY_CHECK_ENABLED] == "false") {
-			update_option(iHomefinderConstants::COMPATIBILITY_CHECK_ENABLED, "false");
-		}
-		
-		if(get_option(iHomefinderConstants::COMPATIBILITY_CHECK_ENABLED) != "false") {
-		
+		if(get_option(iHomefinderConstants::COMPATIBILITY_CHECK_ENABLED, true) !== "false") {
 			$errors = array();
-			//Get current wordpress plugins as array
-			$plugins = get_plugins();
-			
 			//check if permalink structure is set
-			if(get_option("permalink_structure") == "") {
-				$errors[] = "<p><a href='options-permalink.php'>WordPress permalink settings are set as default (Error 404)</a></p>";					
+			$permalinkStructure = get_option("permalink_structure", null);
+			if(empty($permalinkStructure)) {
+				$errors[] = "<a href=\"" . admin_url("options-permalink.php") . "\">WordPress permalink settings are set as default (Error 404)</a>";					
 			}
-			
 			$remoteRequest = new iHomefinderRequestor();
 			$remoteRequest
 				->addParameter("method", "handleRequest")
@@ -67,122 +59,120 @@ class iHomefinderAdmin {
 				->addParameter("requestType", "compatibility-check")
 			;
 			$remoteRequest->setCacheExpiration(60*60*24);
-			$contentInfo = $remoteRequest->remoteGetRequest();
-			
-			if(empty($contentInfo) === false) {
-				
-				if(iHomefinderLayoutManager::getInstance()->isResponsive() === true) {
-					$content = (string) $remoteRequest->getJson($contentInfo);
+			$remoteResponse = $remoteRequest->remoteGetRequest();
+			if(!empty($remoteResponse)) {
+				$content = null;
+				if(iHomefinderLayoutManager::getInstance()->isResponsive()) {
+					$content = (string) $remoteRequest->getJson($remoteResponse);
 				} else {
-					$content = json_encode($contentInfo);
+					$content = json_encode($remoteResponse);
 				}
-				
-				if(isset($content) === true && $content != "") {
+				if(!empty($content)) {
 					$compatibility = json_decode($content, true);
-					$compatibilityPluginArray=$compatibility["Plugin"];
-													
-					//loop through plugin array
-					foreach($plugins as $pluginPath => $plugin) {
-						//check if plugin is active
-						if(is_plugin_active($pluginPath) == true) {
-							//get plugin name
-							$pluginName = $plugin["Name"];	
-							if(array_key_exists($pluginName, $compatibilityPluginArray)) {
-								$message = $compatibilityPluginArray[$pluginName];
-								if($message != null) {
-									$errors[] = "<p><a href='plugins.php?s=" . urlencode($pluginName) . "'>" . $pluginName . "</a> (" . $message . ")</p>";
+					if(!empty($compatibility) && is_array($compatibility)) {
+						//check plugins
+						if(array_key_exists("Plugin", $compatibility)) {
+							$incompatiblePlugins = $compatibility["Plugin"];
+							$plugins = get_plugins();
+							foreach($plugins as $pluginPath => $plugin) {
+								if(is_plugin_active($pluginPath)) {
+									$pluginName = $plugin["Name"];
+									if(array_key_exists($pluginName, $incompatiblePlugins)) {
+										$message = $incompatiblePlugins[$pluginName];
+										if($message != null) {
+											$errors[] = "<a href=\"" . admin_url("plugins.php") . "?s=" . urlencode($pluginName) . "\">" . $pluginName . "</a> (" . $message . ")";
+										}
+									}
 								}
-							}	
-						}
-					}
-						
-					if(function_exists("wp_get_theme")) {
-						//get current wordpress theme as string
-						$theme = wp_get_theme();	
-						$themeName=$theme["Name"];
-						$compatibilityThemeArray=$compatibility["Theme"];	
-						if(array_key_exists($themeName, $compatibilityThemeArray)) {
-							$message = $compatibilityThemeArray[$themeName];
-							if($message != null) {
-								$errors[] = "<p><a href='themes.php'>" . $themeName . "</a> (" . $message . ")</p>";
-							}	
-						}
-					}
-				}
-					
-				//check error count
-				if(count($errors) > 0) {
-					?>
-					<div class="error">
-						<div style="">
-							<h3 style="float: left;"><?php echo count($errors) ?> compatibility issue(s):</h3>
-							<form id="<?php echo iHomefinderConstants::COMPATIBILITY_CHECK_ENABLED ?>" style="float: right; margin-top: 5px;" method="post" action="options.php">
-								<?php settings_fields(iHomefinderConstants::OPTION_GROUP_COMPATIBILITY_CHECK); ?>
-								<input type="hidden" value="false" name="<?php echo iHomefinderConstants::COMPATIBILITY_CHECK_ENABLED ?>" />
-								<input class="button-secondary" type="submit" value="Dismiss compatibility warnings" />
-							</form>
-						</div>
-						<div style="clear: both;">
-							<?php
-							foreach($errors as $error) {
-								echo $error;
 							}
-							?>
-						</div>
-					</div>
-					<?php
+						}
+						//check theme
+						if(array_key_exists("Theme", $compatibility)) {
+							$theme = wp_get_theme();
+							$themeName = $theme->get("Name");
+							$incompatibleThemes = $compatibility["Theme"];
+							if(array_key_exists($themeName, $incompatibleThemes)) {
+								$message = $incompatibleThemes[$themeName];
+								if($message != null) {
+									$errors[] = "<a href=\"" . admin_url("themes.php") . "\">" . $themeName . "</a> (" . $message . ")";
+								}
+							}
+						}
+					}
 				}
+			}
+			//check error count
+			if(count($errors) > 0) {
+				?>
+				<div class="error">
+					<h3 style="float: left;">
+						<?php echo count($errors) ?> compatibility issue<?php if(count($errors) > 1) { ?>s<?php } ?>:
+					</h3>
+					<form style="float: right; margin-top: 5px;" method="post" action="options.php">
+						<?php settings_fields(iHomefinderConstants::OPTION_GROUP_COMPATIBILITY_CHECK); ?>
+						<input type="hidden" value="false" name="<?php echo iHomefinderConstants::COMPATIBILITY_CHECK_ENABLED ?>" />
+						<button class="button-secondary" type="submit">Dismiss compatibility warnings</button>
+					</form>
+					<div style="clear: both;">
+						<?php foreach($errors as $error) { ?>
+							<p>
+								<?php echo $error; ?>
+							</p>
+						<?php } ?>
+					</div>
+				</div>
+				<?php
 			}
 		}
 	}
 
 	public function createAdminMenu() {
-		add_menu_page("Optima Express", "Optima Express", "manage_options", "ihf_idx", array(iHomefinderAdminInformation::getInstance(), "getPage"));
-		add_submenu_page("ihf_idx", "Information", "Information", "manage_options", "ihf_idx", array(iHomefinderAdminInformation::getInstance(), "getPage"));
-		add_submenu_page("ihf_idx", "Register", "Register", "manage_options", iHomefinderConstants::OPTION_ACTIVATE, array(iHomefinderAdminActivate::getInstance(), "getPage"));
-		add_submenu_page("ihf_idx", "IDX Control Panel", "IDX Control Panel", "manage_options", iHomefinderConstants::OPTION_IDX_CONTROL_PANEL, array(iHomefinderAdminControlPanel::getInstance(), "getPage"));
-		add_submenu_page("ihf_idx", "IDX Pages", "IDX Pages", "manage_options", iHomefinderConstants::OPTION_PAGES, array(iHomefinderAdminPageConfig::getInstance(), "getPage"));
-		add_submenu_page("ihf_idx", "Configuration", "Configuration", "manage_options", iHomefinderConstants::OPTION_CONFIG_PAGE, array(iHomefinderAdminConfiguration::getInstance(), "getPage"));
-		add_submenu_page("ihf_idx", "Bio Widget", "Bio Widget", "manage_options", iHomefinderConstants::BIO_PAGE, array(iHomefinderAdminBio::getInstance(), "getPage"));
-		add_submenu_page("ihf_idx", "Social Widget", "Social Widget", "manage_options", iHomefinderConstants::SOCIAL_PAGE, array(iHomefinderAdminSocial::getInstance(), "getPage"));
-		add_submenu_page("ihf_idx", "Email Branding", "Email Branding", "manage_options", iHomefinderConstants::EMAIL_BRANDING_PAGE, array(iHomefinderAdminEmail::getInstance(), "getPage"));
+		add_menu_page("Optima Express", "Optima Express", "manage_options", iHomefinderConstants::INFORMATION, array(iHomefinderAdminInformation::getInstance(), "getPage"));
+		add_submenu_page(iHomefinderConstants::INFORMATION, "Information", "Information", "manage_options", iHomefinderConstants::INFORMATION, array(iHomefinderAdminInformation::getInstance(), "getPage"));
+		add_submenu_page(iHomefinderConstants::INFORMATION, "Register", "Register", "manage_options", iHomefinderConstants::OPTION_ACTIVATE, array(iHomefinderAdminActivate::getInstance(), "getPage"));
+		add_submenu_page(iHomefinderConstants::INFORMATION, "IDX Control Panel", "IDX Control Panel", "manage_options", iHomefinderConstants::OPTION_IDX_CONTROL_PANEL, array(iHomefinderAdminControlPanel::getInstance(), "getPage"));
+		add_submenu_page(iHomefinderConstants::INFORMATION, "IDX Pages", "IDX Pages", "manage_options", iHomefinderConstants::OPTION_PAGES, array(iHomefinderAdminPageConfig::getInstance(), "getPage"));
+		add_submenu_page(iHomefinderConstants::INFORMATION, "Configuration", "Configuration", "manage_options", iHomefinderConstants::OPTION_CONFIG_PAGE, array(iHomefinderAdminConfiguration::getInstance(), "getPage"));
+		add_submenu_page(iHomefinderConstants::INFORMATION, "Bio Widget", "Bio Widget", "manage_options", iHomefinderConstants::BIO_PAGE, array(iHomefinderAdminBio::getInstance(), "getPage"));
+		add_submenu_page(iHomefinderConstants::INFORMATION, "Social Widget", "Social Widget", "manage_options", iHomefinderConstants::SOCIAL_PAGE, array(iHomefinderAdminSocial::getInstance(), "getPage"));
+		add_submenu_page(iHomefinderConstants::INFORMATION, "Email Branding", "Email Branding", "manage_options", iHomefinderConstants::EMAIL_BRANDING_PAGE, array(iHomefinderAdminEmail::getInstance(), "getPage"));
 		if(iHomefinderPermissions::getInstance()->isCommunityPagesEnabled()) {
-			add_submenu_page("ihf_idx", "Community Pages", "Community Pages", "manage_options", iHomefinderConstants::COMMUNITY_PAGES, array(iHomefinderAdminCommunityPages::getInstance(), "getPage"));
+			add_submenu_page(iHomefinderConstants::INFORMATION, "Community Pages", "Community Pages", "manage_options", iHomefinderConstants::COMMUNITY_PAGES, array(iHomefinderAdminCommunityPages::getInstance(), "getPage"));
 		}
 		if(iHomefinderPermissions::getInstance()->isSeoCityLinksEnabled()) {
-			add_submenu_page("ihf_idx", "SEO City Links", "SEO City Links", "manage_options", iHomefinderConstants::SEO_CITY_LINKS_PAGE, array(iHomefinderAdminSeoCityLinks::getInstance(), "getPage"));
+			add_submenu_page(iHomefinderConstants::INFORMATION, "SEO City Links", "SEO City Links", "manage_options", iHomefinderConstants::SEO_CITY_LINKS_PAGE, array(iHomefinderAdminSeoCityLinks::getInstance(), "getPage"));
 		}
 	}
 
 	public function updateAuthenticationToken() {
-		$activationToken = get_option(iHomefinderConstants::ACTIVATION_TOKEN_OPTION);
-		$this->activateAuthenticationToken($activationToken);
-		
+		$this->activateAuthenticationToken();
 	}
 
-	public function activateAuthenticationToken($activationToken, $updateActivationTokenOption = false) {
-		if($updateActivationTokenOption) {
+	public function activateAuthenticationToken($activationToken = null) {
+		if(!empty($activationToken)) {
 			update_option(iHomefinderConstants::ACTIVATION_TOKEN_OPTION, $activationToken);
 		}
-		if(!empty($activationToken)) {
-			$authenticationInfo = $this->activate($activationToken);
-			$authenticationToken = "";
-			if($authenticationInfo->authenticationToken) {
+		$authenticationInfo = $this->getAuthenticationInfo();
+		if($authenticationInfo !== null) {
+			if(property_exists($authenticationInfo, "authenticationToken")) {
 				$authenticationToken = (string) $authenticationInfo->authenticationToken;
+				update_option(iHomefinderConstants::AUTHENTICATION_TOKEN_OPTION, $authenticationToken);
+			}
+			if(property_exists($authenticationInfo, "permissions")) {
 				$permissions = $authenticationInfo->permissions;
 				iHomefinderPermissions::getInstance()->initialize($permissions);
-				if(!$this->previouslyActivated()) {
-					update_option(iHomefinderConstants::IS_ACTIVATED_OPTION, "true");
-				}
-			}				
-			update_option(iHomefinderConstants::AUTHENTICATION_TOKEN_OPTION, $authenticationToken);				
+			}
+			update_option(iHomefinderConstants::IS_ACTIVATED_OPTION, "true");
+			//We need to flush the rewrite rules, if any permalinks have been updated.
+			//Only flush in the admin screens, because that is the only point where urls patterns may change.
+			iHomefinderRewriteRules::getInstance()->flushRules();
+			//clear the cache
+			iHomefinderCacheUtility::getInstance()->deleteItems();
+			//update menu with any new available menu items
+			iHomefinderMenu::getInstance()->updateMenu();
 		}
-		iHomefinderMenu::getInstance()->updateMenu();
 	}
 	
-	/**
-	 * This forces reactivation of the plugin at next site visit.
-	 */
 	public function deleteAuthenticationToken() {
 		delete_option(iHomefinderConstants::AUTHENTICATION_TOKEN_OPTION);
 	}
@@ -209,7 +199,11 @@ class iHomefinderAdmin {
 		return $result;
 	}
 	
-	private function activate($activationToken) {
+	private function getAuthenticationInfo() {
+		$activationToken = get_option(iHomefinderConstants::ACTIVATION_TOKEN_OPTION, null);
+		if(empty($activationToken)) {
+			return null;
+		}
 		$urlFactory = iHomefinderUrlFactory::getInstance();
 		$ajaxBaseUrl = urlencode($urlFactory->getAjaxBaseUrl());
 		$listingsSearchResultsUrl = urlencode($urlFactory->getListingsSearchResultsUrl(true));
@@ -333,13 +327,6 @@ class iHomefinderAdmin {
 		$remoteResponse = $remoteRequest->remotePostRequest();
 		iHomefinderLogger::getInstance()->debugDumpVar($remoteResponse);
 		
-		//We need to flush the rewrite rules, if any permalinks have been updated.
-		//Only flush in the admin screens, because that is the only point where urls patterns may change.
-		iHomefinderRewriteRules::getInstance()->flushRules();
-		
-		//clear the cache
-		iHomefinderCacheUtility::getInstance()->deleteItems();
-		
 		return $remoteResponse;
 		
 	}
@@ -399,6 +386,7 @@ class iHomefinderAdmin {
 
 	public function addScripts() {
 		$pages = array(
+			iHomefinderConstants::INFORMATION,
 			iHomefinderConstants::OPTION_ACTIVATE,
 			iHomefinderConstants::OPTION_IDX_CONTROL_PANEL,
 			iHomefinderConstants::OPTION_PAGES,
@@ -415,7 +403,8 @@ class iHomefinderAdmin {
 			if($foo !== false && $foo >= 0) {
 				wp_enqueue_script("jquery");
 				wp_enqueue_script("jquery-ui-core");
-				wp_enqueue_script("jquery-ui-autocomplete", "", array("jquery-ui-widget", "jquery-ui-position"), "1.8.6");
+				wp_enqueue_script("jquery-ui-autocomplete", "", array("jquery-ui-widget", "jquery-ui-position"));
+				wp_enqueue_script("jquery-ui-accordion", "", array("jquery-ui-widget", "jquery-ui-position"));
 				wp_enqueue_style("thickbox");
 				wp_enqueue_script("oe-dashboard", plugins_url("js/dashboard.js", __FILE__), array("jquery", "editor", "media-upload", "thickbox"), iHomefinderConstants::VERSION);
 			}

@@ -132,48 +132,50 @@ class iHomefinderAdminSeoCityLinks extends iHomefinderAdminAbstractPage {
 	
 	private function createCityZipAutoComplete() {
 		$formData = iHomefinderSearchFormFieldsUtility::getInstance()->getFormData();
-		$propertyTypesList = $formData->getPropertyTypesList();
-		$cityZipList = $formData->getCityZipList();
-		$cityZipListJson = json_encode($cityZipList);
-		?>
-		<script type="text/javascript">
-			function ihfRemoveSeoLink(button) {
-				//debugger;
-				var theButton = jQuery(button);
-				var theForm = theButton.closest("form");
-				theButton.parent().remove();
-				theForm.submit();
-			}
-			jQuery(document).ready(function() {
-				jQuery("input#location").focus(function() {
-					jQuery("input#location").val("");
-				});
-				jQuery("input#location").autocomplete({
-					autoFocus: true,
-					source: function(request,response) {
-						var data=<?php echo($cityZipListJson);?>;
-						var searchTerm=request.term;
-						searchTerm=searchTerm.toLowerCase();
-						var results=new Array();
-						for(var i=0; i<data.length;i++) {
-							//debugger;
-							var oneTerm=data[i];
-							//appending '' converts numbers to strings for the indexOf function call
-							var value=oneTerm.value + "";
-							value=value.toLowerCase();
-							if(value && value != null && value.indexOf(searchTerm) == 0) {
-								results.push(oneTerm);
+		if(!empty($formData)) {
+			$cityZipList = $formData->getCityZipList();
+			?>
+			<script type="text/javascript">
+				function ihfRemoveSeoLink(button) {
+					//debugger;
+					var theButton = jQuery(button);
+					var theForm = theButton.closest("form");
+					theButton.parent().remove();
+					theForm.submit();
+				}
+				jQuery(document).ready(function() {
+					jQuery("input#location").focus(function() {
+						jQuery("input#location").val("");
+					});
+					jQuery("input#location").autocomplete({
+						autoFocus: true,
+						source: function(request,response) {
+							var data=<?php echo json_encode($cityZipList);?>;
+							var searchTerm=request.term;
+							searchTerm=searchTerm.toLowerCase();
+							var results=new Array();
+							for(var i=0; i<data.length;i++) {
+								//debugger;
+								var oneTerm=data[i];
+								//appending '' converts numbers to strings for the indexOf function call
+								var value=oneTerm.value + "";
+								value=value.toLowerCase();
+								if(value && value != null && value.indexOf(searchTerm) == 0) {
+									results.push(oneTerm);
+								}
 							}
+							response(results);
+						},
+						select: function(event, ui) {
+							//When an item is selected, set the text value for the link
+							jQuery("#linkText").val(ui.item.label);
 						}
-						response(results);
-					},
-					select: function(event, ui) {
-						//When an item is selected, set the text value for the link
-						jQuery("#linkText").val(ui.item.label);
-					}
+					});
 				});
-			});
-		</script>
+			</script>
+			<?php
+		}
+		?>
 		<input
 			id="location"
 			class="regular-text"
@@ -187,25 +189,25 @@ class iHomefinderAdminSeoCityLinks extends iHomefinderAdminAbstractPage {
 	}
 		
 	private function createPropertyTypeSelect() {
-		$formData = iHomefinderSearchFormFieldsUtility::getInstance()->getFormData();
-		if(isset($formData)) {
-			$propertyTypesList = $formData->getPropertyTypesList();
-			if(isset($propertyTypesList)) {
+		?>
+		<select
+			id="propertyType"
+			class="regular-text"
+			name="<?php echo iHomefinderConstants::SEO_CITY_LINKS_SETTINGS . '[0][' . iHomefinderConstants::SEO_CITY_LINKS_PROPERTY_TYPE . ']' ?>"
+		>
+			<?php
+			$formData = iHomefinderSearchFormFieldsUtility::getInstance()->getFormData();
+			if(!empty($formData)) {
+				$propertyTypesList = $formData->getPropertyTypesList();
 				?>
-				<select
-					id="propertyType"
-					class="regular-text"
-					name="<?php echo iHomefinderConstants::SEO_CITY_LINKS_SETTINGS . '[0][' . iHomefinderConstants::SEO_CITY_LINKS_PROPERTY_TYPE . ']' ?>"
-				>
-					<?php foreach($propertyTypesList as $i => $value) { ?>
-						<option value="<?php echo $propertyTypesList[$i]->propertyTypeCode ?>">
-							<?php echo $propertyTypesList[$i]->displayName ?>
-						</option>
-					<?php } ?>
-				</select>
-				<?php
-			}
-		}
+				<?php foreach($propertyTypesList as $index => $value) { ?>
+					<option value="<?php echo $propertyTypesList[$index]->propertyTypeCode ?>">
+						<?php echo $propertyTypesList[$index]->displayName ?>
+					</option>
+				<?php } ?>
+			<?php } ?>
+		</select>
+		<?php
 	}
 	
 }

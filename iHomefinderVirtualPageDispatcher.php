@@ -115,7 +115,7 @@ class iHomefinderVirtualPageDispatcher {
 	 * 
 	 * @param $pageTemplate
 	 */
-	public function getPageTemplate($pageTemplate) {					
+	public function getPageTemplate($pageTemplate) {
 		$this->init();
 		if($this->initialized) {
 			$virtualPageTemplate = $this->virtualPage->getPageTemplate();

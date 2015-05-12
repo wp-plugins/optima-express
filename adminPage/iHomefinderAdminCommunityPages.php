@@ -12,9 +12,7 @@ class iHomefinderAdminCommunityPages extends iHomefinderAdminAbstractPage {
 	}
 	
 	protected function getContent() {
-		//On Update, push the CSS_OVERRIDE_OPTION to iHomefinder
 		if($this->isUpdated()) {
-			//call function here to pass the activation key to ihf and update the CSS Override value
 			$title = $_REQUEST["title"];
 			$cityZip = $_REQUEST["cityZip"];
 			$propertyType = $_REQUEST["propertyType"];
@@ -102,7 +100,7 @@ class iHomefinderAdminCommunityPages extends iHomefinderAdminAbstractPage {
 			<div style="padding-bottom: 9px;">Click the page name to edit Community Page content.</div>
 			<div style="padding-bottom: 9px;">
 				Change or edit the links that appear within the
-				<a href="<?php echo admin_url("/nav-menus.php"); ?>">Menus</a>
+				<a href="<?php echo admin_url("nav-menus.php"); ?>">Menus</a>
 				section.
 			</div>
 			<?php $communityPageMenuItems = (array) iHomefinderMenu::getInstance()->getCommunityPagesMenuItems(); ?>
@@ -132,64 +130,68 @@ class iHomefinderAdminCommunityPages extends iHomefinderAdminAbstractPage {
 		);
 		$postId = wp_insert_post($post);
 		iHomefinderMenu::getInstance()->addPageToCommunityPages($postId);
-		return $errors;
 	}
 	
 	private function createCityZipAutoComplete() {
 		$formData = iHomefinderSearchFormFieldsUtility::getInstance()->getFormData();
-		$cityZipList = $formData->getCityZipList();
-		$cityZipListJson = json_encode($cityZipList);
-		?>
-		<script type="text/javascript">
-			jQuery(document).ready(function() {
-				jQuery("input#location").focus(function() {
-					jQuery("input#location").val("");
-				});
-				jQuery("input#location").autocomplete({
-					autoFocus: true,
-					source: function(request,response) {
-						var data=<?php echo($cityZipListJson);?>;
-						var searchTerm=request.term;
-						searchTerm=searchTerm.toLowerCase();
-						var results=new Array();
-						for(var i=0; i<data.length;i++) {
-							var oneTerm=data[i];
-							var value=oneTerm.value + "";
-							value=value.toLowerCase();
-							if(value && value != null && value.indexOf(searchTerm) == 0) {
-								results.push(oneTerm);
+		if(!empty($formData)) {
+			$cityZipList = $formData->getCityZipList();
+			?>
+			<script type="text/javascript">
+				jQuery(document).ready(function() {
+					jQuery("input#location").focus(function() {
+						jQuery("input#location").val("");
+					});
+					jQuery("input#location").autocomplete({
+						autoFocus: true,
+						source: function(request,response) {
+							var data=<?php echo json_encode($cityZipList); ?>;
+							var searchTerm=request.term;
+							searchTerm=searchTerm.toLowerCase();
+							var results=new Array();
+							for(var i=0; i<data.length;i++) {
+								var oneTerm=data[i];
+								var value=oneTerm.value + "";
+								value=value.toLowerCase();
+								if(value && value != null && value.indexOf(searchTerm) == 0) {
+									results.push(oneTerm);
+								}
 							}
-						}
-						response(results);
-					},
-					select: function(event, ui) {
-						//When an item is selected, set the text value for the link
-						jQuery("#title").val(ui.item.label);
-					},
-					selectFirst: true
+							response(results);
+						},
+						select: function(event, ui) {
+							//When an item is selected, set the text value for the link
+							jQuery("#title").val(ui.item.label);
+						},
+						selectFirst: true
+					});
 				});
-			});
-		</script>
+			</script>
+		<?php } ?>
 		<input id="location" class="regular-text" type="text" name="cityZip" placeholder="Enter City - OR - Postal Code" required="required" />
 		<?php
 	}
 	
 	private function createPropertyTypeSelect() {
-		$formData = iHomefinderSearchFormFieldsUtility::getInstance()->getFormData();
-		if(isset($formData)) {
-			$propertyTypesList = $formData->getPropertyTypesList();
-			if(isset($propertyTypesList)) {
-				?>
-				<select id="propertyType" class="regular-text" name="propertyType">
-					<?php foreach ($propertyTypesList as $i => $value) { ?>
-						<option value="<?php echo $propertyTypesList[$i]->propertyTypeCode ?>">
-							<?php echo $propertyTypesList[$i]->displayName; ?>
+		?>
+		<select id="propertyType" class="regular-text" name="propertyType">
+			<?php
+			$formData = iHomefinderSearchFormFieldsUtility::getInstance()->getFormData();
+			if(!empty($formData)) {
+				$propertyTypesList = $formData->getPropertyTypesList();
+				if(isset($propertyTypesList)) {
+					?>
+					<?php foreach ($propertyTypesList as $index => $value) { ?>
+						<option value="<?php echo $propertyTypesList[$index]->propertyTypeCode ?>">
+							<?php echo $propertyTypesList[$index]->displayName; ?>
 						</option>
 					<?php } ?>
-				</select>
-				<?php
+					<?php
+				}
 			}
-		}
+			?>
+		</select>
+		<?php
 	}
 	
 }

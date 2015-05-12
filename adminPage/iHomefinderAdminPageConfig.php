@@ -75,13 +75,13 @@ class iHomefinderAdminPageConfig extends iHomefinderAdminAbstractPage {
 		$selectedTemplate=iHomefinderVirtualPageHelper::getInstance()->getDefaultTemplate();
 		?>
 		<h3>Other IDX Pages</h3>
-		<table>
+		<table class="form-table condensed">
 			<tr>
+				<th>
+					<label for="<?php echo iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_DEFAULT; ?>">Theme Template*</label>
+				</th>
 				<td>
-					<b>Theme Template*:</b>
-				</td>
-				<td>
-					<select style="width: 250px;" name="<?php echo iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_DEFAULT ?>">
+					<select id="<?php echo iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_DEFAULT; ?>" style="width: 250px;" name="<?php echo iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_DEFAULT; ?>">
 						<option value="default">Default Template</option>
 						<?php page_template_dropdown($selectedTemplate); ?>
 					</select>
@@ -345,21 +345,21 @@ class iHomefinderAdminPageConfig extends iHomefinderAdminAbstractPage {
 		$hotsheetListVirtualPage = iHomefinderVirtualPageFactory::getInstance()->getVirtualPage(iHomefinderVirtualPageFactory::HOTSHEET_LIST);
 		?>
 		<h3>List of Saved Search Pages</h3>
-		<table>
+		<table class="form-table condensed">
 			<tr>
-				<td>
-					<b>Permalink:</b>
-				</td>
+				<th>
+					<label>Permalink</label>
+				</th>
 				<td>
 					<div id="<?php echo $permalinkId ?>Container">
-					<?php echo $urlFactory->getHotsheetListUrl(true) ?>
+						<?php echo $urlFactory->getHotsheetListUrl(true) ?>
 					</div>
 				</td>
 			</tr>
 			<tr>
-				<td>
-					<b>Title:</b>
-				</td>
+				<th>
+					<label>Title</label>
+				</th>
 				<td>
 					<?php echo $hotsheetListVirtualPage->getTitle() ?>
 				</td>
@@ -408,11 +408,11 @@ class iHomefinderAdminPageConfig extends iHomefinderAdminAbstractPage {
 		<h3>
 			<?php echo $pageTitle ?>
 		</h3>
-		<table>
+		<table class="form-table condensed">
 			<tr>
-				<td>
-					<b>Permalink:</b>
-				</td>
+				<th>
+					<label>Permalink</label>
+				</th>
 				<td>
 					<div id="<?php echo $permalinkId ?>Container">
 						<?php echo $urlFactory->getBaseUrl() ?>/<span id="<?php echo $permalinkId ?>Text"><?php echo $currentUrl ?></span>/<?php if($extraPermalinkText != null) {echo $extraPermalinkText;} ?>
@@ -426,21 +426,25 @@ class iHomefinderAdminPageConfig extends iHomefinderAdminAbstractPage {
 				</td>
 			</tr>
 			<tr>
+				<th>
+					<label for="<?php echo $titleOption ?>">Title</label>
+				</th>
 				<td>
-					<b>Title:</b>
-				</td>
-				<td>
-					<input style="width: 250px;" type="text" name="<?php echo $titleOption ?>" value="<?php echo $virtualPage->getTitle() ?>" />
-					<?php if($extraTitleText != null) {echo $extraTitleText;} ?>
+					<input id="<?php echo $titleOption ?>" style="width: 250px;" type="text" name="<?php echo $titleOption ?>" value="<?php echo $virtualPage->getTitle() ?>" />
+					<?php if($extraTitleText != null) { ?>
+						<span class="description">
+							<?php echo $extraTitleText; ?>
+						</span>
+					<?php } ?>
 				</td>
 			</tr>
 			<tr>
+				<th>
+					<label for="<?php echo $templateOption ?>">Theme Template*</label>
+				</th>
 				<td>
-					<b>Theme Template*:</b>
-				</td>
-				<td>
-					<select style="width: 250px;" name="<?php echo $templateOption ?>">
-						<option value='default'><?php _e('Default Template'); ?></option>
+					<select id="<?php echo $templateOption ?>" style="width: 250px;" name="<?php echo $templateOption ?>">
+						<option value="default">Default Template</option>
 						<?php page_template_dropdown($virtualPage->getPageTemplate()); ?>
 					</select>
 				</td>

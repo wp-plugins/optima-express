@@ -22,7 +22,13 @@ abstract class iHomefinderAdminAbstractPage implements iHomefinderAdminPageInter
 			}
 			.form-table.condensed td,
 			.form-table.condensed th {
-				padding: 10px 0px 10px 0px;
+				padding: 5px 0px 5px 0px;
+			}
+			.form-table.condensed th {
+			    vertical-align: middle;
+			}
+			.form-table.condensed td {
+			    font-size: 13px;
 			}
 			.button-large-ihf {
 				height: 54px !important;

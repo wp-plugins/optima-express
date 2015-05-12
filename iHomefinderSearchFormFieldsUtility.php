@@ -21,43 +21,46 @@ class iHomefinderSearchFormFieldsUtility {
 	}
 	
 	public function getFormData() {
-		if($this->formData != null) {
-			return $this->formData;
+		$result = $this->formData;
+		if(empty($result)) {
+			$remoteRequest = new iHomefinderRequestor();
+			$remoteRequest
+				->addParameter("method", "handleRequest")
+				->addParameter("viewType", "json")
+				->addParameter("requestType", "search-form-lists")
+			;
+			$remoteRequest->setCacheExpiration(60*60);
+			$response = $remoteRequest->remoteGetRequest();
+			if(!empty($response) && is_object($response)) {
+				$hotsheetsList = array();
+				$citiesList = array();
+				$cityZipList = array();
+				$propertyTypesList = array();
+				$agentList = array();
+				$officeList = array();
+				if(property_exists($response, "hotsheetsList")) {
+					$hotsheetsList = $this->convertItemValues($response->hotsheetsList);
+				}
+				if(property_exists($response, "citiesList")) {
+					$citiesList = $this->convertItemValues($response->citiesList);
+				}
+				if(property_exists($response, "cityZipList")) {
+					$cityZipList = $this->convertItemValues($response->cityZipList);
+				}
+				if(property_exists($response, "propertyTypesList")) {
+					$propertyTypesList = $this->convertItemValues($response->propertyTypesList);
+				}
+				if(property_exists($response, "agentList")) {
+					$agentList = $this->convertItemValues($response->agentList);
+				}
+				if(property_exists($response, "officeList")) {
+					$officeList = $this->convertItemValues($response->officeList);
+				}
+				$result = new iHomefinderFormData($hotsheetsList, $citiesList, $cityZipList, $propertyTypesList, $agentList, $officeList);
+				$this->formData = $result;
+			}
 		}
-		$remoteRequest = new iHomefinderRequestor();
-		$remoteRequest
-			->addParameter("method", "handleRequest")
-			->addParameter("viewType", "json")
-			->addParameter("requestType", "search-form-lists")
-		;
-		$remoteRequest->setCacheExpiration(60*60);
-		$response = $remoteRequest->remoteGetRequest();
-		$hotsheetsList = array();
-		$citiesList = array();
-		$cityZipList = array();
-		$propertyTypesList = array();
-		$agentList = array();
-		$officeList = array();
-		if(property_exists($response, "hotsheetsList")) {
-			$hotsheetsList = $this->convertItemValues($response->hotsheetsList);
-		}
-		if(property_exists($response, "citiesList")) {
-			$citiesList = $this->convertItemValues($response->citiesList);
-		}
-		if(property_exists($response, "cityZipList")) {
-			$cityZipList = $this->convertItemValues($response->cityZipList);
-		}
-		if(property_exists($response, "propertyTypesList")) {
-			$propertyTypesList = $this->convertItemValues($response->propertyTypesList);
-		}
-		if(property_exists($response, "agentList")) {
-			$agentList = $this->convertItemValues($response->agentList);
-		}
-		if(property_exists($response, "officeList")) {
-			$officeList = $this->convertItemValues($response->officeList);
-		}
-		$this->formData = new iHomefinderFormData($hotsheetsList, $citiesList, $cityZipList, $propertyTypesList, $agentList, $officeList);
-		return $this->formData;
+		return $result;
 	 }	
 
 	/**
