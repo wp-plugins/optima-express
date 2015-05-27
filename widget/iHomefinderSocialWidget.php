@@ -4,7 +4,7 @@ class iHomefinderSocialWidget extends WP_Widget {
 	
 	public function __construct() {
 		parent::__construct(
-			false,
+			"iHomefinderSocialWidget",
 			"IDX: Social",
 			array(
 				"description" => "Displays an social links."

@@ -4,8 +4,8 @@ class iHomefinderMoreInfoWidget extends WP_Widget {
 
 	public function __construct() {
 		parent::__construct(
-			false,
-			$name = "IDX: More Info",
+			"iHomefinderMoreInfoWidget",
+			"IDX: More Info",
 			array(
 				"description" => "Displays a More Information form on listing detail virtual pages."
 			)

@@ -98,6 +98,8 @@ class iHomefinderRequestor {
 			$contentType = wp_remote_retrieve_header($response, "content-type");
 			if($contentType != null && $contentType == "text/xml;charset=UTF-8") {
 				$contentInfo = simplexml_load_string($responseBody, null, LIBXML_NOCDATA);
+				//hack to convert SimpleXMLElement to stdClass
+				//$contentInfo = json_decode(json_encode($contentInfo));
 			} else {
 				$contentInfo = json_decode($responseBody);
 			}
@@ -217,6 +219,7 @@ class iHomefinderRequestor {
 				$contentType = wp_remote_retrieve_header($response, "content-type");
 				if($contentType != null && $contentType == "text/xml;charset=UTF-8") {
 					$contentInfo = simplexml_load_string($responseBody, null, LIBXML_NOCDATA);	
+					$contentInfo = json_decode(json_encode($contentInfo));
 				} else {
 					$contentInfo = json_decode($responseBody);
 				}

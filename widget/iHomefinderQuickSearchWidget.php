@@ -6,7 +6,7 @@ class iHomefinderQuickSearchWidget extends WP_Widget {
 	
 	public function __construct() {
 		parent::__construct(
-			false,
+			"iHomefinderQuickSearchWidget",
 			"IDX: Quick Search",
 			array(
 				"description" => "Property Search form."

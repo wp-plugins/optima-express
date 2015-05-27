@@ -41,6 +41,8 @@ class iHomefinderShortcodeSelector {
 	}
 	
 	public function getShortcodeSelectorContent() {
+		$permissions = iHomefinderPermissions::getInstance();
+		$layoutManager = iHomefinderLayoutManager::getInstance();
 		?>
 		<html>
 			<head>
@@ -85,7 +87,7 @@ class iHomefinderShortcodeSelector {
 						<li>
 							<a href="#IdxPages" data-toggle="tab">IDX Pages</a>
 						</li>
-						<?php if(iHomefinderPermissions::getInstance()->isAgentBioEnabled()) { ?>
+						<?php if($permissions->isAgentBioEnabled()) { ?>
 							<li>
 								<a href="#Broker" data-toggle="tab">Broker</a>
 							</li>
@@ -106,19 +108,21 @@ class iHomefinderShortcodeSelector {
 										<select class="form-control" name="header" onchange="jQuery('.menu').hide(); jQuery('#' + this.value).toggle();">
 											<option value="">Type</option>
 											<option value="featuredMenu">Featured Listings</option>
-											<?php if(iHomefinderPermissions::getInstance()->isAgentBioEnabled()) { ?>
+											<?php if($permissions->isAgentBioEnabled()) { ?>
 												<option value="agentMenu">Agent Listing</option>
 											<?php } ?>
-											<?php if(iHomefinderPermissions::getInstance()->isOfficeEnabled()) { ?>
+											<?php if($permissions->isOfficeEnabled()) { ?>
 												<option value="officeMenu">Office Listing</option>
 											<?php } ?>
-											<?php if(iHomefinderPermissions::getInstance()->isHotSheetEnabled()) { ?>
+											<?php if($permissions->isHotSheetEnabled()) { ?>
 												<option value="toppicksMenu">Saved Search</option>
 											<?php } ?>
-											<option value="searchMenu">Search</option>
+											<?php if(iHomefinderPermissions::getInstance()->isNamedSearchEnabled()) { ?>
+												<option value="searchMenu">Search</option>
+											<?php } ?>
 										</select>
 									</div>
-									<?php if(iHomefinderLayoutManager::getInstance()->supportsListingGallery()) { ?>
+									<?php if($layoutManager->supportsListingGallery()) { ?>
 										<div class="radio">
 											<label class="control-label">
 												<input name="shortcodeType" type="radio" onclick="jQuery('.listingGalleryMenu').hide(); jQuery('.menu').hide(); jQuery('#listingGalleryMenu').toggle();">
@@ -143,7 +147,7 @@ class iHomefinderShortcodeSelector {
 												<?php $this->createSortSelect(true); ?>
 											</div>
 										</div>
-										<?php if(iHomefinderLayoutManager::getInstance()->supportsResultsDisplayType()) { ?>
+										<?php if($layoutManager->supportsResultsDisplayType()) { ?>
 											<div class="form-group">
 												<label class="control-label">Display Type</label>
 												<div>
@@ -151,7 +155,7 @@ class iHomefinderShortcodeSelector {
 												</div>
 											</div>
 										<?php } ?>
-										<?php if(iHomefinderLayoutManager::getInstance()->supportsResultsResultsPerPage()) { ?>
+										<?php if($layoutManager->supportsResultsResultsPerPage()) { ?>
 											<div class="form-group">
 												<label class="control-label">Results Per Page</label>
 												<div>
@@ -188,7 +192,7 @@ class iHomefinderShortcodeSelector {
 												<?php $this->createSortSelect(); ?>
 											</div>
 										</div>
-										<?php if(iHomefinderLayoutManager::getInstance()->supportsResultsDisplayType()) { ?>
+										<?php if($layoutManager->supportsResultsDisplayType()) { ?>
 											<div class="form-group">
 												<label class="control-label">Display Type</label>
 												<div>
@@ -196,7 +200,7 @@ class iHomefinderShortcodeSelector {
 												</div>
 											</div>
 										<?php } ?>
-										<?php if(iHomefinderLayoutManager::getInstance()->supportsResultsResultsPerPage()) { ?>
+										<?php if($layoutManager->supportsResultsResultsPerPage()) { ?>
 											<div class="form-group">
 												<label class="control-label">Results Per Page</label>
 												<div>
@@ -263,7 +267,7 @@ class iHomefinderShortcodeSelector {
 												<?php $this->createSortSelect(true); ?>
 											</div>
 										</div>
-										<?php if(iHomefinderLayoutManager::getInstance()->supportsResultsDisplayType()) { ?>
+										<?php if($layoutManager->supportsResultsDisplayType()) { ?>
 											<div class="form-group">
 												<label class="control-label">Display Type</label>
 												<div>
@@ -271,7 +275,7 @@ class iHomefinderShortcodeSelector {
 												</div>
 											</div>
 										<?php } ?>
-										<?php if(iHomefinderLayoutManager::getInstance()->supportsResultsResultsPerPage()) { ?>
+										<?php if($layoutManager->supportsResultsResultsPerPage()) { ?>
 											<div class="form-group">
 												<label class="control-label">Results Per Page</label>
 												<div>
@@ -313,7 +317,7 @@ class iHomefinderShortcodeSelector {
 								<div id="listingGalleryMenu" class="menu">
 									<form onsubmit="return false;" action="#">
 										<div class="form-group">
-											<?php if(iHomefinderPermissions::getInstance()->isHotSheetEnabled()) { ?>
+											<?php if($permissions->isHotSheetEnabled()) { ?>
 												<label class="radio-inline">
 													<input type="radio" name="type" checked onclick="jQuery('#TopPicksSelect').hide(); jQuery('select#toppickId').prop('selectedIndex', 0); jQuery('select#toppickId').removeAttr('required');" />
 													Featured
@@ -327,7 +331,7 @@ class iHomefinderShortcodeSelector {
 										<div id="TopPicksSelect" class="form-group" style="display: none;">
 											<?php $this->createTopPicksSelect(); ?>
 										</div>
-										<?php if(iHomefinderLayoutManager::getInstance()->supportsListingGalleryResponsiveness()) { ?>
+										<?php if($layoutManager->supportsListingGalleryResponsiveness()) { ?>
 											<div class="form-group">
 												<label class="control-label">Width</label>
 												<div class="checkbox">
@@ -408,7 +412,7 @@ class iHomefinderShortcodeSelector {
 											Quick Search
 										</label>
 									</div>
-									<?php if(iHomefinderPermissions::getInstance()->isMapSearchEnabled()) { ?>
+									<?php if($permissions->isMapSearchEnabled()) { ?>
 										<div class="radio">
 											<label class="control-label">
 												<input name="shortcodeType" type="radio" onclick="jQuery('.menu').hide(); jQuery('#mapSearchMenu').toggle();">
@@ -416,7 +420,7 @@ class iHomefinderShortcodeSelector {
 											</label>
 										</div>
 									<?php } ?>
-									<?php if(iHomefinderPermissions::getInstance()->isSearchByAddressEnabled()) { ?>
+									<?php if($permissions->isSearchByAddressEnabled()) { ?>
 										<div class="radio">
 											<label class="control-label">
 												<input name="shortcodeType" type="radio" onclick="jQuery('.menu').hide(); jQuery('#searchByAddressMenu').toggle();">
@@ -424,7 +428,7 @@ class iHomefinderShortcodeSelector {
 											</label>
 										</div>
 									<?php } ?>
-									<?php if(iHomefinderPermissions::getInstance()->isSearchByListingIdEnabled()) { ?>
+									<?php if($permissions->isSearchByListingIdEnabled()) { ?>
 										<div class="radio">
 											<label class="control-label">
 												<input name="shortcodeType" type="radio" onclick="jQuery('.menu').hide(); jQuery('#searchByListingIdMenu').toggle();">
@@ -437,7 +441,7 @@ class iHomefinderShortcodeSelector {
 							<div class="col-xs-8">
 								<div id="quickSearchMenu" class="menu">
 									<form onsubmit="return false;" action="#">
-										<?php if(iHomefinderLayoutManager::getInstance()->supportsMultipleQuickSearchLayouts()) { ?>
+										<?php if($layoutManager->supportsMultipleQuickSearchLayouts()) { ?>
 											<div class="form-group">
 												<label class="control-label">Style</label>
 												<div>
@@ -450,7 +454,7 @@ class iHomefinderShortcodeSelector {
 												</div>
 											</div>
 										<?php } ?>
-										<?php if(iHomefinderLayoutManager::getInstance()->supportsQuickSearchPropertyType()) { ?>
+										<?php if($layoutManager->supportsQuickSearchPropertyType()) { ?>
 											<div class="form-group">
 												<div class="checkbox">
 													<label class="control-label">
@@ -465,7 +469,7 @@ class iHomefinderShortcodeSelector {
 								</div>
 								<div id="mapSearchMenu" class="menu">
 									<form onsubmit="return false;" action="#">
-									<?php if(iHomefinderLayoutManager::getInstance()->supportsMapSearchResponsiveness()) { ?>
+									<?php if($layoutManager->supportsMapSearchResponsiveness()) { ?>
 											<div class="form-group">
 												<label class="control-label">Width</label>
 												<div class="checkbox">
@@ -495,7 +499,7 @@ class iHomefinderShortcodeSelector {
 												<span class="input-group-addon">px</span>
 											</div>
 										</div>
-										<?php if(iHomefinderLayoutManager::getInstance()->supportsMapSearchCenterLatLong()) { ?>
+										<?php if($layoutManager->supportsMapSearchCenterLatLong()) { ?>
 											<div class="form-group">
 												<label class="control-label">Center Latitude</label>
 												<div>
@@ -509,7 +513,7 @@ class iHomefinderShortcodeSelector {
 												</div>
 											</div>
 										<?php } ?>
-										<?php if(iHomefinderLayoutManager::getInstance()->supportsMapSearchCenterAddress()) { ?>
+										<?php if($layoutManager->supportsMapSearchCenterAddress()) { ?>
 											<div class="form-group">
 												<label class="control-label">Center Address</label>
 												<div>
@@ -574,19 +578,23 @@ class iHomefinderShortcodeSelector {
 							<h4></h4>
 							<div class="col-xs-4">
 								<div class="form-group">
-									<div class="radio">
-										<label class="control-label">
-											<input name="shortcodeType" type="radio" onclick="jQuery('.menu').hide(); jQuery('#basicSearchMenu').toggle();">
-											Basic Search Form
-										</label>
-									</div>
-									<div class="radio">
-										<label class="control-label">
-											<input name="shortcodeType" type="radio" onclick="jQuery('.menu').hide(); jQuery('#advancedSearchMenu').toggle();">
-											Advanced Search Form
-										</label>
-									</div>
-									<?php if(iHomefinderPermissions::getInstance()->isOrganizerEnabled()) { ?>
+									<?php if($permissions->isBasicSearchEnabled()) { ?>
+										<div class="radio">
+											<label class="control-label">
+												<input name="shortcodeType" type="radio" onclick="jQuery('.menu').hide(); jQuery('#basicSearchMenu').toggle();">
+												Basic Search Form
+											</label>
+										</div>
+									<?php } ?>
+									<?php if($permissions->isAdvancedSearchEnabled()) { ?>
+										<div class="radio">
+											<label class="control-label">
+												<input name="shortcodeType" type="radio" onclick="jQuery('.menu').hide(); jQuery('#advancedSearchMenu').toggle();">
+												Advanced Search Form
+											</label>
+										</div>
+									<?php } ?>
+									<?php if($permissions->isOrganizerEnabled()) { ?>
 										<div class="radio">
 											<label class="control-label">
 												<input name="shortcodeType" type="radio" onclick="jQuery('.menu').hide(); jQuery('#organizerLoginMenu').toggle();">
@@ -594,7 +602,7 @@ class iHomefinderShortcodeSelector {
 											</label>
 										</div>
 									<?php } ?>
-									<?php if(iHomefinderPermissions::getInstance()->isValuationEnabled()) { ?>
+									<?php if($permissions->isValuationEnabled()) { ?>
 										<div class="radio">
 											<label class="control-label">
 												<input name="shortcodeType" type="radio" onclick="jQuery('.menu').hide(); jQuery('#valuationFormMenu').toggle();">
@@ -630,7 +638,7 @@ class iHomefinderShortcodeSelector {
 						<div class="tab-pane fade" id="Broker">
 							<h4></h4>
 							<div class="col-xs-5">
-								<?php if(iHomefinderPermissions::getInstance()->isAgentBioEnabled()) { ?>
+								<?php if($permissions->isAgentBioEnabled()) { ?>
 									<div class="form-group">
 										<div class="radio">
 											<label class="control-label">

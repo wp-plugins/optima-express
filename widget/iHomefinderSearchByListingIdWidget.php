@@ -6,7 +6,7 @@ class iHomefinderSearchByListingIdWidget extends WP_Widget {
 
 	public function __construct() {
 		parent::__construct(
-			false,
+			"iHomefinderSearchByListingIdWidget",
 			"IDX: Listing ID Search",
 			array(
 				"description" => "Search by Listing ID form."

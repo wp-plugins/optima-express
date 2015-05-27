@@ -51,7 +51,6 @@ class iHomefinderHotsheetVirtualPageImpl extends iHomefinderAbstractVirtualPage 
 		if($this->getTitle() == "") {
 			$this->remoteRequest->addParameter("includeDisplayName", false);
 		}
-		$this->remoteRequest->setCacheExpiration(60*60);
 		$this->remoteResponse = $this->remoteRequest->remoteGetRequest();
 		$body = $this->remoteRequest->getContent($this->remoteResponse);
 		if(isset($this->remoteResponse) && isset($this->remoteResponse->title)) {

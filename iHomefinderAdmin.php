@@ -127,19 +127,24 @@ class iHomefinderAdmin {
 	}
 
 	public function createAdminMenu() {
+		$permissions = iHomefinderPermissions::getInstance();
 		add_menu_page("Optima Express", "Optima Express", "manage_options", iHomefinderConstants::INFORMATION, array(iHomefinderAdminInformation::getInstance(), "getPage"));
 		add_submenu_page(iHomefinderConstants::INFORMATION, "Information", "Information", "manage_options", iHomefinderConstants::INFORMATION, array(iHomefinderAdminInformation::getInstance(), "getPage"));
 		add_submenu_page(iHomefinderConstants::INFORMATION, "Register", "Register", "manage_options", iHomefinderConstants::OPTION_ACTIVATE, array(iHomefinderAdminActivate::getInstance(), "getPage"));
 		add_submenu_page(iHomefinderConstants::INFORMATION, "IDX Control Panel", "IDX Control Panel", "manage_options", iHomefinderConstants::OPTION_IDX_CONTROL_PANEL, array(iHomefinderAdminControlPanel::getInstance(), "getPage"));
 		add_submenu_page(iHomefinderConstants::INFORMATION, "IDX Pages", "IDX Pages", "manage_options", iHomefinderConstants::OPTION_PAGES, array(iHomefinderAdminPageConfig::getInstance(), "getPage"));
 		add_submenu_page(iHomefinderConstants::INFORMATION, "Configuration", "Configuration", "manage_options", iHomefinderConstants::OPTION_CONFIG_PAGE, array(iHomefinderAdminConfiguration::getInstance(), "getPage"));
-		add_submenu_page(iHomefinderConstants::INFORMATION, "Bio Widget", "Bio Widget", "manage_options", iHomefinderConstants::BIO_PAGE, array(iHomefinderAdminBio::getInstance(), "getPage"));
-		add_submenu_page(iHomefinderConstants::INFORMATION, "Social Widget", "Social Widget", "manage_options", iHomefinderConstants::SOCIAL_PAGE, array(iHomefinderAdminSocial::getInstance(), "getPage"));
+		if($permissions->isAgentBioWidgetEnabled()) {
+			add_submenu_page(iHomefinderConstants::INFORMATION, "Bio Widget", "Bio Widget", "manage_options", iHomefinderConstants::BIO_PAGE, array(iHomefinderAdminBio::getInstance(), "getPage"));
+		}
+		if($permissions->isSocialEnabled()) {
+			add_submenu_page(iHomefinderConstants::INFORMATION, "Social Widget", "Social Widget", "manage_options", iHomefinderConstants::SOCIAL_PAGE, array(iHomefinderAdminSocial::getInstance(), "getPage"));
+		}
 		add_submenu_page(iHomefinderConstants::INFORMATION, "Email Branding", "Email Branding", "manage_options", iHomefinderConstants::EMAIL_BRANDING_PAGE, array(iHomefinderAdminEmail::getInstance(), "getPage"));
-		if(iHomefinderPermissions::getInstance()->isCommunityPagesEnabled()) {
+		if($permissions->isCommunityPagesEnabled()) {
 			add_submenu_page(iHomefinderConstants::INFORMATION, "Community Pages", "Community Pages", "manage_options", iHomefinderConstants::COMMUNITY_PAGES, array(iHomefinderAdminCommunityPages::getInstance(), "getPage"));
 		}
-		if(iHomefinderPermissions::getInstance()->isSeoCityLinksEnabled()) {
+		if($permissions->isSeoCityLinksEnabled()) {
 			add_submenu_page(iHomefinderConstants::INFORMATION, "SEO City Links", "SEO City Links", "manage_options", iHomefinderConstants::SEO_CITY_LINKS_PAGE, array(iHomefinderAdminSeoCityLinks::getInstance(), "getPage"));
 		}
 	}
@@ -325,7 +330,6 @@ class iHomefinderAdmin {
 		;
 		
 		$remoteResponse = $remoteRequest->remotePostRequest();
-		iHomefinderLogger::getInstance()->debugDumpVar($remoteResponse);
 		
 		return $remoteResponse;
 		

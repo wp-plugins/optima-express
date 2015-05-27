@@ -47,15 +47,44 @@ class iHomefinderVirtualPageDispatcher {
 			$this->initialized = true;
 			//turn off some filters on ihf pages
 			$this->removeFilters();
+			$this->removeCaching();
 		}
 	}
 	
+	/**
+	 * removes filters that can cause issues on virtual pages
+	 */
 	private function removeFilters() {
-		$tags = array("the_content", "the_excerpt");
-		$functionNames = array("wpautop", "wptexturize", "convert_chars");
+		$tags = array(
+			"the_content",
+			"the_excerpt"
+		);
+		$functionNames = array(
+			"wpautop",
+			"wptexturize",
+			"convert_chars"
+		);
 		foreach($tags as $tag) {
 			foreach($functionNames as $functionName) {
 				remove_filter($tag, $functionName);
+			}
+		}
+	}
+	
+	/**
+	 * disables caching plugins on virtual pages
+	 */
+	private function removeCaching() {
+		$constants = array(
+			"DONOTCACHEPAGE",
+			"DONOTCACHEDB",
+			"DONOTMINIFY",
+			"DONOTCDN",
+			"DONOTCACHCEOBJECT"
+		);
+		foreach($constants as $constant) {
+			if(!defined($constant)) {
+				define($constant, true);
 			}
 		}
 	}

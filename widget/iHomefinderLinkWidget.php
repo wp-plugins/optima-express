@@ -1,13 +1,10 @@
 <?php
 
-/**
- * iHomefinderLinkWidget Class
- */
 class iHomefinderLinkWidget extends WP_Widget {
 	
 	public function __construct() {
 		parent::__construct(
-			false,
+			"iHomefinderLinkWidget",
 			"IDX: SEO City Links",
 			array(
 				"description" => "Displays a list of Homes For Sale links in the choosen cities from Themes Options - SEO indexing tool."

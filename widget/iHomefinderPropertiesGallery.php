@@ -6,7 +6,7 @@ class iHomefinderPropertiesGallery extends WP_Widget {
 	
 	public function __construct() {
 		parent::__construct(
-			false,
+			"iHomefinderPropertiesGallery",
 			"IDX: Property Gallery",
 			array(
 				"description" => "Display a list of properties."
@@ -276,28 +276,28 @@ class iHomefinderPropertiesGallery extends WP_Widget {
 			?>
 			<?php if(iHomefinderPermissions::getInstance()->isFeaturedPropertiesEnabled()) { ?>
 				<label>
-					<input onclick="togglePropertyFormFields(this.value);" <?php if($galleryType == 'featuredListing') echo 'checked="checked"'; ?> class="galtype" type="radio" class="galtype" value="featuredListing" name="<?php echo $this->get_field_name('galleryType'); ?>" />
+					<input onclick="togglePropertyFormFields(this.value);" <?php if($galleryType == 'featuredListing') echo 'checked="checked"'; ?> type="radio" value="featuredListing" name="<?php echo $this->get_field_name('galleryType'); ?>" />
 					Featured Properties Gallery
 				</label>
 				<br />
 			<?php } ?>
 			<?php if(iHomefinderPermissions::getInstance()->isHotSheetEnabled()) { ?>
 				<label>
-					<input onclick="togglePropertyFormFields(this.value);" <?php if($galleryType == 'hotSheet') echo 'checked="checked"'; ?> class="galtype" type="radio" class="galtype" value="hotSheet" name="<?php echo $this->get_field_name('galleryType'); ?>" />
+					<input onclick="togglePropertyFormFields(this.value);" <?php if($galleryType == 'hotSheet') echo 'checked="checked"'; ?> type="radio" value="hotSheet" name="<?php echo $this->get_field_name('galleryType'); ?>" />
 					Saved Search Page Gallery
 				</label>
 				<br />
 			<?php } ?>
 			<?php if(iHomefinderPermissions::getInstance()->isNamedSearchEnabled()) { ?>
 				<label>
-					<input onclick="togglePropertyFormFields(this.value);" <?php if($galleryType == 'namedSearch') echo 'checked="checked"'; ?> class="galtype" type="radio" class="galtype" value="namedSearch" name="<?php echo $this->get_field_name('galleryType'); ?>" />
+					<input onclick="togglePropertyFormFields(this.value);" <?php if($galleryType == 'namedSearch') echo 'checked="checked"'; ?> type="radio" value="namedSearch" name="<?php echo $this->get_field_name('galleryType'); ?>" />
 					Dynamic Search Gallery
 				</label>
 				<br />
 			<?php } ?>
 			<?php if(iHomefinderPermissions::getInstance()->isLinkSearchEnabled()) { ?>
 				<label>
-					<input onclick="togglePropertyFormFields(this.value);" <?php if($galleryType == 'linkSearch') echo 'checked="checked"'; ?> class="galtype" type="radio" class="galtype" value="linkSearch" name="<?php echo $this->get_field_name('galleryType'); ?>" />
+					<input onclick="togglePropertyFormFields(this.value);" <?php if($galleryType == 'linkSearch') echo 'checked="checked"'; ?> type="radio" value="linkSearch" name="<?php echo $this->get_field_name('galleryType'); ?>" />
 					Dynamic Search Link
 				</label>
 			<?php } ?>
