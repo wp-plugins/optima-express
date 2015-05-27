@@ -6,7 +6,7 @@ class iHomefinderContactFormWidget extends WP_Widget {
 
 	public function __construct() {
 		parent::__construct(
-			false,
+			"iHomefinderContactFormWidget",
 			"IDX: Contact Form",
 			array(
 				"description" => "Contact form."

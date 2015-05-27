@@ -371,7 +371,6 @@ class iHomefinderShortcodeDispatcher {
 			->addParameter("auto", $this->getAttribute($attributes, "auto"))
 			->addParameter("maxResults", $this->getAttribute($attributes, "maxResults"))
 		;
-		$remoteRequest->setCacheExpiration(60*60);
 		$contentInfo = $remoteRequest->remoteGetRequest();
 		$content = $remoteRequest->getContent($contentInfo);
 		iHomefinderEnqueueResource::getInstance()->addToFooter($contentInfo->head);

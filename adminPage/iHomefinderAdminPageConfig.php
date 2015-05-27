@@ -14,6 +14,14 @@ class iHomefinderAdminPageConfig extends iHomefinderAdminAbstractPage {
 	protected function getContent() {
 		$permissions = iHomefinderPermissions::getInstance();
 		?>
+		<style type="text/css">
+			.ihf-permalink-field {
+				display: none;
+				padding: 0;
+				margin: 0;
+				font-size: 13px;
+			}
+		</style>
 		<h2>IDX Pages</h2>
 		<form method="post" action="options.php">
 			<p class="submit">
@@ -21,53 +29,76 @@ class iHomefinderAdminPageConfig extends iHomefinderAdminAbstractPage {
 			</p>
 			<?php settings_fields(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_CONFIG); ?>
 			<?php
+			if($permissions->isListingDetailEnabled()) {
 				$this->getDetailPageSetup();
-				$this->getSearchPageSetup();
-				if($permissions->isMapSearchEnabled()) {
-					$this->getMapSearchPageSetup();
-				}
-				$this->getAdvSearchPageSetup();
-				if($permissions->isOrganizerEnabled()) {
-					$this->getOrganizerLoginPageSetup();
-				}
-				if($permissions->isEmailUpdatesEnabled()) {
-					$this->getEmailAlertsPageSetup();
-				}
-				if($permissions->isFeaturedPropertiesEnabled()) {
-					$this->getFeaturedPageSetup();
-				}
-				if($permissions->isHotSheetEnabled()) {
-					$this->getHotsheetPageSetup();
-				}
-				if($permissions->isContactFormEnabled()) {
-					$this->getContactFormPageSetup();
-				}
-				if($permissions->isValuationEnabled()) {
-					$this->getValuationFormPageSetup();
-				}
+			}
+			if($permissions->isBasicSearchEnabled()) {
+				$this->getBasicSearchPageSetup();
+			}
+			if($permissions->isMapSearchEnabled()) {
+				$this->getMapSearchPageSetup();
+			}
+			if($permissions->isAdvancedSearchEnabled()) {
+				$this->getAdvancedSearchPageSetup();
+			}
+			if($permissions->isOrganizerEnabled()) {
+				$this->getOrganizerLoginPageSetup();
+			}
+			if($permissions->isEmailUpdatesEnabled()) {
+				$this->getEmailAlertsPageSetup();
+			}
+			if($permissions->isFeaturedPropertiesEnabled()) {
+				$this->getFeaturedPageSetup();
+			}
+			if($permissions->isHotSheetEnabled()) {
+				$this->getHotsheetPageSetup();
+			}
+			if($permissions->isContactFormEnabled()) {
+				$this->getContactFormPageSetup();
+			}
+			if($permissions->isValuationEnabled()) {
+				$this->getValuationFormPageSetup();
+			}
+			if($permissions->isOpenHomeSearchEnabled()) {
 				$this->getOpenHomeSearchFormPageSetup();
-				if($permissions->isSupplementalListingsEnabled()) {
-					$this->getSupplementalListingPageSetup();
-				}
-				if($permissions->isSoldPendingEnabled()) {
-					$this->getSoldFeaturedListingPageSetup();
-					$this->getSoldDetailPageSetup();
-				}
-				if($permissions->isOfficeEnabled()) {
-					$this->getOfficeListPageSetup();
-					$this->getOfficeDetailPageSetup();
-				}
-				if($permissions->isAgentBioEnabled()) {
-					$this->getAgentListPageSetup();
-					$this->getAgentDetailPageSetup();
-				}
-				$this->getDefaultPageSetup();
+			}
+			if($permissions->isSupplementalListingsEnabled()) {
+				$this->getSupplementalListingPageSetup();
+			}
+			if($permissions->isSoldPendingEnabled()) {
+				$this->getSoldFeaturedListingPageSetup();
+				$this->getSoldDetailPageSetup();
+			}
+			if($permissions->isOfficeEnabled()) {
+				$this->getOfficeListPageSetup();
+				$this->getOfficeDetailPageSetup();
+			}
+			if($permissions->isAgentBioEnabled()) {
+				$this->getAgentListPageSetup();
+				$this->getAgentDetailPageSetup();
+			}
+			$this->getDefaultPageSetup();
 			?>
 			<p>* Template selection is compatible only with select themes.</p>
 			<p class="submit">
 				<button type="submit" class="button-primary">Save Changes</button>
 			</p>
 		</form>
+		<script type="text/javascript">
+			jQuery("[data-ihf-toggle]").on("click", function() {
+				var $button = jQuery(this);
+				var $preview = $button.parent().find(".ihf-permalink-preview");
+				var $field = $button.parent().find(".ihf-permalink-field");
+				if($button.text() === "Edit") {
+					$button.text("Save");
+				} else {
+					$button.text("Edit");
+				}
+				$preview.text($field.val());
+				$preview.toggle();
+				$field.toggle();
+			});
+			</script>
 		<?php
 	}
 	
@@ -91,27 +122,6 @@ class iHomefinderAdminPageConfig extends iHomefinderAdminAbstractPage {
 	<?php
 	}
 
-	private function permalinkJavascript($permalinkId, $urlFactory) {
-		?>
-		<script>
-			jQuery('#<?php echo $permalinkId?>EditButton').click(function() {
-				jQuery('#<?php echo $permalinkId ?>Edit').show();
-				jQuery('#<?php echo $permalinkId ?>Container').hide();
-			});
-			jQuery('#<?php echo $permalinkId ?>DoneButton').click(function() {
-				var inputObject=jQuery('#<?php echo $permalinkId ?>');
-				var inputValue = inputObject.val();
-				inputValue = inputValue.replace(/\s/g,"-");
-				inputObject.val(inputValue);
-
-				jQuery('#<?php echo $permalinkId ?>Text').text(jQuery('#<?php echo $permalinkId ?>').val());
-				jQuery('#<?php echo $permalinkId ?>Container').show();
-				jQuery('#<?php echo $permalinkId ?>Edit').hide();
-			});
-		</script>
-		<?php
-	}
-
 	/**
 	 * We do not use getPageSetup to display the detail page customization, because we require some 
 	 * extra explanation of the permalink structure for detail pages.
@@ -128,7 +138,7 @@ class iHomefinderAdminPageConfig extends iHomefinderAdminAbstractPage {
 			iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_DETAIL,
 			"(If empty, the property address will be the title)",
 			"%ADDRESS%/%LISTING_NUMBER%/%LISTING_PROVIDER%/"
-		); 			
+		);
 	}
 	
 	/**
@@ -147,10 +157,10 @@ class iHomefinderAdminPageConfig extends iHomefinderAdminAbstractPage {
 			iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_SOLD_DETAIL,
 			"(If empty, the property address will be the title)",
 			"%ADDRESS%/%LISTING_NUMBER%/%LISTING_PROVIDER%/"
-		); 			
+		);
 	}
 
-	private function getSearchPageSetup() {
+	private function getBasicSearchPageSetup() {
 		$urlFactory = iHomefinderUrlFactory::getInstance();
 		$this->getPageSetup(
 			"Search Form",
@@ -159,7 +169,7 @@ class iHomefinderAdminPageConfig extends iHomefinderAdminAbstractPage {
 			$urlFactory->getListingsSearchFormUrl(false), 
 			iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_SEARCH, 
 			iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_SEARCH
-		);				
+		);
 		$virtualPage = iHomefinderVirtualPageFactory::getInstance()->getVirtualPage(iHomefinderVirtualPageFactory::LISTING_SEARCH_FORM);
 		$permalinkId=iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_SEARCH;
 	}
@@ -173,12 +183,12 @@ class iHomefinderAdminPageConfig extends iHomefinderAdminAbstractPage {
 			$urlFactory->getMapSearchFormUrl(false), 
 			iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_MAP_SEARCH, 
 			iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_MAP_SEARCH
-		);				
+		);
 		$virtualPage = iHomefinderVirtualPageFactory::getInstance()->getVirtualPage(iHomefinderVirtualPageFactory::MAP_SEARCH_FORM);
 		$permalinkId=iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_MAP_SEARCH;
 	}
 
-	private function getAdvSearchPageSetup() {
+	private function getAdvancedSearchPageSetup() {
 		$urlFactory = iHomefinderUrlFactory::getInstance();
 		$this->getPageSetup(
 			"Advanced Search Form",
@@ -247,7 +257,7 @@ class iHomefinderAdminPageConfig extends iHomefinderAdminAbstractPage {
 			$urlFactory->getValuationFormUrl(false),
 			iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_VALUATION_FORM,
 			iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_VALUATION_FORM
-		); 				
+		);
 	}
 	
 	private function getSupplementalListingPageSetup() {
@@ -259,7 +269,7 @@ class iHomefinderAdminPageConfig extends iHomefinderAdminAbstractPage {
 			$urlFactory->getSupplementalListingUrl(false),
 			iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_SUPPLEMENTAL_LISTING,
 			iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_SUPPLEMENTAL_LISTING
-		); 			
+		);
 	}
 	
 	private function getSoldFeaturedListingPageSetup() {
@@ -271,7 +281,7 @@ class iHomefinderAdminPageConfig extends iHomefinderAdminAbstractPage {
 			$urlFactory->getSoldFeaturedListingUrl(false),
 			iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_SOLD_FEATURED,
 			iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_SOLD_FEATURED
-		); 			
+		);
 	}
 	
 	private function getOpenHomeSearchFormPageSetup() {
@@ -283,7 +293,7 @@ class iHomefinderAdminPageConfig extends iHomefinderAdminAbstractPage {
 			$urlFactory->getOpenHomeSearchFormUrl(false),
 			iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_OPEN_HOME_SEARCH_FORM,
 			iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_OPEN_HOME_SEARCH_FORM
-		); 				
+		);
 	}
 	
 	private function getOfficeListPageSetup() {
@@ -295,7 +305,7 @@ class iHomefinderAdminPageConfig extends iHomefinderAdminAbstractPage {
 			$urlFactory->getOfficeListUrl(false),
 			iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_OFFICE_LIST,
 			iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_OFFICE_LIST
-		); 				
+		);
 	}
 
 	private function getOfficeDetailPageSetup() {
@@ -309,7 +319,7 @@ class iHomefinderAdminPageConfig extends iHomefinderAdminAbstractPage {
 			iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_OFFICE_DETAIL,
 			"(If empty, the office name will be used for the title)",
 			"%OFFICE_NAME%/%OFFICE_ID%/"
-		); 				
+		);
 	}
 			
 	private function getAgentListPageSetup() {
@@ -321,7 +331,7 @@ class iHomefinderAdminPageConfig extends iHomefinderAdminAbstractPage {
 			$urlFactory->getAgentListUrl(false),
 			iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_AGENT_LIST,
 			iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_AGENT_LIST
-		); 				
+		);
 	}
 
 	private function getAgentDetailPageSetup() {
@@ -335,7 +345,7 @@ class iHomefinderAdminPageConfig extends iHomefinderAdminAbstractPage {
 			iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_AGENT_DETAIL,
 			"(If empty, the agent name will be used for the title)",
 			"%AGENT_NAME%/%AGENT_ID%/"
-		); 				
+		);
 	}
 
 	private function getHotsheetPageSetup() {
@@ -381,16 +391,16 @@ class iHomefinderAdminPageConfig extends iHomefinderAdminAbstractPage {
 	
 	/**
 	 * 
-	 * Function to setup form elements to allow customization of iHomefinder page title, urls and 
+	 * Used to setup form elements to allow customization of iHomefinder page title, urls and 
 	 * display templates. iHomefinder pages are not true pages in the Wordpress database, so we 
 	 * need to remember the title, permalink and template as options.
 	 * 
-	 * @param unknown_type $pageTitle
-	 * @param unknown_type $virtualPageKey
-	 * @param unknown_type $permalLinkId
-	 * @param unknown_type $currentUrl
-	 * @param unknown_type $titleOption
-	 * @param unknown_type $templateOption
+	 * @param string $pageTitle
+	 * @param string $virtualPageKey
+	 * @param string $permalLinkId
+	 * @param string $currentUrl
+	 * @param string $titleOption
+	 * @param string $templateOption
 	 */
 	private function getPageSetup(
 		$pageTitle,
@@ -414,23 +424,16 @@ class iHomefinderAdminPageConfig extends iHomefinderAdminAbstractPage {
 					<label>Permalink</label>
 				</th>
 				<td>
-					<div id="<?php echo $permalinkId ?>Container">
-						<?php echo $urlFactory->getBaseUrl() ?>/<span id="<?php echo $permalinkId ?>Text"><?php echo $currentUrl ?></span>/<?php if($extraPermalinkText != null) {echo $extraPermalinkText;} ?>
-						<input id="<?php echo $permalinkId ?>EditButton" type="button" value="Edit" />
-					</div>
-					<div id="<?php echo $permalinkId ?>Edit" style="display: none;" >
-						<?php echo $urlFactory->getBaseUrl() ?>/
-						<input type="text" id="<?php echo $permalinkId ?>" name="<?php echo $permalinkId ?>" value="<?php echo $currentUrl ?>" />/<?php if($extraPermalinkText != null) {echo $extraPermalinkText;} ?>
-						<input id="<?php echo $permalinkId ?>DoneButton" type="button" value="Done" />
-					</div>
+					<span><?php echo $urlFactory->getBaseUrl(); ?>/<span class="ihf-permalink-preview"><?php echo $currentUrl; ?></span><input class="ihf-permalink-field" type="text" id="<?php echo $permalinkId; ?>" name="<?php echo $permalinkId; ?>" value="<?php echo $currentUrl; ?>" />/<?php echo $extraPermalinkText; ?></span>
+					<button type="button" data-ihf-toggle>Edit</button>
 				</td>
 			</tr>
 			<tr>
 				<th>
-					<label for="<?php echo $titleOption ?>">Title</label>
+					<label for="<?php echo $titleOption; ?>">Title</label>
 				</th>
 				<td>
-					<input id="<?php echo $titleOption ?>" style="width: 250px;" type="text" name="<?php echo $titleOption ?>" value="<?php echo $virtualPage->getTitle() ?>" />
+					<input id="<?php echo $titleOption; ?>" style="width: 250px;" type="text" name="<?php echo $titleOption; ?>" value="<?php echo $virtualPage->getTitle(); ?>" />
 					<?php if($extraTitleText != null) { ?>
 						<span class="description">
 							<?php echo $extraTitleText; ?>
@@ -440,17 +443,16 @@ class iHomefinderAdminPageConfig extends iHomefinderAdminAbstractPage {
 			</tr>
 			<tr>
 				<th>
-					<label for="<?php echo $templateOption ?>">Theme Template*</label>
+					<label for="<?php echo $templateOption; ?>">Theme Template*</label>
 				</th>
 				<td>
-					<select id="<?php echo $templateOption ?>" style="width: 250px;" name="<?php echo $templateOption ?>">
+					<select id="<?php echo $templateOption; ?>" style="width: 250px;" name="<?php echo $templateOption; ?>">
 						<option value="default">Default Template</option>
 						<?php page_template_dropdown($virtualPage->getPageTemplate()); ?>
 					</select>
 				</td>
 			</tr>
 		</table>
-		<?php $this->permalinkJavascript($permalinkId, $urlFactory); ?>
 		<br />
 		<?php
 	}

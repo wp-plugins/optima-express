@@ -1,13 +1,8 @@
 <?php
-/**
- * iHomefinder plugin related constants.  These are used in many
- * different classes.
- *
- * @author ihomefinder
- */
-interface iHomefinderConstants{
 
-	const VERSION = "2.6.3";
+interface iHomefinderConstants {
+
+	const VERSION = "2.6.4";
 	const VERSION_NAME = "Optima Express";
 	const LEGACY_EXTERNAL_URL = "http://www.idxre.com/services/wordpress";
 	const RESPONSIVE_EXTERNAL_URL = "http://www.idxhome.com/service/wordpress";
@@ -144,6 +139,7 @@ interface iHomefinderConstants{
 	
 	//prefix should only be up 13 character in length because cache key can only be 45 characters. prefix (13) + md5 hash (32). 
 	const CACHE_PREFIX = "ihf_cache_";
+	const CACHE_ENABLED = true;
 	
 	const DEBUG = false;
 }

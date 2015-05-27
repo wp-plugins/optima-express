@@ -19,13 +19,16 @@ class iHomefinderCacheUtility {
 	 * @return mixed
 	 */
 	public function getItem($key) {
-		$cacheKey = $this->getKey($key);
-		iHomefinderLogger::getInstance()->debug("get cached version cacheKey " . $cacheKey);
-		$result = get_transient($cacheKey);
-		if($result === false) {
-			$result = null;
+		$result = null;
+		if(iHomefinderConstants::CACHE_ENABLED) {
+			$cacheKey = $this->getKey($key);
+			iHomefinderLogger::getInstance()->debug("get cached version cacheKey " . $cacheKey);
+			$result = get_transient($cacheKey);
+			if($result === false) {
+				$result = null;
+			}
+			iHomefinderLogger::getInstance()->debugDumpVar($result);
 		}
-		iHomefinderLogger::getInstance()->debugDumpVar($result);
 		return $result;
 	}
 	

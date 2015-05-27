@@ -7,7 +7,7 @@ class iHomefinderAgentBioWidget extends WP_Widget {
 	
 	public function __construct() {
 		parent::__construct(
-			false,
+			"iHomefinderAgentBioWidget",
 			"IDX: Agent Bio",
 			array(
 				"description" => "Displays an agent bio."

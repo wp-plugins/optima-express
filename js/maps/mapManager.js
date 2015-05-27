@@ -1,12 +1,13 @@
 var MapManager = function( containerId ) {
 	
 	this.DEBUG = false;
-	this.MAPBOX_ACCESS_TOKEN = 'pk.eyJ1IjoiaWhvbWVmaW5kZXIiLCJhIjoiR1JFZzQyYyJ9.0g0cCGrEpv3B4zuYl2lBGw';
+	//this.MAPBOX_ACCESS_TOKEN = 'pk.eyJ1IjoiaWhvbWVmaW5kZXIiLCJhIjoiR1JFZzQyYyJ9.0g0cCGrEpv3B4zuYl2lBGw';
 	this.MAPBOX_ID_ROADMAP = 'ihomefinder.k3f0npic';
 	this.MAPBOX_ID_SATELLITE = 'ihomefinder.k3f132cj';
 	this.MAPBOX_ID_HYBRID = 'ihomefinder.k767gpl3';
 	this.MAPBOX_ID_TERRAIN = 'ihomefinder.k3f11f54';
 	this.MAPQUEST_KEY = 'Gmjtd%7Cluurn96bng%2Cb5%3Do5-lrba1';
+	this.MAPBOX_ACCESS_TOKEN;
 	
 	this.containerId;
 	this.markerAjaxUrl;
@@ -512,19 +513,29 @@ var MapManager = function( containerId ) {
 	 * synchronously retrieves LatLng for an address
 	 * @returns LatLng object
 	 */
-	this.geocodeAddress = function( address, onSuccess ) {
-		var url = '//www.mapquestapi.com/geocoding/v1/address?key=' + this.MAPQUEST_KEY + '&location=' + encodeURIComponent(address);
+	this.geocodeAddress = function( address, geocodingUrl, onSuccess ) {
+	//	var url = '//www.mapquestapi.com/geocoding/v1/address?key=' + this.MAPQUEST_KEY + '&location=' + encodeURIComponent(address);
+	//	var url ='//api.tiles.mapbox.com/v4/geocode/mapbox.places/' + encodeURIComponent(address) + '.json?access_token='+ this.MAPBOX_ACCESS_TOKEN ;
 		this.abortAjaxRequest();
+		var geocodingUrl = geocodingUrl + "?address=" + encodeURIComponent(address);
 		this.ajaxRequest = jQuery.ajax({
 			type: 'GET',
-			url: url,
+			url: geocodingUrl,
 			dataType: 'jsonp'
 		}).done( function( response ) {
-			lat = response.results[0].locations[0].latLng.lat;
-			lng = response.results[0].locations[0].latLng.lng;
+			//lat = response.results[0].locations[0].latLng.lat;
+			//lng = response.results[0].locations[0].latLng.lng;
+			lat = response.features[0].geometry.coordinates[1];
+			lng = response.features[0].geometry.coordinates[0];
 			latLng = new L.LatLng( lat, lng );
 			onSuccess( latLng );
 		});
+		/*this.ajaxRequest = jQuery.getJSON(url,function(response){
+			lat = response.features[0].geometry.coordinates[1];
+			lng = response.features[0].geometry.coordinates[0];
+			latLng = new L.LatLng( lat, lng );
+			onSuccess( latLng );
+		});*/
 	};
 	
 	/**
@@ -553,11 +564,15 @@ var MapManager = function( containerId ) {
 		centerLng,
 		defaultMapType,
 		markerAjaxUrl,
-		detailAjaxUrl
+		detailAjaxUrl,
+		geocodingUrl,
+		mapBoxToken
 	) {
 		this.containerId = containerId;
 		this.markerAjaxUrl = markerAjaxUrl;
 		this.detailAjaxUrl = detailAjaxUrl;
+		this.MAPBOX_ACCESS_TOKEN = mapBoxToken;
+		var geocodingUrl = geocodingUrl;
 		this.createMap( defaultMapType );
 		
 		var self = this;
@@ -601,7 +616,7 @@ var MapManager = function( containerId ) {
 			latLng = new L.latLng( centerLat, centerLng );
 			callback( latLng );
 		} else if( centerAddress.length !== 0 ) {
-			this.geocodeAddress( centerAddress, callback );
+			this.geocodeAddress( centerAddress, geocodingUrl, callback );
 		} else {
 			latLng = this.getDefaultCenter();
 			callback( latLng );
@@ -616,13 +631,17 @@ var MapManager = function( containerId ) {
 	this.initializeResultsOrDetailMap = function(
 		containerId,
 		listings,
-		context
+		context,
+		mapBoxToken,
+		geocodingUrl
 	) {
 		if(!listings.length > 0) {
 			return;
 		}
 		this.containerId = containerId;
+		this.MAPBOX_ACCESS_TOKEN = mapBoxToken;
 		var self = this;
+		var geocodingUrl = geocodingUrl;
 		var getInvalidListing = function() {
 			for( var index in listings ) {
 				var listing = listings[index];
@@ -641,7 +660,7 @@ var MapManager = function( containerId ) {
 			var listing = getInvalidListing();
 			if( listing !== null ) {
 				self.debug( 'listing #' + listing.number + ': invalid lat lng' );
-				self.geocodeAddress( listing.address, function( latLng ) {
+				self.geocodeAddress( listing.address, geocodingUrl, function( latLng ) {
 					self.debug( 'listing #' + listing.number + ': updating listing lat lng' );
 					listing.latitude = latLng.lat;
 					listing.longitude = latLng.lng;
@@ -678,10 +697,12 @@ var MapManager = function( containerId ) {
 	 */
 	this.initializeResultsMap = function(
 		containerId,
-		listings
+		listings,
+		mapBoxToken,
+		geocodingUrl
 	) {
 		var context = "results";
-		this.initializeResultsOrDetailMap( containerId, listings, context );
+		this.initializeResultsOrDetailMap( containerId, listings, context, mapBoxToken, geocodingUrl);
 	};
 	
 	/**
@@ -689,10 +710,12 @@ var MapManager = function( containerId ) {
 	 */
 	this.initializeDetailMap = function(
 		containerId,
-		listings
+		listings,
+		mapBoxToken,
+		geocodingUrl
 	) {
 		var context = "detail";
-		this.initializeResultsOrDetailMap( containerId, listings, context );
+		this.initializeResultsOrDetailMap( containerId, listings, context, mapBoxToken, geocodingUrl);
 	};
 	
 };

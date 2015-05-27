@@ -6,7 +6,7 @@ class iHomefinderHotsheetListWidget extends WP_Widget {
 
 	public function __construct() {
 		parent::__construct(
-			false,
+			"iHomefinderHotsheetListWidget",
 			"IDX: Saved Search Page List",
 			array(
 				"description" => "List of Saved Search Pages"

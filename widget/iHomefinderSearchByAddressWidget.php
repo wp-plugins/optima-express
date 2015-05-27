@@ -6,7 +6,7 @@ class iHomefinderSearchByAddressWidget extends WP_Widget {
 
 	public function __construct() {
 		parent::__construct(
-			false,
+			"iHomefinderSearchByAddressWidget",
 			"IDX: Address Search",
 			array(
 				"description" => "Search by Address form."
