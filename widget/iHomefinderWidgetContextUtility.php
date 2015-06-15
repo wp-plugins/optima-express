@@ -1,0 +1,206 @@
+<?php
+
+/**
+ * iHomefinderWidgetContextUtility Class
+ * 
+ * This singleton utility class is used to support hiding or displaying of widgets.
+ * 
+ * It defines a list of pages that can be enabled for a given widget.
+ * When an Optima Express page is viewed, this utility is used to 
+ * determine if the widget should display or not.
+ * 
+ * This is a helper class used by widgets to display form information,
+ * perform instance updates and determine if the widget is enabled
+ * for a given page context.
+ * 
+ * Rather than extending class WP_Widget, this functionality has
+ * been added as a separate Utility class that can be added to 
+ * a widget using composition.
+ */
+class iHomefinderWidgetContextUtility {
+	
+	private $enabledContextField = "enabledContext";
+	private static $instance;
+	
+	private function __construct() {
+	}
+
+	public static function getInstance() {
+		if(!isset(self::$instance)) {
+			self::$instance = new self();
+		}
+		return self::$instance;
+	}
+
+	public function loadWidgetStyle() {
+		wp_register_style("ihf-widget-style", plugins_url("css/style.css", __FILE__));
+		wp_enqueue_style("ihf-widget-style");
+	}
+			
+	public function loadWidgetJavascript() {
+	  wp_enqueue_script("widgetSupport", plugins_url("/js/widgetSupport.js", __FILE__));
+	}
+	
+	public function isEnabled($widgetInstance) {
+		$result = false;
+		
+		//type is only defined for ihomefinder page. 
+		//If not set, then always display the widget.
+		$type = get_query_var(iHomefinderConstants::IHF_TYPE_URL_VAR);			
+		if(!isset($type) || trim($type) == "") {
+			//always display the widget for non Optima Express pages
+			//this will not work if using shortcodes
+			$result = true;	
+		} elseif(!array_key_exists(iHomefinderVirtualPageFactory::LISTING_DETAIL, $widgetInstance)) {
+			//If the widget instance does not have the listing detail key, then we have a plugin
+			//That has been upgraded, but the user did not update the widget. In this case
+			//we default to the previous behavior of displaying the widget on all pages.
+			$result = true;				
+		} elseif(array_key_exists($type, $widgetInstance) && $widgetInstance[$type] == "true") {
+			//We have enabled the type for this widget
+			//see iHomefinderVirtualPageFactory for valid types
+			$result = true;				
+		} else {
+			//Special cases that are not covered specifically by type
+			if($widgetInstance[iHomefinderVirtualPageFactory::HOTSHEET_SEARCH_RESULTS] == "true") {	
+				//If set to display with Hotsheet, then also display in the Hotsheet list.
+				if($type == iHomefinderVirtualPageFactory::HOTSHEET_LIST) {
+					$result = "true";
+				}
+			} elseif($widgetInstance[iHomefinderVirtualPageFactory::ORGANIZER_LOGIN] == "true") {
+				//If set to display for Organizer, then enabled for saved listings and search
+				if($type == iHomefinderVirtualPageFactory::ORGANIZER_VIEW_SAVED_LISTING_LIST) {
+					$result = "true";
+				} elseif($type == iHomefinderVirtualPageFactory::ORGANIZER_EDIT_SAVED_SEARCH) {
+					$result = "true";
+				}
+			} elseif($widgetInstance[iHomefinderVirtualPageFactory::ORGANIZER_EDIT_SAVED_SEARCH] == "true") {
+				//Email Alerts page
+				if($type == iHomefinderVirtualPageFactory::ORGANIZER_EMAIL_UPDATES_CONFIRMATION) {
+					$result = "true";
+				}
+			}
+		}
+			
+		return $result;
+	}
+	
+	private function listOfPages($widgetType) {
+		$listOfPages = array(
+			"Search Form" => iHomefinderVirtualPageFactory::LISTING_SEARCH_FORM,
+			"Advanced Search Form" => iHomefinderVirtualPageFactory::LISTING_ADVANCED_SEARCH_FORM,
+			"Open Home Search" => iHomefinderVirtualPageFactory::OPEN_HOME_SEARCH_FORM,
+			"Map Search" => iHomefinderVirtualPageFactory::MAP_SEARCH_FORM,
+			"Search Results" => iHomefinderVirtualPageFactory::LISTING_SEARCH_RESULTS,			
+			"Listing Details" => iHomefinderVirtualPageFactory::LISTING_DETAIL,
+			"Sold Property Details" => iHomefinderVirtualPageFactory::LISTING_SOLD_DETAIL,
+			"Sold Featured Listing" => 	iHomefinderVirtualPageFactory::SOLD_FEATURED_LISTING,
+			"Supplemental Listing" => iHomefinderVirtualPageFactory::SUPPLEMENTAL_LISTING,
+			"Featured Properties" => iHomefinderVirtualPageFactory::FEATURED_SEARCH,			
+			"Saved Search Pages" => iHomefinderVirtualPageFactory::HOTSHEET_SEARCH_RESULTS,			
+			"Email Alerts" => iHomefinderVirtualPageFactory::ORGANIZER_EDIT_SAVED_SEARCH,
+			"Organizer Pages" => iHomefinderVirtualPageFactory::ORGANIZER_LOGIN ,
+			"Valuation Request" => 	iHomefinderVirtualPageFactory::VALUATION_FORM ,
+			"Contact Form" => iHomefinderVirtualPageFactory::CONTACT_FORM
+		);
+		
+		if(iHomefinderPermissions::getInstance()->isAgentBioEnabled()) {
+			$listOfPages["Agent Bio"] = iHomefinderVirtualPageFactory::AGENT_DETAIL;
+			$listOfPages["Agent List"] = iHomefinderVirtualPageFactory::AGENT_LIST;
+		}
+		
+		if(iHomefinderPermissions::getInstance()->isOfficeEnabled()) {
+			$listOfPages["Office Detail"] = iHomefinderVirtualPageFactory::OFFICE_DETAIL;
+			$listOfPages["Office List"] = iHomefinderVirtualPageFactory::OFFICE_LIST;
+			
+		}
+		//Search pages are not valid for search widgets.
+		if($widgetType == iHomefinderConstants::SEARCH_WIDGET_TYPE) {
+			unset($listOfPages["Search Form"]);
+			unset($listOfPages["Advanced Search Form"]);
+			unset($listOfPages["Email Alerts"]);
+			unset($listOfPages["Map Search"]);
+		}
+		
+		//Contact page is not valid for contact form widget
+		if($widgetType == iHomefinderConstants::CONTACT_WIDGET_TYPE) {
+			unset ($listOfPages["Contact Form"]);
+		}
+		
+		return $listOfPages;
+	}
+	
+	public function updateContext($new_widgetInstance, $old_widgetInstance) {
+		$instance = $old_widgetInstance;
+		$listOfPages = $this->listOfPages();
+		foreach ($listOfPages as $i => $value) {
+			$instance[$value] = empty($new_widgetInstance[$value]) ? "false" : "true";
+		}
+		return $instance;	
+	}
+	
+	/**
+	 * This function echos JavaScript and a set of checkboxes used to 
+	 * restrict the pages that the widget displays on. For example, we
+	 * can configure a Featured Listings widget to NOT diplay on the 
+	 * Featured Lisitngs page.
+	 * 
+	 * @param WP_Widget $widget The actual widget object.
+	 * @param unknown_type $instance The settings for the particular instance of the widget
+	 * @param String $widgetType Examples are search or gallery - @see iHomefinderConstants for gallery types
+	 */
+	public function getPageSelector($widget, $instance, $widgetType) {
+		//cannot use $this->id in the function name, b/c it has characters
+		//that are not allowed for JavaScript functions
+		$selectAllCheckbox = "selectAllCheckbox" . $widget->id;
+		$selectAllCheckboxDiv = "selectAllContainer" . $widget->id;
+		
+		//this is false if the user has upgraded from 1.1.1 to 1.1.2
+		//because the widget instance does not have the listing detail field
+		$hasPageSelector = array_key_exists(iHomefinderVirtualPageFactory::LISTING_DETAIL, $instance);		
+		?>
+		<p>Display widget on selected IDX pages:</p>
+		<label>
+			<input
+				id="<?php echo $selectAllCheckbox ?>"
+				type="checkbox"
+				<?php if(!$hasPageSelector) {echo "checked='checked'";} ?>
+				onclick="selectAllCheckboxes('<?php echo $selectAllCheckbox ?>', '<?php echo $selectAllCheckboxDiv ?>');"
+			/>
+			Select All &nbsp;&nbsp;
+		</label>
+		<br/>
+		<div id="<?php echo $selectAllCheckboxDiv ?>">	
+			<?php
+			//The following call adds for variables to setup a context for pages to display.
+			$listOfPages = $this->listOfPages($widgetType);
+			//The value is the type from iHomefinderVirtualPageFactory
+			foreach ($listOfPages as $label => $pageType) {
+				$fieldName = $widget->get_field_name($pageType);
+				$fieldId = $widget->get_field_id($pageType);
+				//gets the saved checkbox value for this pageType
+				//defaults to true, if instance does not have this
+				//field. This situation may occur when upgrading
+				//this plugin from 1.1.1 to 1.1.2
+				$fieldValue = "true";
+				if($hasPageSelector && array_key_exists("pageType", $instance)) {
+					$fieldValue = $instance[$pageType];
+				}
+				?>
+				<input id="<?php echo $fieldId ?>"
+					name="<?php echo $fieldName ?>"
+					type="checkbox" 
+					onclick="selectAllCheckboxesReset('<?php echo $selectAllCheckbox ?>', '<?php echo $selectAllCheckboxDiv ?>')"
+					<?php if($fieldValue == "true") {echo "checked='checked'";} ?>
+					<?php if(!$hasPageSelector) {echo "checked='checked'";} ?>
+				/>
+				<label for="<?php echo $fieldId ?>">
+					<?php echo $label ?>
+				</label>
+				<br/>
+			<?php } ?>
+		</div>
+		<?php
+	}
+
+}
