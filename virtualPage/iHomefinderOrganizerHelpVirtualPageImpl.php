@@ -2,20 +2,14 @@
 
 class iHomefinderOrganizerHelpVirtualPageImpl extends iHomefinderAbstractVirtualPage {
 	
-	private $path = "property-organizer-help";
-	
 	public function getTitle() {
 		return "Organizer Help";
-	}	
-	
-	public function getPageTemplate() {
-		
 	}
 	
-	public function getPath() {
-		return $this->path;
+	public function getPermalink() {
+		return "property-organizer-help";
 	}
-		
+	
 	public function getContent() {
 		$this->remoteRequest
 			->addParameter("method", "handleRequest")
@@ -24,8 +18,6 @@ class iHomefinderOrganizerHelpVirtualPageImpl extends iHomefinderAbstractVirtual
 			->addParameter("phpStyle", true)
 		;
 		$this->remoteResponse = $this->remoteRequest->remoteGetRequest();
-		$body = $this->remoteRequest->getContent($this->remoteResponse);
-		return $body;
 	}
 	
 }

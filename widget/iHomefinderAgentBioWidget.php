@@ -16,71 +16,72 @@ class iHomefinderAgentBioWidget extends WP_Widget {
 	}
 	
 	public function widget($args, $instance) {
-		
-		//sets vars like $before_widget from $args
-		extract($args);
-		
+		$beforeWidget = $args["before_widget"];
+		$afterWidget = $args["after_widget"];
+		$beforeTitle = $args["before_title"];
+		$afterTitle = $args["after_title"];
 		$displayType = $instance["displayType"];
-
-		$agentPhotoUrl = get_option(iHomefinderConstants::AGENT_PHOTO_OPTION);
-		$agentText = get_option(iHomefinderConstants::AGENT_TEXT_OPTION);
-		$displayTitle = get_option(iHomefinderConstants::AGENT_DISPLAY_TITLE_OPTION);
-		$contactPhone = get_option(iHomefinderConstants::CONTACT_PHONE_OPTION);
-		$contactEmail = get_option(iHomefinderConstants::CONTACT_EMAIL_OPTION);
-		$agentDesignations = get_option(iHomefinderConstants::AGENT_DESIGNATIONS_OPTION);
-		$agentLicenseInfo = get_option(iHomefinderConstants::AGENT_LICENSE_INFO_OPTION);
-		
-		echo $before_widget;
-		
+		$agentPhotoUrl = get_option(iHomefinderConstants::AGENT_PHOTO_OPTION, null);
+		$agentText = get_option(iHomefinderConstants::AGENT_TEXT_OPTION, null);
+		$displayTitle = get_option(iHomefinderConstants::AGENT_DISPLAY_TITLE_OPTION, null);
+		$contactPhone = get_option(iHomefinderConstants::CONTACT_PHONE_OPTION, null);
+		$contactEmail = get_option(iHomefinderConstants::CONTACT_EMAIL_OPTION, null);
+		$agentDesignations = get_option(iHomefinderConstants::AGENT_DESIGNATIONS_OPTION, null);
+		$agentLicenseInfo = get_option(iHomefinderConstants::AGENT_LICENSE_INFO_OPTION, null);
+		echo $beforeWidget;
 		if(!empty($displayTitle)) {
-			echo $before_title . $displayTitle . $after_title;
-		} 
-		
+			echo $beforeTitle . $displayTitle . $afterTitle;
+		}
 		?>
 		<table>
 			<tr>
 				<?php if(!empty($agentPhotoUrl)) { ?>
-					<td style="vertical-align: top;">
-						<img src="<?php echo $agentPhotoUrl ?>" alt="<?php echo $displayTitle ?>" width="90" hspace="0" style="width: 90px; margin-top: 3px; margin-right: 10px;" id="ihf-bio-img" />
+					<td class="ihf-bio-img">
+						<img id="ihf-bio-img" src="<?php echo $agentPhotoUrl; ?>" alt="<?php echo $displayTitle; ?>" />
 					</td>
 				<?php } ?>
 				<?php if($displayType == iHomefinderAgentBioWidget::NARROW_DISPLAY_TYPE) { ?>
 					</tr><tr>
 				<?php } ?>
 				<td>
-					<div class="ihf-about-info" style="font-size: 12px; line-height: 1.5em;">
+					<div class="ihf-bio-about-info">
 						<?php if(!empty($agentText)) { ?>
-							<?php echo $agentText ?>
-							<br />
+							<div>
+								<?php echo $agentText ?>
+							</div>
 							<br />				
 						<?php } ?>
 						<?php if(!empty($contactPhone)) { ?>
-							<?php echo $contactPhone ?>
-							<br />
+							<div>
+								<?php echo $contactPhone; ?>
+							</div>
 						<?php } ?>
 						<?php if(!empty($contactEmail)) { ?>
-							<?php echo $contactEmail ?>
-							<br />
+							<div>
+								<?php echo $contactEmail; ?>
+							</div>
 						<?php } ?>
 						<?php if(!empty($agentDesignations)) { ?>
-							<?php echo $agentDesignations ?>
-							<br />
+							<div>
+								<?php echo $agentDesignations; ?>
+							</div>
 						<?php } ?>
 						<?php if(!empty($agentLicenseInfo)) { ?>
-							<?php echo $agentLicenseInfo ?>
-							<br />
+							<div>
+								<?php echo $agentLicenseInfo; ?>
+							</div>
 						<?php } ?>
 					</div>
 				</td>
 			</tr>
 		</table>
 		<?php
-		echo $after_widget;
+		echo $afterWidget;
 	}
 	
-	public function update($new_instance, $old_instance) {
-		$instance = $old_instance;
-		$instance["displayType"] = $new_instance["displayType"];
+	public function update($newInstance, $oldInstance) {
+		$instance = $oldInstance;
+		$instance["displayType"] = $newInstance["displayType"];
 		return $instance;
 	}
   
@@ -97,7 +98,7 @@ class iHomefinderAgentBioWidget extends WP_Widget {
 			</label>
 		</p>
 		<?php
-		$configurationUrl = admin_url("admin.php?page=" . iHomefinderConstants::BIO_PAGE);
+		$configurationUrl = admin_url("admin.php?page=" . iHomefinderConstants::PAGE_BIO);
 		?>
 		<p>
 			<a href="<?php echo $configurationUrl ?>">Configure Bio</a>

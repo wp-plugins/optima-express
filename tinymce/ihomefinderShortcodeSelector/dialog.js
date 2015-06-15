@@ -6,6 +6,7 @@ var IhfGalleryDialog = {
 	insertFeaturedListings: function(theForm, shortcode) {
 		var parameters = {
 			sortBy: this.getFieldValue(theForm.sortBy),
+			propertyType: this.getFieldValue(theForm.propertyType),
 			displayType: this.getFieldValue(theForm.displayType),
 			resultsPerPage: this.getFieldValue(theForm.resultsPerPage),
 			header: this.getFieldValue(theForm.header),

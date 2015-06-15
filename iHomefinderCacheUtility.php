@@ -2,6 +2,10 @@
 
 class iHomefinderCacheUtility {
 	
+	//prefix should only be up 13 character in length because cache key can only be 45 characters. prefix (13) + md5 hash (32).
+	const CACHE_PREFIX = "ihf_cache_";
+	const CACHE_ENABLED = true;
+	
 	private static $instance;
 	
 	public function __construct() {
@@ -20,14 +24,14 @@ class iHomefinderCacheUtility {
 	 */
 	public function getItem($key) {
 		$result = null;
-		if(iHomefinderConstants::CACHE_ENABLED) {
+		if(self::CACHE_ENABLED) {
 			$cacheKey = $this->getKey($key);
 			iHomefinderLogger::getInstance()->debug("get cached version cacheKey " . $cacheKey);
 			$result = get_transient($cacheKey);
 			if($result === false) {
 				$result = null;
 			}
-			iHomefinderLogger::getInstance()->debugDumpVar($result);
+			iHomefinderLogger::getInstance()->debug($result);
 		}
 		return $result;
 	}
@@ -60,7 +64,7 @@ class iHomefinderCacheUtility {
 	public function deleteItems() {
 		global $wpdb;
 		$optionsTableName = $wpdb->options;
-		$sql = "DELETE FROM " . $optionsTableName . " WHERE `option_name` LIKE '%" . iHomefinderConstants::CACHE_PREFIX . "%'";
+		$sql = "DELETE FROM " . $optionsTableName . " WHERE `option_name` LIKE '%" . self::CACHE_PREFIX . "%'";
 		$wpdb->query($sql);
 	}
 	
@@ -70,7 +74,7 @@ class iHomefinderCacheUtility {
 	 */
 	private function getKey($key) {
 		$keyHash = md5(serialize($key));
-		$cacheKey = iHomefinderConstants::CACHE_PREFIX . $keyHash;
+		$cacheKey = self::CACHE_PREFIX . $keyHash;
 		return $cacheKey;
 	}
 	

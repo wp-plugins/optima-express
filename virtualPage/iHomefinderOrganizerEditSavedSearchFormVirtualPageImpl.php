@@ -2,42 +2,29 @@
 
 class iHomefinderOrganizerEditSavedSearchFormVirtualPageImpl extends iHomefinderAbstractVirtualPage {
 	
-	private $path = "email-alerts";
-	private $title = "Email Alerts";
-	
 	public function getTitle() {
-		$customTitle = get_option(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_EMAIL_UPDATES);
-		if($customTitle != null && "" != $customTitle) {
-			$this->title=$customTitle;
-		}
-		
-		return $this->title;
+		return $this->getText(iHomefinderConstants::OPTION_VIRTUAL_PAGE_TITLE_EMAIL_UPDATES, "Email Alerts");
 	}
 
 	public function getPageTemplate() {
-		$pageTemplate = get_option(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_EMAIL_UPDATES);
+		$pageTemplate = get_option(iHomefinderConstants::OPTION_VIRTUAL_PAGE_TEMPLATE_EMAIL_UPDATES, null);
 		return $pageTemplate;			
 	}
 	
-	public function getPath() {
-		$customPath = get_option(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_EMAIL_UPDATES);	
-		if($customPath != null && "" != $customPath) {
-			$this->path = $customPath;
-		}
-		return $this->path;
+	public function getPermalink() {
+		return $this->getText(iHomefinderConstants::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_EMAIL_UPDATES, "email-alerts");
 	}
-	
 		
 	public function getContent() {
 		$boardId = iHomefinderUtility::getInstance()->getQueryVar("boardId");
 		$this->remoteRequest
+			->addParameters($_REQUEST)
 			->addParameter("method", "handleRequest")
 			->addParameter("viewType", "json")
 			->addParameter("requestType", "property-organizer-edit-saved-search-form")
 			->addParameter("phpStyle", true)
 			->addParameter("boardId", $boardId)
 		;
-		$this->remoteRequest->addParameters($_REQUEST);
 		$lastSearchQuery = iHomefinderStateManager::getInstance()->getLastSearchQuery();
 		if(count($lastSearchQuery) > 0) {
 			$cityID = trim(iHomefinderUtility::getInstance()->getVarFromArray("cityID", $lastSearchQuery));
@@ -58,8 +45,6 @@ class iHomefinderOrganizerEditSavedSearchFormVirtualPageImpl extends iHomefinder
 			;
 		}
 		$this->remoteResponse = $this->remoteRequest->remoteGetRequest();
-		$body = $this->remoteRequest->getContent($this->remoteResponse);
-		return $body;
 	}
 			
 }

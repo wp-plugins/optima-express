@@ -2,18 +2,12 @@
 
 class iHomefinderOrganizerViewSavedSearchListVirtualPageImpl extends iHomefinderAbstractVirtualPage {
 	
-	private $path="property-organizer-view-saved-search-list";
-	
 	public function getTitle() {
 		return "Saved Search List";
-	}			
-		
-	public function getPageTemplate() {
-		
 	}
 	
-	public function getPath() {
-		return $this->path;
+	public function getPermalink() {
+		return "property-organizer-view-saved-search-list";
 	}
 			
 	public function getContent() {
@@ -24,7 +18,6 @@ class iHomefinderOrganizerViewSavedSearchListVirtualPageImpl extends iHomefinder
 			->addParameter("phpStyle", true)
 		;
 		$this->remoteResponse = $this->remoteRequest->remoteGetRequest();
-		$body = $this->remoteRequest->getContent($this->remoteResponse);
-		return $body;
 	}
+	
 }

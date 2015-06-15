@@ -1,10 +1,5 @@
 <?php
 
-/**
- * This singleton class creates instances of iHomefinder VirtualPages, based
- * on a type parameter.
- * @author ihomefinder
- */
 class iHomefinderVirtualPageFactory {
 
 	private static $instance;
@@ -20,6 +15,7 @@ class iHomefinderVirtualPageFactory {
 	}
 	
 	//Types used to determine the VirtualPage type in iHomefinderVirtualPageFactory.
+	const DEFAULT_PAGE = "idx-default";
 	const LISTING_SEARCH_RESULTS = "idx-results";
 	const LISTING_DETAIL = "idx-detail";
 	const LISTING_SOLD_DETAIL = "idx-sold-detail";
@@ -47,8 +43,6 @@ class iHomefinderVirtualPageFactory {
 	const ORGANIZER_SEND_SUBSCRIBER_PASSWORD = "idx-property-organizer-send-login";
 	const ORGANIZER_HELP = "idx-property-organizer-help";
 	const ORGANIZER_EDIT_SUBSCRIBER = "idx-property-organizer-edit-subscriber";
-	const LISTING_SEARCH_BY_ADDRESS_RESULTS = "idx-results-by-address";
-	const LISTING_SEARCH_BY_LISTING_ID_RESULTS = "idx-results-by-listing-id";
 	const CONTACT_FORM = "idx-contact-form";
 	const VALUATION_FORM = "idx-valuation-form";
 	const OPEN_HOME_SEARCH_FORM = "idx-open-home-search-form";
@@ -59,10 +53,18 @@ class iHomefinderVirtualPageFactory {
 	const AGENT_LIST = "idx-agent-list";
 	const AGENT_DETAIL = "idx-agent-detail";
 	const AGENT_OR_OFFICE_LISTINGS = "idx-agent-or-office-listings";
-
-	public function getVirtualPage($type) {
+	
+	/**
+	 * 
+	 * @param string $type
+	 * @return iHomefinderVirtualPageInterface
+	 */
+	public function getVirtualPage($virtualPageType) {
 		$virtualPage = null;
-		switch($type) {
+		switch($virtualPageType) {
+			case self::DEFAULT_PAGE:
+				$virtualPage = new iHomefinderDefaultVirtualPageImpl();
+				break;
 			case self::LISTING_SEARCH_RESULTS:
 				$virtualPage = new iHomefinderSearchResultsVirtualPageImpl();
 				break;
@@ -80,12 +82,6 @@ class iHomefinderVirtualPageFactory {
 				break;
 			case self::LISTING_SEARCH_FORM:
 				$virtualPage = new iHomefinderSearchFormVirtualPageImpl();
-				break;
-			case self::LISTING_SEARCH_BY_ADDRESS_RESULTS:
-				$virtualPage = new iHomefinderSearchByAddressResultsVirtualPageImpl();
-				break;
-			case self::LISTING_SEARCH_BY_LISTING_ID_RESULTS:
-				$virtualPage = new iHomefinderSearchByListingIdResultsVirtualPageImpl();
 				break;
 			case self::MAP_SEARCH_FORM:
 				$virtualPage = new iHomefinderMapSearchVirtualPageImpl();

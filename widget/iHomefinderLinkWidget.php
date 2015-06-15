@@ -7,33 +7,27 @@ class iHomefinderLinkWidget extends WP_Widget {
 			"iHomefinderLinkWidget",
 			"IDX: SEO City Links",
 			array(
-				"description" => "Displays a list of Homes For Sale links in the choosen cities from Themes Options - SEO indexing tool."
+				"description" => "Configure indexable links to listings in the areas you serve."
 			)
 		);
 	}
 	
 	public function widget($args, $instance) {
-		$linkWidth = get_option(IHomefinderConstants::SEO_CITY_LINK_WIDTH);
-		//sets vars like $before_widget from $args
-		extract($args);
-		
-		echo $before_widget;
-		echo $before_title;
-
-		$linkArray = get_option(iHomefinderConstants::SEO_CITY_LINKS_SETTINGS);	
-		
+		$beforeWidget = $args["before_widget"];
+		$afterWidget = $args["after_widget"];
+		$linkWidth = get_option(IHomefinderConstants::SEO_CITY_LINK_WIDTH, null);
+		echo $beforeWidget;
+		$linkArray = get_option(iHomefinderConstants::SEO_CITY_LINKS_SETTINGS, null);	
 		if(!empty($linkArray)) {
 			?>
 			<div>
 			<?php
 			foreach($linkArray as $link) {
-				//create link
 				$linkText = $link[iHomefinderConstants::SEO_CITY_LINKS_TEXT];
 				$cityZip = $link[iHomefinderConstants::SEO_CITY_LINKS_CITY_ZIP];
 				$propertyType = $link[iHomefinderConstants::SEO_CITY_LINKS_PROPERTY_TYPE];
 				$minPrice = $link[iHomefinderConstants::SEO_CITY_LINKS_MIN_PRICE];
 				$maxPrice = $link[iHomefinderConstants::SEO_CITY_LINKS_MAX_PRICE];
-				
 				if(!empty($linkText)) {
 					$searchLinkInfo = new iHomefinderSearchLinkInfo($linkText, $cityZip, $propertyType, $minPrice, $maxPrice);
 					$linkUrl = $this->createLinkUrl($searchLinkInfo);		
@@ -49,24 +43,21 @@ class iHomefinderLinkWidget extends WP_Widget {
 					</div>
 					<?php
 				}
-				
 			}
 			?>
 			</div>
 			<?php
 		}
-		
-		echo $after_title;
-		echo $after_widget;
+		echo $afterWidget;
 	}
 	
-	public function update($new_instance, $old_instance) {
-		$instance = $new_instance;
+	public function update($newInstance, $oldInstance) {
+		$instance = $newInstance;
 		return $instance;
 	}
 	
 	public function form($instance) {
-		$configurationUrl = admin_url("admin.php?page=" . iHomefinderConstants::SEO_CITY_LINKS_PAGE);
+		$configurationUrl = admin_url("admin.php?page=" . iHomefinderConstants::PAGE_SEO_CITY_LINKS);
 		?>
 		<p>
 			<a href="<?php echo $configurationUrl ?>">Configure City Links</a>

@@ -21,7 +21,6 @@ class iHomefinderRewriteRules {
 	private $rootPageName;
 
 	private function __construct() {
-		$this->urlFactory = iHomefinderUrlFactory::getInstance();
 		$this->rootPageName = "index.php?pagename=non_existent_page";
 	}
 
@@ -101,163 +100,173 @@ class iHomefinderRewriteRules {
 	 * When "listing-search-results" is selected, the "listing-search" may be
 	 * returned instead. If you encounter this problem, a simple fix is to change
 	 * the first few characters of the problem page to something unique.
+	 * 
+	 * @param string $matchRulePrefix
+	 * @return void
 	 */
 	private function setRewriteRules($matchRulePrefix) {
+		$urlFactory = iHomefinderUrlFactory::getInstance();
 		$this->addRule(
 			iHomefinderVirtualPageFactory::LISTING_ADVANCED_SEARCH_FORM,
-			$matchRulePrefix . $this->urlFactory->getListingsAdvancedSearchFormUrl(false) . "/{boardId}"
+			$matchRulePrefix . $urlFactory->getListingsAdvancedSearchFormUrl(false) . "/{boardId}"
 		);
 		$this->addRule(
 			iHomefinderVirtualPageFactory::LISTING_ADVANCED_SEARCH_FORM,
-			$matchRulePrefix . $this->urlFactory->getListingsAdvancedSearchFormUrl(false)
+			$matchRulePrefix . $urlFactory->getListingsAdvancedSearchFormUrl(false)
 		);
 		$this->addRule(
 			iHomefinderVirtualPageFactory::OFFICE_LIST,
-			$matchRulePrefix . $this->urlFactory->getOfficeListUrl(false)
+			$matchRulePrefix . $urlFactory->getOfficeListUrl(false)
 		);
 		$this->addRule(
 			iHomefinderVirtualPageFactory::OFFICE_DETAIL,
-			$matchRulePrefix . $this->urlFactory->getOfficeDetailUrl(false) . "/{officeName}/{officeId}"
+			$matchRulePrefix . $urlFactory->getOfficeDetailUrl(false) . "/{officeName}/{officeId}"
 		);
 		$this->addRule(
 			iHomefinderVirtualPageFactory::AGENT_LIST,
-			$matchRulePrefix . $this->urlFactory->getAgentListUrl(false)
+			$matchRulePrefix . $urlFactory->getAgentListUrl(false)
 		);
 		$this->addRule(
 			iHomefinderVirtualPageFactory::AGENT_DETAIL,
-			$matchRulePrefix . $this->urlFactory->getAgentDetailUrl(false) . "/{agentName}/{agentId}"
+			$matchRulePrefix . $urlFactory->getAgentDetailUrl(false) . "/{agentName}/{agentId}"
 		);
 		$this->addRule(
 			iHomefinderVirtualPageFactory::CONTACT_FORM,
-			$matchRulePrefix . $this->urlFactory->getContactFormUrl(false)
+			$matchRulePrefix . $urlFactory->getContactFormUrl(false)
 		);
 		$this->addRule(
 			iHomefinderVirtualPageFactory::VALUATION_FORM,
-			$matchRulePrefix . $this->urlFactory->getValuationFormUrl(false)
+			$matchRulePrefix . $urlFactory->getValuationFormUrl(false)
 		);
 		$this->addRule(
 			iHomefinderVirtualPageFactory::OPEN_HOME_SEARCH_FORM,
-			$matchRulePrefix . $this->urlFactory->getOpenHomeSearchFormUrl(false)
+			$matchRulePrefix . $urlFactory->getOpenHomeSearchFormUrl(false)
 		);
 		$this->addRule(
 			iHomefinderVirtualPageFactory::SOLD_FEATURED_LISTING,
-			$matchRulePrefix . $this->urlFactory->getSoldFeaturedListingUrl(false)
+			$matchRulePrefix . $urlFactory->getSoldFeaturedListingUrl(false)
 		);
 		$this->addRule(
 			iHomefinderVirtualPageFactory::SUPPLEMENTAL_LISTING,
-			$matchRulePrefix . $this->urlFactory->getSupplementalListingUrl(false)
-		);
-		$this->addRule(
-			iHomefinderVirtualPageFactory::LISTING_SEARCH_BY_ADDRESS_RESULTS,
-			$matchRulePrefix . $this->urlFactory->getListingSearchByAddressResultsUrl(false)
-		);
-		$this->addRule(
-			iHomefinderVirtualPageFactory::LISTING_SEARCH_BY_LISTING_ID_RESULTS,
-			$matchRulePrefix . $this->urlFactory->getListingSearchByListingIdResultsUrl(false)
+			$matchRulePrefix . $urlFactory->getSupplementalListingUrl(false)
 		);
 		$this->addRule(
 			iHomefinderVirtualPageFactory::LISTING_SEARCH_FORM,
-			$matchRulePrefix . $this->urlFactory->getListingsSearchFormUrl(false)
+			$matchRulePrefix . $urlFactory->getListingsSearchFormUrl(false)
 		);
 		$this->addRule(
 			iHomefinderVirtualPageFactory::MAP_SEARCH_FORM,
-			$matchRulePrefix . $this->urlFactory->getMapSearchFormUrl(false)
+			$matchRulePrefix . $urlFactory->getMapSearchFormUrl(false)
 		);
 		$this->addRule(
 			iHomefinderVirtualPageFactory::ORGANIZER_LOGIN_SUBMIT,
-			$matchRulePrefix . $this->urlFactory->getOrganizerLoginSubmitUrl(false)
+			$matchRulePrefix . $urlFactory->getOrganizerLoginSubmitUrl(false)
 		);
 		$this->addRule(
 			iHomefinderVirtualPageFactory::ORGANIZER_DELETE_SAVED_SEARCH_SUBMIT,
-			$matchRulePrefix . $this->urlFactory->getOrganizerDeleteSavedSearchSubmitUrl(false)
+			$matchRulePrefix . $urlFactory->getOrganizerDeleteSavedSearchSubmitUrl(false)
 		);
 		$this->addRule(
 			iHomefinderVirtualPageFactory::ORGANIZER_DELETE_SAVED_LISTING_SUBMIT,
-			$matchRulePrefix . $this->urlFactory->getOrganizerDeleteSavedListingUrl(false) . "/{savedListingId}"
+			$matchRulePrefix . $urlFactory->getOrganizerDeleteSavedListingUrl(false) . "/{savedListingId}"
 		);
 		$this->addRule(
 			iHomefinderVirtualPageFactory::ORGANIZER_EDIT_SAVED_SEARCH,
-			$matchRulePrefix . $this->urlFactory->getOrganizerEditSavedSearchUrl(false) . "/{boardId}"
+			$matchRulePrefix . $urlFactory->getOrganizerEditSavedSearchUrl(false) . "/{boardId}"
 		);
 		$this->addRule(
 			iHomefinderVirtualPageFactory::ORGANIZER_EDIT_SAVED_SEARCH,
-			$matchRulePrefix . $this->urlFactory->getOrganizerEditSavedSearchUrl(false)
+			$matchRulePrefix . $urlFactory->getOrganizerEditSavedSearchUrl(false)
 		);
 		$this->addRule(
 			iHomefinderVirtualPageFactory::ORGANIZER_EDIT_SAVED_SEARCH_SUBMIT,
-			$matchRulePrefix . $this->urlFactory->getOrganizerEditSavedSearchSubmitUrl(false)
+			$matchRulePrefix . $urlFactory->getOrganizerEditSavedSearchSubmitUrl(false)
 		);
 		$this->addRule(
 			iHomefinderVirtualPageFactory::ORGANIZER_EMAIL_UPDATES_CONFIRMATION,
-			$matchRulePrefix . $this->urlFactory->getOrganizerEmailUpdatesConfirmationUrl(false)
+			$matchRulePrefix . $urlFactory->getOrganizerEmailUpdatesConfirmationUrl(false)
 		);
 		$this->addRule(
 			iHomefinderVirtualPageFactory::ORGANIZER_HELP,
-			$matchRulePrefix . $this->urlFactory->getOrganizerHelpUrl(false)
+			$matchRulePrefix . $urlFactory->getOrganizerHelpUrl(false)
 		);
 		$this->addRule(
 			iHomefinderVirtualPageFactory::ORGANIZER_EDIT_SUBSCRIBER,
-			$matchRulePrefix . $this->urlFactory->getOrganizerEditSubscriberUrl(false)
+			$matchRulePrefix . $urlFactory->getOrganizerEditSubscriberUrl(false)
 		);
 		$this->addRule(
 			iHomefinderVirtualPageFactory::ORGANIZER_LOGIN,
-			$matchRulePrefix . $this->urlFactory->getOrganizerLoginUrl(false)
+			$matchRulePrefix . $urlFactory->getOrganizerLoginUrl(false)
 		);
 		$this->addRule(
 			iHomefinderVirtualPageFactory::ORGANIZER_LOGOUT,
-			$matchRulePrefix . $this->urlFactory->getOrganizerLogoutUrl(false)
+			$matchRulePrefix . $urlFactory->getOrganizerLogoutUrl(false)
 		);
 		$this->addRule(
 			iHomefinderVirtualPageFactory::ORGANIZER_VIEW_SAVED_SEARCH,
-			$matchRulePrefix . $this->urlFactory->getOrganizerViewSavedSearchUrl(false) . "/{searchProfileId}"
+			$matchRulePrefix . $urlFactory->getOrganizerViewSavedSearchUrl(false) . "/{searchProfileId}"
 		);
 		$this->addRule(
 			iHomefinderVirtualPageFactory::ORGANIZER_VIEW_SAVED_SEARCH_LIST,
-			$matchRulePrefix . $this->urlFactory->getOrganizerViewSavedSearchListUrl(false)
+			$matchRulePrefix . $urlFactory->getOrganizerViewSavedSearchListUrl(false)
 		);
 		$this->addRule(
 			iHomefinderVirtualPageFactory::ORGANIZER_VIEW_SAVED_LISTING_LIST,
-			$matchRulePrefix . $this->urlFactory->getOrganizerViewSavedListingListUrl(false)
+			$matchRulePrefix . $urlFactory->getOrganizerViewSavedListingListUrl(false)
 		);
 		$this->addRule(
 			iHomefinderVirtualPageFactory::ORGANIZER_RESEND_CONFIRMATION_EMAIL,
-			$matchRulePrefix . $this->urlFactory->getOrganizerResendConfirmationEmailUrl(false)
+			$matchRulePrefix . $urlFactory->getOrganizerResendConfirmationEmailUrl(false)
 		);
 		$this->addRule(
 			iHomefinderVirtualPageFactory::ORGANIZER_ACTIVATE_SUBSCRIBER,
-			$matchRulePrefix . $this->urlFactory->getOrganizerActivateSubscriberUrl(false)
+			$matchRulePrefix . $urlFactory->getOrganizerActivateSubscriberUrl(false)
 		);
 		$this->addRule(
 			iHomefinderVirtualPageFactory::ORGANIZER_SEND_SUBSCRIBER_PASSWORD,
-			$matchRulePrefix . $this->urlFactory->getOrganizerSendSubscriberPasswordUrl(false)
+			$matchRulePrefix . $urlFactory->getOrganizerSendSubscriberPasswordUrl(false)
 		);
 		$this->addRule(
 			iHomefinderVirtualPageFactory::HOTSHEET_SEARCH_RESULTS,
-			$matchRulePrefix . $this->urlFactory->getHotsheetSearchResultsUrl(false) . "/{hotSheetName}/{hotSheetId}"
+			$matchRulePrefix . $urlFactory->getHotsheetSearchResultsUrl(false) . "/{savedSearchName}/{savedSearchId}"
 		);
 		$this->addRule(
 			iHomefinderVirtualPageFactory::HOTSHEET_SEARCH_RESULTS,
-			$matchRulePrefix . $this->urlFactory->getHotsheetSearchResultsUrl(false) . "/{hotSheetId}"
+			$matchRulePrefix . $urlFactory->getHotsheetSearchResultsUrl(false) . "/{savedSearchId}"
 		);
 		$this->addRule(
 			iHomefinderVirtualPageFactory::HOTSHEET_LIST,
-			$matchRulePrefix . $this->urlFactory->getHotsheetListUrl(false)
+			$matchRulePrefix . $urlFactory->getHotsheetListUrl(false)
 		);
 		$this->addRule(
 			iHomefinderVirtualPageFactory::LISTING_SOLD_DETAIL,
-			$matchRulePrefix . $this->urlFactory->getListingSoldDetailUrl(false) . "/{address}/{listingNumber}/{boardId}"
+			$matchRulePrefix . $urlFactory->getListingSoldDetailUrl(false) . "/{listingAddress}/{listingNumber}/{boardId}"
 		);
 		$this->addRule(
 			iHomefinderVirtualPageFactory::LISTING_DETAIL,
-			$matchRulePrefix . $this->urlFactory->getListingDetailUrl(false) . "/{address}/{listingNumber}/{boardId}"
+			$matchRulePrefix . $urlFactory->getListingDetailUrl(false) . "/{listingAddress}/{listingNumber}/{boardId}"
 		);
 		$this->addRule(
 			iHomefinderVirtualPageFactory::LISTING_SEARCH_RESULTS,
-			$matchRulePrefix . $this->urlFactory->getListingsSearchResultsUrl(false)
+			$matchRulePrefix . $urlFactory->getListingsSearchResultsUrl(false)
+		);
+		/**
+		 * @deprecated only used to support old URL
+		 */
+		$this->addRule(
+			iHomefinderVirtualPageFactory::LISTING_SEARCH_RESULTS,
+			$matchRulePrefix . "address-listing-results"
+		);
+		/**
+		 * @deprecated only used to support old URL
+		 */
+		$this->addRule(
+			iHomefinderVirtualPageFactory::LISTING_SEARCH_RESULTS,
+			$matchRulePrefix . "id-listing-results"
 		);
 		$this->addRule(
 			iHomefinderVirtualPageFactory::FEATURED_SEARCH,
-			$matchRulePrefix . $this->urlFactory->getFeaturedSearchResultsUrl(false)
+			$matchRulePrefix . $urlFactory->getFeaturedSearchResultsUrl(false)
 		);
 	}
 	

@@ -2,8 +2,9 @@
 
 class iHomefinderContactFormWidget extends WP_Widget {
 
-	private $contextUtility;
-
+	private $widgetUtility;
+	private $widgetType = iHomefinderWidgetUtility::CONTACT_WIDGET_TYPE;
+	
 	public function __construct() {
 		parent::__construct(
 			"iHomefinderContactFormWidget",
@@ -12,17 +13,17 @@ class iHomefinderContactFormWidget extends WP_Widget {
 				"description" => "Contact form."
 			)
 		);
-		$this->contextUtility = iHomefinderWidgetContextUtility::getInstance();
+		$this->widgetUtility = iHomefinderWidgetUtility::getInstance();
 	}
 	
 	public function widget($args, $instance) {
-		if($this->contextUtility->isEnabled($instance)) {
-			
-			extract($args);
+		if($this->widgetUtility->isEnabled($this, $instance, $this->widgetType)) {
+			$beforeWidget = $args["before_widget"];
+			$afterWidget = $args["after_widget"];
+			$beforeTitle = $args["before_title"];
+			$afterTitle = $args["after_title"];
 			$title = apply_filters("widget_title", $instance["title"]);
-			
 			$remoteRequest = new iHomefinderRequestor();
-			
 			$remoteRequest
 				->addParameter("method", "handleRequest")
 				->addParameter("viewType", "json")
@@ -30,18 +31,14 @@ class iHomefinderContactFormWidget extends WP_Widget {
 				->addParameter("smallView", true)
 				->addParameter("phpStyle", true)
 			;
-			
 			$remoteRequest->setCacheExpiration(60*60);
-			$contentInfo = $remoteRequest->remoteGetRequest();
-			$content = $remoteRequest->getContent($contentInfo);
-			iHomefinderEnqueueResource::getInstance()->addToFooter($contentInfo->head);
-			
-			echo $before_widget;
-			
-			if($title) {
-				echo $before_title . $title . $after_title;
+			$remoteResponse = $remoteRequest->remoteGetRequest();
+			$content = $remoteResponse->getBody();
+			iHomefinderEnqueueResource::getInstance()->addToFooter($remoteResponse->getHead());
+			echo $beforeWidget;
+			if(!empty($title)) {
+				echo $beforeTitle . $title . $afterTitle;
 			}
-			
 			if(iHomefinderLayoutManager::getInstance()->hasExtraLineBreaksInWidget()) {
 				echo "<br />";	
 				echo $content;
@@ -49,16 +46,14 @@ class iHomefinderContactFormWidget extends WP_Widget {
 			} else {
 				echo $content;
 			}
-			
-			echo $after_widget;
+			echo $afterWidget;
 		}
 	}
 	
-	public function update($new_instance, $old_instance) {
-		$instance = $old_instance;
-		$instance["title"] = strip_tags(stripslashes($new_instance["title"]));
-		//Add context related values.
-		$instance = $this->contextUtility->updateContext($new_instance, $instance);
+	public function update($newInstance, $oldInstance) {
+		$instance = $oldInstance;
+		$instance["title"] = strip_tags(stripslashes($newInstance["title"]));
+		$instance = $this->widgetUtility->updateContext($newInstance, $instance);
 		return $instance;
 	}
 	
@@ -72,7 +67,7 @@ class iHomefinderContactFormWidget extends WP_Widget {
 			</label>
 		</p>
 		<?php
-		$this->contextUtility->getPageSelector($this, $instance, iHomefinderConstants::CONTACT_WIDGET_TYPE);
+		$this->widgetUtility->getPageSelector($this, $instance, $this->widgetType);
 		?>
 		<br />
 		<?php

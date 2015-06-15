@@ -15,36 +15,23 @@ class iHomefinderLogger {
 	}
 	
 	private function isDebug() {
-		$debug=false;
-		if(array_key_exists('debug', $_REQUEST)) {
-			$debugValue = $_REQUEST['debug'];
-			if($debugValue && $debugValue === 'true') {
-				$debug=true;
-			}						
-		} elseif(iHomefinderConstants::DEBUG) {
-			$debug=true;
+		$debugValue = iHomefinderUtility::getInstance()->getRequestVar("debug");
+		$debug = false;
+		if($debugValue === "true" || iHomefinderConstants::DEBUG) {
+			$debug = true;
 		}
 		return $debug;				
 	}
 	
 	/**
-	 * Echo messages to the screen if debugging on
-	 * @param unknown_type $message
+	 * dumps messages to the screen if debugging on
+	 * @param mixed $message
 	 */
-	public function debug($message) {	
+	public function debug($message) {
 		if($this->isDebug()) {
-			echo "\n\r";
-			echo microtime(true) . ": ";
-			echo $message;
-		}				
-	}
-			
-	public function debugDumpVar($message) {	
-		if($this->isDebug()) {	
-			echo "\n\r";
 			echo microtime(true) . ": ";
 			var_dump($message);
-		}				
+		}
 	}
 				
 }

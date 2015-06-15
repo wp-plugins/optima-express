@@ -240,11 +240,11 @@ class iHomefinderPermissions {
 		return $this->listingDetail;
 	}
 	
-	public function isPendingAccountEnabled() {
+	public function isPendingAccount() {
 		return $this->pendingAccount;
 	}
 	
-	public function isActiveTrialAccountEnabled() {
+	public function isActiveTrialAccount() {
 		return $this->activeTrialAccount;
 	}
 	

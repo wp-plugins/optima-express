@@ -2,35 +2,34 @@
 
 class iHomefinderOfficeDetailVirtualPageImpl extends iHomefinderAbstractVirtualPage {
 	
-	private $path = "office-detail";
-	private $title = "";
-	private $defaultTitle = "";
-	
 	public function getTitle() {
-		$customTitle = get_option(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_OFFICE_DETAIL);
-		if($customTitle != null && "" != $customTitle) {
-			$this->title=$customTitle;
-		} else {
-			$this->title = $this->defaultTitle;
+		$default = null;
+		if(iHomefinderLayoutManager::getInstance()->supportsSeoVariables()) {
+			$default = "{officeName}";
+		} elseif(is_object($this->remoteResponse) && $this->remoteResponse->hasTitle()) {
+			$default = $this->remoteResponse->getTitle();
 		}
-		return $this->title;
+		return $this->getText(iHomefinderConstants::OPTION_VIRTUAL_PAGE_TITLE_OFFICE_DETAIL, $default);
 	}
 
 	public function getPageTemplate() {
-		$pageTemplate = get_option(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_OFFICE_DETAIL);
-		return $pageTemplate;			
+		return get_option(iHomefinderConstants::OPTION_VIRTUAL_PAGE_TEMPLATE_OFFICE_DETAIL, null);
 	}
 	
-	public function getPath() {
-		$customPath = get_option(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_OFFICE_DETAIL);	
-		if($customPath != null && "" != $customPath) {
-			$this->path = $customPath;
-		}
-		return $this->path;
+	public function getPermalink() {
+		return $this->getText(iHomefinderConstants::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_OFFICE_DETAIL, "office-detail");
+	}
+	
+	function getAvailableVariables() {
+		$variableUtility = iHomefinderVariableUtility::getInstance();
+		return array(
+			$variableUtility->getOfficeName()
+		);
 	}
 	
 	public function getContent() {
 		$this->remoteRequest
+			->addParameters($_REQUEST)
 			->addParameter("method", "handleRequest")
 			->addParameter("viewType", "json")
 			->addParameter("requestType", "office-detail")
@@ -40,15 +39,8 @@ class iHomefinderOfficeDetailVirtualPageImpl extends iHomefinderAbstractVirtualP
 		if(is_numeric($officeId)) {
 			$this->remoteRequest->addParameter("officeID", $officeId);
 		}
-		$this->remoteRequest->addParameters($_REQUEST);
 		$this->remoteRequest->setCacheExpiration(60*60);
 		$this->remoteResponse = $this->remoteRequest->remoteGetRequest();
-		$body = $this->remoteRequest->getContent($this->remoteResponse);
-		if(property_exists($this->remoteResponse, "title")) {
-			//success, display the view
-			$this->defaultTitle = $this->remoteResponse->title;
-		}
-		return $body;
 	}
 	
 }

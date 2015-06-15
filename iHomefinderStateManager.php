@@ -12,8 +12,8 @@ class iHomefinderStateManager {
 
 	private static $instance;
 	private $uniqueId = null;
-	private $identifierCookieName = "ihf_identifier";
-	private $rememberMeCookieName = "ihf_rmuser";
+	const IDENTIFIER_COOKIE_NAME = "ihf_identifier";
+	const REMEMBER_ME_COOKIE_NAME = "ihf_rmuser";
 		
 	//url used for last search
 	//stored in a cookie
@@ -69,15 +69,15 @@ class iHomefinderStateManager {
 			session_start();
 		}
 		
-		if(array_key_exists($this->identifierCookieName, $_COOKIE)) {
-			$this->uniqueId = $_COOKIE[$this->identifierCookieName];
+		if(array_key_exists(self::IDENTIFIER_COOKIE_NAME, $_COOKIE)) {
+			$this->uniqueId = $_COOKIE[self::IDENTIFIER_COOKIE_NAME];
 		}
 		
 		$isWebCrawler=iHomefinderUtility::getInstance()->isWebCrawler();
 		if(empty($this->uniqueId) && !$this->isWebCrawler()) {
 			$this->uniqueId = uniqid();
 			$expireTime = time()+60*60*24*365*5; /* expire in 5 years */
-			setcookie($this->identifierCookieName, $this->uniqueId, $expireTime, "/");
+			setcookie(self::IDENTIFIER_COOKIE_NAME, $this->uniqueId, $expireTime, "/");
 		}
 					
 		/**
@@ -117,7 +117,7 @@ class iHomefinderStateManager {
 	}
 	
 	private function getStateValue($cacheKey) {
-		$value = '';
+		$value = "";
 		if($this->isSessionsEnabled()) {
 			if(array_key_exists($cacheKey, $_SESSION)) {
 				$value = unserialize($_SESSION[$cacheKey]);
@@ -204,7 +204,6 @@ class iHomefinderStateManager {
 	 * longer set the value a a cookie.
 	 */
 	public function getLeadCaptureId() {
-		
 		if($this->leadCaptureId == null) {
 			if(!$this->isWebCrawler()) {
 				$cacheKey = $this->getLeadCaptureKey();
@@ -220,7 +219,7 @@ class iHomefinderStateManager {
 	 * @param unknown_type $leadCaptureId
 	 */
 	public function saveLeadCaptureId($leadCaptureId) {			
-		if(!$this->isWebCrawler()) {
+		if(!$this->isWebCrawler() && !empty($leadCaptureId)) {
 			$cacheKey = $this->getLeadCaptureKey();
 			$this->saveStateValue($cacheKey, (string) $leadCaptureId);
 		}
@@ -240,7 +239,7 @@ class iHomefinderStateManager {
 	 * Store as a session variable or transient.
 	 * 
 	 * @param unknown_type $ihfSessionId
-	 */		
+	 */
 	public function saveIhfSessionId($ihfSessionId) {
 		if(!$this->isWebCrawler()) {
 			$cacheKey = $this->getIhfSessionKey();
@@ -251,8 +250,8 @@ class iHomefinderStateManager {
 	public function getCurrentUrl() {
 		$currentUrl = "";
 		if(!$this->isWebCrawler()) {
-			$host = $_SERVER['HTTP_HOST'];
-			$requestUri = $_SERVER['REQUEST_URI'];	
+			$host = $_SERVER["HTTP_HOST"];
+			$requestUri = $_SERVER["REQUEST_URI"];	
 			$currentUrl = "http://" . $host . $requestUri;	
 		}
 		return $currentUrl;	
@@ -287,7 +286,7 @@ class iHomefinderStateManager {
 		$queryString = "";
 		if(!$this->isWebCrawler()) {
 			$lastSearch = $this->getLastSearch();
-			$searchArray = explode('?', $lastSearch);
+			$searchArray = explode("?", $lastSearch);
 			if(isset($searchArray) && is_array($searchArray) && count($searchArray) > 1) {
 				$queryString = $searchArray[1];
 			}
@@ -297,7 +296,7 @@ class iHomefinderStateManager {
 
 	public function getLastSearchQuery() {
 		$lastSearchQueryString = $this->getLastSearchQueryString();
-		if($lastSearchQueryString != null && trim($lastSearchQueryString) != '') {
+		if($lastSearchQueryString != null && trim($lastSearchQueryString) != "") {
 			$lastSearchNameValueArray = explode("&", $lastSearchQueryString);	
 		}		
 		$lastSearchArray = array();
@@ -358,7 +357,6 @@ class iHomefinderStateManager {
 	}
 
 	public function saveSearchSummary($searchSummary) {
-		
 		if(!$this->isWebCrawler()) {
 			$searchSummaryArray = (array) $searchSummary;				
 			$cacheKey = $this->getSearchSummaryKey();
@@ -383,17 +381,25 @@ class iHomefinderStateManager {
 	
 	public function createRememberMeCookie() {
 		$leadCaptureUserId = $this->getLeadCaptureId();
-		if(leadCaptureUserId != null && !$this->isWebCrawler()) {
+		if(!empty($leadCaptureUserId) && !$this->isWebCrawler()) {
 			$expireTime = time()+60*60*24*365*5; /* expire in 5 years */
-			setcookie($this->rememberMeCookieName, $leadCaptureUserId, $expireTime, "/");
+			setcookie(self::REMEMBER_ME_COOKIE_NAME, $leadCaptureUserId, $expireTime, "/");
 		}
 	}
 	
 	public function deleteRememberMeCookie() {
-		if(isset($_COOKIE[$this->rememberMeCookieName])) {
-			unset($_COOKIE[$this->rememberMeCookieName]);
-			setcookie($this->rememberMeCookieName, '', time()-3600, "/"); // empty value and old timestamp
+		if(isset($_COOKIE[self::REMEMBER_ME_COOKIE_NAME])) {
+			unset($_COOKIE[self::REMEMBER_ME_COOKIE_NAME]);
+			setcookie(self::REMEMBER_ME_COOKIE_NAME, "", time()-3600, "/"); // empty value and old timestamp
 		}
+	}
+	
+	public function isListingIdResults() {
+		return array_key_exists("listingIdList", $_REQUEST);
+	}
+	
+	public function isListingAddressResults() {
+		return array_key_exists("streetNumber", $_REQUEST);
 	}
 	
 }

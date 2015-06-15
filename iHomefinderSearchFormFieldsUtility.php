@@ -1,8 +1,6 @@
 <?php
 
 /**
- * iHomefinderSearchFormFieldsUtility Class
- * 
  * This singleton utility class is used to search form fields.
  */
 class iHomefinderSearchFormFieldsUtility {
@@ -21,8 +19,7 @@ class iHomefinderSearchFormFieldsUtility {
 	}
 	
 	public function getFormData() {
-		$result = $this->formData;
-		if(empty($result)) {
+		if(empty($this->formData)) {
 			$remoteRequest = new iHomefinderRequestor();
 			$remoteRequest
 				->addParameter("method", "handleRequest")
@@ -30,7 +27,8 @@ class iHomefinderSearchFormFieldsUtility {
 				->addParameter("requestType", "search-form-lists")
 			;
 			$remoteRequest->setCacheExpiration(60*60);
-			$response = $remoteRequest->remoteGetRequest();
+			$remoteResponse = $remoteRequest->remoteGetRequest();
+			$response = $remoteResponse->getResponse();
 			if(!empty($response) && is_object($response)) {
 				$hotsheetsList = array();
 				$citiesList = array();
@@ -56,11 +54,10 @@ class iHomefinderSearchFormFieldsUtility {
 				if(property_exists($response, "officeList")) {
 					$officeList = $this->convertItemValues($response->officeList);
 				}
-				$result = new iHomefinderFormData($hotsheetsList, $citiesList, $cityZipList, $propertyTypesList, $agentList, $officeList);
-				$this->formData = $result;
+				$this->formData = new iHomefinderFormData($hotsheetsList, $citiesList, $cityZipList, $propertyTypesList, $agentList, $officeList);
 			}
 		}
-		return $result;
+		return $this->formData;
 	 }	
 
 	/**

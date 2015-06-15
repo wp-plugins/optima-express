@@ -2,32 +2,34 @@
 
 class iHomefinderSearchResultsVirtualPageImpl extends iHomefinderAbstractVirtualPage {
 	
-	//default path used for URL Rewriting
-	private $path="homes-for-sale-results";
-	
 	public function getTitle() {
 		return "Property Search Results";
-	}	
-		
-	function getPageTemplate() {
-		
 	}
 	
-	public function getPath() {
-		return $this->path;
+	public function getPermalink() {
+		return "homes-for-sale-results";
 	}
 			
 	public function getContent() {
-		iHomefinderStateManager::getInstance()->saveLastSearch();
+		$stateManager = iHomefinderStateManager::getInstance();
+		$stateManager->saveLastSearch();
+		//use a different requestType depending on the search
+		$requestType = null;
+		if($stateManager->isListingIdResults()) {
+			$requestType = "results-by-listing-id";
+		} elseif($stateManager->isListingAddressResults()) {
+			$requestType = "results-by-address";
+		} else {
+			$requestType = "listing-search-results";
+		}
 		$this->remoteRequest
+			->addParameters($_REQUEST)
 			->addParameter("method", "handleRequest")
 			->addParameter("viewType", "json")
-			->addParameter("requestType", "listing-search-results")
+			->addParameter("requestType", $requestType)
 			->addParameter("includeSearchSummary", true)
 		;
-		$this->remoteRequest->addParameters($_REQUEST);
 		$this->remoteResponse = $this->remoteRequest->remoteGetRequest();
-		$body = $this->remoteRequest->getContent($this->remoteResponse);	
-		return $body;
-	}		
+	}
+	
 }

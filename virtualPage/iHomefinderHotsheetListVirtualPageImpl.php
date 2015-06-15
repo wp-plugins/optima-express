@@ -2,18 +2,16 @@
 
 class iHomefinderHotsheetListVirtualPageImpl extends iHomefinderAbstractVirtualPage {
 	
-	private $path = "homes-for-sale-toppicks";
-	
 	public function getTitle() {
-		return "Saved Search Pages";
+		return $this->getText(iHomefinderConstants::OPTION_VIRTUAL_PAGE_TITLE_HOTSHEET_LIST, "Saved Search Pages");
 	}
 			
 	public function getPageTemplate() {
-		
+		return get_option(iHomefinderConstants::OPTION_VIRTUAL_PAGE_TEMPLATE_HOTSHEET, null);
 	}
 	
-	public function getPath() {
-		return $this->path;
+	public function getPermalink() {
+		return $this->getText(iHomefinderConstants::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_HOTSHEET, "homes-for-sale-toppicks");
 	}
 			
 	public function getContent() {
@@ -24,7 +22,6 @@ class iHomefinderHotsheetListVirtualPageImpl extends iHomefinderAbstractVirtualP
 		;
 		$this->remoteRequest->setCacheExpiration(60*60);
 		$this->remoteResponse = $this->remoteRequest->remoteGetRequest();
-		$body = $this->remoteRequest->getContent($this->remoteResponse);
-		return $body;
 	}
+	
 }

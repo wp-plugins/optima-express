@@ -16,6 +16,19 @@ class iHomefinderAdminEmail extends iHomefinderAdminAbstractPage {
 		return self::$instance;
 	}
 	
+	public function registerSettings() {
+		register_setting(iHomefinderConstants::OPTION_GROUP_EMAIL_DISPLAY, iHomefinderConstants::EMAIL_HEADER_OPTION);
+		register_setting(iHomefinderConstants::OPTION_GROUP_EMAIL_DISPLAY, iHomefinderConstants::EMAIL_FOOTER_OPTION);
+		register_setting(iHomefinderConstants::OPTION_GROUP_EMAIL_DISPLAY, iHomefinderConstants::EMAIL_PHOTO_OPTION);
+		register_setting(iHomefinderConstants::OPTION_GROUP_EMAIL_DISPLAY, iHomefinderConstants::EMAIL_LOGO_OPTION);
+		register_setting(iHomefinderConstants::OPTION_GROUP_EMAIL_DISPLAY, iHomefinderConstants::EMAIL_NAME_OPTION);
+		register_setting(iHomefinderConstants::OPTION_GROUP_EMAIL_DISPLAY, iHomefinderConstants::EMAIL_COMPANY_OPTION);
+		register_setting(iHomefinderConstants::OPTION_GROUP_EMAIL_DISPLAY, iHomefinderConstants::EMAIL_ADDRESS_LINE1_OPTION);
+		register_setting(iHomefinderConstants::OPTION_GROUP_EMAIL_DISPLAY, iHomefinderConstants::EMAIL_ADDRESS_LINE2_OPTION);
+		register_setting(iHomefinderConstants::OPTION_GROUP_EMAIL_DISPLAY, iHomefinderConstants::EMAIL_PHONE_OPTION);
+		register_setting(iHomefinderConstants::OPTION_GROUP_EMAIL_DISPLAY, iHomefinderConstants::EMAIL_DISPLAY_TYPE_OPTION);
+	}
+	
 	protected function getContent() {
 		$emailDisplayType = get_option(iHomefinderConstants::EMAIL_DISPLAY_TYPE_OPTION, null);
 		?>
@@ -78,11 +91,11 @@ class iHomefinderAdminEmail extends iHomefinderAdminAbstractPage {
 			>
 				<p>Add the logo, photo and business information you would like displayed in your email branding.</p>
 				<h3>Agent Photo</h3>
-				<?php if(get_option(iHomefinderConstants::EMAIL_PHOTO_OPTION)) { ?>
+				<?php if(get_option(iHomefinderConstants::EMAIL_PHOTO_OPTION, null)) { ?>
 					<img
 						id="ihf_upload_agent_photo_image"
-						src="<?php echo get_option(iHomefinderConstants::EMAIL_PHOTO_OPTION) ?>"
-						<?php if(!get_option(iHomefinderConstants::EMAIL_PHOTO_OPTION)) { ?>
+						src="<?php echo get_option(iHomefinderConstants::EMAIL_PHOTO_OPTION, null) ?>"
+						<?php if(!get_option(iHomefinderConstants::EMAIL_PHOTO_OPTION, null)) { ?>
 							style="display:none"
 						<?php } ?>
 					/>
@@ -93,16 +106,16 @@ class iHomefinderAdminEmail extends iHomefinderAdminAbstractPage {
 					class="regular-text"
 					type="text"
 					name="<?php echo iHomefinderConstants::EMAIL_PHOTO_OPTION ?>"
-					value="<?php echo get_option(iHomefinderConstants::EMAIL_PHOTO_OPTION) ?>"
+					value="<?php echo get_option(iHomefinderConstants::EMAIL_PHOTO_OPTION, null) ?>"
 				/>
-				<input id="ihf_upload_agent_photo_button" type="button" value="Upload Agent Photo" class="button-secondary" />
+				<button id="ihf_upload_agent_photo_button" class="button-secondary" type="button">Upload Agent Photo</button>
 				<p>Enter an image URL or use an image from the Media Library</p>
 				<h3>Logo</h3>
-				<?php if(get_option(iHomefinderConstants::EMAIL_LOGO_OPTION)) { ?>
+				<?php if(get_option(iHomefinderConstants::EMAIL_LOGO_OPTION, null)) { ?>
 					<img
 						id="ihf_upload_email_logo_image"
-						src="<?php echo get_option(iHomefinderConstants::EMAIL_LOGO_OPTION) ?>"
-						<?php if(!get_option(iHomefinderConstants::EMAIL_LOGO_OPTION)) { ?>
+						src="<?php echo get_option(iHomefinderConstants::EMAIL_LOGO_OPTION, null) ?>"
+						<?php if(!get_option(iHomefinderConstants::EMAIL_LOGO_OPTION, null)) { ?>
 							style="display:none"
 						<?php } ?>
 					/>
@@ -113,9 +126,9 @@ class iHomefinderAdminEmail extends iHomefinderAdminAbstractPage {
 					class="regular-text"
 					type="text"
 					name="<?php echo iHomefinderConstants::EMAIL_LOGO_OPTION ?>"
-					value="<?php echo get_option(iHomefinderConstants::EMAIL_LOGO_OPTION) ?>"
+					value="<?php echo get_option(iHomefinderConstants::EMAIL_LOGO_OPTION, null) ?>"
 				/>
-				<input id="ihf_upload_email_logo_button" type="button" value="Upload Logo" class="button-secondary"/>
+				<button id="ihf_upload_email_logo_button" class="button-secondary" type="button">Upload Logo</button>
 				<p>Enter an image URL or use an image from the Media Library</p>
 				<h3>Business Information</h3>
 				<table class="form-table condensed">
@@ -125,7 +138,7 @@ class iHomefinderAdminEmail extends iHomefinderAdminAbstractPage {
 								<label for="<?php echo iHomefinderConstants::EMAIL_NAME_OPTION ?>">Name</label>
 							</th>
 							<td>
-								<input id="<?php echo iHomefinderConstants::EMAIL_NAME_OPTION ?>" class="regular-text" type="text" name="<?php echo iHomefinderConstants::EMAIL_NAME_OPTION ?>" value="<?php echo get_option(iHomefinderConstants::EMAIL_NAME_OPTION) ?>" />
+								<input id="<?php echo iHomefinderConstants::EMAIL_NAME_OPTION ?>" class="regular-text" type="text" name="<?php echo iHomefinderConstants::EMAIL_NAME_OPTION ?>" value="<?php echo get_option(iHomefinderConstants::EMAIL_NAME_OPTION, null) ?>" />
 							</td>
 						</tr>
 						<tr>
@@ -133,7 +146,7 @@ class iHomefinderAdminEmail extends iHomefinderAdminAbstractPage {
 								<label for="<?php echo iHomefinderConstants::EMAIL_COMPANY_OPTION ?>">Company</label>
 							</th>
 							<td>
-								<input id="<?php echo iHomefinderConstants::EMAIL_COMPANY_OPTION ?>" class="regular-text" type="text" name="<?php echo iHomefinderConstants::EMAIL_COMPANY_OPTION ?>" value="<?php echo get_option(iHomefinderConstants::EMAIL_COMPANY_OPTION) ?>" />
+								<input id="<?php echo iHomefinderConstants::EMAIL_COMPANY_OPTION ?>" class="regular-text" type="text" name="<?php echo iHomefinderConstants::EMAIL_COMPANY_OPTION ?>" value="<?php echo get_option(iHomefinderConstants::EMAIL_COMPANY_OPTION, null) ?>" />
 							</td>
 						</tr>
 						<tr>
@@ -141,7 +154,7 @@ class iHomefinderAdminEmail extends iHomefinderAdminAbstractPage {
 								<label for="<?php echo iHomefinderConstants::EMAIL_ADDRESS_LINE1_OPTION ?>">Address Line 1</label>
 							</th>
 							<td>
-								<input id="<?php echo iHomefinderConstants::EMAIL_ADDRESS_LINE1_OPTION ?>" class="regular-text" type="text" name="<?php echo iHomefinderConstants::EMAIL_ADDRESS_LINE1_OPTION ?>" value="<?php echo get_option(iHomefinderConstants::EMAIL_ADDRESS_LINE1_OPTION) ?>" />
+								<input id="<?php echo iHomefinderConstants::EMAIL_ADDRESS_LINE1_OPTION ?>" class="regular-text" type="text" name="<?php echo iHomefinderConstants::EMAIL_ADDRESS_LINE1_OPTION ?>" value="<?php echo get_option(iHomefinderConstants::EMAIL_ADDRESS_LINE1_OPTION, null) ?>" />
 							</td>
 						</tr>
 						<tr>
@@ -149,7 +162,7 @@ class iHomefinderAdminEmail extends iHomefinderAdminAbstractPage {
 								<label for="<?php echo iHomefinderConstants::EMAIL_ADDRESS_LINE2_OPTION ?>">Address Line 2</label>
 							</th>
 							<td>
-								<input id="<?php echo iHomefinderConstants::EMAIL_ADDRESS_LINE2_OPTION ?>" class="regular-text" type="text" name="<?php echo iHomefinderConstants::EMAIL_ADDRESS_LINE2_OPTION ?>" value="<?php echo get_option(iHomefinderConstants::EMAIL_ADDRESS_LINE2_OPTION) ?>" />
+								<input id="<?php echo iHomefinderConstants::EMAIL_ADDRESS_LINE2_OPTION ?>" class="regular-text" type="text" name="<?php echo iHomefinderConstants::EMAIL_ADDRESS_LINE2_OPTION ?>" value="<?php echo get_option(iHomefinderConstants::EMAIL_ADDRESS_LINE2_OPTION, null) ?>" />
 							</td>
 						</tr>
 						<tr>
@@ -157,7 +170,7 @@ class iHomefinderAdminEmail extends iHomefinderAdminAbstractPage {
 								<label for="<?php echo iHomefinderConstants::EMAIL_PHONE_OPTION ?>" for="">Phone</label>
 							</th>
 							<td>
-								<input id="<?php echo iHomefinderConstants::EMAIL_PHONE_OPTION ?>" class="regular-text" type="text" name="<?php echo iHomefinderConstants::EMAIL_PHONE_OPTION ?>" value="<?php echo get_option(iHomefinderConstants::EMAIL_PHONE_OPTION) ?>" />
+								<input id="<?php echo iHomefinderConstants::EMAIL_PHONE_OPTION ?>" class="regular-text" type="text" name="<?php echo iHomefinderConstants::EMAIL_PHONE_OPTION ?>" value="<?php echo get_option(iHomefinderConstants::EMAIL_PHONE_OPTION, null) ?>" />
 							</td>
 						</tr>
 					</tbody>
@@ -181,7 +194,7 @@ class iHomefinderAdminEmail extends iHomefinderAdminAbstractPage {
 						"tinymce" => true,
 						"textarea_name" => iHomefinderConstants::EMAIL_HEADER_OPTION
 					);
-					$emailHeaderContent = get_option(iHomefinderConstants::EMAIL_HEADER_OPTION);
+					$emailHeaderContent = get_option(iHomefinderConstants::EMAIL_HEADER_OPTION, null);
 					wp_editor($emailHeaderContent, "emailheaderid", $emailHeaderEditorSettings);
 				?>
 				<br />
@@ -194,7 +207,7 @@ class iHomefinderAdminEmail extends iHomefinderAdminAbstractPage {
 						"tinymce" => true,
 						"textarea_name" => iHomefinderConstants::EMAIL_FOOTER_OPTION
 					);
-					$emailFooterContent = get_option(iHomefinderConstants::EMAIL_FOOTER_OPTION);
+					$emailFooterContent = get_option(iHomefinderConstants::EMAIL_FOOTER_OPTION, null);
 					wp_editor($emailFooterContent, "emailfooterid", $emailFooterEditorSettings);
 				?>
 			</div>
@@ -221,19 +234,19 @@ class iHomefinderAdminEmail extends iHomefinderAdminAbstractPage {
 	
 	public function getHeader() {
 		$result = null;
-		$emailDisplayType = get_option(iHomefinderConstants::EMAIL_DISPLAY_TYPE_OPTION);
+		$emailDisplayType = get_option(iHomefinderConstants::EMAIL_DISPLAY_TYPE_OPTION, null);
 		if(!$emailDisplayType) {
 			$emailDisplayType = self::EMAIL_DISPLAY_TYPE_DEFAULT_VALUE;
 		}
 		switch ($emailDisplayType) {
 			case self::EMAIL_DISPLAY_TYPE_CUSTOM_IMAGES_VALUE:
-				$agentPhoto = get_option(iHomefinderConstants::EMAIL_PHOTO_OPTION);
-				$logo = get_option(iHomefinderConstants::EMAIL_LOGO_OPTION);
-				$name = get_option(iHomefinderConstants::EMAIL_NAME_OPTION);
-				$company = get_option(iHomefinderConstants::EMAIL_COMPANY_OPTION);
-				$address1 = get_option(iHomefinderConstants::EMAIL_ADDRESS_LINE1_OPTION);
-				$address2 = get_option(iHomefinderConstants::EMAIL_ADDRESS_LINE2_OPTION);
-				$phone = get_option(iHomefinderConstants::EMAIL_PHONE_OPTION);
+				$agentPhoto = get_option(iHomefinderConstants::EMAIL_PHOTO_OPTION, null);
+				$logo = get_option(iHomefinderConstants::EMAIL_LOGO_OPTION, null);
+				$name = get_option(iHomefinderConstants::EMAIL_NAME_OPTION, null);
+				$company = get_option(iHomefinderConstants::EMAIL_COMPANY_OPTION, null);
+				$address1 = get_option(iHomefinderConstants::EMAIL_ADDRESS_LINE1_OPTION, null);
+				$address2 = get_option(iHomefinderConstants::EMAIL_ADDRESS_LINE2_OPTION, null);
+				$phone = get_option(iHomefinderConstants::EMAIL_PHONE_OPTION, null);
 				$result = $this->getBasicEmailHeader($agentPhoto, $logo, $name, $company, $address1, $address2, $phone);
 				break;
 			case self::EMAIL_DISPLAY_TYPE_CUSTOM_HTML_VALUE:
@@ -241,7 +254,7 @@ class iHomefinderAdminEmail extends iHomefinderAdminAbstractPage {
 				break;
 			case self::EMAIL_DISPLAY_TYPE_DEFAULT_VALUE:
 				//Use the agent photo and office logo that were previoulsy uploaded
-				$agentPhoto = get_option(iHomefinderConstants::AGENT_PHOTO_OPTION);
+				$agentPhoto = get_option(iHomefinderConstants::AGENT_PHOTO_OPTION, null);
 				$logo = $this->getDefaultLogo();
 				$result = $this->getBasicEmailHeader($agentPhoto, $logo, null, null, null, null, null);
 				break;
@@ -252,19 +265,19 @@ class iHomefinderAdminEmail extends iHomefinderAdminAbstractPage {
 	
 	public function getFooter() {
 		$result = null;
-		$emailDisplayType = get_option(iHomefinderConstants::EMAIL_DISPLAY_TYPE_OPTION);
+		$emailDisplayType = get_option(iHomefinderConstants::EMAIL_DISPLAY_TYPE_OPTION, null);
 		if(!$emailDisplayType) {
 			$emailDisplayType = self::EMAIL_DISPLAY_TYPE_DEFAULT_VALUE;
 		}
 		switch ($emailDisplayType) {
 			case self::EMAIL_DISPLAY_TYPE_CUSTOM_IMAGES_VALUE:
-				$agentPhoto = get_option(iHomefinderConstants::EMAIL_PHOTO_OPTION);
-				$logo = get_option(iHomefinderConstants::EMAIL_LOGO_OPTION);
-				$name = get_option(iHomefinderConstants::EMAIL_NAME_OPTION);
-				$company = get_option(iHomefinderConstants::EMAIL_COMPANY_OPTION);
-				$address1 = get_option(iHomefinderConstants::EMAIL_ADDRESS_LINE1_OPTION);
-				$address2 = get_option(iHomefinderConstants::EMAIL_ADDRESS_LINE2_OPTION);
-				$phone = get_option(iHomefinderConstants::EMAIL_PHONE_OPTION);
+				$agentPhoto = get_option(iHomefinderConstants::EMAIL_PHOTO_OPTION, null);
+				$logo = get_option(iHomefinderConstants::EMAIL_LOGO_OPTION, null);
+				$name = get_option(iHomefinderConstants::EMAIL_NAME_OPTION, null);
+				$company = get_option(iHomefinderConstants::EMAIL_COMPANY_OPTION, null);
+				$address1 = get_option(iHomefinderConstants::EMAIL_ADDRESS_LINE1_OPTION, null);
+				$address2 = get_option(iHomefinderConstants::EMAIL_ADDRESS_LINE2_OPTION, null);
+				$phone = get_option(iHomefinderConstants::EMAIL_PHONE_OPTION, null);
 				$result = $this->getBasicEmailFooter($agentPhoto, $logo, $name, $company, $address1, $address2, $phone);
 				break;
 			case self::EMAIL_DISPLAY_TYPE_CUSTOM_HTML_VALUE:
@@ -272,7 +285,7 @@ class iHomefinderAdminEmail extends iHomefinderAdminAbstractPage {
 				break;
 			case self::EMAIL_DISPLAY_TYPE_DEFAULT_VALUE:
 				//Use the agent photo and office logo that were previoulsy uploaded
-				$agentPhoto = get_option(iHomefinderConstants::AGENT_PHOTO_OPTION);
+				$agentPhoto = get_option(iHomefinderConstants::AGENT_PHOTO_OPTION, null);
 				$logo = $this->getDefaultLogo();
 				$result = $this->getBasicEmailFooter($agentPhoto, $logo, null, null, null, null, null);
 				break;

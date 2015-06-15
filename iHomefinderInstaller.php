@@ -1,23 +1,23 @@
 <?php
 
 class iHomefinderInstaller{
-
+	
 	private static $instance;
 	private $rewriteRules;
 	private $admin;
-
+	
 	private function __construct() {
 		$this->rewriteRules = iHomefinderRewriteRules::getInstance();
 		$this->admin = iHomefinderAdmin::getInstance();
 	}
-
+	
 	public static function getInstance() {
 		if(!isset(self::$instance)) {
 			self::$instance = new self();
 		}
 		return self::$instance;
 	}
-
+	
 	/**
 	 * installs the Optima Express plugin and initializes rewrite rules.
 	 */
@@ -28,7 +28,7 @@ class iHomefinderInstaller{
 			update_option(iHomefinderConstants::OPTION_LAYOUT_TYPE, iHomefinderConstants::OPTION_LAYOUT_TYPE_RESPONSIVE);
 		}
 	}
-
+	
 	/**
 	 * removes Optima Express plugin related information.
 	 */
@@ -36,28 +36,25 @@ class iHomefinderInstaller{
 		//Clear out any rewrite rules associated with the plugin
 		$this->rewriteRules->flushRules();
 	}
-
-
+	
 	/**
 	 * Update authentication and rewrite information after upgrade
 	 */
 	public function upgrade() {
 		$currentVersion = get_option(iHomefinderConstants::VERSION_OPTION, null);
 		if($currentVersion !== iHomefinderConstants::VERSION) {
+			$this->addStyleTagsToCssOverride();
 			if($this->admin->previouslyActivated()) {
-				$this->admin->updateAuthenticationToken();
+				$this->admin->activateAuthenticationToken();
 				$this->rewriteRules->initialize();
 				$this->rewriteRules->flushRules();
 				update_option(iHomefinderConstants::VERSION_OPTION, iHomefinderConstants::VERSION);
 			}
-			$this->cleanUp();
+			$this->deleteOldOptions();
 		}
 	}
 	
-	/**
-	 * used to delete old options
-	 */
-	private function cleanUp() {
+	private function deleteOldOptions() {
 		$options = array(
 			"ihf_email_updates_enabled",
 			"ihf_save_listing_enabled",
@@ -79,6 +76,15 @@ class iHomefinderInstaller{
 		);
 		foreach($options as $option) {
 			delete_option($option);
+		}
+	}
+	
+	private function addStyleTagsToCssOverride() {
+		$migrated = get_option(iHomefinderConstants::CSS_OVERRIDE_MIGRATED, false);
+		if(!$migrated) {
+			$cssOverride = get_option(iHomefinderConstants::CSS_OVERRIDE_OPTION, null);
+			update_option(iHomefinderConstants::CSS_OVERRIDE_OPTION, "<style type=\"text/css\">\n" . $cssOverride . "\n</style>");
+			update_option(iHomefinderConstants::CSS_OVERRIDE_MIGRATED, true);
 		}
 	}
 	

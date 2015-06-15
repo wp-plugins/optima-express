@@ -3,7 +3,7 @@
 Plugin Name: Optima Express IDX Plugin
 Plugin URI: http://wordpress.org/extend/plugins/optima-express/
 Description: Adds MLS / IDX property search and listings to your site. Includes search and listing pages, widgets and shortcodes. Requires an IDX account from iHomefinder. Get a free trial account with sample IDX data, or a paid account with data from your MLS.
-Version: 2.6.4
+Version: 2.7.0
 Author: ihomefinder
 Author URI: http://www.ihomefinder.com
 License: GPL
@@ -33,7 +33,6 @@ if(is_admin()) {
 	add_action("admin_menu", array(iHomefinderAdmin::getInstance(), "createAdminMenu"));
 	add_action("admin_init", array(iHomefinderInstaller::getInstance(), "upgrade"));
 	add_action("admin_init", array(iHomefinderAdmin::getInstance(), "registerSettings"));
-	add_action("admin_init", array(iHomefinderWidgetContextUtility::getInstance(), "loadWidgetJavascript"));
 	//Adds functionality to the text editor for pages and posts
 	//Add buttons to text editor and initialize short codes
 	add_action("admin_init", array(iHomefinderShortcodeSelector::getInstance(), "addButtons"));	
@@ -50,12 +49,10 @@ if(is_admin()) {
 	add_action("init", array(iHomefinderEnqueueResource::getInstance(), "loadStandardJavaScript"));
 	add_action("init", array(iHomefinderEnqueueResource::getInstance(), "loadJavaScript"));
 	add_action("init", array(iHomefinderEnqueueResource::getInstance(), "loadCSS"));
-	add_action("wp_enqueue_scripts", array(iHomefinderWidgetContextUtility::getInstance(), "loadWidgetStyle"));
 	//Remember the users state in the application (subscriber info and last search)
 	add_action("plugins_loaded", array(iHomefinderStateManager::getInstance(), "initialize"), 5);	
 	add_action("wp_head", array(iHomefinderEnqueueResource::getInstance(), "getMetaTags"), -100);
 	add_action("wp_head", array(iHomefinderEnqueueResource::getInstance(), "getHeader"));
-	add_action("wp_head", array(iHomefinderEnqueueResource::getInstance(), "addCustomCSS"));
 	add_action("wp_footer", array(iHomefinderEnqueueResource::getInstance(), "getFooter"));
 	add_filter("page_template", array(iHomefinderVirtualPageDispatcher::getInstance(), "getPageTemplate"));
 	add_filter("the_content", array(iHomefinderVirtualPageDispatcher::getInstance(), "getContent"), 20);
@@ -117,6 +114,7 @@ add_action("wp_ajax_nopriv_ihf_save_search_subscriber_session", array(iHomefinde
 add_action("wp_ajax_nopriv_ihf_area_autocomplete", array(iHomefinderAjaxHandler::getInstance(), "getAutocompleteMatches"));
 add_action("wp_ajax_nopriv_ihf_contact_form_request", array(iHomefinderAjaxHandler::getInstance(), "contactFormRequest"));
 add_action("wp_ajax_nopriv_ihf_send_password", array(iHomefinderAjaxHandler::getInstance(), "sendPassword"));
+add_action("wp_ajax_nopriv_ihf_email_alert_popup", array(iHomefinderAjaxHandler::getInstance(), "emailAlertPopup"));
 
 add_action("wp_ajax_ihf_more_info_request", array(iHomefinderAjaxHandler::getInstance(), "requestMoreInfo"));
 add_action("wp_ajax_ihf_schedule_showing", array(iHomefinderAjaxHandler::getInstance(), "scheduleShowing"));
@@ -133,6 +131,7 @@ add_action("wp_ajax_ihf_save_search_subscriber_session", array(iHomefinderAjaxHa
 add_action("wp_ajax_ihf_area_autocomplete", array(iHomefinderAjaxHandler::getInstance(), "getAutocompleteMatches"));
 add_action("wp_ajax_ihf_contact_form_request", array(iHomefinderAjaxHandler::getInstance(), "contactFormRequest"));
 add_action("wp_ajax_ihf_send_password", array(iHomefinderAjaxHandler::getInstance(), "sendPassword"));
+add_action("wp_ajax_ihf_email_alert_popup", array(iHomefinderAjaxHandler::getInstance(), "emailAlertPopup"));
 add_action("wp_ajax_ihf_tiny_mce_shortcode_dialog", array(iHomefinderShortcodeSelector::getInstance(), "getShortcodeSelectorContent"));
 
 //Disable canonical urls, because we use a single page to display all results

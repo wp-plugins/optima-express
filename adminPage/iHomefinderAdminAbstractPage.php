@@ -9,36 +9,15 @@ abstract class iHomefinderAdminAbstractPage implements iHomefinderAdminPageInter
 	}
 	
 	public function getPage() {
+		$this->registerSettings();
 		if(!current_user_can("manage_options")) {
 			wp_die("You do not have sufficient permissions to access this page.");
 		}
 		if($this->isUpdated()) {
-			$this->admin->updateAuthenticationToken();
+			$this->admin->activateAuthenticationToken();
 		}
 		?>
-		<style type="text/css">
-			select.regular-text {
-				width: 25em;
-			}
-			.form-table.condensed td,
-			.form-table.condensed th {
-				padding: 5px 0px 5px 0px;
-			}
-			.form-table.condensed th {
-			    vertical-align: middle;
-			}
-			.form-table.condensed td {
-			    font-size: 13px;
-			}
-			.button-large-ihf {
-				height: 54px !important;
-				text-align: center;
-				font: 14px arial !important;
-				padding-top: 10px !important;
-				margin-right: 15px !important;
-			}
-		</style>
-		<div class="wrap">
+		<div id="ihf-main-container" class="wrap">
 			<?php
 			$this->getContent();
 			?>
@@ -46,17 +25,20 @@ abstract class iHomefinderAdminAbstractPage implements iHomefinderAdminPageInter
 		<?php
 	}
 	
+	public function registerSettings() {
+		
+	}
+	
 	protected function getContent() {
-		?>
-		nothing
-		<?php
+		
 	}
 	
 	//Check if an options form has been updated.
 	//When new options are updated, the parameter "updated" is set to true
 	public function isUpdated() {
-		$isUpdated = (array_key_exists("settings-updated", $_REQUEST) && $_REQUEST["settings-updated"] === "true");
-		return $isUpdated;
+		$settingsUpdated = iHomefinderUtility::getInstance()->getRequestVar("settings-updated");
+		$result = $settingsUpdated === "true";
+		return $result;
 	}
 	
 	protected function showErrorMessages($errors) {
@@ -74,8 +56,8 @@ abstract class iHomefinderAdminAbstractPage implements iHomefinderAdminPageInter
 	}
 	
 	protected function hasErrors($errors) {
-		$hasErrors = $errors !== null && count($errors) > 0;
-		return $hasErrors;
+		$result = $errors !== null && count($errors) > 0;
+		return $result;
 	}
 	
 }

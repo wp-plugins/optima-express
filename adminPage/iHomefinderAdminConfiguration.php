@@ -11,12 +11,22 @@ class iHomefinderAdminConfiguration extends iHomefinderAdminAbstractPage {
 		return self::$instance;
 	}
 	
+	public function registerSettings() {
+		register_setting(iHomefinderConstants::OPTION_GROUP_CONFIGURATION, iHomefinderConstants::OPTION_LAYOUT_TYPE);
+		register_setting(iHomefinderConstants::OPTION_GROUP_CONFIGURATION, iHomefinderConstants::CSS_OVERRIDE_OPTION);
+		register_setting(iHomefinderConstants::OPTION_GROUP_CONFIGURATION, iHomefinderConstants::COLOR_SCHEME_OPTION);
+	}
+	
 	protected function getContent() {
+		$responsive = iHomefinderLayoutManager::getInstance()->isResponsive();
+		$cssOverride = get_option(iHomefinderConstants::CSS_OVERRIDE_OPTION, null);
+		if(empty($cssOverride)) {
+			$cssOverride = "<style type=\"text/css\">\n\n</style>";
+		}
 		?>
-		<?php $responsive = iHomefinderLayoutManager::getInstance()->isResponsive(); ?>
 		<h2>Configuration</h2>
 		<form method="post" action="options.php">
-			<?php settings_fields(iHomefinderConstants::OPTION_CONFIG_PAGE); ?>
+			<?php settings_fields(iHomefinderConstants::OPTION_GROUP_CONFIGURATION); ?>
 			<table class="form-table">
 				<?php if(!iHomefinderPermissions::getInstance()->isOmnipressSite()) { ?>
 					<tr>
@@ -31,7 +41,7 @@ class iHomefinderAdminConfiguration extends iHomefinderAdminAbstractPage {
 						</td>
 					</tr>
 				<?php } else { ?>
-					<input type="hidden" name="<?php echo iHomefinderConstants::OPTION_LAYOUT_TYPE; ?>" value="<?php echo get_option(iHomefinderConstants::OPTION_LAYOUT_TYPE); ?>" />
+					<input type="hidden" name="<?php echo iHomefinderConstants::OPTION_LAYOUT_TYPE; ?>" value="<?php echo get_option(iHomefinderConstants::OPTION_LAYOUT_TYPE, null); ?>" />
 				<?php } ?>
 				<?php if(iHomefinderLayoutManager::getInstance()->supportsColorScheme()) { ?>
 					<tr>
@@ -39,8 +49,8 @@ class iHomefinderAdminConfiguration extends iHomefinderAdminAbstractPage {
 							<label for="<?php echo iHomefinderConstants::COLOR_SCHEME_OPTION; ?>">Button Color</label>
 						</th>
 						<td>
-							<?php $colorScheme = get_option(iHomefinderConstants::COLOR_SCHEME_OPTION) ?>
-							<select id="<?php echo iHomefinderConstants::COLOR_SCHEME_OPTION; ?>" name="<?php echo iHomefinderConstants::COLOR_SCHEME_OPTION ?>">
+							<?php $colorScheme = get_option(iHomefinderConstants::COLOR_SCHEME_OPTION, null) ?>
+							<select id="<?php echo iHomefinderConstants::COLOR_SCHEME_OPTION; ?>" name="<?php echo iHomefinderConstants::COLOR_SCHEME_OPTION; ?>">
 								<option value="gray" <?php if($colorScheme == "gray") { ?>selected<?php } ?>>Gray</option>
 								<option value="red" <?php if($colorScheme == "red") { ?>selected<?php } ?>>Red</option>
 								<option value="green" <?php if($colorScheme == "green") { ?>selected<?php } ?>>Green</option>
@@ -57,8 +67,8 @@ class iHomefinderAdminConfiguration extends iHomefinderAdminAbstractPage {
 						<label for="<?php echo iHomefinderConstants::CSS_OVERRIDE_OPTION; ?>">CSS Override</label>
 					</th>
 					<td>
-						<p>To redefine an Optima Express style, paste the edited style below.</p>
-						<textarea id="<?php echo iHomefinderConstants::CSS_OVERRIDE_OPTION; ?>" name="<?php echo iHomefinderConstants::CSS_OVERRIDE_OPTION ?>" style="width: 100%; height: 300px; "><?php echo get_option(iHomefinderConstants::CSS_OVERRIDE_OPTION, null); ?></textarea>
+						<p>To redefine an Optima Express style, paste the edited CSS inside the style tags in the field below.</p>
+						<textarea id="<?php echo iHomefinderConstants::CSS_OVERRIDE_OPTION; ?>" name="<?php echo iHomefinderConstants::CSS_OVERRIDE_OPTION; ?>" style="width: 100%; height: 300px; "><?php echo $cssOverride; ?></textarea>
 					</td>
 				</tr>
 			</table>
