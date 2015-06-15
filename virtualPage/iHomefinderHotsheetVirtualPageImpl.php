@@ -43,7 +43,9 @@ class iHomefinderHotsheetVirtualPageImpl extends iHomefinderAbstractVirtualPage 
 			->addParameter("includeSearchSummary", true)
 		;
 		$hotSheetId = iHomefinderUtility::getInstance()->getQueryVar("savedSearchId");
-		$this->remoteRequest->addParameter("hotSheetId", $hotSheetId);
+		if(!empty($hotSheetId)) {
+			$this->remoteRequest->addParameter("hotSheetId", $hotSheetId);
+		}
 		$title = $this->getTitle();
 		if(empty($title)) {
 			$this->remoteRequest->addParameter("includeDisplayName", false);

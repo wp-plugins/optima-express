@@ -206,7 +206,7 @@ class iHomefinderShortcodeDispatcher {
 		$content = null;
 		if($this->getAttribute($attributes, "id") != null) {
 			$virtualPage = iHomefinderVirtualPageFactory::getInstance()->getVirtualPage(iHomefinderVirtualPageFactory::HOTSHEET_SEARCH_RESULTS);
-			$_REQUEST["savedSearchId"] = $this->getAttribute($attributes, "id");
+			$_REQUEST["hotSheetId"] = $this->getAttribute($attributes, "id");
 			$_REQUEST["includeMap"] = $this->getAttribute($attributes, "includeMap");
 			$_REQUEST["sortBy"] = $this->getAttribute($attributes, "sortBy");
 			if($this->getAttribute($attributes, "header") == "true") {
@@ -435,8 +435,8 @@ class iHomefinderShortcodeDispatcher {
 	/**
 	 * all values in the $attributes array are convered to lowercase
 	 */
-	private function getAttribute(array $attributes, $key) {
-		return iHomefinderUtility::getInstance()->getVarFromArray($key, $attributes);;
+	private function getAttribute($attributes, $key) {
+		return iHomefinderUtility::getInstance()->getVarFromArray($key, $attributes);
 	}
 	
 	/**
