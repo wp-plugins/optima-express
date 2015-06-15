@@ -23,7 +23,7 @@ class iHomefinderUtility {
 		return $result;
 	}
 
-	public function getVarFromArray($key, array $array) {
+	public function getVarFromArray($key, $array) {
 		$result = null;
 		$key = strtolower($key);
 		$array = $this->arrayKeysToLowerCase($array);
@@ -33,11 +33,13 @@ class iHomefinderUtility {
 		return $result;
 	}
 	
-	private function arrayKeysToLowerCase(array $array) {
+	private function arrayKeysToLowerCase($array) {
 		$lowerCaseKeysArray = array();
-		foreach($array as $key => $value) {
-			$key = strtolower($key);
-			$lowerCaseKeysArray[$key] = $value;
+		if(is_array($array)) {
+			foreach($array as $key => $value) {
+				$key = strtolower($key);
+				$lowerCaseKeysArray[$key] = $value;
+			}
 		}
 		return $lowerCaseKeysArray;
 	}
