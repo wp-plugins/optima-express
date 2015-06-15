@@ -1,0 +1,31 @@
+.ihf-bio-img {
+	vertical-align: top;
+}
+
+.ihf-bio-img img {
+	width: 90px;
+	margin-top: 3px;
+	margin-right: 10px;
+	max-width: none !important;
+}
+
+.ihf-bio-about-info {
+	font-size: 12px;
+	line-height: 1.5em;
+}
+
+.ihf-seo-link {
+	font-size: 11px;
+	line-height: 1.6em;
+	margin-bottom: 10px;
+	display: inline-block;
+	width: 75px;
+	padding: 5px;
+}
+
+.ihf-social-icon {
+	width: 24px;
+	height: 24px;
+	float: left;
+	margin: 2px;
+}
