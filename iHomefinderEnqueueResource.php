@@ -74,18 +74,12 @@ class iHomefinderEnqueueResource {
 				$this->enqueueStyle("ihf-layout-blue-gradient", "css/ihlayout-blue-gradient.css");
 				break;
 		}
-		$this->enqueueStyle("jquery-ui", "css/jquery-ui-1.10.3.custom.min.css");		
+		$this->enqueueStyle("jquery-ui", "css/jquery-ui-1.10.3.custom.min.css");
+		$this->enqueueStyle("ihf-widget-style", "css/widget-style.css");
 	}
 	
 	private function enqueueStyle($handle, $src) {
 		wp_enqueue_style($handle, plugins_url($src, __FILE__), null, iHomefinderConstants::VERSION);
-	}
-	
-	public function addCustomCSS() {
-		$cssOverride = get_option(iHomefinderConstants::CSS_OVERRIDE_OPTION, null);
-		if(!empty($cssOverride)) {
-			echo "<style type=\"text/css\">" . $cssOverride . "</style>";
-		}
 	}
 	
 	public function addToHeader($value) {
@@ -93,6 +87,7 @@ class iHomefinderEnqueueResource {
 	}
 	
 	public function getHeader() {
+		echo get_option(iHomefinderConstants::CSS_OVERRIDE_OPTION, null);
 		foreach($this->header as $value) {
 			echo $value;
 		}

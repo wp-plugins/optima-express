@@ -2,50 +2,151 @@
 
 interface iHomefinderConstants {
 
-	const VERSION = "2.6.4";
+	const VERSION = "2.7.0";
 	const VERSION_NAME = "Optima Express";
 	const LEGACY_EXTERNAL_URL = "http://www.idxre.com/services/wordpress";
 	const RESPONSIVE_EXTERNAL_URL = "http://www.idxhome.com/service/wordpress";
 	const CONTROL_PANEL_EXTERNAL_URL = "http://www.idxre.com/idx/guid";
-
-	//Group for Activation related options
-	//Also used as menu slug for the Activate Menu
-	const OPTION_ACTIVATE = "ihf-option-activate";
 	
-	//menu slug for information page
-	const INFORMATION = "ihf-information";
+	/*
+	 * menu slugs
+	 */
+	const PAGE_INFORMATION = "ihf-information";
+	const PAGE_ACTIVATE = "ihf-option-activate";
+	const PAGE_IDX_CONTROL_PANEL = "ihf-idx-control-panel";
+	const PAGE_IDX_PAGES = "ihf-option-pages";
+	const PAGE_CONFIGURATION = "ihf-config-page";
+	const PAGE_BIO = "ihf-bio-page";
+	const PAGE_SOCIAL = "ihf-social-page";
+	const PAGE_EMAIL_BRANDING = "ihf-email-branding-page";
+	const PAGE_COMMUNITY_PAGES = "ihf-community-pages";
+	const PAGE_SEO_CITY_LINKS = "ihf-seo-city-links-page";
 	
-	//menu slug for control panel page
-	const OPTION_IDX_CONTROL_PANEL = "ihf-idx-control-panel";
+	/*
+	 * activation options
+	 */
+	const OPTION_GROUP_ACTIVATE = "ihf-option-activate";
+	const ACTIVATION_TOKEN_OPTION = "ihf_activation_token"; //key used to register and generate authentication token
+	const AUTHENTICATION_TOKEN_OPTION = "ihf_authentication_token"; //token sent with every request
 	
-	//Menu slug for the option pages
-	const OPTION_PAGES = "ihf-option-pages";
+	/*
+	 * IDX page options
+	 */
+	const OPTION_VIRTUAL_PAGE_CONFIG = "ihf-virtual-page-config";
 	
-	//Group for Bio related options
-	const OPTION_GROUP_BIO = "ihf-option-bio";
+	//Default Virtual Page options
+	const OPTION_VIRTUAL_PAGE_TEMPLATE_DEFAULT = "ihf-virtual-page-template-default";
 	
-	//Group for Social related options
-	const OPTION_GROUP_SOCIAL = "ihf-option-social";
+	//Listing Detail Virtual Page Options
+	const OPTION_VIRTUAL_PAGE_TITLE_DETAIL = "ihf-virtual-page-title-detail";
+	const OPTION_VIRTUAL_PAGE_TEMPLATE_DETAIL = "ihf-virtual-page-template-detail";
+	const OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_DETAIL = "ihf-virtual-page-permalink-text-detail";
+	const OPTION_VIRTUAL_PAGE_META_TAGS_DETAIL = "ihf-virtual-page-meta-tags-detail";
 	
-	//Group for Email Display related options
-	const OPTION_GROUP_EMAIL_DISPLAY = "ihf-option-email-display";
+	//Listing Search Virtual Page Options
+	const OPTION_VIRTUAL_PAGE_TITLE_SEARCH = "ihf-virtual-page-title-search";
+	const OPTION_VIRTUAL_PAGE_TEMPLATE_SEARCH = "ihf-virtual-page-template-search";
+	const OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_SEARCH = "ihf-virtual-page-permalink-text-search";
 	
-	//Group for SEO City Links related options
-	const OPTION_GROUP_SEO_CITY_LINKS = "ihf-option-seo-city-links";
+	//Map Search Virtual Page Options
+	const OPTION_VIRTUAL_PAGE_TITLE_MAP_SEARCH = "ihf-virtual-page-title-map-search";
+	const OPTION_VIRTUAL_PAGE_TEMPLATE_MAP_SEARCH = "ihf-virtual-page-template-map-search";
+	const OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_MAP_SEARCH = "ihf-virtual-page-permalink-text-map-search";
 	
-	//Group for compatibility check related options
-	const OPTION_GROUP_COMPATIBILITY_CHECK = "ihf-option-compatibility-check";
-
-	//Select type of virtual pages
-	//Possible vlaues are RESPONSIVE OR LEGACY
+	//Advanced Listing Search Virtual Page Options
+	const OPTION_VIRTUAL_PAGE_TITLE_ADVANCED_SEARCH = "ihf-virtual-page-title-adv-search";
+	const OPTION_VIRTUAL_PAGE_TEMPLATE_ADVANCED_SEARCH = "ihf-virtual-page-template-adv-search";
+	const OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_ADVANCED_SEARCH = "ihf-virtual-page-permalink-text-adv-search";
+		
+	//Organizer Login Virtual Page Options
+	const OPTION_VIRTUAL_PAGE_TITLE_ORGANIZER_LOGIN = "ihf-virtual-page-title-org-login";
+	const OPTION_VIRTUAL_PAGE_TEMPLATE_ORGANIZER_LOGIN = "ihf-virtual-page-template-org-login";
+	const OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_ORGANIZER_LOGIN = "ihf-virtual-page-permalink-text-org-login";
+	
+	//Email Updated Virtual Page Options
+	const OPTION_VIRTUAL_PAGE_TITLE_EMAIL_UPDATES = "ihf-virtual-page-title-email-updates";
+	const OPTION_VIRTUAL_PAGE_TEMPLATE_EMAIL_UPDATES = "ihf-virtual-page-template-email-updates";
+	const OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_EMAIL_UPDATES = "ihf-virtual-page-permalink-text-email-updates";
+	
+	//Featured Virtual Page Options
+	const OPTION_VIRTUAL_PAGE_TITLE_FEATURED = "ihf-virtual-page-title-featured";
+	const OPTION_VIRTUAL_PAGE_TEMPLATE_FEATURED = "ihf-virtual-page-template-featured";
+	const OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_FEATURED = "ihf-virtual-page-permalink-text-featured";
+	
+	//Hotsheet Virtual Page Options
+	const OPTION_VIRTUAL_PAGE_TITLE_HOTSHEET = "ihf-virtual-page-title-hotsheet";
+	const OPTION_VIRTUAL_PAGE_TEMPLATE_HOTSHEET = "ihf-virtual-page-template-hotsheet";
+	const OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_HOTSHEET = "ihf-virtual-page-permalink-text-hotsheet";
+	const OPTION_VIRTUAL_PAGE_META_TAGS_HOTSHEET = "ihf-virtual-page-meta-tags-hotsheet";
+	
+	//Hotsheet List Virtual Page Options
+	const OPTION_VIRTUAL_PAGE_TITLE_HOTSHEET_LIST = "ihf-virtual-page-title-hotsheet-list";
+	
+	//Contact Form Virtual Page Options
+	const OPTION_VIRTUAL_PAGE_TITLE_CONTACT_FORM = "ihf-virtual-page-title-contact-form";
+	const OPTION_VIRTUAL_PAGE_TEMPLATE_CONTACT_FORM = "ihf-virtual-page-template-contact-form";
+	const OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_CONTACT_FORM = "ihf-virtual-page-permalink-text-contact-form";
+	
+	//Valuation Form Virtual Page Options
+	const OPTION_VIRTUAL_PAGE_TITLE_VALUATION_FORM = "ihf-virtual-page-title-valuation-form";
+	const OPTION_VIRTUAL_PAGE_TEMPLATE_VALUATION_FORM = "ihf-virtual-page-template-valuation-form";
+	const OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_VALUATION_FORM = "ihf-virtual-page-permalink-text-valuation-form";
+	
+	//Open Home Search Form Virtual Page Options
+	const OPTION_VIRTUAL_PAGE_TITLE_OPEN_HOME_SEARCH_FORM = "ihf-virtual-page-title-open-home-search-form";
+	const OPTION_VIRTUAL_PAGE_TEMPLATE_OPEN_HOME_SEARCH_FORM = "ihf-virtual-page-template-open-home-search-form";
+	const OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_OPEN_HOME_SEARCH_FORM = "ihf-virtual-page-open-home-search-form";
+	
+	//Featured Sold Listings Virtual Page Options
+	const OPTION_VIRTUAL_PAGE_TITLE_SOLD_FEATURED = "ihf-virtual-page-title-sold-featured";
+	const OPTION_VIRTUAL_PAGE_TEMPLATE_SOLD_FEATURED = "ihf-virtual-page-template-sold-featured";
+	const OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_SOLD_FEATURED = "ihf-virtual-page-permalink-text-sold-featured";
+	
+	//Supplemental listings
+	const OPTION_VIRTUAL_PAGE_TITLE_SUPPLEMENTAL_LISTING = "ihf-virtual-page-title-supplemental-listing";
+	const OPTION_VIRTUAL_PAGE_TEMPLATE_SUPPLEMENTAL_LISTING = "ihf-virtual-page-template-supplemental-listing";
+	const OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_SUPPLEMENTAL_LISTING = "ihf-virtual-page-permalink-text-supplemental-listing";
+	
+	//Sold Detail Virtual Page Options
+	const OPTION_VIRTUAL_PAGE_TITLE_SOLD_DETAIL = "ihf-virtual-page-title-sold-detail";
+	const OPTION_VIRTUAL_PAGE_TEMPLATE_SOLD_DETAIL = "ihf-virtual-page-template-sold-detail";
+	const OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_SOLD_DETAIL = "ihf-virtual-page-permalink-text-sold-detail";
+	const OPTION_VIRTUAL_PAGE_META_TAGS_SOLD_DETAIL = "ihf-virtual-page-meta-tags-sold-detail";
+	
+	//Office List Virtual Page Options
+	const OPTION_VIRTUAL_PAGE_TITLE_OFFICE_LIST = "ihf-virtual-page-title-office-list";
+	const OPTION_VIRTUAL_PAGE_TEMPLATE_OFFICE_LIST = "ihf-virtual-page-template-office-list";
+	const OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_OFFICE_LIST = "ihf-virtual-page-permalink-text-office-list";
+	
+	//Listing Office Detail Virtual Page Options
+	const OPTION_VIRTUAL_PAGE_TITLE_OFFICE_DETAIL = "ihf-virtual-page-title-office-detail";
+	const OPTION_VIRTUAL_PAGE_TEMPLATE_OFFICE_DETAIL = "ihf-virtual-page-template-office-detail";
+	const OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_OFFICE_DETAIL = "ihf-virtual-page-permalink-text-office-detail";
+	
+	//Agent List Virtual Page Options
+	const OPTION_VIRTUAL_PAGE_TITLE_AGENT_LIST = "ihf-virtual-page-title-agent-list";
+	const OPTION_VIRTUAL_PAGE_TEMPLATE_AGENT_LIST = "ihf-virtual-page-template-agent-list";
+	const OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_AGENT_LIST = "ihf-virtual-page-permalink-text-agent-list";
+	
+	//Agent Detail Virtual Page Options
+	const OPTION_VIRTUAL_PAGE_TITLE_AGENT_DETAIL = "ihf-virtual-page-title-agent-detail";
+	const OPTION_VIRTUAL_PAGE_TEMPLATE_AGENT_DETAIL = "ihf-virtual-page-template-agent-detail";
+	const OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_AGENT_DETAIL = "ihf-virtual-page-permalink-text-agent-detail";
+	
+	/*
+	 * configuration options
+	 */
+	const OPTION_GROUP_CONFIGURATION = "ihf-config-page";
 	const OPTION_LAYOUT_TYPE = "ihf-option-layout-type";
 	const OPTION_LAYOUT_TYPE_RESPONSIVE = "responsive";
 	const OPTION_LAYOUT_TYPE_LEGACY = "legacy";
-
-	//Community Pages setup
-	const COMMUNITY_PAGES = "ihf-community-pages";
-
-	//Bio Information setup
+	const COLOR_SCHEME_OPTION = "ihf-color-scheme";
+	const CSS_OVERRIDE_OPTION = "ihf-css-override";
+	
+	/*
+	 * bio widget options
+	 */
+	const OPTION_GROUP_BIO = "ihf-option-bio";
 	const AGENT_PHOTO_OPTION = "ihf-bio-agent-photo-option";
 	const AGENT_TEXT_OPTION = "ihf-bio-agent-text-option";
 	const AGENT_DESIGNATIONS_OPTION = "ihf-bio-agent-designations-option";
@@ -54,13 +155,24 @@ interface iHomefinderConstants {
 	const CONTACT_PHONE_OPTION = "ihf-bio-contact-phone";
 	const CONTACT_EMAIL_OPTION = "ihf-bio-contact-email";
 	const OFFICE_LOGO_OPTION = "ihf-bio-office-logo";
-
-	//Social related settings
-	const FACEBOOK_URL_OPTION = "ihf-social-facebook-url-option";
-	const LINKEDIN_URL_OPTION = "ihf-social-linkedin-url-option";
-	const TWITTER_URL_OPTION = "ihf-social-twitter-url-option";
-
-	//Email Display related settings
+	
+	/*
+	 * social widget options
+	 */
+	const OPTION_GROUP_SOCIAL = "ihf-option-social";
+	const SOCIAL_FACEBOOK_URL_OPTION = "ihf-social-facebook-url-option";
+	const SOCIAL_LINKEDIN_URL_OPTION = "ihf-social-linkedin-url-option";
+	const SOCIAL_TWITTER_URL_OPTION = "ihf-social-twitter-url-option";
+	const SOCIAL_PINTEREST_URL_OPTION = "ihf-social-pinterest-url";
+	const SOCIAL_INSTAGRAM_URL_OPTION = "ihf-social-instagram-url";
+	const SOCIAL_GOOGLE_PLUS_URL_OPTION = "ihf-social-google-plus-url";
+	const SOCIAL_YOUTUBE_URL_OPTION = "ihf-social-youtube-url";
+	const SOCIAL_YELP_URL_OPTION = "ihf-social-yelp-url";
+	
+	/*
+	 * email branding options
+	 */
+	const OPTION_GROUP_EMAIL_DISPLAY = "ihf-option-email-display";
 	const EMAIL_HEADER_OPTION = "ihf-email-display-header-option";
 	const EMAIL_FOOTER_OPTION = "ihf-email-display-footer-option";
 	const EMAIL_PHOTO_OPTION = "ihf-email-photo-option";
@@ -71,8 +183,16 @@ interface iHomefinderConstants {
 	const EMAIL_ADDRESS_LINE2_OPTION = "ihf-email-address-line2-option";
 	const EMAIL_PHONE_OPTION = "ihf-email-phone-option";
 	const EMAIL_DISPLAY_TYPE_OPTION = "ihf-email-display-type-option";
-
-	//SEO City Links settings
+	
+	/*
+	 * community pages options
+	 */
+	const OPTION_GROUP_COMMUNITY_PAGES = "ihf-community-pages";
+	
+	/*
+	 * SEO city links options
+	 */
+	const OPTION_GROUP_SEO_CITY_LINKS = "ihf-option-seo-city-links";
 	const SEO_CITY_LINKS_SETTINGS = "ihf-seo-city-links-settings";
 	const SEO_CITY_LINKS_CITY_ZIP = "ihf-seo-city-links-city-zip";
 	const SEO_CITY_LINKS_TEXT = "ihf-seo-city-links-text";
@@ -80,66 +200,26 @@ interface iHomefinderConstants {
 	const SEO_CITY_LINKS_MAX_PRICE = "ihf-seo-city-links-max-price";
 	const SEO_CITY_LINKS_PROPERTY_TYPE = "ihf-seo-city-links-property-type";
 	const SEO_CITY_LINK_WIDTH = "ihf-seo-city-link-width";
-
-	//Group for configuration related options
-	//Also menu slug for the configuration page
-	const OPTION_CONFIG_PAGE = "ihf-config-page";
 	
-	//Configuration realted option
-	const CSS_OVERRIDE_OPTION = "ihf-css-override";
-	
-	//Configuration realted option
-	const COLOR_SCHEME_OPTION = "ihf-color-scheme";
-	
-	//
-	const OPTION_MOBILE_SITE_YN = "ihf-mobile-site-yn";
-
-	//Bio related options page
-	const BIO_PAGE = "ihf-bio-page";
-
-	//Social related options page
-	const SOCIAL_PAGE = "ihf-social-page";
-
-	//Email Display related options page
-	const EMAIL_BRANDING_PAGE = "ihf-email-branding-page";
-	
-	//
-	const SEO_CITY_LINKS_PAGE = "ihf-seo-city-links-page";
-	
-	//
+	/*
+	 * compatibility check options
+	 */
+	const OPTION_GROUP_COMPATIBILITY_CHECK = "ihf-option-compatibility-check";
 	const COMPATIBILITY_CHECK_ENABLED = "ihf-compatibility-check-enabled";
 	
 	//
+	const OPTION_MOBILE_SITE_YN = "ihf-mobile-site-yn";
+	
+	//
 	const VERSION_OPTION = "ihf_version_option";
-	
-	//key used to register and generate authentication token
-	const ACTIVATION_TOKEN_OPTION = "ihf_activation_token";
-	
-	//token sent with every request
-	const AUTHENTICATION_TOKEN_OPTION = "ihf_authentication_token";
 
-	//Remember if this plugin has ever been activated on this site.
-	//This affects things like link creation, when the plugin is activated.
+	//Remember if this plugin has ever been activated on this site. This affects things like link creation, when the plugin is activated.
 	const IS_ACTIVATED_OPTION = "ihf_links_created";
+	const CSS_OVERRIDE_MIGRATED = "ihf_css_override_migrated";
 
-	//Used throughout the application to discover iHomefinder requests
-	//and used to determin the proper filter to execute.
+	//Used throughout the application to discover iHomefinder requests and used to determine the proper filter to execute.
 	const IHF_TYPE_URL_VAR = "ihf-type";
 	
-	// Used to set the widget context.
-	// A search widget should not display on a search related virtual page
-	const SEARCH_WIDGET_TYPE = "searchWidget";
-	const GALLERY_WIDGET_TYPE = "galleryWidget";
-	
-	//contact widget should not display on contact form virtual page
-	const CONTACT_WIDGET_TYPE = "contactWidget";
-	
-	// Search widgets that can display on search pages
-	const SEARCH_OTHER_WIDGET_TYPE = "searchOtherWidget";
-	
-	//prefix should only be up 13 character in length because cache key can only be 45 characters. prefix (13) + md5 hash (32). 
-	const CACHE_PREFIX = "ihf_cache_";
-	const CACHE_ENABLED = true;
-	
 	const DEBUG = false;
+	
 }

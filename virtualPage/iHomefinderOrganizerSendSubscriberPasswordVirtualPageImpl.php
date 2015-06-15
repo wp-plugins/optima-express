@@ -2,18 +2,12 @@
 
 class iHomefinderOrganizerSendSubscriberPasswordVirtualPageImpl extends iHomefinderAbstractVirtualPage {
 	
-	private $path="property-organizer-send-login";
-	
 	public function getTitle() {
 		return "Email Password";
-	}			
-	
-	public function getPageTemplate() {
-		
 	}
 	
-	public function getPath() {
-		return $this->path;
+	public function getPermalink() {
+		return "property-organizer-send-login";
 	}
 	
 	public function getContent() {
@@ -25,7 +19,6 @@ class iHomefinderOrganizerSendSubscriberPasswordVirtualPageImpl extends iHomefin
 			->addParameter("email", $email)
 		;
 		$this->remoteResponse = $this->remoteRequest->remoteGetRequest();
-		$body = $this->remoteRequest->getContent($this->remoteResponse);	
-		return $body;
 	}
+	
 }

@@ -11,6 +11,11 @@ class iHomefinderAdminSeoCityLinks extends iHomefinderAdminAbstractPage {
 		return self::$instance;
 	}
 	
+	public function registerSettings() {
+		register_setting(iHomefinderConstants::OPTION_GROUP_SEO_CITY_LINKS, iHomefinderConstants::SEO_CITY_LINKS_SETTINGS);
+		register_setting(iHomefinderConstants::OPTION_GROUP_SEO_CITY_LINKS, iHomefinderConstants::SEO_CITY_LINK_WIDTH);
+	}
+	
 	protected function getContent() {
 		?>
 		<h2>SEO City Links Setup</h2>
@@ -192,7 +197,6 @@ class iHomefinderAdminSeoCityLinks extends iHomefinderAdminAbstractPage {
 		?>
 		<select
 			id="propertyType"
-			class="regular-text"
 			name="<?php echo iHomefinderConstants::SEO_CITY_LINKS_SETTINGS . '[0][' . iHomefinderConstants::SEO_CITY_LINKS_PROPERTY_TYPE . ']' ?>"
 		>
 			<?php

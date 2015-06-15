@@ -13,13 +13,13 @@ class iHomefinderAdminCommunityPages extends iHomefinderAdminAbstractPage {
 	
 	protected function getContent() {
 		if($this->isUpdated()) {
-			$title = $_REQUEST["title"];
-			$cityZip = $_REQUEST["cityZip"];
-			$propertyType = $_REQUEST["propertyType"];
-			$bed = $_REQUEST["bed"];
-			$bath = $_REQUEST["bath"];
-			$minPrice = $_REQUEST["minPrice"];
-			$maxPrice = $_REQUEST["maxPrice"];
+			$title = iHomefinderUtility::getInstance()->getRequestVar("title");
+			$cityZip = iHomefinderUtility::getInstance()->getRequestVar("cityZip");
+			$propertyType = iHomefinderUtility::getInstance()->getRequestVar("propertyType");
+			$bed = iHomefinderUtility::getInstance()->getRequestVar("bed");
+			$bath = iHomefinderUtility::getInstance()->getRequestVar("bath");
+			$minPrice = iHomefinderUtility::getInstance()->getRequestVar("minPrice");
+			$maxPrice = iHomefinderUtility::getInstance()->getRequestVar("maxPrice");
 			$this->updateCommunityPages($title, $cityZip, $propertyType, $bed, $bath, $minPrice, $maxPrice);
 		}
 		?>
@@ -29,7 +29,7 @@ class iHomefinderAdminCommunityPages extends iHomefinderAdminAbstractPage {
 			<div>Enter search criteria to create a new page under the Community Pages menu.</div>
 			<form method="post">
 				<input type="hidden" name="settings-updated" value="true" />
-				<?php settings_fields(iHomefinderConstants::COMMUNITY_PAGES); ?>
+				<?php settings_fields(iHomefinderConstants::OPTION_GROUP_COMMUNITY_PAGES); ?>
 				<table class="form-table condensed">
 					<tbody>
 						<tr>
@@ -174,7 +174,7 @@ class iHomefinderAdminCommunityPages extends iHomefinderAdminAbstractPage {
 	
 	private function createPropertyTypeSelect() {
 		?>
-		<select id="propertyType" class="regular-text" name="propertyType">
+		<select id="propertyType" name="propertyType">
 			<?php
 			$formData = iHomefinderSearchFormFieldsUtility::getInstance()->getFormData();
 			if(!empty($formData)) {

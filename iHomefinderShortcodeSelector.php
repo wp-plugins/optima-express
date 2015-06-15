@@ -147,6 +147,14 @@ class iHomefinderShortcodeSelector {
 												<?php $this->createSortSelect(true); ?>
 											</div>
 										</div>
+										<?php if($layoutManager->supportsFeaturedPropertyType()) { ?>
+											<div class="form-group">
+												<label class="control-label">Property Type</label>
+												<div>
+													<?php $this->createPropertyTypeSelect(true); ?>
+												</div>
+											</div>
+										<?php } ?>
 										<?php if($layoutManager->supportsResultsDisplayType()) { ?>
 											<div class="form-group">
 												<label class="control-label">Display Type</label>
@@ -169,7 +177,7 @@ class iHomefinderShortcodeSelector {
 												<?php $this->createHeaderSelect(true); ?>
 											</div>
 										</div>
-										<input class="btn btn-default" type="button" name="insertFeatured" value="Insert" onclick="return IhfGalleryDialog.validateForm(this.form) && IhfGalleryDialog.insertFeaturedListings(this.form, '<?php echo iHomefinderShortcodeDispatcher::getInstance()->getFeaturedShortcode() ?>');" />
+										<input class="btn btn-default" type="button" name="insertFeatured" value="Insert" onclick="return IhfGalleryDialog.validateForm(this.form) && IhfGalleryDialog.insertFeaturedListings(this.form, '<?php echo iHomefinderShortcodeDispatcher::FEATURED_SHORTCODE ?>');" />
 									</form>
 								</div>
 								<div id="toppicksMenu" class="menu">
@@ -214,7 +222,7 @@ class iHomefinderShortcodeSelector {
 												<?php $this->createHeaderSelect(true); ?>
 											</div>
 										</div>
-										<input class="btn btn-default" type="button" name="insertToppicks" value="Insert" onclick="return IhfGalleryDialog.validateForm(this.form) && IhfGalleryDialog.insertToppicks(this.form, '<?php echo iHomefinderShortcodeDispatcher::getInstance()->getToppicksShortCode() ?>');" />
+										<input class="btn btn-default" type="button" name="insertToppicks" value="Insert" onclick="return IhfGalleryDialog.validateForm(this.form) && IhfGalleryDialog.insertToppicks(this.form, '<?php echo iHomefinderShortcodeDispatcher::TOPPICKS_SHORTCODE ?>');" />
 									</form>
 								</div>
 								<div id="searchMenu" class="menu">
@@ -289,7 +297,7 @@ class iHomefinderShortcodeSelector {
 												<?php $this->createHeaderSelect(true); ?>
 											</div>
 										</div>
-										<input class="btn btn-default" type="button" name="insertSearchResults" value="Insert" onclick="return IhfGalleryDialog.validateForm(this.form) && IhfGalleryDialog.insertSearchResults(this.form, '<?php echo iHomefinderShortcodeDispatcher::getInstance()->getSearchResultsShortcode() ?>');" />
+										<input class="btn btn-default" type="button" name="insertSearchResults" value="Insert" onclick="return IhfGalleryDialog.validateForm(this.form) && IhfGalleryDialog.insertSearchResults(this.form, '<?php echo iHomefinderShortcodeDispatcher::SEARCH_RESULTS_SHORTCODE; ?>');" />
 									</form>
 								</div>
 								<div id="agentMenu" class="menu">
@@ -300,7 +308,7 @@ class iHomefinderShortcodeSelector {
 												<?php $this->createAgentSelect(true); ?>
 											</div>
 										</div>
-										<input class="btn btn-default" type="button" name="insertAgentListings" value="Insert" onclick="return IhfGalleryDialog.validateForm(this.form) && IhfGalleryDialog.insertAgentListings(this.form, '<?php echo iHomefinderShortcodeDispatcher::getInstance()->getAgentListingsShortcode() ?>');" />
+										<input class="btn btn-default" type="button" name="insertAgentListings" value="Insert" onclick="return IhfGalleryDialog.validateForm(this.form) && IhfGalleryDialog.insertAgentListings(this.form, '<?php echo iHomefinderShortcodeDispatcher::AGENT_LISTINGS_SHORTCODE; ?>');" />
 									</form>
 								</div>
 								<div id="officeMenu" class="menu">
@@ -311,7 +319,7 @@ class iHomefinderShortcodeSelector {
 												<?php $this->createOfficeSelect(true); ?>
 											</div>
 										</div>
-										<input class="btn btn-default" type="button" name="insertOfficeListings" value="Insert" onclick="return IhfGalleryDialog.validateForm(this.form) && IhfGalleryDialog.insertOfficeListings(this.form, '<?php echo iHomefinderShortcodeDispatcher::getInstance()->getOfficeListingsShortcode() ?>');" />
+										<input class="btn btn-default" type="button" name="insertOfficeListings" value="Insert" onclick="return IhfGalleryDialog.validateForm(this.form) && IhfGalleryDialog.insertOfficeListings(this.form, '<?php echo iHomefinderShortcodeDispatcher::OFFICE_LISTINGS_SHORTCODE; ?>');" />
 									</form>
 								</div>
 								<div id="listingGalleryMenu" class="menu">
@@ -397,7 +405,7 @@ class iHomefinderShortcodeSelector {
 												<input class="form-control" type="number" name="maxResults" value="25" />
 											</div>
 										</div>
-										<input class="btn btn-default" type="button" name="insertListingGallery" value="Insert" onclick="return IhfGalleryDialog.validateForm(this.form) && IhfGalleryDialog.insertListingGallery(this.form, '<?php echo iHomefinderShortcodeDispatcher::getInstance()->getListingGalleryShortcode() ?>');" />
+										<input class="btn btn-default" type="button" name="insertListingGallery" value="Insert" onclick="return IhfGalleryDialog.validateForm(this.form) && IhfGalleryDialog.insertListingGallery(this.form, '<?php echo iHomefinderShortcodeDispatcher::LISTING_GALLERY_SHORTCODE; ?>');" />
 									</form>
 								</div>
 							</div>
@@ -464,7 +472,7 @@ class iHomefinderShortcodeSelector {
 												</div>
 											</div>
 										<?php } ?>
-										<input class="btn btn-default" type="button" name="insertQuickSearch" value="Insert" onclick="return IhfGalleryDialog.validateForm(this.form) && IhfGalleryDialog.insertQuickSearch(this.form, '<?php echo iHomefinderShortcodeDispatcher::getInstance()->getQuickSearchShortcode() ?>');" />
+										<input class="btn btn-default" type="button" name="insertQuickSearch" value="Insert" onclick="return IhfGalleryDialog.validateForm(this.form) && IhfGalleryDialog.insertQuickSearch(this.form, '<?php echo iHomefinderShortcodeDispatcher::QUICK_SEARCH_SHORTCODE; ?>');" />
 									</form>
 								</div>
 								<div id="mapSearchMenu" class="menu">
@@ -549,7 +557,7 @@ class iHomefinderShortcodeSelector {
 											</div>
 										</div>
 										
-										<input class="btn btn-default" type="button" name="insertMapSearch" value="Insert" onclick="return IhfGalleryDialog.validateForm(this.form) && IhfGalleryDialog.insertMapSearch(this.form, '<?php echo iHomefinderShortcodeDispatcher::getInstance()->getMapSearchShortcode() ?>');" />
+										<input class="btn btn-default" type="button" name="insertMapSearch" value="Insert" onclick="return IhfGalleryDialog.validateForm(this.form) && IhfGalleryDialog.insertMapSearch(this.form, '<?php echo iHomefinderShortcodeDispatcher::MAP_SEARCH_SHORTCODE; ?>');" />
 									</form>
 								</div>
 								<div id="searchByAddressMenu" class="menu">
@@ -564,12 +572,12 @@ class iHomefinderShortcodeSelector {
 												</select>
 											</div>
 										</div>
-										<input class="btn btn-default" type="button" name="insertSearchByAddress" value="Insert" onclick="return IhfGalleryDialog.validateForm(this.form) && IhfGalleryDialog.insertSearchByAddress(this.form, '<?php echo iHomefinderShortcodeDispatcher::getInstance()->getSearchByAddressShortcode() ?>');" />
+										<input class="btn btn-default" type="button" name="insertSearchByAddress" value="Insert" onclick="return IhfGalleryDialog.validateForm(this.form) && IhfGalleryDialog.insertSearchByAddress(this.form, '<?php echo iHomefinderShortcodeDispatcher::SEARCH_BY_ADDRESS_SHORTCODE; ?>');" />
 									</form>
 								</div>
 								<div id="searchByListingIdMenu" class="menu">
 									<form onsubmit="return false;" action="#">
-										<input class="btn btn-default" type="button" name="insertSearchByListingId" value="Insert" onclick="return IhfGalleryDialog.validateForm(this.form) && IhfGalleryDialog.insertSearchByListingId(this.form, '<?php echo iHomefinderShortcodeDispatcher::getInstance()->getSearchByListingIdShortcode() ?>');" />
+										<input class="btn btn-default" type="button" name="insertSearchByListingId" value="Insert" onclick="return IhfGalleryDialog.validateForm(this.form) && IhfGalleryDialog.insertSearchByListingId(this.form, '<?php echo iHomefinderShortcodeDispatcher::SEARCH_BY_LISTING_ID_SHORTCODE; ?>');" />
 									</form>
 								</div>
 							</div>
@@ -615,22 +623,22 @@ class iHomefinderShortcodeSelector {
 							<div class="col-xs-8">
 								<div id="basicSearchMenu" class="menu">
 									<form onsubmit="return false;" action="#">
-										<input class="btn btn-default" type="button" name="insertBasicSearch" value="Insert" onclick="return IhfGalleryDialog.validateForm(this.form) && IhfGalleryDialog.insertBasicSearch(this.form, '<?php echo iHomefinderShortcodeDispatcher::getInstance()->getBasicSearchShortcode() ?>');" />
+										<input class="btn btn-default" type="button" name="insertBasicSearch" value="Insert" onclick="return IhfGalleryDialog.validateForm(this.form) && IhfGalleryDialog.insertBasicSearch(this.form, '<?php echo iHomefinderShortcodeDispatcher::BASIC_SEARCH_SHORTCODE; ?>');" />
 									</form>
 								</div>
 								<div id="advancedSearchMenu" class="menu">
 									<form onsubmit="return false;" action="#">
-										<input class="btn btn-default" type="button" name="insertAdvancedSearch" value="Insert" onclick="return IhfGalleryDialog.validateForm(this.form) && IhfGalleryDialog.insertAdvancedSearch(this.form, '<?php echo iHomefinderShortcodeDispatcher::getInstance()->getAdvancedSearchShortcode() ?>');" />
+										<input class="btn btn-default" type="button" name="insertAdvancedSearch" value="Insert" onclick="return IhfGalleryDialog.validateForm(this.form) && IhfGalleryDialog.insertAdvancedSearch(this.form, '<?php echo iHomefinderShortcodeDispatcher::ADVANCED_SEARCH_SHORTCODE; ?>');" />
 									</form>
 								</div>
 								<div id="organizerLoginMenu" class="menu">
 									<form onsubmit="return false;" action="#">
-										<input class="btn btn-default" type="button" name="insertOrganizerLogin" value="Insert" onclick="return IhfGalleryDialog.validateForm(this.form) && IhfGalleryDialog.insertOrganizerLogin(this.form, '<?php echo iHomefinderShortcodeDispatcher::getInstance()->getOrganizerLoginShortcode() ?>');" />
+										<input class="btn btn-default" type="button" name="insertOrganizerLogin" value="Insert" onclick="return IhfGalleryDialog.validateForm(this.form) && IhfGalleryDialog.insertOrganizerLogin(this.form, '<?php echo iHomefinderShortcodeDispatcher::ORGANIZER_LOGIN_SHORTCODE; ?>');" />
 									</form>
 								</div>
 								<div id="valuationFormMenu" class="menu">
 									<form onsubmit="return false;" action="#">
-										<input class="btn btn-default" type="button" name="insertValuationForm" value="Insert" onclick="return IhfGalleryDialog.validateForm(this.form) && IhfGalleryDialog.insertValuationForm(this.form, '<?php echo iHomefinderShortcodeDispatcher::getInstance()->getValuationFormShortcode() ?>');" />
+										<input class="btn btn-default" type="button" name="insertValuationForm" value="Insert" onclick="return IhfGalleryDialog.validateForm(this.form) && IhfGalleryDialog.insertValuationForm(this.form, '<?php echo iHomefinderShortcodeDispatcher::VALUATION_FORM_SHORTCODE; ?>');" />
 									</form>
 								</div>
 							</div>
@@ -658,7 +666,7 @@ class iHomefinderShortcodeSelector {
 												<?php $this->createAgentSelect(true); ?>
 											</div>
 										</div>
-										<input class="btn btn-default" type="button" name="insertAgentDetail" value="Insert" onclick="return IhfGalleryDialog.validateForm(this.form) && IhfGalleryDialog.insertAgentDetail(this.form, '<?php echo iHomefinderShortcodeDispatcher::getInstance()->getAgentDetailShortcode() ?>');" />
+										<input class="btn btn-default" type="button" name="insertAgentDetail" value="Insert" onclick="return IhfGalleryDialog.validateForm(this.form) && IhfGalleryDialog.insertAgentDetail(this.form, '<?php echo iHomefinderShortcodeDispatcher::AGENT_DETAIL_SHORTCODE; ?>');" />
 									</form>
 								</div>
 							</div>

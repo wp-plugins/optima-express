@@ -1,8 +1,50 @@
 <?php
 
 interface iHomefinderVirtualPageInterface {
-	function getContent();
-	function getTitle();
+	
+	/**
+	 * @return string
+	 */
 	function getPageTemplate();
-	function getPath();
+	
+	/**
+	 * @return string
+	 */
+	function getPermalink();
+	
+	/**
+	 * @return string
+	 */
+	function getHead();
+	
+	/**
+	 * @return string
+	 */
+	function getTitle();
+	
+	/**
+	 * @return string
+	 */
+	function getContent();
+	
+	/**
+	 * @return string
+	 */
+	function getBody();
+	
+	/**
+	 * @return string
+	 */
+	function getMetaTags();
+	
+	/**
+	 * @return array<iHomefinderVariable>
+	 */
+	function getVariables();
+	
+	/**
+	 * @return array<iHomefinderVariable>
+	 */
+	function getAvailableVariables();
+	
 }

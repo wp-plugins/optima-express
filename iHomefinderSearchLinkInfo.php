@@ -104,9 +104,5 @@ class iHomefinderSearchLinkInfo {
 		} 
 		return $result;
 	}
-	
-	private function getCityZipParts() {
-		$cityZipParts = explode(",", $this->cityZip);
-		return $cityZipParts;
-	}		
+		
 }

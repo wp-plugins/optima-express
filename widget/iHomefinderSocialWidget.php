@@ -7,54 +7,50 @@ class iHomefinderSocialWidget extends WP_Widget {
 			"iHomefinderSocialWidget",
 			"IDX: Social",
 			array(
-				"description" => "Displays an social links."
+				"description" => "Displays icons linked to your social media pages."
 			)
 		);
 	}
 	
 	public function widget($args, $instance) {
-		
-		$facebookUrl = get_option(iHomefinderConstants::FACEBOOK_URL_OPTION);
-		$twitterUrl =  get_option(iHomefinderConstants::TWITTER_URL_OPTION);
-		$linkedinUrl = get_option(iHomefinderConstants::LINKEDIN_URL_OPTION);
-		
-		$baseUrl = plugins_url("/optima-express");
-		
-		//sets vars like $before_widget from $args
-		extract($args);
-			
-		echo $before_widget;
-		
+		$beforeWidget = $args["before_widget"];
+		$afterWidget = $args["after_widget"];
+		echo $beforeWidget;
 		?>
 		<div id="social-icons">
-			<?php if(!empty($facebookUrl)) { ?>
-				<a href="https://www.facebook.com/<?php echo $facebookUrl ?>" target="_blank">
-					<img src="<?php echo $baseUrl ?>/images/fbicon.png" style="width: 24px; height: 24px;" />
-				</a>
-			<?php } ?>
-			<?php if(!empty($twitterUrl)) { ?>
-				<a href="https://twitter.com/<?php echo $twitterUrl ?>" target="_blank">
-					<img src="<?php echo $baseUrl ?>/images/twittericon.png" style="width:24px; height: 24px;" />
-				</a>
-			<?php } ?>
-			<?php if(!empty($linkedinUrl)) { ?>
-				<a href="https://www.linkedin.com/<?php echo $linkedinUrl ?>" target="_blank">
-					<img src="<?php echo $baseUrl ?>/images/linkedinicon.png" style="width:24px; height: 24px;" />
-				</a>
-			<?php } ?>
+			<?php
+			$this->getLink(iHomefinderConstants::SOCIAL_FACEBOOK_URL_OPTION, "https://www.facebook.com/", "/images/facebook-icon.png");
+			$this->getLink(iHomefinderConstants::SOCIAL_LINKEDIN_URL_OPTION, "https://www.linkedin.com/", "/images/linkedin-icon.png");
+			$this->getLink(iHomefinderConstants::SOCIAL_TWITTER_URL_OPTION, "https://twitter.com/", "/images/twitter-icon.png");
+			$this->getLink(iHomefinderConstants::SOCIAL_PINTEREST_URL_OPTION, "https://www.pinterest.com/", "/images/pinterest-icon.png");
+			$this->getLink(iHomefinderConstants::SOCIAL_INSTAGRAM_URL_OPTION, "https://instagram.com/", "/images/instagram-icon.png");
+			$this->getLink(iHomefinderConstants::SOCIAL_GOOGLE_PLUS_URL_OPTION, "https://plus.google.com/", "/images/google-plus-icon.png");
+			$this->getLink(iHomefinderConstants::SOCIAL_YOUTUBE_URL_OPTION, "https://www.youtube.com/", "/images/youtube-icon.png");
+			$this->getLink(iHomefinderConstants::SOCIAL_YELP_URL_OPTION, "https://www.yelp.com/", "/images/yelp-icon.png");
+			?>
 		</div>
 		<?php
-		echo $after_widget;	    	
-		
+		echo $afterWidget;
 	}
 	
-	public function update($new_instance, $old_instance) {
-		$instance = $new_instance;
+	private function getLink($optionName, $socialUrl, $iconFileName) {
+		$url = get_option($optionName, null);
+		if(!empty($url)) {
+			?>
+			<a href="<?php echo $socialUrl . $url; ?>" target="_blank">
+				<img class="ihf-social-icon" src="<?php echo plugins_url($iconFileName, dirname(__FILE__)); ?>" />
+			</a>
+			<?php
+		} 
+	}
+	
+	public function update($newInstance, $oldInstance) {
+		$instance = $newInstance;
 		return $instance;
 	}
 	
 	public function form($instance) {
-		$configurationUrl = admin_url("admin.php?page=" . iHomefinderConstants::SOCIAL_PAGE);
+		$configurationUrl = admin_url("admin.php?page=" . iHomefinderConstants::PAGE_SOCIAL);
 		?>
 		<p>
 			<a href="<?php echo $configurationUrl ?>">Configure Social Links</a>

@@ -2,61 +2,53 @@
 
 class iHomefinderHotsheetVirtualPageImpl extends iHomefinderAbstractVirtualPage {
 	
-	private $path = "homes-for-sale-toppicks";
-	private $title = "";
-	//The default title might get updated in function getContent
-	private $defaultTitle = "";
-
 	public function getTitle() {
-		$customTitle = get_option(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_HOTSHEET);
-		if($customTitle != null && "" != $customTitle) {
-			$this->title=$customTitle;
-		} else {
-			$this->title = $this->defaultTitle;
+		$default = null;
+		if(iHomefinderLayoutManager::getInstance()->supportsSeoVariables()) {
+			$default = "{savedSearchName}";
+		} elseif(is_object($this->remoteResponse) && $this->remoteResponse->hasTitle()) {
+			$default = $this->remoteResponse->getTitle();
 		}
-		return $this->title;
+		return $this->getText(iHomefinderConstants::OPTION_VIRTUAL_PAGE_TITLE_HOTSHEET, $default);
 	}
 
 	public function getPageTemplate() {
-		$pageTemplate = get_option(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_HOTSHEET);
-		return $pageTemplate;			
+		return get_option(iHomefinderConstants::OPTION_VIRTUAL_PAGE_TEMPLATE_HOTSHEET, null);	
 	}
 	
-	public function getPath() {
-		$customPath = get_option(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_HOTSHEET);	
-		if($customPath != null && "" != $customPath) {
-			$this->path = $customPath;
-		}
-		return $this->path;
+	public function getPermalink() {
+		return $this->getText(iHomefinderConstants::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_HOTSHEET, "homes-for-sale-toppicks");
 	}
-			
+	
+	function getMetaTags() {
+		$default = "<meta name=\"description\" content=\"{savedSearchDescription}\" />";
+		return $this->getText(iHomefinderConstants::OPTION_VIRTUAL_PAGE_META_TAGS_HOTSHEET, $default);
+	}
+	
+	function getAvailableVariables() {
+		$variableUtility = iHomefinderVariableUtility::getInstance();
+		return array(
+			$variableUtility->getSavedSearchName(),
+			$variableUtility->getSavedSearchDescription()
+		);
+	}
+	
 	public function getContent() {
 		iHomefinderStateManager::getInstance()->saveLastSearch();
 		$this->remoteRequest
+			->addParameters($_REQUEST)
 			->addParameter("method", "handleRequest")
 			->addParameter("viewType", "json")
 			->addParameter("requestType", "hotsheet-results")
 			->addParameter("includeSearchSummary", true)
 		;
-		$this->remoteRequest->addParameters($_REQUEST);
-		$hotSheetId=iHomefinderUtility::getInstance()->getRequestVar("hotSheetId");
-		if(!isset($hotSheetId)) {
-			//iHomefinderShortCodeDispatcher sets vars in $_REQUEST
-			//URL rewriting can set vars in the URL
-			$hotSheetId=iHomefinderUtility::getInstance()->getQueryVar("hotSheetId");
-			if(isset($hotSheetId)) {
-				$this->remoteRequest->addParameter("hotSheetId", $hotSheetId);
-			}
-		}
-		if($this->getTitle() == "") {
+		$hotSheetId = iHomefinderUtility::getInstance()->getQueryVar("savedSearchId");
+		$this->remoteRequest->addParameter("hotSheetId", $hotSheetId);
+		$title = $this->getTitle();
+		if(empty($title)) {
 			$this->remoteRequest->addParameter("includeDisplayName", false);
 		}
 		$this->remoteResponse = $this->remoteRequest->remoteGetRequest();
-		$body = $this->remoteRequest->getContent($this->remoteResponse);
-		if(isset($this->remoteResponse) && isset($this->remoteResponse->title)) {
-			//success, display the view
-			$this->defaultTitle = $this->remoteResponse->title;
-		}
-		return $body;
 	}
+	
 }

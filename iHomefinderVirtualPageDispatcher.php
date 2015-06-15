@@ -9,41 +9,42 @@
  * @author ihomefinder
  */
 class iHomefinderVirtualPageDispatcher {
-
+	
 	private static $instance;
-
+	
 	private $virtualPage = null;
 	private $content = null;
 	private $excerpt = null;
 	private $title = null;
 	private $initialized = false;
 	
-	private $genericErrorPageContent="Error 123: Unable to load content. Please visit the <a href='http://www.ihomefinder.com/support/optima-express/error-messages/' target='_blank'>support guide</a>, or contact customer support.";
-
 	private function __construct() {
 		
 	}
-
+	
 	public static function getInstance() {
 		if(!isset(self::$instance)) {
 			self::$instance = new self();
 		}
 		return self::$instance;
 	}
-
+	
 	public function init() {
 		global $wp_query;
 		$postsCount = $wp_query->post_count;
 		$type = get_query_var(iHomefinderConstants::IHF_TYPE_URL_VAR);
 		//we only try to initialize, if we are accessing a virtual page
 		//which does not have any true posts in the global posts array	
-		if(!$this->initialized && $postsCount == 0 && !empty($type)) {
+		if(!$this->initialized && $postsCount === 0 && !empty($type)) {
 			$this->virtualPage = iHomefinderVirtualPageFactory::getInstance()->getVirtualPage($type);
-			$this->content = (string) $this->virtualPage->getContent();
-			$this->excerpt = (string) $this->content;
+			$this->virtualPage->getContent();
+			$this->content = (string) $this->virtualPage->getBody();
+			$this->excerpt = (string) $this->virtualPage->getBody();
 			$this->title = (string) $this->virtualPage->getTitle();
 			iHomefinderEnqueueResource::getInstance()->addToHeader($this->virtualPage->getHead());
-			iHomefinderEnqueueResource::getInstance()->addToMetaTags($this->virtualPage->getMetaTags());
+			if(iHomefinderLayoutManager::getInstance()->supportsSeoVariables()) {
+				iHomefinderEnqueueResource::getInstance()->addToMetaTags($this->virtualPage->getMetaTags());
+			}
 			$this->initialized = true;
 			//turn off some filters on ihf pages
 			$this->removeFilters();
@@ -112,28 +113,23 @@ class iHomefinderVirtualPageDispatcher {
 	public function postCleanUp($posts) {
 		$this->init();
 		if($this->initialized) {
-			$_postArray['post_title'] = $this->title;
-			//This value will get replaced with remote content. If it is not replaced, then an error
-			//has occurred and we leave the following default text.
-			$_postArray['post_content'] = $this->content;
-			$_postArray['post_excerpt'] = $this->excerpt;
-			$_postArray['post_status'] = 'publish';
-			$_postArray['post_type'] = 'page';
-			$_postArray['is_page'] = 1;
-			$_postArray['is_single'] = 1;
-			$_postArray['comment_status'] = 'closed';
-			$_postArray['comment_count'] = 0;
-			$_postArray['ping_status'] = 'closed';
-			$_postArray['post_category'] = array(1); // the default 'Uncategorized'
-			$_postArray['post_parent'] = 0;
-			$_postArray['post_author'] = 0;
-			$_postArray['post_date'] = current_time('mysql');
-			$_postArray['ID'] = 0;
-			$_postObject = (object) $_postArray;
-			$_postObject = get_post($_postObject);
-
-			$posts= array();
-			$posts[0] = $_postObject;
+			$post = new stdClass();
+			$post->post_title = $this->title;
+			$post->post_content = $this->content;
+			$post->post_excerpt = $this->excerpt;
+			$post->post_status = "publish";
+			$post->post_type = "page";
+			$post->is_page = 1;
+			$post->is_single = 1;
+			$post->comment_status = "closed";
+			$post->comment_count = 0;
+			$post->ping_status = "closed";
+			$post->post_category = array(1); // the default "Uncategorized"
+			$post->post_parent = 0;
+			$post->post_author = 0;
+			$post->post_date = current_time("mysql");
+			$post->ID = 0;
+			$posts = array($post);
 		}
 		return $posts;
 	}
@@ -149,7 +145,8 @@ class iHomefinderVirtualPageDispatcher {
 		if($this->initialized) {
 			$virtualPageTemplate = $this->virtualPage->getPageTemplate();
 			if(empty($virtualPageTemplate)) {
-				$virtualPageTemplate = iHomefinderVirtualPageHelper::getInstance()->getDefaultTemplate();
+				$defaultVirtualPage = iHomefinderVirtualPageFactory::getInstance()->getVirtualPage(iHomefinderVirtualPageFactory::DEFAULT_PAGE);
+				$virtualPageTemplate = $defaultVirtualPage->getPageTemplate();
 			}
 			//If the $virtualPageTemplate is NOT empty, then reset $pageTemplate
 			if(!empty($virtualPageTemplate)) {
@@ -160,10 +157,9 @@ class iHomefinderVirtualPageDispatcher {
 		}
 		return $pageTemplate;
 	}
-
+	
 	/**
-	 * For the ihf plugin page, we replace the content, with data retrieved from
-	 * the iHomefinder servers.
+	 * For the ihf plugin page, we replace the content, with data retrieved from the iHomefinder servers.
 	 *
 	 * @param $content
 	 */
@@ -176,10 +172,9 @@ class iHomefinderVirtualPageDispatcher {
 		$this->afterFilter();
 		return $content;
 	}
-
+	
 	/**
-	 * For the ihf plugin page, we replace the excerpt, with data retrieved from
-	 * the iHomefinder servers.
+	 * For the ihf plugin page, we replace the excerpt, with data retrieved from the iHomefinder servers.
 	 *
 	 * @param $content
 	 */

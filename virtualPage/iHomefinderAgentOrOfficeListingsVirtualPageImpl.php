@@ -1,25 +1,6 @@
 <?php
 
-/**
- * 
- * This virtual page is used in a shortcode and does not have a title, template or path.
- * 
- * @author ihomefinder
- *
- */
 class iHomefinderAgentOrOfficeListingsVirtualPageImpl extends iHomefinderAbstractVirtualPage {
-	
-	public function getTitle() {
-		return "";
-	}
-	
-	public function getPageTemplate() {
-		return "";			
-	}
-	
-	public function getPath() {
-		return "";
-	}
 			
 	public function getContent() {
 		iHomefinderStateManager::getInstance()->saveLastSearch();
@@ -33,7 +14,6 @@ class iHomefinderAgentOrOfficeListingsVirtualPageImpl extends iHomefinderAbstrac
 			->addParameter("officeId", $officeId)
 		;		
 		$this->remoteResponse = $this->remoteRequest->remoteGetRequest();
-		$body = $this->remoteRequest->getContent($this->remoteResponse);
-		return $body;
 	}
+	
 }

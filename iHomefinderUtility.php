@@ -23,19 +23,19 @@ class iHomefinderUtility {
 		return $result;
 	}
 
-	public function getVarFromArray($name, $arrayVar) {
+	public function getVarFromArray($key, array $array) {
 		$result = null;
-		$name = strtolower($name);
-		$arrayVar = $this->arrayKeysToLowerCase($arrayVar);
-		if(array_key_exists($name, $arrayVar)) {
-			$result = $arrayVar[$name];
+		$key = strtolower($key);
+		$array = $this->arrayKeysToLowerCase($array);
+		if(array_key_exists($key, $array)) {
+			$result = $array[$key];
 		}
 		return $result;
 	}
 	
-	private function arrayKeysToLowerCase($arrayVar) {
+	private function arrayKeysToLowerCase(array $array) {
 		$lowerCaseKeysArray = array();
-		foreach($arrayVar as $key => $value) {
+		foreach($array as $key => $value) {
 			$key = strtolower($key);
 			$lowerCaseKeysArray[$key] = $value;
 		}
@@ -57,7 +57,7 @@ class iHomefinderUtility {
 		return $url;
 	}
 	
-	public function buildUrl($url, $parameters = null) {
+	public function buildUrl($url, array $parameters = null) {
 		if(strpos($url, "?") === false) {
 			$url .= "?";
 		}
@@ -79,42 +79,6 @@ class iHomefinderUtility {
 		}
 		return $url;
 	}
-	
-	/**
-	 * When navigating listing detail pages, we need to set the next and previous
-	 * details and pass in the request, to properly create next and previous links
-	 * 
-	 * @param string $requestData
-	 * @param int $boardId
-	 * @param string $listingNumber
-	 */
-	public function getPreviousAndNextInformation($boardId, $listingNumber) {
-		$result = array();
-		$searchSummaryArray = iHomefinderStateManager::getInstance()->getSearchSummary();
-		$key = $boardId . "|" . $listingNumber;
-		if(isset($searchSummaryArray) && is_array($searchSummaryArray) && array_key_exists($key, $searchSummaryArray)) {
-			$searchSummaryObject = $searchSummaryArray[$key];				
-			if(isset($searchSummaryObject->previousId)) {
-				$searchSummaryPrevious = $searchSummaryArray[$searchSummaryObject->previousId];
-				$prevBoardAndListingNumber = explode("|", $searchSummaryObject->previousId);
-				$result["prevBoardId"] = $prevBoardAndListingNumber[0];					
-				$result["prevListingNumber"] = $prevBoardAndListingNumber[1];
-				$result["prevAddress"] = $searchSummaryPrevious->address;
-				$result["prevStatus"] = $searchSummaryPrevious->status;
-			}
-			
-			if(isset($searchSummaryObject->nextId)) {
-				$searchSummaryNext = $searchSummaryArray[$searchSummaryObject->nextId];
-				$nextBoardAndListingNumber = explode("|", $searchSummaryObject->nextId);
-				$result["nextBoardId"] = $nextBoardAndListingNumber[0];					
-				$result["nextListingNumber"] = $nextBoardAndListingNumber[1];
-				$result["nextAddress"] = $searchSummaryNext->address;
-				$result["nextStatus"] = $searchSummaryNext->status;
-			}
-		}
-		
-		return $result;
-	}
 
 	/**
 	 * Returns true is the user agent is a known web crawler
@@ -122,7 +86,7 @@ class iHomefinderUtility {
 	 */
 	public function isWebCrawler() {
 		$result = true;
-		$userAgent = strtolower($_SERVER['HTTP_USER_AGENT']);			
+		$userAgent = strtolower($_SERVER["HTTP_USER_AGENT"]);			
 		$knownCrawlersArray = array("Mediapartners-Google", "Googlebot", "Baiduspider", "Bingbot", "msnbot", "Slurp", "Twiceler", "YandexBot");			
 		foreach($knownCrawlersArray as $value) {
 			if(strpos($userAgent, $value)) {

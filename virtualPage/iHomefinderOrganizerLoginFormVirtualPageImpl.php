@@ -2,38 +2,25 @@
 
 class iHomefinderOrganizerLoginFormVirtualPageImpl extends iHomefinderAbstractVirtualPage {
 	
-	private $path="property-organizer-login";
-	private $title="Organizer Login";
-	
 	public function getTitle() {
-		$customTitle = get_option(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_ORG_LOGIN);
-		if($customTitle != null && "" != $customTitle) {
-			$this->title=$customTitle;
-		}
-		
-		return $this->title;
+		return $this->getText(iHomefinderConstants::OPTION_VIRTUAL_PAGE_TITLE_ORGANIZER_LOGIN, "Organizer Login");
 	}
 	
 	public function getPageTemplate() {
-		$pageTemplate = get_option(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_ORG_LOGIN);
-		return $pageTemplate;			
+		return get_option(iHomefinderConstants::OPTION_VIRTUAL_PAGE_TEMPLATE_ORGANIZER_LOGIN, null);
 	}
 	
-	public function getPath() {
-		$customPath = get_option(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_ORG_LOGIN);	
-		if($customPath != null && "" != $customPath) {
-			$this->path = $customPath;
-		}
-		return $this->path;
+	public function getPermalink() {
+		return $this->getText(iHomefinderConstants::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_ORGANIZER_LOGIN, "property-organizer-login");
 	}
 	
 	public function getContent() {
 		$subscriberId = iHomefinderUtility::getInstance()->getQueryVar("subscriberID");
-		if($subscriberId != null && trim($subscriberId) != "") {
+		if(!empty($subscriberId)) {
 			$subscriber = new iHomefinderSubscriber($subscriberId, null, null);
 			iHomefinderStateManager::getInstance()->saveSubscriberLogin($subscriber);			
 		}
-		$message=iHomefinderUtility::getInstance()->getQueryVar("message");
+		$message = iHomefinderUtility::getInstance()->getQueryVar("message");
 		$afterLoginUrl=iHomefinderUtility::getInstance()->getRequestVar("afterLoginUrl");		
 		$this->remoteRequest
 			->addParameter("method", "handleRequest")
@@ -43,8 +30,6 @@ class iHomefinderOrganizerLoginFormVirtualPageImpl extends iHomefinderAbstractVi
 			->addParameter("afterLoginUrl", $afterLoginUrl)
 		;
 		$this->remoteResponse = $this->remoteRequest->remoteGetRequest();
-		$body = $this->remoteRequest->getContent($this->remoteResponse);
-		return $body;
 	}
 	
 }

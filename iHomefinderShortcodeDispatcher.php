@@ -9,24 +9,24 @@
  * @author ihomefinder
  */
 class iHomefinderShortcodeDispatcher {
-
-	private static $instance;
 	
-	private $toppicksShortCode = "optima_express_toppicks";
-	private $featuredShortCode = "optima_express_featured";
-	private $searchResultsShortCode = "optima_express_search_results";
-	private $quickSearchShortCode = "optima_express_quick_search";
-	private $searchByAddressShortCode = "optima_express_address_search";
-	private $searchByListingIdShortCode = "optima_express_listing_search";
-	private $mapSearchShortCode = "optima_express_map_search";
-	private $agentListingsShortCode = "optima_express_agent_listings";
-	private $officeListingsShortCode = "optima_express_office_listings";
-	private $listingGalleryShortCode = "optima_express_gallery_slider";
-	private $basicSearchShortCode = "optima_express_basic_search";
-	private $advancedSearchShortCode = "optima_express_advanced_search";
-	private $organizerLoginShortCode = "optima_express_organizer_login";
-	private $agentDetailShortCode = "optima_express_agent_detail";
-	private $valuationFormShortCode = "optima_express_valuation_form";
+	const TOPPICKS_SHORTCODE = "optima_express_toppicks";
+	const FEATURED_SHORTCODE = "optima_express_featured";
+	const SEARCH_RESULTS_SHORTCODE = "optima_express_search_results";
+	const QUICK_SEARCH_SHORTCODE = "optima_express_quick_search";
+	const SEARCH_BY_ADDRESS_SHORTCODE = "optima_express_address_search";
+	const SEARCH_BY_LISTING_ID_SHORTCODE = "optima_express_listing_search";
+	const MAP_SEARCH_SHORTCODE = "optima_express_map_search";
+	const AGENT_LISTINGS_SHORTCODE = "optima_express_agent_listings";
+	const OFFICE_LISTINGS_SHORTCODE = "optima_express_office_listings";
+	const LISTING_GALLERY_SHORTCODE = "optima_express_gallery_slider";
+	const BASIC_SEARCH_SHORTCODE = "optima_express_basic_search";
+	const ADVANCED_SEARCH_SHORTCODE = "optima_express_advanced_search";
+	const ORGANIZER_LOGIN_SHORTCODE = "optima_express_organizer_login";
+	const AGENT_DETAIL_SHORTCODE = "optima_express_agent_detail";
+	const VALUATION_FORM_SHORTCODE = "optima_express_valuation_form";
+	
+	private static $instance;
 
 	private function __construct() {
 	}
@@ -39,133 +39,185 @@ class iHomefinderShortcodeDispatcher {
 	}
 
 	public function init() {
-		add_shortcode($this->getToppicksShortcode(), array($this, "getToppicks"));
-		add_shortcode($this->getFeaturedShortcode(), array($this, "getFeaturedListings"));
-		add_shortcode($this->getSearchResultsShortcode(), array($this, "getSearchResults"));
-		add_shortcode($this->getQuickSearchShortcode(), array($this, "getQuickSearch"));
-		add_shortcode($this->getSearchByAddressShortcode(), array($this, "getSearchByAddress"));
-		add_shortcode($this->getSearchByListingIdShortcode(), array($this, "getSearchByListingId"));
-		add_shortcode($this->getMapSearchShortcode(), array($this, "getMapSearch"));
-		add_shortcode($this->getAgentListingsShortcode(), array($this, "getAgentListings"));
-		add_shortcode($this->getOfficeListingsShortcode(), array($this, "getOfficeListings"));
-		add_shortcode($this->getListingGalleryShortcode(), array($this, "getListingGallery"));
-		add_shortcode($this->getBasicSearchShortcode(), array($this, "getBasicSearch"));
-		add_shortcode($this->getAdvancedSearchShortcode(), array($this, "getAdvancedSearch"));
-		add_shortcode($this->getOrganizerLoginShortcode(), array($this, "getOrganizerLogin"));
-		add_shortcode($this->getAgentDetailShortcode(), array($this, "getAgentDetail"));
-		add_shortcode($this->getValuationFormShortcode(), array($this, "getValuationForm"));
+		add_shortcode(self::TOPPICKS_SHORTCODE, array($this, "getToppicks"));
+		add_shortcode(self::FEATURED_SHORTCODE, array($this, "getFeaturedListings"));
+		add_shortcode(self::SEARCH_RESULTS_SHORTCODE, array($this, "getSearchResults"));
+		add_shortcode(self::QUICK_SEARCH_SHORTCODE, array($this, "getQuickSearch"));
+		add_shortcode(self::SEARCH_BY_ADDRESS_SHORTCODE, array($this, "getSearchByAddress"));
+		add_shortcode(self::SEARCH_BY_LISTING_ID_SHORTCODE, array($this, "getSearchByListingId"));
+		add_shortcode(self::MAP_SEARCH_SHORTCODE, array($this, "getMapSearch"));
+		add_shortcode(self::AGENT_LISTINGS_SHORTCODE, array($this, "getAgentListings"));
+		add_shortcode(self::OFFICE_LISTINGS_SHORTCODE, array($this, "getOfficeListings"));
+		add_shortcode(self::LISTING_GALLERY_SHORTCODE, array($this, "getListingGallery"));
+		add_shortcode(self::BASIC_SEARCH_SHORTCODE, array($this, "getBasicSearch"));
+		add_shortcode(self::ADVANCED_SEARCH_SHORTCODE, array($this, "getAdvancedSearch"));
+		add_shortcode(self::ORGANIZER_LOGIN_SHORTCODE, array($this, "getOrganizerLogin"));
+		add_shortcode(self::AGENT_DETAIL_SHORTCODE, array($this, "getAgentDetail"));
+		add_shortcode(self::VALUATION_FORM_SHORTCODE, array($this, "getValuationForm"));
 	}
-
+	
+	/**
+	 * @deprecated use constant
+	 */
 	public function getToppicksShortcode() {
-		return $this->toppicksShortCode;
+		return self::TOPPICKS_SHORTCODE;
 	}
-
+	
+	/**
+	 * @deprecated use constant
+	 */
 	public function getFeaturedShortcode() {
-		return $this->featuredShortCode;
+		return self::FEATURED_SHORTCODE;
 	}
 
+	/**
+	 * @deprecated use constant
+	 */
 	public function getSearchResultsShortcode() {
-		return $this->searchResultsShortCode;
+		return self::SEARCH_RESULTS_SHORTCODE;
 	}
 
+	/**
+	 * @deprecated use constant
+	 */
 	public function getQuickSearchShortcode() {
-		return $this->quickSearchShortCode;
+		return self::QUICK_SEARCH_SHORTCODE;
 	}
 
+	/**
+	 * @deprecated use constant
+	 */
 	public function getSearchByAddressShortcode() {
-		return $this->searchByAddressShortCode;
+		return self::SEARCH_BY_ADDRESS_SHORTCODE;
 	}
 
+	/**
+	 * @deprecated use constant
+	 */
 	public function getSearchByListingIdShortcode() {
-		return $this->searchByListingIdShortCode;
+		return self::SEARCH_BY_LISTING_ID_SHORTCODE;
 	}
-	
+
+	/**
+	 * @deprecated use constant
+	 */
 	public function getMapSearchShortcode() {
-		return $this->mapSearchShortCode;
+		return self::MAP_SEARCH_SHORTCODE;
 	}		
-	
+
+	/**
+	 * @deprecated use constant
+	 */
 	public function getAgentListingsShortcode() {
-		return $this->agentListingsShortCode;
+		return self::AGENT_LISTINGS_SHORTCODE;
 	}
-	
+
+	/**
+	 * @deprecated use constant
+	 */
 	public function getOfficeListingsShortcode() {
-		return $this->officeListingsShortCode;
+		return self::OFFICE_LISTINGS_SHORTCODE;
 	}
+
+	/**
+	 * @deprecated use constant
+	 */
 	public function getListingGalleryShortcode() {
-		return $this->listingGalleryShortCode;
+		return self::LISTING_GALLERY_SHORTCODE;
 	}
-	
+
+	/**
+	 * @deprecated use constant
+	 */
 	public function getBasicSearchShortcode() {
-		return $this->basicSearchShortCode;
+		return self::BASIC_SEARCH_SHORTCODE;
 	}
 
+	/**
+	 * @deprecated use constant
+	 */
 	public function getAdvancedSearchShortcode() {
-		return $this->advancedSearchShortCode;
+		return self::ADVANCED_SEARCH_SHORTCODE;
 	}
 
+	/**
+	 * @deprecated use constant
+	 */
 	public function getOrganizerLoginShortcode() {
-		return $this->organizerLoginShortCode;
+		return self::ORGANIZER_LOGIN_SHORTCODE;
 	}
 
+	/**
+	 * @deprecated use constant
+	 */
 	public function getAgentDetailShortcode() {
-		return $this->agentDetailShortCode;
-	}		
+		return self::AGENT_DETAIL_SHORTCODE;
+	}
 	
+	/**
+	 * @deprecated use constant
+	 */
 	public function getValuationFormShortcode() {
-		return $this->valuationFormShortCode;
+		return self::VALUATION_FORM_SHORTCODE;
 	}		
 	
 	public function getBasicSearch($attributes) {
 		$virtualPage = iHomefinderVirtualPageFactory::getInstance()->getVirtualPage(iHomefinderVirtualPageFactory::LISTING_SEARCH_FORM);
-		$content = $virtualPage->getContent();
+		$virtualPage->getContent();
+		$content = $virtualPage->getBody();
 		iHomefinderEnqueueResource::getInstance()->addToFooter($virtualPage->getHead());
 		return $content;
 	}
 
 	public function getAdvancedSearch($attributes) {
 		$virtualPage = iHomefinderVirtualPageFactory::getInstance()->getVirtualPage(iHomefinderVirtualPageFactory::LISTING_ADVANCED_SEARCH_FORM);
-		$content = $virtualPage->getContent();
+		$virtualPage->getContent();
+		$content = $virtualPage->getBody();
 		iHomefinderEnqueueResource::getInstance()->addToFooter($virtualPage->getHead());
 		return $content;
 	}
 
 	public function getOrganizerLogin($attributes) {
 		$virtualPage = iHomefinderVirtualPageFactory::getInstance()->getVirtualPage(iHomefinderVirtualPageFactory::ORGANIZER_LOGIN);
-		$content = $virtualPage->getContent();
+		$virtualPage->getContent();
+		$content = $virtualPage->getBody();
 		iHomefinderEnqueueResource::getInstance()->addToFooter($virtualPage->getHead());
 		return $content;
 	}
 
 	public function getAgentDetail($attributes) {
 		$virtualPage = iHomefinderVirtualPageFactory::getInstance()->getVirtualPage(iHomefinderVirtualPageFactory::AGENT_DETAIL);
-		$_REQUEST["agentID"] = $this->getAttribute($attributes, "agentId");
-		$content = $virtualPage->getContent();
+		$_REQUEST["agentId"] = $this->getAttribute($attributes, "agentId");
+		$virtualPage->getContent();
+		$content = $virtualPage->getBody();
 		iHomefinderEnqueueResource::getInstance()->addToFooter($virtualPage->getHead());
 		return $content;
 	}
 	
 	public function getValuationForm($attributes) {
 		$virtualPage = iHomefinderVirtualPageFactory::getInstance()->getVirtualPage(iHomefinderVirtualPageFactory::VALUATION_FORM);
-		$content = $virtualPage->getContent();
+		$virtualPage->getContent();
+		$content = $virtualPage->getBody();
 		iHomefinderEnqueueResource::getInstance()->addToFooter($virtualPage->getHead());
 		return $content;
 	}
 	
 	public function getToppicks($attributes) {
-		$content = "";
+		$content = null;
 		if($this->getAttribute($attributes, "id") != null) {
 			$virtualPage = iHomefinderVirtualPageFactory::getInstance()->getVirtualPage(iHomefinderVirtualPageFactory::HOTSHEET_SEARCH_RESULTS);
-			$_REQUEST["hotSheetId"] = $this->getAttribute($attributes, "id");
+			$_REQUEST["savedSearchId"] = $this->getAttribute($attributes, "id");
 			$_REQUEST["includeMap"] = $this->getAttribute($attributes, "includeMap");
 			$_REQUEST["sortBy"] = $this->getAttribute($attributes, "sortBy");
 			if($this->getAttribute($attributes, "header") == "true") {
-				$_REQUEST["gallery"] = "false";
+				$_REQUEST["gallery"] = false;
 			} else {
-				$_REQUEST["gallery"] = "true";
+				$_REQUEST["gallery"] = true;
 			}
 			$_REQUEST["displayType"] = $this->getAttribute($attributes, "displayType");
 			$_REQUEST["resultsPerPage"] = $this->getAttribute($attributes, "resultsPerPage");
-			$content = $virtualPage->getContent();
+			$virtualPage->getContent();
+			$content = $virtualPage->getBody();
 			iHomefinderEnqueueResource::getInstance()->addToFooter($virtualPage->getHead());
 		}
 		return $content;
@@ -174,7 +226,8 @@ class iHomefinderShortcodeDispatcher {
 	public function getAgentListings($attributes) {
 		$virtualPage = iHomefinderVirtualPageFactory::getInstance()->getVirtualPage(iHomefinderVirtualPageFactory::AGENT_OR_OFFICE_LISTINGS);
 		$_REQUEST["agentId"] = $this->getAttribute($attributes, "agentId");
-		$content = $virtualPage->getContent();
+		$virtualPage->getContent();
+		$content = $virtualPage->getBody();
 		iHomefinderEnqueueResource::getInstance()->addToFooter($virtualPage->getHead());
 		return $content;
 	}
@@ -182,30 +235,31 @@ class iHomefinderShortcodeDispatcher {
 	public function getOfficeListings($attributes) {
 		$virtualPage = iHomefinderVirtualPageFactory::getInstance()->getVirtualPage(iHomefinderVirtualPageFactory::AGENT_OR_OFFICE_LISTINGS);
 		$_REQUEST["officeId"] = $this->getAttribute($attributes, "officeId");
-		$content = $virtualPage->getContent();
+		$virtualPage->getContent();
+		$content = $virtualPage->getBody();
 		iHomefinderEnqueueResource::getInstance()->addToFooter($virtualPage->getHead());
 		return $content;
 	}
 	
 	public function getFeaturedListings($attributes) {
-		$content = "";
 		$virtualPage = iHomefinderVirtualPageFactory::getInstance()->getVirtualPage(iHomefinderVirtualPageFactory::FEATURED_SEARCH);
 		$_REQUEST["includeMap"] = $this->getAttribute($attributes, "includeMap");
 		$_REQUEST["sortBy"] = $this->getAttribute($attributes, "sortBy");
 		if($this->getAttribute($attributes, "header") == "true") {
-			$_REQUEST["gallery"] = "false";
+			$_REQUEST["gallery"] = false;
 		} else {
-			$_REQUEST["gallery"] = "true";
+			$_REQUEST["gallery"] = true;
 		}
 		$_REQUEST["displayType"] = $this->getAttribute($attributes, "displayType");
 		$_REQUEST["resultsPerPage"] = $this->getAttribute($attributes, "resultsPerPage");
-		$content = $virtualPage->getContent();
+		$_REQUEST["propertyType"] = $this->getAttribute($attributes, "propertyType");
+		$virtualPage->getContent();
+		$content = $virtualPage->getBody();
 		iHomefinderEnqueueResource::getInstance()->addToFooter($virtualPage->getHead());
 		return $content;
 	}
 
 	public function getSearchResults($attributes) {
-		$content = "";
 		$virtualPage = iHomefinderVirtualPageFactory::getInstance()->getVirtualPage(iHomefinderVirtualPageFactory::LISTING_SEARCH_RESULTS);
 		$bath = $this->getAttribute($attributes, "bath");
 		$bed = $this->getAttribute($attributes, "bed");
@@ -214,12 +268,12 @@ class iHomefinderShortcodeDispatcher {
 		$minPrice = $this->getAttribute($attributes, "minPrice");
 		$maxPrice = $this->getAttribute($attributes, "maxPrice");
 		$propertyType = $this->getAttribute($attributes, "propertyType");
-		if($cityId != null && strlen($cityId) > 0 && is_numeric($cityId)) {
+		if(is_numeric($cityId)) {
 			$_REQUEST["cityId"] = $cityId;
 		}
-		if($cityZip != null && strlen($cityZip) > 0) {				
+		if(!empty($cityZip)) {				
 			//$_REQUEST["cityZip"] = $cityZip;
-			$searchLinkInfo = new iHomefinderSearchLinkInfo("", $cityZip, $propertyType, $minPrice, $maxPrice);
+			$searchLinkInfo = new iHomefinderSearchLinkInfo(null, $cityZip, $propertyType, $minPrice, $maxPrice);
 			if($searchLinkInfo->hasPostalCode()) {
 				$_REQUEST["zip"] = $searchLinkInfo->getPostalCode();
 			} else {
@@ -229,37 +283,37 @@ class iHomefinderShortcodeDispatcher {
 				}
 			}
 		}			
-		if($propertyType != null && strlen($propertyType) > 0) {
+		if(!empty($propertyType)) {
 			$_REQUEST["propertyType"] = $propertyType;
 		}
-		if($bed != null && strlen($bed) > 0 && is_numeric($bed)) {
+		if(is_numeric($bed)) {
 			$_REQUEST["bedrooms"] = $bed;
 		}
-		if($bath != null && strlen($bath) > 0 && is_numeric($bath)) {
+		if(is_numeric($bath)) {
 			$_REQUEST["bathcount"] = $bath;
 		}
-		if($minPrice != null && strlen($minPrice) > 0 && is_numeric($minPrice)) {
+		if( is_numeric($minPrice)) {
 			$_REQUEST["minListPrice"] = $minPrice;
 		}
-		if($maxPrice != null && strlen($maxPrice && is_numeric($maxPrice)) > 0) {
+		if(is_numeric($maxPrice)) {
 			$_REQUEST["maxListPrice"] = $maxPrice;
 		}
 		$_REQUEST["includeMap"] = $this->getAttribute($attributes, "includeMap");
 		$_REQUEST["sortBy"] = $this->getAttribute($attributes, "sortBy");
 		if($this->getAttribute($attributes, "header") == "true") {
-			$_REQUEST["gallery"] = "false";
+			$_REQUEST["gallery"] = false;
 		} else {
-			$_REQUEST["gallery"] = "true";
+			$_REQUEST["gallery"] = true;
 		}
 		$_REQUEST["displayType"] = $this->getAttribute($attributes, "displayType");
 		$_REQUEST["resultsPerPage"] = $this->getAttribute($attributes, "resultsPerPage");
-		$content = $virtualPage->getContent();
+		$virtualPage->getContent();
+		$content = $virtualPage->getBody();
 		iHomefinderEnqueueResource::getInstance()->addToFooter($virtualPage->getHead());
 		return $content;
 	}
 	
 	public function getQuickSearch($attributes) {
-		$content = "";
 		if(iHomefinderLayoutManager::getInstance()->supportsQuickSearchVirtualPage()) {
 			$content = $this->getQuickSearchWithVirtualPage();
 		} else {
@@ -270,7 +324,8 @@ class iHomefinderShortcodeDispatcher {
 	
 	public function getQuickSearchWithVirtualPage() {
 		$virtualPage = iHomefinderVirtualPageFactory::getInstance()->getVirtualPage(iHomefinderVirtualPageFactory::LISTING_QUICK_SEARCH_FORM);
-		$content = $virtualPage->getContent();
+		$virtualPage->getContent();
+		$content = $virtualPage->getBody();
 		iHomefinderEnqueueResource::getInstance()->addToFooter($virtualPage->getHead());
 		return $content;
 	}
@@ -288,9 +343,9 @@ class iHomefinderShortcodeDispatcher {
 			->addParameter("showPropertyType", $this->getAttribute($attributes, "showPropertyType"))
 		;
 		$remoteRequest->setCacheExpiration(60*60);
-		$contentInfo = $remoteRequest->remoteGetRequest();
-		$content = $remoteRequest->getContent($contentInfo);
-		iHomefinderEnqueueResource::getInstance()->addToFooter($contentInfo->head);
+		$remoteResponse = $remoteRequest->remoteGetRequest();
+		$content = $remoteResponse->getBody();
+		iHomefinderEnqueueResource::getInstance()->addToFooter($remoteResponse->getHead());
 		return $content;
 	}
 
@@ -306,9 +361,9 @@ class iHomefinderShortcodeDispatcher {
 			->addParameter("style", $this->getAttribute($attributes, "style"))
 		;
 		$remoteRequest->setCacheExpiration(60*60);
-		$contentInfo = $remoteRequest->remoteGetRequest();
-		$content = $remoteRequest->getContent($contentInfo);
-		iHomefinderEnqueueResource::getInstance()->addToFooter($contentInfo->head);
+		$remoteResponse = $remoteRequest->remoteGetRequest();
+		$content = $remoteResponse->getBody();
+		iHomefinderEnqueueResource::getInstance()->addToFooter($remoteResponse->getHead());
 		return $content;
 	}
 
@@ -323,9 +378,9 @@ class iHomefinderShortcodeDispatcher {
 			->addParameter("includeJQueryUI", false)
 		;
 		$remoteRequest->setCacheExpiration(60*60);
-		$contentInfo = $remoteRequest->remoteGetRequest();
-		$content = $remoteRequest->getContent($contentInfo);
-		iHomefinderEnqueueResource::getInstance()->addToFooter($contentInfo->head);
+		$remoteResponse = $remoteRequest->remoteGetRequest();
+		$content = $remoteResponse->getBody();
+		iHomefinderEnqueueResource::getInstance()->addToFooter($remoteResponse->getHead());
 		return $content;
 	}
 	
@@ -344,9 +399,9 @@ class iHomefinderShortcodeDispatcher {
 			->addParameter("zoom", $this->getAttribute($attributes, "zoom"))
 		;
 		$remoteRequest->setCacheExpiration(60*60);
-		$contentInfo = $remoteRequest->remoteGetRequest();
-		$content = $remoteRequest->getContent($contentInfo);
-		iHomefinderEnqueueResource::getInstance()->addToFooter($contentInfo->head);
+		$remoteResponse = $remoteRequest->remoteGetRequest();
+		$content = $remoteResponse->getBody();
+		iHomefinderEnqueueResource::getInstance()->addToFooter($remoteResponse->getHead());
 		return $content;
 	}
 
@@ -371,50 +426,45 @@ class iHomefinderShortcodeDispatcher {
 			->addParameter("auto", $this->getAttribute($attributes, "auto"))
 			->addParameter("maxResults", $this->getAttribute($attributes, "maxResults"))
 		;
-		$contentInfo = $remoteRequest->remoteGetRequest();
-		$content = $remoteRequest->getContent($contentInfo);
-		iHomefinderEnqueueResource::getInstance()->addToFooter($contentInfo->head);
+		$remoteResponse = $remoteRequest->remoteGetRequest();
+		$content = $remoteResponse->getBody();
+		iHomefinderEnqueueResource::getInstance()->addToFooter($remoteResponse->getHead());
 		return $content;
 	}
 	
 	/**
 	 * all values in the $attributes array are convered to lowercase
 	 */
-	public function getAttribute($attributes, $key) {
-		$result = null;
-		$lowerKey = strtolower($key);
-		if(is_array($attributes) && array_key_exists($lowerKey, $attributes)) {
-			$result = $attributes[$lowerKey];
-		}
-		return $result;
+	private function getAttribute(array $attributes, $key) {
+		return iHomefinderUtility::getInstance()->getVarFromArray($key, $attributes);;
 	}
 	
 	/**
 	 * used by iHomefinderAdmin to generate shortcode string for community pages
 	 */
-	public function buildSearchResultsShortCode($cityZip, $propertyType, $bed, $bath, $minPrice, $maxPrice) {
-		$searchResultsShortcode = "[";
-		$searchResultsShortcode .= $this->searchResultsShortCode;
-		if($cityZip != null && strlen($cityZip) > 0) {
-			$searchResultsShortcode .= " cityZip=\"" . $cityZip . "\"";
+	public function buildSearchResultsShortcode($cityZip, $propertyType, $bed, $bath, $minPrice, $maxPrice) {
+		$result = "[";
+		$result .= self::SEARCH_RESULTS_SHORTCODE;
+		if(!empty($cityZip)) {
+			$result .= " cityZip=\"" . $cityZip . "\"";
 		}
-		if($propertyType != null && strlen($propertyType) > 0) {
-			$searchResultsShortcode .= " propertyType = " . $propertyType;
+		if(!empty($propertyType)) {
+			$result .= " propertyType=\"" . $propertyType . "\"";
 		}
-		if($bed != null && strlen($bed) > 0) {
-			$searchResultsShortcode .= " bed = " . $bed;
+		if(!empty($bed)) {
+			$result .= " bed=\"" . $bed . "\"";
 		}
-		if($bath != null && strlen($bath) > 0) {
-			$searchResultsShortcode .= " bath = " . $bath;
+		if(!empty($bath)) {
+			$result .= " bath=\"" . $bath . "\"";
 		}
-		if($minPrice != null && strlen($minPrice) > 0) {
-			$searchResultsShortcode .= " minPrice = " . $minPrice;
+		if(!empty($minPrice)) {
+			$result .= " minPrice=\"" . $minPrice . "\"";
 		}
-		if($maxPrice != null && strlen($maxPrice) > 0) {
-			$searchResultsShortcode .= " maxPrice = " . $maxPrice;
+		if(!empty($maxPrice)) {
+			$result .= " maxPrice=\"" . $maxPrice . "\"";
 		}
-		$searchResultsShortcode .= "]";
-		return $searchResultsShortcode;
+		$result .= "]";
+		return $result;
 	}
 
 }

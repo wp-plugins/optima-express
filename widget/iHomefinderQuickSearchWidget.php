@@ -2,7 +2,8 @@
 
 class iHomefinderQuickSearchWidget extends WP_Widget {
 
-	private $contextUtility;
+	private $widgetUtility;
+	private $widgetType = iHomefinderWidgetUtility::SEARCH_WIDGET_TYPE;
 	
 	public function __construct() {
 		parent::__construct(
@@ -12,58 +13,51 @@ class iHomefinderQuickSearchWidget extends WP_Widget {
 				"description" => "Property Search form."
 			)
 		);
-		$this->contextUtility = iHomefinderWidgetContextUtility::getInstance();
+		$this->widgetUtility = iHomefinderWidgetUtility::getInstance();
 	}
 	
 	public function widget($args, $instance) {
-		if(!iHomefinderStateManager::getInstance()->isSearchContext()) {
-			if($this->contextUtility->isEnabled($instance)) {
-				extract($args);
-				$title = apply_filters("widget_title", $instance["title"]);
-				
-				$remoteRequest = new iHomefinderRequestor();
-				
-				$remoteRequest
-					->addParameter("method", "handleRequest")
-					->addParameter("viewType", "json")
-					->addParameter("requestType", "listing-search-form")
-					->addParameter("smallView", true)
-					->addParameter("phpStyle", true)
-					->addParameter("style", $instance["style"])
-					->addParameter("showPropertyType", $instance["showPropertyType"])
-				;
-				$remoteRequest->setCacheExpiration(60*60*24);
-				$contentInfo = $remoteRequest->remoteGetRequest();
-				$content = $remoteRequest->getContent($contentInfo);
-				iHomefinderEnqueueResource::getInstance()->addToFooter($contentInfo->head);
-				
-				echo $before_widget;
-				if($title) {
-					echo $before_title . $title . $after_title;
-				}
-				
-				if(iHomefinderLayoutManager::getInstance()->hasExtraLineBreaksInWidget()) {
-					echo "<br/>";	
-					echo $content;
-					echo "<br/>";
-				} else {
-					echo $content;
-				}
-				
-				echo $after_widget;
+		if($this->widgetUtility->isEnabled($this, $instance, $this->widgetType)) {
+			$beforeWidget = $args["before_widget"];
+			$afterWidget = $args["after_widget"];
+			$beforeTitle = $args["before_title"];
+			$afterTitle = $args["after_title"];
+			$title = apply_filters("widget_title", $instance["title"]);
+			$remoteRequest = new iHomefinderRequestor();
+			$remoteRequest
+				->addParameter("method", "handleRequest")
+				->addParameter("viewType", "json")
+				->addParameter("requestType", "listing-search-form")
+				->addParameter("smallView", true)
+				->addParameter("phpStyle", true)
+				->addParameter("style", $instance["style"])
+				->addParameter("showPropertyType", $instance["showPropertyType"])
+			;
+			$remoteRequest->setCacheExpiration(60*60*24);
+			$remoteResponse = $remoteRequest->remoteGetRequest();
+			$content = $remoteResponse->getBody();
+			iHomefinderEnqueueResource::getInstance()->addToFooter($remoteResponse->getHead());
+			echo $beforeWidget;
+			if(!empty($title)) {
+				echo $beforeTitle . $title . $afterTitle;
 			}
+			if(iHomefinderLayoutManager::getInstance()->hasExtraLineBreaksInWidget()) {
+				echo "<br/>";	
+				echo $content;
+				echo "<br/>";
+			} else {
+				echo $content;
+			}
+			echo $afterWidget;
 		}
 	}
 	
-	public function update($new_instance, $old_instance) {
-		$instance = $old_instance;
-		$instance["title"] = strip_tags(stripslashes($new_instance["title"]));
-		$instance["style"] = strip_tags(stripslashes($new_instance["style"]));
-		$instance["showPropertyType"] = $new_instance["showPropertyType"];
-		
-		//Add context related values.
-		$instance = $this->contextUtility->updateContext($new_instance, $instance);
-		
+	public function update($newInstance, $oldInstance) {
+		$instance = $oldInstance;
+		$instance["title"] = strip_tags(stripslashes($newInstance["title"]));
+		$instance["style"] = strip_tags(stripslashes($newInstance["style"]));
+		$instance["showPropertyType"] = $newInstance["showPropertyType"];
+		$instance = $this->widgetUtility->updateContext($newInstance, $instance);
 		return $instance;
 	}
 	
@@ -78,7 +72,6 @@ class iHomefinderQuickSearchWidget extends WP_Widget {
 				<input class="widefat" id="<?php echo $this->get_field_id("title"); ?>" name="<?php echo $this->get_field_name("title"); ?>" type="text" value="<?php echo $title; ?>" />
 			</label>
 		</p>
-			
 		<?php if(iHomefinderLayoutManager::getInstance()->supportsMultipleQuickSearchLayouts()) { ?>
 			<p>
 				<label>
@@ -100,7 +93,7 @@ class iHomefinderQuickSearchWidget extends WP_Widget {
 			</p>
 		<?php } ?>
 		<?php 
-		$this->contextUtility->getPageSelector($this, $instance, iHomefinderConstants::SEARCH_WIDGET_TYPE);
+		$this->widgetUtility->getPageSelector($this, $instance, $this->widgetType);
 		?>
 		<br />
 		<?php

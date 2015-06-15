@@ -2,18 +2,12 @@
 
 class iHomefinderOrganizerDeleteSavedListingVirtualPageImpl extends iHomefinderAbstractVirtualPage {
 	
-	private $path = "property-organizer-delete-saved-listing-submit";
-
 	public function getTitle() {
 		return "Saved Listing List";
 	}
-		
-	public function getPageTemplate() {
-		
-	}
 
-	public function getPath() {
-		return $this->path;	
+	public function getPermalink() {
+		return "property-organizer-delete-saved-listing-submit";
 	}
 	
 	public function getContent() {
@@ -25,8 +19,6 @@ class iHomefinderOrganizerDeleteSavedListingVirtualPageImpl extends iHomefinderA
 			->addParameter("savedListingId", $savedListingId)
 		;
 		$this->remoteResponse = $this->remoteRequest->remoteGetRequest();
-		$body = $this->remoteRequest->getContent($this->remoteResponse);
-		return $body;
 	}
 	
 }

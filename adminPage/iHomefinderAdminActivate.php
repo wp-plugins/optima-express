@@ -13,18 +13,16 @@ class iHomefinderAdminActivate extends iHomefinderAdminAbstractPage {
 		return self::$instance;
 	}
 	
+	public function registerSettings() {
+		register_setting(iHomefinderConstants::OPTION_GROUP_ACTIVATE, iHomefinderConstants::ACTIVATION_TOKEN_OPTION);
+		register_setting(iHomefinderConstants::OPTION_GROUP_ACTIVATE, iHomefinderConstants::AUTHENTICATION_TOKEN_OPTION);
+	}
+	
 	protected function getContent() {
-		$section = null;
-		if(array_key_exists("section", $_REQUEST)) {
-			$section = $_REQUEST["section"];
-		}
-		//if the activationToken is passed in the url, we manually update
-		//the option
-		$activationToken = null;
-		if(array_key_exists("reg", $_REQUEST)) {
-			$activationToken = $_REQUEST["reg"];
-		}
-		if($activationToken !== null) {
+		$section = iHomefinderUtility::getInstance()->getRequestVar("section");
+		//if the activationToken is passed in the url, we manually update the option
+		$activationToken = iHomefinderUtility::getInstance()->getRequestVar("reg");
+		if(!empty($activationToken)) {
 			$this->admin->activateAuthenticationToken($activationToken);
 			?>
 			<h2>Thanks For Signing Up</h2>
@@ -49,7 +47,7 @@ class iHomefinderAdminActivate extends iHomefinderAdminAbstractPage {
 				</div>
 			<?php } ?>
 			<form method="post" action="options.php">
-				<?php settings_fields(iHomefinderConstants::OPTION_ACTIVATE); ?>
+				<?php settings_fields(iHomefinderConstants::OPTION_GROUP_ACTIVATE); ?>
 				<table class="form-table">
 					<tr>
 						<th>
@@ -73,11 +71,11 @@ class iHomefinderAdminActivate extends iHomefinderAdminAbstractPage {
 				<?php echo self::IHOMEFINDER_NOTIFICATION; ?>
 			</p>
 			<?php
-			$firstName = iHomefinderUtility::getInstance()->getVarFromArray("firstName", $_REQUEST);
-			$lastName = iHomefinderUtility::getInstance()->getVarFromArray("lastName", $_REQUEST);
-			$phoneNumber = iHomefinderUtility::getInstance()->getVarFromArray("phoneNumber", $_REQUEST);
-			$email = iHomefinderUtility::getInstance()->getVarFromArray("email", $_REQUEST);
-			$accountType = iHomefinderUtility::getInstance()->getVarFromArray("accountType", $_REQUEST);
+			$firstName = iHomefinderUtility::getInstance()->getRequestVar("firstName");
+			$lastName = iHomefinderUtility::getInstance()->getRequestVar("lastName");
+			$phoneNumber = iHomefinderUtility::getInstance()->getRequestVar("phoneNumber");
+			$email = iHomefinderUtility::getInstance()->getRequestVar("email");
+			$accountType = iHomefinderUtility::getInstance()->getRequestVar("accountType");
 			$errors = array();
 			if(!filter_var($email, FILTER_VALIDATE_EMAIL)) {
 				$errors[] = "Email address is not valid.";
@@ -182,7 +180,7 @@ class iHomefinderAdminActivate extends iHomefinderAdminAbstractPage {
 								<label for="accountType">Account Type</label>
 							</th>
 							<td>
-								<select id="accountType" class="regular-text" name="accountType">
+								<select id="accountType" name="accountType">
 									<option>Select One</option>
 									<option value="agent" <?php if($accountType === "agent") { ?> selected="selected" <?php } ?>>Individual Agent</option>
 									<option value="broker" <?php if($accountType === "broker") { ?> selected="selected" <?php } ?>>Office with Multiple Agents</option>
@@ -200,11 +198,11 @@ class iHomefinderAdminActivate extends iHomefinderAdminAbstractPage {
 			<?php if(!$this->admin->isActivated()) { ?>
 				<h2>Register Optima Express</h2>
 				<p>
-					<a href="<?php echo admin_url("admin.php?page=" . iHomefinderConstants::OPTION_ACTIVATE . "&section=enter-reg-key"); ?>">I already have a registration key</a>
+					<a href="<?php echo admin_url("admin.php?page=" . iHomefinderConstants::PAGE_ACTIVATE . "&section=enter-reg-key"); ?>">I already have a registration key</a>
 				</p>
 				<p>
-					<a href="<?php echo admin_url("admin.php?page=" . iHomefinderConstants::OPTION_ACTIVATE . "&section=free-trial"); ?>" class="button button-primary button-large-ihf" >Get a Free<br />30-Day Trial</a>
-					<a href="http://www.ihomefinder.com/products/optima-express/optima-express-agent-pricing/?plugin=true&redirectURL=<?php echo urlencode(admin_url("admin.php?page=" . iHomefinderConstants::OPTION_ACTIVATE)); ?>" class="button button-primary button-large-ihf">Sign Up for a<br />Paid Account</a>
+					<a href="<?php echo admin_url("admin.php?page=" . iHomefinderConstants::PAGE_ACTIVATE . "&section=free-trial"); ?>" class="button button-primary ihf-button-large" >Get a Free<br />30-Day Trial</a>
+					<a href="http://www.ihomefinder.com/products/optima-express/optima-express-agent-pricing/?plugin=true&redirectURL=<?php echo urlencode(admin_url("admin.php?page=" . iHomefinderConstants::PAGE_ACTIVATE)); ?>" class="button button-primary ihf-button-large">Sign Up for a<br />Paid Account</a>
 				</p>
 				<p>Optima Express from iHomefinder adds MLS/IDX search and listings directly into your WordPress site.</p>
 				<p>A free trial account uses sample IDX listings from Northern California.</p>
@@ -216,7 +214,7 @@ class iHomefinderAdminActivate extends iHomefinderAdminAbstractPage {
 				<h2>Unregister Optima Express</h2>
 				<p>Optima Express is currently registered. Clicking the below button will unregister the IDX plugin.<p>
 				<form method="post" action="options.php">
-					<?php settings_fields(iHomefinderConstants::OPTION_ACTIVATE); ?>
+					<?php settings_fields(iHomefinderConstants::OPTION_GROUP_ACTIVATE); ?>
 					<input type="hidden" name="<?php echo iHomefinderConstants::ACTIVATION_TOKEN_OPTION ?>" value="" />
 					<input type="hidden" name="<?php echo iHomefinderConstants::AUTHENTICATION_TOKEN_OPTION ?>" value="" />
 					<p class="submit">
@@ -224,7 +222,7 @@ class iHomefinderAdminActivate extends iHomefinderAdminAbstractPage {
 					</p>
 				</form>
 				<form method="post" action="options.php" name="refreshRegistration">
-					<?php settings_fields(iHomefinderConstants::OPTION_ACTIVATE); ?>
+					<?php settings_fields(iHomefinderConstants::OPTION_GROUP_ACTIVATE); ?>
 					<input type="hidden" name="<?php echo iHomefinderConstants::ACTIVATION_TOKEN_OPTION; ?>" value="<?php echo get_option(iHomefinderConstants::ACTIVATION_TOKEN_OPTION, null); ?>" />
 					<a href="#" onclick="document.refreshRegistration.submit();">Refresh Registration</a>
 				</form>

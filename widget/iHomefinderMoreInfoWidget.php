@@ -14,14 +14,12 @@ class iHomefinderMoreInfoWidget extends WP_Widget {
 	
 	function widget($args, $instance) {
 		if(iHomefinderStateManager::getInstance()->hasListingInfo()) {
-			
-			//sets vars like $before_widget from $args
-			extract($args);
-			
+			$beforeWidget = $args["before_widget"];
+			$afterWidget = $args["after_widget"];
+			$beforeTitle = $args["before_title"];
+			$afterTitle = $args["after_title"];
 			$listingInfo = iHomefinderStateManager::getInstance()->getCurrentListingInfo();
-			
 			$remoteRequest = new iHomefinderRequestor();
-			
 			$remoteRequest
 				->addParameter("method", "handleRequest")
 				->addParameter("viewType", "json")
@@ -34,25 +32,22 @@ class iHomefinderMoreInfoWidget extends WP_Widget {
 				->addParameter("clientPropertyId", $listingInfo->getClientPropertyId())
 				->addParameter("sold", $listingInfo->getSold())
 			;
-			
-			$contentInfo = $remoteRequest->remoteGetRequest();
-			$content = $remoteRequest->getContent($contentInfo);
-			iHomefinderEnqueueResource::getInstance()->addToFooter($contentInfo->head);
-			
+			$remoteResponse = $remoteRequest->remoteGetRequest();
+			$content = $remoteResponse->getBody();
+			iHomefinderEnqueueResource::getInstance()->addToFooter($remoteResponse->getHead());
 			$title = apply_filters("widget_title", $instance["title"]);
-			
-			echo $before_widget;
-			if($title) {
-				echo $before_title . $title . $after_title;
+			echo $beforeWidget;
+			if(!empty($title)) {
+				echo $beforeTitle . $title . $afterTitle;
 			}
 			echo $content;
-			echo $after_widget;	    		
+			echo $afterWidget;	    		
 		}
 	}
 	
-	public function update($new_instance, $old_instance) {
-		$instance = $old_instance;
-		$instance["title"] = strip_tags(stripslashes($new_instance["title"]));			
+	public function update($newInstance, $oldInstance) {
+		$instance = $oldInstance;
+		$instance["title"] = strip_tags(stripslashes($newInstance["title"]));			
 		return $instance;	  	
 	}
 	

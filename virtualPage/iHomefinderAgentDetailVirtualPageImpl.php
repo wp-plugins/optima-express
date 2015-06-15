@@ -2,33 +2,31 @@
 
 class iHomefinderAgentDetailVirtualPageImpl extends iHomefinderAbstractVirtualPage {
 	
-	private $path = "agent-detail";
-	private $title = "";
-	private $defaultTitle = "";
-	
 	public function getTitle() {
-		$customTitle = get_option(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TITLE_AGENT_DETAIL);
-		if($customTitle != null && "" != $customTitle) {
-			$this->title=$customTitle;
-		} else {
-			$this->title = $this->defaultTitle;
+		$default = null;
+		if(iHomefinderLayoutManager::getInstance()->supportsSeoVariables()) {
+			$default = "{agentName}, {agentDesignation}";
+		} elseif(is_object($this->remoteResponse) && $this->remoteResponse->hasTitle()) {
+			$default = $this->remoteResponse->getTitle();
 		}
-		return $this->title;
+		return $this->getText(iHomefinderConstants::OPTION_VIRTUAL_PAGE_TITLE_AGENT_DETAIL, $default);
 	}
 
 	public function getPageTemplate() {
-		$pageTemplate = get_option(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_TEMPLATE_AGENT_DETAIL);
-		return $pageTemplate;			
+		return get_option(iHomefinderConstants::OPTION_VIRTUAL_PAGE_TEMPLATE_AGENT_DETAIL, null);
 	}
 	
-	public function getPath() {
-		$customPath = get_option(iHomefinderVirtualPageHelper::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_AGENT_DETAIL);	
-		if($customPath != null && "" != $customPath) {
-			$this->path = $customPath;
-		}
-		return $this->path;
+	public function getPermalink() {
+		return $this->getText(iHomefinderConstants::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_AGENT_DETAIL, "agent-detail");
 	}
 	
+	function getAvailableVariables() {
+		$variableUtility = iHomefinderVariableUtility::getInstance();
+		return array(
+			$variableUtility->getAgentName(),
+			$variableUtility->getAgentDesignation()
+		);
+	}
 			
 	public function getContent() {
 		iHomefinderStateManager::getInstance()->saveLastSearch();
@@ -40,17 +38,9 @@ class iHomefinderAgentDetailVirtualPageImpl extends iHomefinderAbstractVirtualPa
 			->addParameter("includeSearchSummary", false)
 		;
 		$agentId = iHomefinderUtility::getInstance()->getQueryVar("agentId");
-		if($agentId != null && is_numeric($agentId)) {
-			$this->remoteRequest->addParameter("agentID", $agentId);
-		}
+		$this->remoteRequest->addParameter("agentID", $agentId);
 		$this->remoteRequest->setCacheExpiration(60*60);
 		$this->remoteResponse = $this->remoteRequest->remoteGetRequest();
-		$body = $this->remoteRequest->getContent($this->remoteResponse);
-		
-		if(property_exists($this->remoteResponse, "title")) {
-			//success, display the view
-			$this->defaultTitle = $this->remoteResponse->title;
-		}
-		return $body;
 	}
+	
 }
