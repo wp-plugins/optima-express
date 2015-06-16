@@ -1,8 +1,5 @@
 <?php
 
-/**
- * This singleton utility class is used to search form fields.
- */
 class iHomefinderSearchFormFieldsUtility {
 	
 	private static $instance;
@@ -20,6 +17,7 @@ class iHomefinderSearchFormFieldsUtility {
 	
 	public function getFormData() {
 		if(empty($this->formData)) {
+			$this->formData = new iHomefinderFormData();
 			$remoteRequest = new iHomefinderRequestor();
 			$remoteRequest
 				->addParameter("method", "handleRequest")
@@ -29,32 +27,31 @@ class iHomefinderSearchFormFieldsUtility {
 			$remoteRequest->setCacheExpiration(60*60);
 			$remoteResponse = $remoteRequest->remoteGetRequest();
 			$response = $remoteResponse->getResponse();
-			if(!empty($response) && is_object($response)) {
-				$hotsheetsList = array();
-				$citiesList = array();
-				$cityZipList = array();
-				$propertyTypesList = array();
-				$agentList = array();
-				$officeList = array();
+			if(is_object($response)) {
 				if(property_exists($response, "hotsheetsList")) {
-					$hotsheetsList = $this->convertItemValues($response->hotsheetsList);
+					$hotsheets = $this->convertItemValues($response->hotsheetsList);
+					$this->formData->setHotsheets($hotsheets);
 				}
 				if(property_exists($response, "citiesList")) {
-					$citiesList = $this->convertItemValues($response->citiesList);
+					$cities = $this->convertItemValues($response->citiesList);
+					$this->formData->setCities($cities);
 				}
 				if(property_exists($response, "cityZipList")) {
-					$cityZipList = $this->convertItemValues($response->cityZipList);
+					$cityZips = $this->convertItemValues($response->cityZipList);
+					$this->formData->setCityZips($cityZips);
 				}
 				if(property_exists($response, "propertyTypesList")) {
-					$propertyTypesList = $this->convertItemValues($response->propertyTypesList);
+					$propertyTypes = $this->convertItemValues($response->propertyTypesList);
+					$this->formData->setPropertyTypes($propertyTypes);
 				}
 				if(property_exists($response, "agentList")) {
-					$agentList = $this->convertItemValues($response->agentList);
+					$agents = $this->convertItemValues($response->agentList);
+					$this->formData->setAgents($agents);
 				}
 				if(property_exists($response, "officeList")) {
-					$officeList = $this->convertItemValues($response->officeList);
+					$offices = $this->convertItemValues($response->officeList);
+					$this->formData->setOffices($offices);
 				}
-				$this->formData = new iHomefinderFormData($hotsheetsList, $citiesList, $cityZipList, $propertyTypesList, $agentList, $officeList);
 			}
 		}
 		return $this->formData;
