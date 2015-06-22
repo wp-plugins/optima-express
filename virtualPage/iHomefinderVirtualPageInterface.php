@@ -5,46 +5,46 @@ interface iHomefinderVirtualPageInterface {
 	/**
 	 * @return string
 	 */
-	function getPageTemplate();
+	public function getPageTemplate();
 	
 	/**
 	 * @return string
 	 */
-	function getPermalink();
+	public function getPermalink();
 	
 	/**
 	 * @return string
 	 */
-	function getHead();
+	public function getHead();
 	
 	/**
 	 * @return string
 	 */
-	function getTitle();
+	public function getTitle();
 	
 	/**
 	 * @return string
 	 */
-	function getContent();
+	public function getContent();
 	
 	/**
 	 * @return string
 	 */
-	function getBody();
+	public function getBody();
 	
 	/**
 	 * @return string
 	 */
-	function getMetaTags();
+	public function getMetaTags();
 	
 	/**
 	 * @return array<iHomefinderVariable>
 	 */
-	function getVariables();
+	public function getVariables();
 	
 	/**
 	 * @return array<iHomefinderVariable>
 	 */
-	function getAvailableVariables();
+	public function getAvailableVariables();
 	
 }

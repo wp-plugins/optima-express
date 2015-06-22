@@ -93,7 +93,7 @@ class iHomefinderStateManager {
 			$this->leadCaptureId = $_COOKIE[$this->getLeadCaptureKey()];
 		} else {
 			$this->leadCaptureId = $this->getLeadCaptureId();
-			if($this->leadCaptureId != null) {
+			if($this->leadCaptureId !== null) {
 				$expireTime = time()+60*60*24*365*5; /* expire in 5 years */
 				setcookie($this->getLeadCaptureKey(), $this->leadCaptureId, $expireTime, "/");
 			}
@@ -296,7 +296,7 @@ class iHomefinderStateManager {
 
 	public function getLastSearchQuery() {
 		$lastSearchQueryString = $this->getLastSearchQueryString();
-		if($lastSearchQueryString != null && trim($lastSearchQueryString) != "") {
+		if($lastSearchQueryString !== null && trim($lastSearchQueryString) !== "") {
 			$lastSearchNameValueArray = explode("&", $lastSearchQueryString);	
 		}		
 		$lastSearchArray = array();
@@ -344,7 +344,7 @@ class iHomefinderStateManager {
 
 	public function isLoggedIn() {
 		$result = false;
-		if($this->getCurrentSubscriber() != null) {
+		if($this->getCurrentSubscriber() !== null) {
 			$result = true;
 		}
 		return $result;
@@ -373,7 +373,7 @@ class iHomefinderStateManager {
 	}
 	
 	public function hasListingInfo() {
-		if($this->listingInfo != null) {
+		if($this->listingInfo !== null) {
 			return true;
 		}
 		return false;

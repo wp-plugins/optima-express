@@ -50,7 +50,7 @@ class iHomefinderUtility {
 				$value = ($value) ? "true" : "false";
 			}
 			if($value !== null) {
-				if(substr($url, -1) != "?" && substr($url, -1) != "&") {
+				if(substr($url, -1) !== "?" && substr($url, -1) !== "&") {
 					$url .= "&";
 				}
 				$url .= $key . "=" . urlencode(trim($value));
@@ -68,7 +68,7 @@ class iHomefinderUtility {
 				$paramValue = null;
 				if(is_array($values)) {
 					foreach($values as $value) {
-						if($paramValue != null) {
+						if($paramValue !== null) {
 							$paramValue .= ",";
 						}
 						$paramValue .= $value;

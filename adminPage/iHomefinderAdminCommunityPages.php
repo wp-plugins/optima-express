@@ -61,7 +61,7 @@ class iHomefinderAdminCommunityPages extends iHomefinderAdminAbstractPage {
 								<label for="bed">Bed</label>
 							</th>
 							<td>
-								<input id="bed" class="regular-text" type="text" name="bed" />
+								<input id="bed" class="regular-text" type="number" name="bed" />
 							</td>
 						</tr>
 						<tr>
@@ -69,7 +69,7 @@ class iHomefinderAdminCommunityPages extends iHomefinderAdminAbstractPage {
 								<label for="bath">Bath</label>
 							</th>
 							<td>
-								<input id="bath" class="regular-text" type="text" name="bath" />
+								<input id="bath" class="regular-text" type="number" name="bath" />
 							</td>
 						</tr>
 						<tr>
@@ -77,7 +77,7 @@ class iHomefinderAdminCommunityPages extends iHomefinderAdminAbstractPage {
 								<label for="minPrice">Min Price</label>
 							</th>
 							<td>
-								<input id="minPrice" class="regular-text" type="text" name="minPrice" />
+								<input id="minPrice" class="regular-text" type="number" name="minPrice" />
 							</td>
 						</tr>
 						<tr>
@@ -85,7 +85,7 @@ class iHomefinderAdminCommunityPages extends iHomefinderAdminAbstractPage {
 								<label for="maxPrice">Max Price</label>
 							</th>
 							<td>
-								<input id="maxPrice" class="regular-text" type="text" name="maxPrice" />
+								<input id="maxPrice" class="regular-text" type="number" name="maxPrice" />
 							</td>
 						</tr>
 					</tbody>
