@@ -80,7 +80,13 @@ var IhfGalleryDialog = {
 	insertOrganizerLogin: function(theForm, shortcode) {
 		this.buildShortcode(shortcode);
 	},
+	insertEmailAlerts: function(theForm, shortcode) {
+		this.buildShortcode(shortcode);
+	},
 	insertValuationForm: function(theForm, shortcode) {
+		this.buildShortcode(shortcode);
+	},
+	insertContactForm: function(theForm, shortcode) {
 		this.buildShortcode(shortcode);
 	},
 	insertMapSearch: function(theForm, shortcode) {

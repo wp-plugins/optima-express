@@ -20,7 +20,7 @@ class iHomefinderOfficeDetailVirtualPageImpl extends iHomefinderAbstractVirtualP
 		return $this->getText(iHomefinderConstants::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_OFFICE_DETAIL, "office-detail");
 	}
 	
-	function getAvailableVariables() {
+	public function getAvailableVariables() {
 		$variableUtility = iHomefinderVariableUtility::getInstance();
 		return array(
 			$variableUtility->getOfficeName()

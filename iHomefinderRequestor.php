@@ -101,7 +101,7 @@ class iHomefinderRequestor {
 		if(!is_wp_error($response)) {
 			$responseBody = wp_remote_retrieve_body($response);
 			$contentType = wp_remote_retrieve_header($response, "content-type");
-			if($contentType != null && $contentType == "text/xml;charset=UTF-8") {
+			if($contentType !== null && $contentType == "text/xml;charset=UTF-8") {
 				$responseBodyObject = simplexml_load_string($responseBody, null, LIBXML_NOCDATA);
 				//hack to convert SimpleXMLElement to stdClass
 				//$this->remoteResponse = json_decode(json_encode($this->remoteResponse));
@@ -191,7 +191,7 @@ class iHomefinderRequestor {
 		//ihfuserinfo variable
 		
 		$userAgent = $_SERVER["HTTP_USER_AGENT"];
-		if($userAgent != null) {
+		if($userAgent !== null) {
 			$userAgent = urlencode($userAgent);
 		}
 		
@@ -217,7 +217,7 @@ class iHomefinderRequestor {
 				$responseBodyObject->view = $responseBody;
 			} else {
 				$contentType = wp_remote_retrieve_header($response, "content-type");
-				if($contentType != null && $contentType == "text/xml;charset=UTF-8") {
+				if($contentType !== null && $contentType == "text/xml;charset=UTF-8") {
 					$responseBodyObject = simplexml_load_string($responseBody, null, LIBXML_NOCDATA);	
 					$responseBodyObject = json_decode(json_encode($responseBodyObject));
 				} else {

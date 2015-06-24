@@ -25,6 +25,8 @@ class iHomefinderShortcodeDispatcher {
 	const ORGANIZER_LOGIN_SHORTCODE = "optima_express_organizer_login";
 	const AGENT_DETAIL_SHORTCODE = "optima_express_agent_detail";
 	const VALUATION_FORM_SHORTCODE = "optima_express_valuation_form";
+	const CONTACT_FORM_SHORTCODE = "optima_express_contact_form";
+	const EMAIL_ALERTS_SHORTCODE = "optima_express_email_alerts";
 	
 	private static $instance;
 
@@ -54,6 +56,8 @@ class iHomefinderShortcodeDispatcher {
 		add_shortcode(self::ORGANIZER_LOGIN_SHORTCODE, array($this, "getOrganizerLogin"));
 		add_shortcode(self::AGENT_DETAIL_SHORTCODE, array($this, "getAgentDetail"));
 		add_shortcode(self::VALUATION_FORM_SHORTCODE, array($this, "getValuationForm"));
+		add_shortcode(self::CONTACT_FORM_SHORTCODE, array($this, "getContactForm"));
+		add_shortcode(self::EMAIL_ALERTS_SHORTCODE, array($this, "getEmailAlerts"));
 	}
 	
 	/**
@@ -202,9 +206,25 @@ class iHomefinderShortcodeDispatcher {
 		return $content;
 	}
 	
+	public function getContactForm($attributes) {
+		$virtualPage = iHomefinderVirtualPageFactory::getInstance()->getVirtualPage(iHomefinderVirtualPageFactory::CONTACT_FORM);
+		$virtualPage->getContent();
+		$content = $virtualPage->getBody();
+		iHomefinderEnqueueResource::getInstance()->addToFooter($virtualPage->getHead());
+		return $content;
+	}
+	
+	public function getEmailAlerts($attributes) {
+		$virtualPage = iHomefinderVirtualPageFactory::getInstance()->getVirtualPage(iHomefinderVirtualPageFactory::ORGANIZER_EDIT_SAVED_SEARCH);
+		$virtualPage->getContent();
+		$content = $virtualPage->getBody();
+		iHomefinderEnqueueResource::getInstance()->addToFooter($virtualPage->getHead());
+		return $content;
+	}
+	
 	public function getToppicks($attributes) {
 		$content = null;
-		if($this->getAttribute($attributes, "id") != null) {
+		if($this->getAttribute($attributes, "id") !== null) {
 			$virtualPage = iHomefinderVirtualPageFactory::getInstance()->getVirtualPage(iHomefinderVirtualPageFactory::HOTSHEET_SEARCH_RESULTS);
 			$_REQUEST["hotSheetId"] = $this->getAttribute($attributes, "id");
 			$_REQUEST["includeMap"] = $this->getAttribute($attributes, "includeMap");
@@ -322,7 +342,7 @@ class iHomefinderShortcodeDispatcher {
 		return $content;
 	}
 	
-	public function getQuickSearchWithVirtualPage() {
+	private function getQuickSearchWithVirtualPage() {
 		$virtualPage = iHomefinderVirtualPageFactory::getInstance()->getVirtualPage(iHomefinderVirtualPageFactory::LISTING_QUICK_SEARCH_FORM);
 		$virtualPage->getContent();
 		$content = $virtualPage->getBody();
@@ -330,7 +350,7 @@ class iHomefinderShortcodeDispatcher {
 		return $content;
 	}
 
-	public function getQuickSearchContent($attributes) {
+	private function getQuickSearchContent($attributes) {
 		$remoteRequest = new iHomefinderRequestor();
 		$remoteRequest
 			->addParameter("method", "handleRequest")
@@ -407,9 +427,9 @@ class iHomefinderShortcodeDispatcher {
 
 	public function getListingGallery($attributes) {
 		iHomefinderStateManager::getInstance()->saveLastSearch();
-		if($this->getAttribute($attributes, "id") != null) {
+		if($this->getAttribute($attributes, "id") !== null) {
 			$hotsheetId = $this->getAttribute($attributes, "id");
-		} elseif($this->getAttribute($attributes, "hotsheetId") != null) {
+		} elseif($this->getAttribute($attributes, "hotsheetId") !== null) {
 			$hotsheetId = $this->getAttribute($attributes, "hotsheetId");
 		}
 		$remoteRequest = new iHomefinderRequestor();
@@ -443,25 +463,29 @@ class iHomefinderShortcodeDispatcher {
 	 * used by iHomefinderAdmin to generate shortcode string for community pages
 	 */
 	public function buildSearchResultsShortcode($cityZip, $propertyType, $bed, $bath, $minPrice, $maxPrice) {
+		$result = $this->buildShortcode(self::SEARCH_RESULTS_SHORTCODE, array(
+			"cityZip" => $cityZip,
+			"propertyType" => $propertyType,
+			"bed" => $bed,
+			"bath" => $bath,
+			"minPrice" => $minPrice,
+			"maxPrice" => $maxPrice,
+		));
+		return $result;
+	}
+	
+	/**
+	 * @param string $slug
+	 * @param array $attributes
+	 * @return string
+	 */
+	private function buildShortcode($slug, array $attributes) {
 		$result = "[";
-		$result .= self::SEARCH_RESULTS_SHORTCODE;
-		if(!empty($cityZip)) {
-			$result .= " cityZip=\"" . $cityZip . "\"";
-		}
-		if(!empty($propertyType)) {
-			$result .= " propertyType=\"" . $propertyType . "\"";
-		}
-		if(!empty($bed)) {
-			$result .= " bed=\"" . $bed . "\"";
-		}
-		if(!empty($bath)) {
-			$result .= " bath=\"" . $bath . "\"";
-		}
-		if(!empty($minPrice)) {
-			$result .= " minPrice=\"" . $minPrice . "\"";
-		}
-		if(!empty($maxPrice)) {
-			$result .= " maxPrice=\"" . $maxPrice . "\"";
+		$result .= $slug;
+		if(is_array($attributes)) {
+			foreach($attributes as $name => $value) {
+				$result .= " " . $name . "=\"" . $value . "\"";
+			}
 		}
 		$result .= "]";
 		return $result;

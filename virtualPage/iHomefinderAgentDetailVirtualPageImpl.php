@@ -20,7 +20,7 @@ class iHomefinderAgentDetailVirtualPageImpl extends iHomefinderAbstractVirtualPa
 		return $this->getText(iHomefinderConstants::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_AGENT_DETAIL, "agent-detail");
 	}
 	
-	function getAvailableVariables() {
+	public function getAvailableVariables() {
 		$variableUtility = iHomefinderVariableUtility::getInstance();
 		return array(
 			$variableUtility->getAgentName(),
@@ -38,6 +38,10 @@ class iHomefinderAgentDetailVirtualPageImpl extends iHomefinderAbstractVirtualPa
 			->addParameter("includeSearchSummary", false)
 		;
 		$agentId = iHomefinderUtility::getInstance()->getQueryVar("agentId");
+		//used for shortcode
+		if(empty($agentId)) {
+			$agentId = iHomefinderUtility::getInstance()->getRequestVar("agentId");
+		}
 		$this->remoteRequest->addParameter("agentID", $agentId);
 		$this->remoteRequest->setCacheExpiration(60*60);
 		$this->remoteResponse = $this->remoteRequest->remoteGetRequest();

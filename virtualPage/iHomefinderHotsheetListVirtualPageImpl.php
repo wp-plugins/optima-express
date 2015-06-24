@@ -11,7 +11,7 @@ class iHomefinderHotsheetListVirtualPageImpl extends iHomefinderAbstractVirtualP
 	}
 	
 	public function getPermalink() {
-		return $this->getText(iHomefinderConstants::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_HOTSHEET, "homes-for-sale-toppicks");
+		return "homes-for-sale-toppicks";
 	}
 			
 	public function getContent() {

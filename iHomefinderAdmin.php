@@ -66,7 +66,7 @@ class iHomefinderAdmin {
 									$pluginName = $plugin["Name"];
 									if(is_array($pluginName) && array_key_exists($pluginName, $incompatiblePlugins)) {
 										$message = $incompatiblePlugins[$pluginName];
-										if($message != null) {
+										if($message !== null) {
 											$errors[] = "<a href=\"" . admin_url("plugins.php") . "?s=" . urlencode($pluginName) . "\">" . $pluginName . "</a> (" . $message . ")";
 										}
 									}
@@ -80,7 +80,7 @@ class iHomefinderAdmin {
 							$incompatibleThemes = $compatibility["Theme"];
 							if(is_array($incompatibleThemes) && array_key_exists($themeName, $incompatibleThemes)) {
 								$message = $incompatibleThemes[$themeName];
-								if($message != null) {
+								if($message !== null) {
 									$errors[] = "<a href=\"" . admin_url("themes.php") . "\">" . $themeName . "</a> (" . $message . ")";
 								}
 							}

@@ -20,12 +20,12 @@ class iHomefinderHotsheetVirtualPageImpl extends iHomefinderAbstractVirtualPage 
 		return $this->getText(iHomefinderConstants::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_HOTSHEET, "homes-for-sale-toppicks");
 	}
 	
-	function getMetaTags() {
+	public function getMetaTags() {
 		$default = "<meta name=\"description\" content=\"{savedSearchDescription}\" />";
 		return $this->getText(iHomefinderConstants::OPTION_VIRTUAL_PAGE_META_TAGS_HOTSHEET, $default);
 	}
 	
-	function getAvailableVariables() {
+	public function getAvailableVariables() {
 		$variableUtility = iHomefinderVariableUtility::getInstance();
 		return array(
 			$variableUtility->getSavedSearchName(),
