@@ -1,6 +1,6 @@
 <?php
 
-class iHomefinderOrganizerEmailUpdatesConfirmationVirtualPageImpl extends iHomefinderAbstractVirtualPage {
+class iHomefinderOrganizerEmailUpdatesConfirmationVirtualPageImpl extends iHomefinderAbstractPropertyOrganizerVirtualPage {
 	
 	public function getTitle() {
 		return "Email Updates Confirmation";

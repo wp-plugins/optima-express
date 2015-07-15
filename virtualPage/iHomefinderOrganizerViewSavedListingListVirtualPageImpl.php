@@ -1,6 +1,6 @@
 <?php
 
-class iHomefinderOrganizerViewSavedListingListVirtualPageImpl extends iHomefinderAbstractVirtualPage {
+class iHomefinderOrganizerViewSavedListingListVirtualPageImpl extends iHomefinderAbstractPropertyOrganizerVirtualPage {
 	
 	public function getTitle() {
 		return "Saved Listing List";

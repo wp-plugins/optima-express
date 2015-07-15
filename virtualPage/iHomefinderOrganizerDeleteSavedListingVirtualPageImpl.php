@@ -1,6 +1,6 @@
 <?php
 
-class iHomefinderOrganizerDeleteSavedListingVirtualPageImpl extends iHomefinderAbstractVirtualPage {
+class iHomefinderOrganizerDeleteSavedListingVirtualPageImpl extends iHomefinderAbstractPropertyOrganizerVirtualPage {
 	
 	public function getTitle() {
 		return "Saved Listing List";
@@ -8,7 +8,7 @@ class iHomefinderOrganizerDeleteSavedListingVirtualPageImpl extends iHomefinderA
 
 	public function getPermalink() {
 		return "property-organizer-delete-saved-listing-submit";
-	}
+	}	
 	
 	public function getContent() {
 		$savedListingId = iHomefinderUtility::getInstance()->getQueryVar("savedListingId");		

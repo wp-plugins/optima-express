@@ -75,6 +75,8 @@ class iHomefinderRewriteRules {
 				$this->addQueryVar($value);
 			}
 		}
+		//anchor regex to prevent matching permalink contained in another permalink (ex. home-for-sale and home-for-sale-)
+		$regex = "^" . $regex . "$";
 		add_rewrite_rule($regex, $redirect, "top");
 	}
 	

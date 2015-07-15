@@ -1,6 +1,6 @@
 <?php
 
-class iHomefinderOrganizerEditSubscriberVirtualPageImpl extends iHomefinderAbstractVirtualPage {
+class iHomefinderOrganizerEditSubscriberVirtualPageImpl extends iHomefinderAbstractPropertyOrganizerVirtualPage {
 	
 	public function getTitle() {
 		return "Organizer Profile";

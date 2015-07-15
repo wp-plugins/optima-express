@@ -1,14 +1,14 @@
 <?php
 
-class iHomefinderOrganizerActivateSubscriberVirtualPageImpl extends iHomefinderAbstractVirtualPage {
+class iHomefinderOrganizerActivateSubscriberVirtualPageImpl extends iHomefinderAbstractPropertyOrganizerVirtualPage {
 	
 	public function getTitle() {
 		return "Subscriber Activation";
 	}
 	
 	public function getPermalink() {
-		return "property-organizer-activate";	
-	}
+		return "property-organizer-activate";
+	}	
 	
 	public function getContent() {
 		$this->remoteRequest

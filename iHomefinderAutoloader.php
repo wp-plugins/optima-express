@@ -92,6 +92,7 @@ class iHomefinderAutoloader {
 			"iHomefinderAgentListVirtualPageImpl" => "virtualPage/iHomefinderAgentListVirtualPageImpl.php",
 			"iHomefinderAgentDetailVirtualPageImpl" => "virtualPage/iHomefinderAgentDetailVirtualPageImpl.php",
 			"iHomefinderAgentOrOfficeListingsVirtualPageImpl" => "virtualPage/iHomefinderAgentOrOfficeListingsVirtualPageImpl.php",
+			"iHomefinderAbstractPropertyOrganizerVirtualPage" => "virtualPage/iHomefinderAbstractPropertyOrganizerVirtualPage.php",
 			//admin pages
 			"iHomefinderAdminAbstractPage" => "adminPage/iHomefinderAdminAbstractPage.php",
 			"iHomefinderAdminPageInterface" => "adminPage/iHomefinderAdminPageInterface.php",

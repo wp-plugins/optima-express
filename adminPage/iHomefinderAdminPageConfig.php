@@ -91,11 +91,64 @@ class iHomefinderAdminPageConfig extends iHomefinderAdminAbstractPage {
 		register_setting(iHomefinderConstants::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderConstants::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_AGENT_DETAIL);
 	}
 	
+	private function showDuplicateUrlMessage() {
+		$urlFactory = iHomefinderUrlFactory::getInstance();
+		$urls = array(
+			$urlFactory->getListingsSearchResultsUrl(),
+			$urlFactory->getListingsSearchFormUrl(),
+			$urlFactory->getMapSearchFormUrl(),
+			$urlFactory->getListingsAdvancedSearchFormUrl(),
+			$urlFactory->getListingDetailUrl(),
+			$urlFactory->getListingSoldDetailUrl(),
+			$urlFactory->getFeaturedSearchResultsUrl(),
+			$urlFactory->getHotsheetSearchResultsUrl(),
+			//$urlFactory->getHotsheetListUrl(), //this is an intentional duplicate
+			$urlFactory->getOrganizerLoginUrl(),
+			$urlFactory->getOrganizerLogoutUrl(),
+			$urlFactory->getOrganizerLoginSubmitUrl(),
+			$urlFactory->getOrganizerEditSavedSearchUrl(),
+			$urlFactory->getOrganizerEditSavedSearchSubmitUrl(),
+			$urlFactory->getOrganizerDeleteSavedSearchSubmitUrl(),
+			$urlFactory->getOrganizerViewSavedSearchUrl(),
+			$urlFactory->getOrganizerViewSavedSearchListUrl(),
+			$urlFactory->getOrganizerResendConfirmationEmailUrl(),
+			$urlFactory->getOrganizerActivateSubscriberUrl(),
+			$urlFactory->getOrganizerSendSubscriberPasswordUrl(),
+			$urlFactory->getOrganizerViewSavedListingListUrl(),
+			$urlFactory->getOrganizerDeleteSavedListingUrl(),
+			$urlFactory->getOrganizerEmailUpdatesConfirmationUrl(),
+			$urlFactory->getOrganizerHelpUrl(),
+			$urlFactory->getOrganizerEditSubscriberUrl(),
+			$urlFactory->getContactFormUrl(),
+			$urlFactory->getValuationFormUrl(),
+			$urlFactory->getOpenHomeSearchFormUrl(),
+			$urlFactory->getSoldFeaturedListingUrl(),
+			$urlFactory->getSupplementalListingUrl(),
+			$urlFactory->getOfficeListUrl(),
+			$urlFactory->getOfficeDetailUrl(),
+			$urlFactory->getAgentListUrl(),
+			$urlFactory->getAgentDetailUrl(),
+		);
+		$duplicateUrls = array_unique(array_diff_assoc($urls, array_unique($urls)));
+		if(!empty($duplicateUrls)) {
+			?>
+			<div class="updated">
+				<?php foreach($duplicateUrls as $duplicateUrl) { ?>
+					<p>
+						<?php echo $duplicateUrl; ?> is a duplicate URL. Please change permalink.
+					</p>
+				<?php } ?>
+			</div>
+			<?php
+		}
+	}
+	
 	protected function getContent() {
 		wp_enqueue_script("postbox");
 		$permissions = iHomefinderPermissions::getInstance();
 		?>
 		<h2>IDX Pages</h2>
+		<?php $this->showDuplicateUrlMessage(); ?>
 		<form method="post" action="options.php">
 			<p class="submit">
 				<button type="submit" class="button-primary">Save Changes</button>
