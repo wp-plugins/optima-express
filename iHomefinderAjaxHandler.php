@@ -12,16 +12,6 @@ class iHomefinderAjaxHandler {
 
 	private function __construct() {
 	}
-	
-	private function isSpam() {
-		$spam = true;			
-		$spamChecker = iHomefinderUtility::getInstance()->getRequestVar("JKGH00920");
-		if(empty($spamChecker)) {
-			//if spamChecker is NOT empty, then we know this is SPAM
-			$spam = false;
-		}
-		return $spam;
-	}
 
 	public static function getInstance() {
 		if(!isset(self::$instance)) {
@@ -31,83 +21,26 @@ class iHomefinderAjaxHandler {
 	}
 
 	public function requestMoreInfo() {
-		if(!$this->isSpam()) {
-			$remoteRequest = new iHomefinderRequestor();
-			$remoteRequest
-				->addParameters($_REQUEST)
-				->addParameter("method", "handleRequest")
-				->addParameter("viewType", "json")
-				->addParameter("requestType", "request-more-info")
-			;
-			$remoteResponse = $remoteRequest->remoteGetRequest();
-			$content = $remoteResponse->getBody() . $remoteResponse->getHead();
-			echo $content;
-		}
-		die(); //don't remove
+		$this->basicAjaxSubmit("request-more-info");
 	}
 
 	public function contactFormRequest() {
-		if(!$this->isSpam()) {
-			$remoteRequest = new iHomefinderRequestor();
-			$remoteRequest
-				->addParameters($_REQUEST)
-				->addParameter("method", "handleRequest")
-				->addParameter("viewType", "json")
-				->addParameter("requestType", "contact-form")
-			;
-			$remoteResponse = $remoteRequest->remoteGetRequest();
-			$content = $remoteResponse->getBody() . $remoteResponse->getHead();
-			echo $content;
-		}
-		die(); //don't remove
+		$this->basicAjaxSubmit("contact-form");
 	}
 
 	public function scheduleShowing() {
-		if(!$this->isSpam()) {
-			$remoteRequest = new iHomefinderRequestor();
-			$remoteRequest
-				->addParameters($_REQUEST)
-				->addParameter("method", "handleRequest")
-				->addParameter("viewType", "json")
-				->addParameter("requestType", "schedule-showing")
-			;
-			$remoteResponse = $remoteRequest->remoteGetRequest();				
-			$content = $remoteResponse->getBody() . $remoteResponse->getHead();
-			echo $content;
-		}
-		die(); //don't remove
+		$this->basicAjaxSubmit("schedule-showing");
 	}
 
 	public function photoTour() {
-		$action = iHomefinderUtility::getInstance()->getRequestVar("action");
-		$listingNumber = iHomefinderUtility::getInstance()->getRequestVar("listingNumber");
 		$boardId = iHomefinderUtility::getInstance()->getRequestVar("boardID");
-		$remoteRequest = new iHomefinderRequestor();
-		$remoteRequest
-			->addParameter("method", "handleRequest")
-			->addParameter("viewType", "json")
-			->addParameter("requestType", "photo-tour")
-			->addParameter("listingNumber", $listingNumber)
-			->addParameter("boardId", $boardId)
-		;
-		$remoteResponse = $remoteRequest->remoteGetRequest();
-		$content = $remoteResponse->getBody() . $remoteResponse->getHead();
-		echo $content;
-		die(); //don't remove
+		$this->basicAjaxSubmit("photo-tour", array(
+			"boardId" => $boardId
+		));
 	}
 
 	public function saveProperty() {
-		$remoteRequest = new iHomefinderRequestor();
-		$remoteRequest
-			->addParameters($_REQUEST)
-			->addParameter("method", "handleRequest")
-			->addParameter("viewType", "json")
-			->addParameter("requestType", "save-property")
-		;
-		$remoteResponse = $remoteRequest->remoteGetRequest();
-		$content = $remoteResponse->getBody() . $remoteResponse->getHead();
-		echo $content;
-		die(); //don't remove
+		$this->basicAjaxSubmit("save-property");
 	}
 
 	public function saveSearch() {
@@ -131,157 +64,86 @@ class iHomefinderAjaxHandler {
 		die(); //don't remove
 	}
 	
-	public function advancedSearchMultiSelects() {
-		$remoteRequest = new iHomefinderRequestor();
-		$remoteRequest
-			->addParameters($_REQUEST)
-			->addParameter("method", "handleRequest")
-			->addParameter("viewType", "json")
-			->addParameter("requestType", "advanced-search-multi-select-values")
-			->addParameter("phpStyle", true)
-		;
-		$remoteResponse = $remoteRequest->remoteGetRequest();
-		$content = $remoteResponse->getBody() . $remoteResponse->getHead();
-		echo $content;
-		die(); //don't remove
-	}
-	
-	public function getAdvancedSearchFormFields() {
-		$boardId = iHomefinderUtility::getInstance()->getRequestVar("boardID");
-		$remoteRequest = new iHomefinderRequestor();
-		$remoteRequest
-			->addParameter("method", "handleRequest")
-			->addParameter("viewType", "json")
-			->addParameter("requestType", "advanced-search-fields")
-			->addParameter("boardID", $boardId)
-			->addParameter("phpStyle", true)
-		;
-		$remoteResponse = $remoteRequest->remoteGetRequest();
-		$content = $remoteResponse->getBody() . $remoteResponse->getHead();
-		echo $content;
-		die(); //don't remove
-	}		
-	
 	public function leadCaptureLogin() {
-		$remoteRequest = new iHomefinderRequestor();
-		$remoteRequest
-			->addParameters($_REQUEST)
-			->addParameter("method", "handleRequest")
-			->addParameter("viewType", "json")
-			->addParameter("requestType", "lead-capture-login")
-			->addParameter("phpStyle", true)
-		;
-		$remoteResponse = $remoteRequest->remoteGetRequest();
-		$content = $remoteResponse->getBody() . $remoteResponse->getHead();
-		echo $content;
-		die(); //don't remove
+		$this->basicAjaxSubmit("lead-capture-login");
 	}
 	
 	public function addSavedListingComments() {
-		$remoteRequest = new iHomefinderRequestor();
-		$remoteRequest
-			->addParameters($_REQUEST)
-			->addParameter("method", "handleRequest")
-			->addParameter("viewType", "json")
-			->addParameter("requestType", "saved-listing-comments")
-		;
-		$remoteResponse = $remoteRequest->remoteGetRequest();
-		$content = $remoteResponse->getBody() . $remoteResponse->getHead();
-		die(); //don't remove
+		$this->basicAjaxSubmit("saved-listing-comments");
 	}
 	
 	public function addSavedListingRating() {
-		$remoteRequest = new iHomefinderRequestor();
-		$remoteRequest
-			->addParameters($_REQUEST)
-			->addParameter("method", "handleRequest")
-			->addParameter("viewType", "json")
-			->addParameter("requestType", "saved-listing-rating")
-		;
-		$remoteResponse = $remoteRequest->remoteGetRequest();
-		$content = $remoteResponse->getBody() . $remoteResponse->getHead();
-		die(); //don't remove
+		$this->basicAjaxSubmit("saved-listing-rating");
 	}
 
 	public function saveListingForSubscriberInSession() {
-		$remoteRequest = new iHomefinderRequestor();
-		$remoteRequest
-			->addParameters($_REQUEST)
-			->addParameter("method", "handleRequest")
-			->addParameter("viewType", "json")
-			->addParameter("requestType", "save-listing-subscriber-session")
-		;
-		$remoteResponse = $remoteRequest->remoteGetRequest();
-		$content = $remoteResponse->getBody() . $remoteResponse->getHead();
-		echo $content;
-		die(); //don't remove
+		$this->basicAjaxSubmit("save-listing-subscriber-session");
 	}
 	
 	public function saveSearchForSubscriberInSession() {
-		$remoteRequest = new iHomefinderRequestor();
-		$remoteRequest
-			->addParameters($_REQUEST)
-			->addParameter("method", "handleRequest")
-			->addParameter("viewType", "json")
-			->addParameter("requestType", "save-search-subscriber-session")
-		;
-		$remoteResponse = $remoteRequest->remoteGetRequest();
-		$content = $remoteResponse->getBody() . $remoteResponse->getHead();
-		echo $content;
-		die(); //don't remove
-	}
-	
-	public function getAutocompleteMatches() {
-		$remoteRequest = new iHomefinderRequestor();
-		$remoteRequest
-			->addParameters($_REQUEST)
-			->addParameter("method", "handleRequest")
-			->addParameter("viewType", "json")
-			->addParameter("requestType", "area-autocomplete")
-		;
-		$remoteResponse = $remoteRequest->remoteGetRequest();
-		$content = $remoteResponse->getJson();
-		echo $content;
-		die(); //don't remove	
+		$this->basicAjaxSubmit("save-search-subscriber-session");
 	}
 	
 	public function sendPassword() {
-		if(!$this->isSpam()) {
-			$remoteRequest = new iHomefinderRequestor();
-			$remoteRequest
-				->addParameters($_REQUEST)
-				->addParameter("method", "handleRequest")
-				->addParameter("viewType", "json")
-				->addParameter("requestType", "send-password")
-			;
-			$remoteResponse = $remoteRequest->remoteGetRequest();
-			$content = $remoteResponse->getBody() . $remoteResponse->getHead();
-			echo $content;
-		}
-		die(); //don't remove
+		$this->basicAjaxSubmit("send-password");
 	}
 	
 	public function emailAlertPopup() {
 		$this->basicAjaxSubmit("email-alert-popup");
 	}
 	
+	public function emailListing() {
+		$this->basicAjaxSubmit("email-listing");
+	}
+	
 	/**
-	 * @param unknown $requestType
+	 * @deprecated not implemented
 	 */
-	private function basicAjaxSubmit($requestType) {
-		if(!$this->isSpam()) {
-			$remoteRequest = new iHomefinderRequestor();
-			$remoteRequest
-				->addParameters($_REQUEST)
-				->addParameter("method", "handleRequest")
-				->addParameter("viewType", "json")
-				->addParameter("requestType", $requestType)
-				->addParameter("phpStyle", true)
-			;
-			$remoteResponse = $remoteRequest->remoteGetRequest();
-			$content = $remoteResponse->getBody() . $remoteResponse->getHead();
-			echo $content;
-		}
+	public function advancedSearchMultiSelects() {
+		$this->basicAjaxSubmit("advanced-search-multi-select-values");
+	}
+	
+	/**
+	 * @deprecated
+	 */
+	public function getAdvancedSearchFormFields() {
+		$this->basicAjaxSubmit("advanced-search-fields");
+	}
+	
+	/**
+	 * @deprecated
+	 */
+	public function getAutocompleteMatches() {
+		$remoteRequest = new iHomefinderRequestor();
+		$remoteRequest
+		->addParameters($_REQUEST)
+		->addParameter("method", "handleRequest")
+		->addParameter("viewType", "json")
+		->addParameter("requestType", "area-autocomplete")
+		;
+		$remoteResponse = $remoteRequest->remoteGetRequest();
+		$content = $remoteResponse->getJson();
+		echo $content;
+		die(); //don't remove
+	}
+	
+	/**
+	 * @param string $requestType
+	 * @param array $parameters
+	 */
+	private function basicAjaxSubmit($requestType, $parameters = array()) {
+		$remoteRequest = new iHomefinderRequestor();
+		$remoteRequest
+			->addParameters($_REQUEST)
+			->addParameters($parameters)
+			->addParameter("method", "handleRequest")
+			->addParameter("viewType", "json")
+			->addParameter("requestType", $requestType)
+			->addParameter("phpStyle", true)
+		;
+		$remoteResponse = $remoteRequest->remoteGetRequest();
+		$content = $remoteResponse->getBody() . $remoteResponse->getHead();
+		echo $content;
 		die(); //don't remove
 	}
 	

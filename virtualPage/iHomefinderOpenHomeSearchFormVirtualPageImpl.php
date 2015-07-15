@@ -1,13 +1,9 @@
 <?php
 
-class iHomefinderOpenHomeSearchFormVirtualPageImpl extends iHomefinderAbstractVirtualPage {
+class iHomefinderOpenHomeSearchFormVirtualPageImpl extends iHomefinderAbstractPropertyOrganizerVirtualPage {
 	
 	public function getTitle() {
 		return $this->getText(iHomefinderConstants::OPTION_VIRTUAL_PAGE_TITLE_OPEN_HOME_SEARCH_FORM, "Open Home Search");
-	}
-	
-	public function getPageTemplate() {
-		return get_option(iHomefinderConstants::OPTION_VIRTUAL_PAGE_TEMPLATE_OPEN_HOME_SEARCH_FORM, null);		
 	}
 	
 	public function getPermalink() {

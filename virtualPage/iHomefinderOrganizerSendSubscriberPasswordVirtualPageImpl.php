@@ -1,6 +1,6 @@
 <?php
 
-class iHomefinderOrganizerSendSubscriberPasswordVirtualPageImpl extends iHomefinderAbstractVirtualPage {
+class iHomefinderOrganizerSendSubscriberPasswordVirtualPageImpl extends iHomefinderAbstractPropertyOrganizerVirtualPage {
 	
 	public function getTitle() {
 		return "Email Password";

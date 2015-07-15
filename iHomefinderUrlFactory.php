@@ -40,14 +40,14 @@ class iHomefinderUrlFactory {
 		}
 		return $result;
 	}
-
+	
 	public function getListingsSearchResultsUrl($includeBaseUrl = true) {
 		$virtualPage = $this->virtualPageFactory->getVirtualPage(iHomefinderVirtualPageFactory::LISTING_SEARCH_RESULTS);
 		$permalink = $virtualPage->getPermalink();
 		$result = $this->prependBaseUrl($permalink, $includeBaseUrl);
 		return $result;
 	}
-
+	
 	public function getListingsSearchFormUrl($includeBaseUrl = true) {
 		$virtualPage = $this->virtualPageFactory->getVirtualPage(iHomefinderVirtualPageFactory::LISTING_SEARCH_FORM);
 		$permalink = $virtualPage->getPermalink();
@@ -89,7 +89,7 @@ class iHomefinderUrlFactory {
 		$result = $this->prependBaseUrl($permalink, $includeBaseUrl);			
 		return $result;
 	}
-
+	
 	public function getHotsheetSearchResultsUrl($includeBaseUrl = true) {
 		$virtualPage = $this->virtualPageFactory->getVirtualPage(iHomefinderVirtualPageFactory::HOTSHEET_SEARCH_RESULTS);
 		$permalink = $virtualPage->getPermalink();					
@@ -103,7 +103,7 @@ class iHomefinderUrlFactory {
 		$result = $this->prependBaseUrl($permalink, $includeBaseUrl);			
 		return $result;
 	}
-
+	
 	public function getOrganizerLoginUrl($includeBaseUrl = true) {
 		$virtualPage = $this->virtualPageFactory->getVirtualPage(iHomefinderVirtualPageFactory::ORGANIZER_LOGIN);
 		$permalink = $virtualPage->getPermalink();							
@@ -180,14 +180,14 @@ class iHomefinderUrlFactory {
 		$result = $this->prependBaseUrl($permalink, $includeBaseUrl);			
 		return $result;
 	}
-		
+	
 	public function getOrganizerViewSavedListingListUrl($includeBaseUrl = true) {
 		$virtualPage = $this->virtualPageFactory->getVirtualPage(iHomefinderVirtualPageFactory::ORGANIZER_VIEW_SAVED_LISTING_LIST);
 		$permalink = $virtualPage->getPermalink();				
 		$result = $this->prependBaseUrl($permalink, $includeBaseUrl);			
 		return $result;			
 	}
-
+	
 	public function getOrganizerDeleteSavedListingUrl($includeBaseUrl = true) {
 		$virtualPage = $this->virtualPageFactory->getVirtualPage(iHomefinderVirtualPageFactory::ORGANIZER_DELETE_SAVED_LISTING_SUBMIT);
 		$permalink = $virtualPage->getPermalink();				
@@ -208,28 +208,28 @@ class iHomefinderUrlFactory {
 		$result = $this->prependBaseUrl($permalink, $includeBaseUrl);
 		return $result;			
 	}
-
+	
 	public function getOrganizerEditSubscriberUrl($includeBaseUrl = true) {
 		$virtualPage = $this->virtualPageFactory->getVirtualPage(iHomefinderVirtualPageFactory::ORGANIZER_EDIT_SUBSCRIBER);
 		$permalink = $virtualPage->getPermalink();				
 		$result = $this->prependBaseUrl($permalink, $includeBaseUrl);
 		return $result;			
 	}
-
+	
 	public function getContactFormUrl($includeBaseUrl = true) {
 		$virtualPage = $this->virtualPageFactory->getVirtualPage(iHomefinderVirtualPageFactory::CONTACT_FORM);
 		$permalink = $virtualPage->getPermalink();				
 		$result = $this->prependBaseUrl($permalink, $includeBaseUrl);
 		return $result;			
 	}
-
+	
 	public function getValuationFormUrl($includeBaseUrl = true) {
 		$virtualPage = $this->virtualPageFactory->getVirtualPage(iHomefinderVirtualPageFactory::VALUATION_FORM);
 		$permalink = $virtualPage->getPermalink();				
 		$result = $this->prependBaseUrl($permalink, $includeBaseUrl);
 		return $result;			
 	}
-
+	
 	public function getOpenHomeSearchFormUrl($includeBaseUrl = true) {
 		$virtualPage = $this->virtualPageFactory->getVirtualPage(iHomefinderVirtualPageFactory::OPEN_HOME_SEARCH_FORM);
 		$permalink = $virtualPage->getPermalink();				
@@ -250,28 +250,28 @@ class iHomefinderUrlFactory {
 		$result = $this->prependBaseUrl($permalink, $includeBaseUrl);
 		return $result;			
 	}
-
+	
 	public function getOfficeListUrl($includeBaseUrl = true) {
 		$virtualPage = $this->virtualPageFactory->getVirtualPage(iHomefinderVirtualPageFactory::OFFICE_LIST);
 		$permalink = $virtualPage->getPermalink();				
 		$result = $this->prependBaseUrl($permalink, $includeBaseUrl);
 		return $result;			
 	}
-
+	
 	public function getOfficeDetailUrl($includeBaseUrl = true) {
 		$virtualPage = $this->virtualPageFactory->getVirtualPage(iHomefinderVirtualPageFactory::OFFICE_DETAIL);
 		$permalink = $virtualPage->getPermalink();				
 		$result = $this->prependBaseUrl($permalink, $includeBaseUrl);
 		return $result;			
 	}
-
+	
 	public function getAgentListUrl($includeBaseUrl = true) {
 		$virtualPage = $this->virtualPageFactory->getVirtualPage(iHomefinderVirtualPageFactory::AGENT_LIST);
 		$permalink = $virtualPage->getPermalink();				
 		$result = $this->prependBaseUrl($permalink, $includeBaseUrl);
 		return $result;			
 	}
-
+	
 	public function getAgentDetailUrl($includeBaseUrl = true) {
 		$virtualPage = $this->virtualPageFactory->getVirtualPage(iHomefinderVirtualPageFactory::AGENT_DETAIL);
 		$permalink = $virtualPage->getPermalink();				

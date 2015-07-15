@@ -1,6 +1,6 @@
 <?php
 
-class iHomefinderOrganizerDeleteSavedSearchVirtualPageImpl extends iHomefinderAbstractVirtualPage {
+class iHomefinderOrganizerDeleteSavedSearchVirtualPageImpl extends iHomefinderAbstractPropertyOrganizerVirtualPage {
 	
 	public function getTitle() {
 		return "Saved Search List";

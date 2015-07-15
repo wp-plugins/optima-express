@@ -11,7 +11,11 @@ class iHomefinderRequestor {
 	}
 	
 	public function remoteGetRequest() {
-		iHomefinderLogger::getInstance()->debug(true);
+		
+		if($this->isSpam()) {
+			echo "invalid request 807a";
+			die();
+		}
 		
 		//only add user specific info if the request is not cacheable
 		if(!$this->isCacheable()) {
@@ -271,6 +275,15 @@ class iHomefinderRequestor {
 	
 	public function getRemoteResponse() {
 		return $this->remoteResponse;
+	}
+	
+	private function isSpam() {
+		$spam = false;
+		$honeyPotValue = iHomefinderUtility::getInstance()->getRequestVar("JKGH00920");
+		if(!empty($honeyPotValue)) {
+			$spam = true;
+		}
+		return $spam;
 	}
 	
 }

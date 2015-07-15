@@ -1,6 +1,6 @@
 <?php
 
-class iHomefinderOrganizerLoginSubmitVirtualPageImpl extends iHomefinderAbstractVirtualPage {
+class iHomefinderOrganizerLoginSubmitVirtualPageImpl extends iHomefinderAbstractPropertyOrganizerVirtualPage {
 	
 	public function getTitle() {
 		return "Organizer Login";
