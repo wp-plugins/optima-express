@@ -13,8 +13,7 @@ class iHomefinderOrganizerLoginFormVirtualPageImpl extends iHomefinderAbstractPr
 	public function getContent() {
 		$subscriberId = iHomefinderUtility::getInstance()->getQueryVar("subscriberID");
 		if(!empty($subscriberId)) {
-			$subscriber = new iHomefinderSubscriber($subscriberId, null, null);
-			iHomefinderStateManager::getInstance()->saveSubscriberLogin($subscriber);			
+			iHomefinderStateManager::getInstance()->setSubscriberId($subscriberId);			
 		}
 		$message = iHomefinderUtility::getInstance()->getQueryVar("message");
 		$afterLoginUrl=iHomefinderUtility::getInstance()->getRequestVar("afterLoginUrl");		

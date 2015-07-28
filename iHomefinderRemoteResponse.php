@@ -75,28 +75,22 @@ class iHomefinderRemoteResponse {
 		return $this->hasProperty("variables");
 	}
 	
-	public function getLeadCaptureId() {
-		return $this->getProperty("leadCaptureId");
+	public function getLeadCaptureUserId() {
+		$result = (integer) $this->getProperty("leadCaptureId");
+		return $result;
 	}
 	
-	public function hasLeadCaptureId() {
+	public function hasLeadCaptureUserId() {
 		return $this->hasProperty("leadCaptureId");
 	}
 	
 	public function getSessionId() {
-		return $this->getProperty("ihfSessionId");
+		$result = (string) $this->getProperty("ihfSessionId");
+		return $result;
 	}
 	
 	public function hasSessionId() {
 		return $this->hasProperty("ihfSessionId");
-	}
-	
-	public function getSearchContext() {
-		return $this->getProperty("searchContext");
-	}
-	
-	public function hasSearchContext() {
-		return $this->hasProperty("searchContext");
 	}
 	
 	public function getListingInfo() {
@@ -107,12 +101,23 @@ class iHomefinderRemoteResponse {
 		return $this->hasProperty("listingInfo");
 	}
 	
-	public function getSubscriberInfo() {
-		return $this->getProperty("subscriberInfo");
+	public function getSubscriberId() {
+		$result = null;
+		if($this->hasSubscriberId()) {
+			$result = (integer) $this->getProperty("subscriberInfo")->subscriberId;
+		}
+		return $result;
 	}
 	
-	public function hasSubscriberInfo() {
-		return $this->hasProperty("subscriberInfo");
+	public function hasSubscriberId() {
+		$result = false;
+		if($this->hasProperty("subscriberInfo")) {
+			$subscriber = $this->getProperty("subscriberInfo");
+			if(property_exists($subscriber, "subscriberId")) {
+				$result = true;
+			}
+		}
+		return $result;
 	}
 	
 	public function getSearchSummary() {

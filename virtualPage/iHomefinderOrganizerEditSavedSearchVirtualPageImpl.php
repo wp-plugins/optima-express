@@ -25,7 +25,7 @@ class iHomefinderOrganizerEditSavedSearchVirtualPageImpl extends iHomefinderAbst
 	public function getBody() {
 		$body = $this->remoteResponse->getBody();
 		if(!iHomefinderLayoutManager::getInstance()->isResponsive()) {
-			if(iHomefinderStateManager::getInstance()->isLoggedIn()) {
+			if(iHomefinderStateManager::getInstance()->hasSubscriberId()) {
 				$redirectUrl=iHomefinderUrlFactory::getInstance()->getOrganizerViewSavedSearchListUrl(true);
 				//redirect to the list of saved searches to avoid double posting the request
 				$body = "<meta http-equiv=\"refresh\" content=\"0;url=" . $redirectUrl . "\">";

@@ -16,7 +16,7 @@ class iHomefinderOrganizerLogoutVirtualPageImpl extends iHomefinderAbstractPrope
 		 * Where as for legacy layout we need to kill session stored locally on wordpress servers
 		 */
 		if(iHomefinderLayoutManager::getInstance()->isResponsive()) {
-			iHomefinderStateManager::getInstance()->deleteRememberMeCookie();
+			iHomefinderStateManager::getInstance()->removeRememberMe();
 			$this->remoteRequest
 				->addParameter("method", "handleRequest")
 				->addParameter("viewType", "json")
@@ -31,7 +31,7 @@ class iHomefinderOrganizerLogoutVirtualPageImpl extends iHomefinderAbstractPrope
 		if(iHomefinderLayoutManager::getInstance()->isResponsive()) {
 			$body = $this->remoteResponse->getBody();
 		} else {
-			iHomefinderStateManager::getInstance()->deleteSubscriberLogin();	
+			iHomefinderStateManager::getInstance()->removeSubscriberId();	
 			$redirectUrl = iHomefinderUrlFactory::getInstance()->getOrganizerLoginUrl(true); 
 			$body = "<meta http-equiv=\"refresh\" content=\"0;url=" . $redirectUrl . "\">";
 		}

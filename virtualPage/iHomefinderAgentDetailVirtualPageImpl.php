@@ -29,7 +29,7 @@ class iHomefinderAgentDetailVirtualPageImpl extends iHomefinderAbstractVirtualPa
 	}
 			
 	public function getContent() {
-		iHomefinderStateManager::getInstance()->saveLastSearch();
+		iHomefinderStateManager::getInstance()->setLastSearchUrl();
 		$this->remoteRequest
 			->addParameter("method", "handleRequest")
 			->addParameter("viewType", "json")

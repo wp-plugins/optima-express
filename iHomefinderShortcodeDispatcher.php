@@ -405,7 +405,7 @@ class iHomefinderShortcodeDispatcher {
 	}
 	
 	public function getMapSearch($attributes) {
-		iHomefinderStateManager::getInstance()->saveLastSearch();
+		iHomefinderStateManager::getInstance()->setLastSearchUrl();
 		$remoteRequest = new iHomefinderRequestor();
 		$remoteRequest
 			->addParameter("method", "handleRequest")
@@ -426,10 +426,9 @@ class iHomefinderShortcodeDispatcher {
 	}
 
 	public function getListingGallery($attributes) {
-		iHomefinderStateManager::getInstance()->saveLastSearch();
-		if($this->getAttribute($attributes, "id") !== null) {
-			$hotsheetId = $this->getAttribute($attributes, "id");
-		} elseif($this->getAttribute($attributes, "hotsheetId") !== null) {
+		iHomefinderStateManager::getInstance()->setLastSearchUrl();
+		$hotsheetId = $this->getAttribute($attributes, "id");
+		if(empty($hotsheetId)) {
 			$hotsheetId = $this->getAttribute($attributes, "hotsheetId");
 		}
 		$remoteRequest = new iHomefinderRequestor();

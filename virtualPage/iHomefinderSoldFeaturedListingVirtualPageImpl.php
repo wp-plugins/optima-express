@@ -15,7 +15,7 @@ class iHomefinderSoldFeaturedListingVirtualPageImpl extends iHomefinderAbstractV
 	}
 	
 	public function getContent() {
-		iHomefinderStateManager::getInstance()->saveLastSearch();
+		iHomefinderStateManager::getInstance()->setLastSearchUrl();
 		$this->remoteRequest
 			->addParameters($_REQUEST)
 			->addParameter("method", "handleRequest")

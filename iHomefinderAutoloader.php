@@ -31,7 +31,6 @@ class iHomefinderAutoloader {
 			"iHomefinderShortcodeSelector" => "iHomefinderShortcodeSelector.php",
 			"iHomefinderShortcodeDispatcher" => "iHomefinderShortcodeDispatcher.php",
 			"iHomefinderStateManager" => "iHomefinderStateManager.php",
-			"iHomefinderSubscriber" => "iHomefinderSubscriber.php",
 			"iHomefinderUrlFactory" => "iHomefinderUrlFactory.php",
 			"iHomefinderUtility" => "iHomefinderUtility.php",
 			"iHomefinderVirtualPageDispatcher" => "iHomefinderVirtualPageDispatcher.php",
