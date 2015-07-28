@@ -18,7 +18,7 @@ class iHomefinderMoreInfoWidget extends WP_Widget {
 			$afterWidget = $args["after_widget"];
 			$beforeTitle = $args["before_title"];
 			$afterTitle = $args["after_title"];
-			$listingInfo = iHomefinderStateManager::getInstance()->getCurrentListingInfo();
+			$listingInfo = iHomefinderStateManager::getInstance()->getListingInfo();
 			$remoteRequest = new iHomefinderRequestor();
 			$remoteRequest
 				->addParameter("method", "handleRequest")

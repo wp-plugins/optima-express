@@ -16,34 +16,18 @@ class iHomefinderOrganizerEditSavedSearchFormVirtualPageImpl extends iHomefinder
 	}
 		
 	public function getContent() {
-		$boardId = iHomefinderUtility::getInstance()->getQueryVar("boardId");
+		$utility = iHomefinderUtility::getInstance();
+		$boardId = $utility->getQueryVar("boardId");
+		$lastSearch = iHomefinderStateManager::getInstance()->getLastSearch();
 		$this->remoteRequest
 			->addParameters($_REQUEST)
+			->addParameters($lastSearch)
 			->addParameter("method", "handleRequest")
 			->addParameter("viewType", "json")
 			->addParameter("requestType", "property-organizer-edit-saved-search-form")
 			->addParameter("phpStyle", true)
 			->addParameter("boardId", $boardId)
 		;
-		$lastSearchQuery = iHomefinderStateManager::getInstance()->getLastSearchQuery();
-		if(count($lastSearchQuery) > 0) {
-			$cityID = trim(iHomefinderUtility::getInstance()->getVarFromArray("cityID", $lastSearchQuery));
-			$zip = trim(iHomefinderUtility::getInstance()->getVarFromArray("zip", $lastSearchQuery));
-			$bedrooms = trim(iHomefinderUtility::getInstance()->getVarFromArray("bedrooms", $lastSearchQuery));
-			$bathCount = trim(iHomefinderUtility::getInstance()->getVarFromArray("bathCount", $lastSearchQuery));
-			$minListPrice = trim(iHomefinderUtility::getInstance()->getVarFromArray("minListPrice", $lastSearchQuery));
-			$maxListPrice = trim(iHomefinderUtility::getInstance()->getVarFromArray("maxListPrice", $lastSearchQuery));
-			$squareFeet = trim(iHomefinderUtility::getInstance()->getVarFromArray("squareFeet", $lastSearchQuery));
-			$this->remoteRequest
-				->addParameter("cityID", $cityID)
-				->addParameter("zip", $zip)
-				->addParameter("bedrooms", $bedrooms)
-				->addParameter("bathcount", $bathCount)
-				->addParameter("minListPrice", $minListPrice)
-				->addParameter("maxListPrice", $maxListPrice)
-				->addParameter("squareFeet", $squareFeet)
-			;
-		}
 		$this->remoteResponse = $this->remoteRequest->remoteGetRequest();
 	}
 			

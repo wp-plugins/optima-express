@@ -86,17 +86,17 @@ abstract class iHomefinderAbstractVirtualPage implements iHomefinderVirtualPageI
 	 * @return string
 	 */
 	protected function getPreviousSearchLink() {
-		$previousUrl = iHomefinderStateManager::getInstance()->getLastSearch();
+		$lastSearchUrl = iHomefinderStateManager::getInstance()->getLastSearchUrl();
 		$text = null;
-		if(empty($previousUrl)) {
+		if(empty($lastSearchUrl)) {
 			$previousUrl = iHomefinderUrlFactory::getInstance()->getListingsSearchFormUrl(true);
 			$text = "New Search";
-		} elseif(strpos($previousUrl, "map-search") !== false) {
+		} elseif(strpos($lastSearchUrl, "map-search") !== false) {
 			$text = "Return To Map Search";
 		} else {
 			$text = "Return To Results";
 		}
-		return "<a href=\"" . $previousUrl . "\">&lt;&nbsp;" . $text . "</a>";
+		return "<a href=\"" . $lastSearchUrl . "\">&lt;&nbsp;" . $text . "</a>";
 	}
 	
 	/**

@@ -27,10 +27,15 @@ class iHomefinderLayoutManager {
 	
 	public function getExternalUrl() {
 		$result = null;
+		$scheme = "http";
+		if(is_ssl()) {
+			$scheme = "https";
+		}
+		$result .= $scheme . "://";
 		if($this->isResponsive()) {
-			$result = iHomefinderConstants::RESPONSIVE_EXTERNAL_URL;
+			$result .= iHomefinderConstants::RESPONSIVE_EXTERNAL_URL;
 		} else {
-			$result = iHomefinderConstants::LEGACY_EXTERNAL_URL;
+			$result .= iHomefinderConstants::LEGACY_EXTERNAL_URL;
 		}
 		return $result;
 	}

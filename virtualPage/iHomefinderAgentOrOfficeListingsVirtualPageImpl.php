@@ -3,7 +3,7 @@
 class iHomefinderAgentOrOfficeListingsVirtualPageImpl extends iHomefinderAbstractVirtualPage {
 			
 	public function getContent() {
-		iHomefinderStateManager::getInstance()->saveLastSearch();
+		iHomefinderStateManager::getInstance()->setLastSearchUrl();
 		$agentId = iHomefinderUtility::getInstance()->getRequestVar("agentId");
 		$officeId = iHomefinderUtility::getInstance()->getRequestVar("officeId");
 		$this->remoteRequest

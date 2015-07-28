@@ -12,6 +12,8 @@ class iHomefinderRequestor {
 	
 	public function remoteGetRequest() {
 		
+		$stateManager = iHomefinderStateManager::getInstance();
+		
 		if($this->isSpam()) {
 			echo "invalid request 807a";
 			die();
@@ -21,27 +23,28 @@ class iHomefinderRequestor {
 		if(!$this->isCacheable()) {
 			
 			//add subscriber id to the reqest parameters
-			$subscriber = iHomefinderStateManager::getInstance()->getCurrentSubscriber();
-			if($subscriber !== null) {
-				$subscriberId = $subscriber->getId();
+			if($stateManager->hasSubscriberId()) {
+				$subscriberId = $stateManager->getSubscriberId();
 				//CF cannot handle multiple parameters with the same case insensitive name
 				$this->removeParameter("subscriberId")->removeParameter("subscriberID");
 				$this->addParameter("subscriberId", $subscriberId);
 			}
 			
 			//add lead capture id to the reqest parameters
-			$leadCaptureId = iHomefinderStateManager::getInstance()->getLeadCaptureId();
-			$this->addParameter("leadCaptureId", $leadCaptureId);
-			
-			//add user agent to the reqest parameters
-			if(array_key_exists("HTTP_USER_AGENT", $_SERVER)) {
-				$userAgent = $_SERVER["HTTP_USER_AGENT"];
-				$this->addParameter("uagent", $userAgent);
+			if($stateManager->hasLeadCaptureUserId()) {
+				$leadCaptureUserId = $stateManager->getLeadCaptureUserId();
+				$this->addParameter("leadCaptureId", $leadCaptureUserId);
 			}
 			
 			//if remember me cookie add it to the reqest parameters
-			if(array_key_exists(iHomefinderStateManager::REMEMBER_ME_COOKIE_NAME, $_COOKIE)) {
+			if($stateManager->hasRememberMe()) {
 				$this->addParameter("rmuser", true);
+			}
+			
+			//add user agent to the reqest parameters
+			if($stateManager->hasUserAgent()) {
+				$userAgent = $stateManager->getUserAgent();
+				$this->addParameter("uagent", $userAgent);
 			}
 			
 		}
@@ -59,8 +62,8 @@ class iHomefinderRequestor {
 		$requestUrl = iHomefinderLayoutManager::getInstance()->getExternalUrl();
 		
 		//add jsession id to the end of the url
-		if(iHomefinderLayoutManager::getInstance()->isResponsive()) {
-			$sessionId = iHomefinderStateManager::getInstance()->getIhfSessionId();
+		if(iHomefinderLayoutManager::getInstance()->isResponsive() && $stateManager->hasSessionId()) {
+			$sessionId = $stateManager->getSessionId();
 			$requestUrl .= ";jsessionid=" . $sessionId;
 		}
 		
@@ -68,17 +71,13 @@ class iHomefinderRequestor {
 		
 		$ihfid = iHomefinderUrlFactory::getInstance()->getBaseUrl() . ";" . "WordpressPlugin";
 		$ihfUserInfo = "WordPress/" . get_bloginfo("version") . "; " . iHomefinderUrlFactory::getInstance()->getBaseUrl();
-		//modified user-agent in the request header to pass original user-agent
-		//This information is used by spring-mobile library to determine 
-		//if request came from mobile devices
-		//This can also be acheived by using is_mobile wordpress function
-		//user-agent information that wordpress provides is now added to 
-		//ihfuserinfo variable
+		//Modified user-agent in the request header to pass original user-agent. This information is used to determine if request came from mobile devices.
 		
 		$requestArgs = array(
 			"timeout" => "200",
 			"ihfid" => $ihfid,
 			"ihfUserInfo" => $ihfUserInfo,
+			"sslverify" => false,
 		);
 		
 		if(isset($userAgent)) {
@@ -114,7 +113,7 @@ class iHomefinderRequestor {
 			}
 			$this->remoteResponse = new iHomefinderRemoteResponse($responseBodyObject);
 			if($response["response"]["code"] >= 400) {
-				//This is specifically for listings that are not found. We set status from java code to "404 not found"
+				//This is specifically for listings that are not found. We set response status to "404 not found".
 				if($response["response"]["code"] == 404) {
 					global $wp_query;
 					$wp_query->set_404();
@@ -124,19 +123,15 @@ class iHomefinderRequestor {
 			}
 		}
 		
-		if(!$this->remoteResponse->hasError() && !$this->isCacheable()) {
+		if(is_object($this->remoteResponse) && !$this->remoteResponse->hasError() && !$this->isCacheable()) {
 			
-			//Save the leadCaptureId, if we get it back.
-			if($this->remoteResponse->hasLeadCaptureId()) {
-				iHomefinderStateManager::getInstance()->saveLeadCaptureId($this->remoteResponse->getLeadCaptureId());
+			if($this->remoteResponse->hasLeadCaptureUserId()) {
+				$stateManager->setLeadCaptureUserId($this->remoteResponse->getLeadCaptureUserId());
 			}
 			
 			if($this->remoteResponse->hasSessionId()) {
-				iHomefinderStateManager::getInstance()->saveIhfSessionId($this->remoteResponse->getSessionId());
-			}
-			
-			if($this->remoteResponse->hasSearchContext()) {
-				iHomefinderStateManager::getInstance()->setSearchContext($this->remoteResponse->getSearchContext());
+				$sessionId = $this->remoteResponse->getSessionId();
+				$stateManager->setSessionId($sessionId);
 			}
 			
 			if($this->remoteResponse->hasListingInfo()) {
@@ -159,19 +154,18 @@ class iHomefinderRequestor {
 						$sold = $listingInfo->sold;
 					}
 					$listingInfo = new iHomefinderListingInfo($listingNumber, $boardId, $listingAddress, $clientPropertyId, $sold);
-					iHomefinderStateManager::getInstance()->setCurrentListingInfo($listingInfo);
+					$stateManager->setListingInfo($listingInfo);
 				}
 			}
 				
-			if($this->remoteResponse->hasSubscriberInfo()) {
-				$subscriberInfo = $this->remoteResponse->getSubscriberInfo();
-				$subscriber = new iHomefinderSubscriber($subscriberInfo->subscriberId, $subscriberInfo->name, $subscriberInfo->email);
-				iHomefinderStateManager::getInstance()->saveSubscriberLogin($subscriber);
+			if($this->remoteResponse->hasSubscriberId()) {
+				$subscriberId = $this->remoteResponse->getSubscriberId();
+				$stateManager->setSubscriberId($subscriberId);
 			}
 			
 			if($this->remoteResponse->hasSearchSummary()) {
 				$searchSummary = $this->remoteResponse->getSearchSummary();
-				iHomefinderStateManager::getInstance()->saveSearchSummary($searchSummary);
+				$stateManager->setSearchSummary($searchSummary);
 			}
 			
 		}
@@ -187,12 +181,7 @@ class iHomefinderRequestor {
 		$requestUrl = iHomefinderLayoutManager::getInstance()->getExternalUrl();
 		$ihfid = iHomefinderUrlFactory::getInstance()->getBaseUrl() . ";" . "WordpressPlugin";
 		$ihfUserInfo = "WordPress/" . get_bloginfo("version") . "; " . iHomefinderUrlFactory::getInstance()->getBaseUrl();
-		//modified user-agent in the request header to pass original user-agent
-		//This information is used by spring-mobile library to determine
-		//if request came from mobile devices
-		//This can also be acheived by using is_mobile wordpress function
-		//user-agent information that wordpress provides is now added to
-		//ihfuserinfo variable
+		//Modified user-agent in the request header to pass original user-agent. This information is used to determine if request came from mobile devices.
 		
 		$userAgent = $_SERVER["HTTP_USER_AGENT"];
 		if($userAgent !== null) {
@@ -204,7 +193,8 @@ class iHomefinderRequestor {
 			"body" => $this->getParameters(),
 			"ihfid" => $ihfid,
 			"ihfUserInfo" => $ihfUserInfo,
-			"user-agent" => $userAgent
+			"user-agent" => $userAgent,
+			"sslverify" => false,
 		);
 		
 		iHomefinderLogger::getInstance()->debug("ihfUrl: " . $requestUrl);
@@ -247,8 +237,10 @@ class iHomefinderRequestor {
 	}
 	
 	public function addParameters($parameters) {
-		foreach($parameters as $name => $value) {
-			$this->addParameter($name, $value);
+		if(is_array($parameters)) {
+			foreach($parameters as $name => $value) {
+				$this->addParameter($name, $value);
+			}
 		}
 		return $this;
 	}

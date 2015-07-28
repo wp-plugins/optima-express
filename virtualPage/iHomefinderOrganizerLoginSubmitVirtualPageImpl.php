@@ -11,10 +11,9 @@ class iHomefinderOrganizerLoginSubmitVirtualPageImpl extends iHomefinderAbstract
 	}
 	
 	public function getContent() {
-		//if rememberMe parameter is set create a cookie "rmuser" with leadcaptureid
 		$rememberMe = iHomefinderUtility::getInstance()->getRequestVar("rememberMe");
 		if($rememberMe === "1") {
-			iHomefinderStateManager::getInstance()->createRememberMeCookie();
+			iHomefinderStateManager::getInstance()->setRememberMe(true);
 		}
 		$this->remoteRequest
 			->addParameters($_REQUEST)

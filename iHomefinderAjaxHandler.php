@@ -33,10 +33,15 @@ class iHomefinderAjaxHandler {
 	}
 
 	public function photoTour() {
-		$boardId = iHomefinderUtility::getInstance()->getRequestVar("boardID");
-		$this->basicAjaxSubmit("photo-tour", array(
-			"boardId" => $boardId
-		));
+        $responsive = iHomefinderLayoutManager::getInstance()->isResponsive();
+        if($responsive) {
+            $boardId = iHomefinderUtility::getInstance()->getRequestVar("boardID");
+            $photoTourArray = array("boardId" => $boardId);
+        }
+        if(!$responsive) {
+            $photoTourArray = array();
+        }
+		$this->basicAjaxSubmit("photo-tour", $photoTourArray);
 	}
 
 	public function saveProperty() {
@@ -44,20 +49,20 @@ class iHomefinderAjaxHandler {
 	}
 
 	public function saveSearch() {
+		$stateManager = iHomefinderStateManager::getInstance();
+		$stateManager->initialize();
+		$lastSearch = $stateManager->getLastSearch();
 		$name = iHomefinderUtility::getInstance()->getRequestVar("name");
 		$remoteRequest = new iHomefinderRequestor();
 		$remoteRequest
 			->addParameters($_REQUEST)
+			->addParameters($lastSearch)
 			->addParameter("method", "handleRequest")
 			->addParameter("viewType", "json")
 			->addParameter("requestType", "save-search")
 			->addParameter("subscriberName", $name)
 			->addParameter("modal", true)
 		;
-		//we need to initialize here for Ajax requests, when trying to save a search
-		iHomefinderStateManager::getInstance()->initialize();
-		$lastSearchQuery = iHomefinderStateManager::getInstance()->getLastSearchQuery();
-		$remoteRequest->addParameters($lastSearchQuery);
 		$remoteResponse = $remoteRequest->remoteGetRequest();
 		$content = $remoteResponse->getBody() . $remoteResponse->getHead();
 		echo $content;

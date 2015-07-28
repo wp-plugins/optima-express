@@ -81,22 +81,5 @@ class iHomefinderUtility {
 		}
 		return $url;
 	}
-
-	/**
-	 * Returns true is the user agent is a known web crawler
-	 * @return boolean
-	 */
-	public function isWebCrawler() {
-		$result = true;
-		$userAgent = strtolower($_SERVER["HTTP_USER_AGENT"]);			
-		$knownCrawlersArray = array("Mediapartners-Google", "Googlebot", "Baiduspider", "Bingbot", "msnbot", "Slurp", "Twiceler", "YandexBot");			
-		foreach($knownCrawlersArray as $value) {
-			if(strpos($userAgent, $value)) {
-				$result = true;
-				break;
-			}
-		}
-		return $result;
-	}
 	
 }

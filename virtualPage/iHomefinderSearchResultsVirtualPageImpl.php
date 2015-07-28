@@ -12,7 +12,7 @@ class iHomefinderSearchResultsVirtualPageImpl extends iHomefinderAbstractVirtual
 			
 	public function getContent() {
 		$stateManager = iHomefinderStateManager::getInstance();
-		$stateManager->saveLastSearch();
+		$stateManager->setLastSearchUrl();
 		//use a different requestType depending on the search
 		$requestType = null;
 		if($stateManager->isListingIdResults()) {

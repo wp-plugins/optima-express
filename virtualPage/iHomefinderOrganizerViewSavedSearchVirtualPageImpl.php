@@ -11,7 +11,7 @@ class iHomefinderOrganizerViewSavedSearchVirtualPageImpl extends iHomefinderAbst
 	}
 	
 	public function getContent() {
-		iHomefinderStateManager::getInstance()->saveLastSearch();
+		iHomefinderStateManager::getInstance()->setLastSearchUrl();
 		$searchProfileId = iHomefinderUtility::getInstance()->getQueryVar("searchProfileId");
 		$this->remoteRequest
 			->addParameter("method", "handleRequest")
