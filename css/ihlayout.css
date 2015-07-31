@@ -713,9 +713,13 @@ input .ihf-mini-form-element {
 	font-weight: normal;
 }
 
-#ihf-main-container input[type="checkbox"] {
+input[type="checkbox"],
+input[type="radio"] {
+    width: 13px;
+    height: 13px;
 	line-height: normal;
 	margin: 0;
+	box-shadow: none;
 }
 
 .checkbox label,
@@ -1037,10 +1041,6 @@ input .ihf-mini-form-element {
 #ihf-main-container .ihf-one-selectedArea {
 	margin-left: 4px;
 	margin-right: 4px;
-}
-
-#ihf-main-container input[type="checkbox"] { 
-	box-shadow: none;
 }
 
 #ihf-main-container .fade.in {
