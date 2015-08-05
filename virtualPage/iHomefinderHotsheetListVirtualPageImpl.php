@@ -13,6 +13,11 @@ class iHomefinderHotsheetListVirtualPageImpl extends iHomefinderAbstractVirtualP
 	public function getPermalink() {
 		return "homes-for-sale-toppicks";
 	}
+
+	public function getMetaTags() {
+		$default = "<meta name=\"description\" content=\"\" />\n";
+		return $this->getText(iHomefinderConstants::OPTION_VIRTUAL_PAGE_META_TAGS_HOTSHEET_LIST, $default);
+	}		
 			
 	public function getContent() {
 		$this->remoteRequest

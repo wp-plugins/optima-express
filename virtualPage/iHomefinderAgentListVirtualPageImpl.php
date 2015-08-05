@@ -14,6 +14,11 @@ class iHomefinderAgentListVirtualPageImpl extends iHomefinderAbstractVirtualPage
 		return $this->getText(iHomefinderConstants::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_AGENT_LIST, "agent-list");
 	}
 			
+	public function getMetaTags() {
+		$default = "<meta name=\"description\" content=\"\" />\n";
+		return $this->getText(iHomefinderConstants::OPTION_VIRTUAL_PAGE_META_TAGS_AGENT_LIST, $default);
+	}	
+
 	public function getContent() {
 		$this->remoteRequest
 			->addParameters($_REQUEST)

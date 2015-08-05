@@ -13,6 +13,11 @@ class iHomefinderSoldFeaturedListingVirtualPageImpl extends iHomefinderAbstractV
 	public function getPermalink() {
 		return $this->getText(iHomefinderConstants::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_SOLD_FEATURED, "sold-featured-listing");
 	}
+
+	public function getMetaTags() {
+		$default = "<meta name=\"description\" content=\"\" />\n";
+		return $this->getText(iHomefinderConstants::OPTION_VIRTUAL_PAGE_META_TAGS_SOLD_FEATURED, $default);
+	}	
 	
 	public function getContent() {
 		iHomefinderStateManager::getInstance()->setLastSearchUrl();

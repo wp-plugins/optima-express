@@ -13,7 +13,12 @@ class iHomefinderContactFormVirtualPageImpl extends iHomefinderAbstractVirtualPa
 	public function getPermalink() {
 		return $this->getText(iHomefinderConstants::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_CONTACT_FORM, "contact-form");
 	}
-			
+
+	public function getMetaTags() {
+		$default = "<meta name=\"description\" content=\"\" />\n";
+		return $this->getText(iHomefinderConstants::OPTION_VIRTUAL_PAGE_META_TAGS_CONTACT_FORM, $default);
+	}	
+	
 	public function getContent() {
 		$this->remoteRequest
 			->addParameters($_REQUEST)

@@ -13,7 +13,12 @@ class iHomefinderFeaturedSearchVirtualPageImpl extends iHomefinderAbstractVirtua
 	public function getPermalink() {
 		return $this->getText(iHomefinderConstants::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_FEATURED, "homes-for-sale-featured");
 	}
-			
+
+	public function getMetaTags() {
+		$default = "<meta name=\"description\" content=\"\" />\n";
+		return $this->getText(iHomefinderConstants::OPTION_VIRTUAL_PAGE_META_TAGS_FEATURED, $default);
+	}	
+	
 	public function getContent() {
 		iHomefinderStateManager::getInstance()->setLastSearchUrl();
 		$this->remoteRequest

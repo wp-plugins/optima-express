@@ -26,6 +26,11 @@ class iHomefinderOfficeDetailVirtualPageImpl extends iHomefinderAbstractVirtualP
 			$variableUtility->getOfficeName()
 		);
 	}
+
+	public function getMetaTags() {
+		$default = "<meta name=\"description\" content=\"\" />\n";
+		return $this->getText(iHomefinderConstants::OPTION_VIRTUAL_PAGE_META_TAGS_OFFICE_DETAIL, $default);
+	}	
 	
 	public function getContent() {
 		$this->remoteRequest

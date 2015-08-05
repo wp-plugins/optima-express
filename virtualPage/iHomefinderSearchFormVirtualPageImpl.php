@@ -14,6 +14,11 @@ class iHomefinderSearchFormVirtualPageImpl extends iHomefinderAbstractVirtualPag
 		return $this->getText(iHomefinderConstants::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_SEARCH, "homes-for-sale-search");
 	}
 	
+	public function getMetaTags() {
+		$default = "<meta name=\"description\" content=\"\" />\n";
+		return $this->getText(iHomefinderConstants::OPTION_VIRTUAL_PAGE_META_TAGS_SEARCH, $default);
+	}	
+	
 	public function getContent() {
 		$this->remoteRequest
 			->addParameters($_REQUEST)

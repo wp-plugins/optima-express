@@ -39,6 +39,7 @@ class iHomefinderEnqueueResource {
 		$this->enqueueScript("leaflet", "js/leaflet-0.7.3/leaflet.js");
 		$this->enqueueScript("leaflet-markercluster", "js/maps/leaflet.markercluster.js");
 		$this->enqueueScript("ihf-map-manager", "js/maps/mapManager.js");
+		$this->enqueueScript("ihf-event-manager", "js/IhfEventManager.js");
 	}
 	
 	private function enqueueScript($handle, $src) {

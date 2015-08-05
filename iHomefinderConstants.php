@@ -2,7 +2,7 @@
 
 interface iHomefinderConstants {
 
-	const VERSION = "2.7.4";
+	const VERSION = "2.7.5";
 	const VERSION_NAME = "Optima Express";
 	const LEGACY_EXTERNAL_URL = "www.idxre.com/services/wordpress";
 	const RESPONSIVE_EXTERNAL_URL = "www.idxhome.com/service/wordpress";
@@ -47,31 +47,37 @@ interface iHomefinderConstants {
 	const OPTION_VIRTUAL_PAGE_TITLE_SEARCH = "ihf-virtual-page-title-search";
 	const OPTION_VIRTUAL_PAGE_TEMPLATE_SEARCH = "ihf-virtual-page-template-search";
 	const OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_SEARCH = "ihf-virtual-page-permalink-text-search";
+	const OPTION_VIRTUAL_PAGE_META_TAGS_SEARCH = "ihf-virtual-page-meta-tags-search";
 	
 	//Map Search Virtual Page Options
 	const OPTION_VIRTUAL_PAGE_TITLE_MAP_SEARCH = "ihf-virtual-page-title-map-search";
 	const OPTION_VIRTUAL_PAGE_TEMPLATE_MAP_SEARCH = "ihf-virtual-page-template-map-search";
 	const OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_MAP_SEARCH = "ihf-virtual-page-permalink-text-map-search";
+	const OPTION_VIRTUAL_PAGE_META_TAGS_MAP_SEARCH = "ihf-virtual-page-meta-tags-map-search";
 	
 	//Advanced Listing Search Virtual Page Options
 	const OPTION_VIRTUAL_PAGE_TITLE_ADVANCED_SEARCH = "ihf-virtual-page-title-adv-search";
 	const OPTION_VIRTUAL_PAGE_TEMPLATE_ADVANCED_SEARCH = "ihf-virtual-page-template-adv-search";
 	const OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_ADVANCED_SEARCH = "ihf-virtual-page-permalink-text-adv-search";
+	const OPTION_VIRTUAL_PAGE_META_TAGS_ADVANCED_SEARCH = "ihf-virtual-page-meta-tags-adv-search";
 		
 	//Organizer Login Virtual Page Options
 	const OPTION_VIRTUAL_PAGE_TITLE_ORGANIZER_LOGIN = "ihf-virtual-page-title-org-login";
 	const OPTION_VIRTUAL_PAGE_TEMPLATE_ORGANIZER_LOGIN = "ihf-virtual-page-template-org-login";
 	const OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_ORGANIZER_LOGIN = "ihf-virtual-page-permalink-text-org-login";
+	const OPTION_VIRTUAL_PAGE_META_TAGS_ORGANIZER_LOGIN = "ihf-virtual-page-meta-tags-org-login";
 	
 	//Email Updated Virtual Page Options
 	const OPTION_VIRTUAL_PAGE_TITLE_EMAIL_UPDATES = "ihf-virtual-page-title-email-updates";
 	const OPTION_VIRTUAL_PAGE_TEMPLATE_EMAIL_UPDATES = "ihf-virtual-page-template-email-updates";
 	const OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_EMAIL_UPDATES = "ihf-virtual-page-permalink-text-email-updates";
+	const OPTION_VIRTUAL_PAGE_META_TAGS_EMAIL_UPDATES = "ihf-virtual-page-meta-tags-email-updates";
 	
 	//Featured Virtual Page Options
 	const OPTION_VIRTUAL_PAGE_TITLE_FEATURED = "ihf-virtual-page-title-featured";
 	const OPTION_VIRTUAL_PAGE_TEMPLATE_FEATURED = "ihf-virtual-page-template-featured";
 	const OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_FEATURED = "ihf-virtual-page-permalink-text-featured";
+	const OPTION_VIRTUAL_PAGE_META_TAGS_FEATURED = "ihf-virtual-page-meta-tags-featured";
 	
 	//Hotsheet Virtual Page Options
 	const OPTION_VIRTUAL_PAGE_TITLE_HOTSHEET = "ihf-virtual-page-title-hotsheet";
@@ -81,31 +87,37 @@ interface iHomefinderConstants {
 	
 	//Hotsheet List Virtual Page Options
 	const OPTION_VIRTUAL_PAGE_TITLE_HOTSHEET_LIST = "ihf-virtual-page-title-hotsheet-list";
+	const OPTION_VIRTUAL_PAGE_META_TAGS_HOTSHEET_LIST = "ihf-virtual-page-meta-tags-hotsheet-list";
 	
 	//Contact Form Virtual Page Options
 	const OPTION_VIRTUAL_PAGE_TITLE_CONTACT_FORM = "ihf-virtual-page-title-contact-form";
 	const OPTION_VIRTUAL_PAGE_TEMPLATE_CONTACT_FORM = "ihf-virtual-page-template-contact-form";
 	const OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_CONTACT_FORM = "ihf-virtual-page-permalink-text-contact-form";
+	const OPTION_VIRTUAL_PAGE_META_TAGS_CONTACT_FORM = "ihf-virtual-page-meta-tags-contact-form";
 	
 	//Valuation Form Virtual Page Options
 	const OPTION_VIRTUAL_PAGE_TITLE_VALUATION_FORM = "ihf-virtual-page-title-valuation-form";
 	const OPTION_VIRTUAL_PAGE_TEMPLATE_VALUATION_FORM = "ihf-virtual-page-template-valuation-form";
 	const OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_VALUATION_FORM = "ihf-virtual-page-permalink-text-valuation-form";
+	const OPTION_VIRTUAL_PAGE_META_TAGS_VALUATION_FORM = "ihf-virtual-page-meta-tags-valuation-form";
 	
 	//Open Home Search Form Virtual Page Options
 	const OPTION_VIRTUAL_PAGE_TITLE_OPEN_HOME_SEARCH_FORM = "ihf-virtual-page-title-open-home-search-form";
 	const OPTION_VIRTUAL_PAGE_TEMPLATE_OPEN_HOME_SEARCH_FORM = "ihf-virtual-page-template-open-home-search-form";
 	const OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_OPEN_HOME_SEARCH_FORM = "ihf-virtual-page-open-home-search-form";
+	const OPTION_VIRTUAL_PAGE_META_TAGS_OPEN_HOME_SEARCH_FORM = "ihf-virtual-page-meta-tags-open-home-search-form";
 	
 	//Featured Sold Listings Virtual Page Options
 	const OPTION_VIRTUAL_PAGE_TITLE_SOLD_FEATURED = "ihf-virtual-page-title-sold-featured";
 	const OPTION_VIRTUAL_PAGE_TEMPLATE_SOLD_FEATURED = "ihf-virtual-page-template-sold-featured";
 	const OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_SOLD_FEATURED = "ihf-virtual-page-permalink-text-sold-featured";
+	const OPTION_VIRTUAL_PAGE_META_TAGS_SOLD_FEATURED = "ihf-virtual-page-meta-tags-sold-featured";
 	
 	//Supplemental listings
 	const OPTION_VIRTUAL_PAGE_TITLE_SUPPLEMENTAL_LISTING = "ihf-virtual-page-title-supplemental-listing";
 	const OPTION_VIRTUAL_PAGE_TEMPLATE_SUPPLEMENTAL_LISTING = "ihf-virtual-page-template-supplemental-listing";
 	const OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_SUPPLEMENTAL_LISTING = "ihf-virtual-page-permalink-text-supplemental-listing";
+	const OPTION_VIRTUAL_PAGE_META_TAGS_SUPPLEMENTAL_LISTING = "ihf-virtual-page-meta-tags-supplemental-listing";
 	
 	//Sold Detail Virtual Page Options
 	const OPTION_VIRTUAL_PAGE_TITLE_SOLD_DETAIL = "ihf-virtual-page-title-sold-detail";
@@ -117,21 +129,25 @@ interface iHomefinderConstants {
 	const OPTION_VIRTUAL_PAGE_TITLE_OFFICE_LIST = "ihf-virtual-page-title-office-list";
 	const OPTION_VIRTUAL_PAGE_TEMPLATE_OFFICE_LIST = "ihf-virtual-page-template-office-list";
 	const OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_OFFICE_LIST = "ihf-virtual-page-permalink-text-office-list";
+	const OPTION_VIRTUAL_PAGE_META_TAGS_OFFICE_LIST = "ihf-virtual-page-meta-tags-office-list";
 	
 	//Listing Office Detail Virtual Page Options
 	const OPTION_VIRTUAL_PAGE_TITLE_OFFICE_DETAIL = "ihf-virtual-page-title-office-detail";
 	const OPTION_VIRTUAL_PAGE_TEMPLATE_OFFICE_DETAIL = "ihf-virtual-page-template-office-detail";
 	const OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_OFFICE_DETAIL = "ihf-virtual-page-permalink-text-office-detail";
+	const OPTION_VIRTUAL_PAGE_META_TAGS_OFFICE_DETAIL = "ihf-virtual-page-meta-tags-office-detail";
 	
 	//Agent List Virtual Page Options
 	const OPTION_VIRTUAL_PAGE_TITLE_AGENT_LIST = "ihf-virtual-page-title-agent-list";
 	const OPTION_VIRTUAL_PAGE_TEMPLATE_AGENT_LIST = "ihf-virtual-page-template-agent-list";
 	const OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_AGENT_LIST = "ihf-virtual-page-permalink-text-agent-list";
+	const OPTION_VIRTUAL_PAGE_META_TAGS_AGENT_LIST = "ihf-virtual-page-meta-tags-agent-list";
 	
 	//Agent Detail Virtual Page Options
 	const OPTION_VIRTUAL_PAGE_TITLE_AGENT_DETAIL = "ihf-virtual-page-title-agent-detail";
 	const OPTION_VIRTUAL_PAGE_TEMPLATE_AGENT_DETAIL = "ihf-virtual-page-template-agent-detail";
 	const OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_AGENT_DETAIL = "ihf-virtual-page-permalink-text-agent-detail";
+	const OPTION_VIRTUAL_PAGE_META_TAGS_AGENT_DETAIL = "ihf-virtual-page-meta-tags-agent-detail";
 	
 	/*
 	 * configuration options
