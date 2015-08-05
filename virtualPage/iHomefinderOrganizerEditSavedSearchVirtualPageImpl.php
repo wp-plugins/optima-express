@@ -11,13 +11,16 @@ class iHomefinderOrganizerEditSavedSearchVirtualPageImpl extends iHomefinderAbst
 	}
 	
 	public function getContent() {
+		//searchProfileName is used only in fixed width
 		$searchProfileName = iHomefinderUtility::getInstance()->getQueryVar("searchProfileName");
+		if(!empty($searchProfileName)) {
+			$this->remoteRequest->addParameter("name", $searchProfileName);
+		}
 		$this->remoteRequest
 			->addParameters($_REQUEST)
 			->addParameter("method", "handleRequest")
 			->addParameter("viewType", "json")
 			->addParameter("requestType", "property-organizer-edit-saved-search-submit")
-			->addParameter("name", $searchProfileName)
 		;
 		$this->remoteResponse = $this->remoteRequest->remoteGetRequest();
 	}

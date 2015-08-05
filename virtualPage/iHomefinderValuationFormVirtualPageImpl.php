@@ -14,6 +14,11 @@ class iHomefinderValuationFormVirtualPageImpl extends iHomefinderAbstractVirtual
 		return $this->getText(iHomefinderConstants::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_VALUATION_FORM, "valuation-form");
 	}
 			
+	public function getMetaTags() {
+		$default = "<meta name=\"description\" content=\"\" />\n";
+		return $this->getText(iHomefinderConstants::OPTION_VIRTUAL_PAGE_META_TAGS_VALUATION_FORM, $default);
+	}	
+			
 	public function getContent() {
 		$this->remoteRequest
 			->addParameters($_REQUEST)

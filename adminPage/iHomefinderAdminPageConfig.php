@@ -22,52 +22,65 @@ class iHomefinderAdminPageConfig extends iHomefinderAdminAbstractPage {
 		register_setting(iHomefinderConstants::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderConstants::OPTION_VIRTUAL_PAGE_TITLE_SEARCH);
 		register_setting(iHomefinderConstants::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderConstants::OPTION_VIRTUAL_PAGE_TEMPLATE_SEARCH);
 		register_setting(iHomefinderConstants::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderConstants::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_SEARCH);
+		register_setting(iHomefinderConstants::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderConstants::OPTION_VIRTUAL_PAGE_META_TAGS_SEARCH);
 		
 		register_setting(iHomefinderConstants::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderConstants::OPTION_VIRTUAL_PAGE_TITLE_MAP_SEARCH);
 		register_setting(iHomefinderConstants::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderConstants::OPTION_VIRTUAL_PAGE_TEMPLATE_MAP_SEARCH);
 		register_setting(iHomefinderConstants::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderConstants::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_MAP_SEARCH);
+		register_setting(iHomefinderConstants::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderConstants::OPTION_VIRTUAL_PAGE_META_TAGS_MAP_SEARCH);
 		
 		register_setting(iHomefinderConstants::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderConstants::OPTION_VIRTUAL_PAGE_TITLE_ADVANCED_SEARCH);
 		register_setting(iHomefinderConstants::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderConstants::OPTION_VIRTUAL_PAGE_TEMPLATE_ADVANCED_SEARCH);
 		register_setting(iHomefinderConstants::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderConstants::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_ADVANCED_SEARCH);
+		register_setting(iHomefinderConstants::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderConstants::OPTION_VIRTUAL_PAGE_META_TAGS_ADVANCED_SEARCH);
 		
 		register_setting(iHomefinderConstants::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderConstants::OPTION_VIRTUAL_PAGE_TITLE_ORGANIZER_LOGIN);
 		register_setting(iHomefinderConstants::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderConstants::OPTION_VIRTUAL_PAGE_TEMPLATE_ORGANIZER_LOGIN);
 		register_setting(iHomefinderConstants::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderConstants::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_ORGANIZER_LOGIN);
+		register_setting(iHomefinderConstants::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderConstants::OPTION_VIRTUAL_PAGE_META_TAGS_ORGANIZER_LOGIN);
 		
 		register_setting(iHomefinderConstants::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderConstants::OPTION_VIRTUAL_PAGE_TITLE_EMAIL_UPDATES);
 		register_setting(iHomefinderConstants::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderConstants::OPTION_VIRTUAL_PAGE_TEMPLATE_EMAIL_UPDATES);
 		register_setting(iHomefinderConstants::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderConstants::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_EMAIL_UPDATES);
+		register_setting(iHomefinderConstants::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderConstants::OPTION_VIRTUAL_PAGE_META_TAGS_EMAIL_UPDATES);
 		
 		register_setting(iHomefinderConstants::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderConstants::OPTION_VIRTUAL_PAGE_TITLE_FEATURED);
 		register_setting(iHomefinderConstants::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderConstants::OPTION_VIRTUAL_PAGE_TEMPLATE_FEATURED);
 		register_setting(iHomefinderConstants::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderConstants::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_FEATURED);
+		register_setting(iHomefinderConstants::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderConstants::OPTION_VIRTUAL_PAGE_META_TAGS_FEATURED);
 		
 		register_setting(iHomefinderConstants::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderConstants::OPTION_VIRTUAL_PAGE_TITLE_HOTSHEET);
 		register_setting(iHomefinderConstants::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderConstants::OPTION_VIRTUAL_PAGE_TEMPLATE_HOTSHEET);
 		register_setting(iHomefinderConstants::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderConstants::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_HOTSHEET);
+		register_setting(iHomefinderConstants::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderConstants::OPTION_VIRTUAL_PAGE_META_TAGS_HOTSHEET);
 		
 		register_setting(iHomefinderConstants::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderConstants::OPTION_VIRTUAL_PAGE_TITLE_HOTSHEET_LIST);
+		register_setting(iHomefinderConstants::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderConstants::OPTION_VIRTUAL_PAGE_META_TAGS_HOTSHEET_LIST);
 		
 		register_setting(iHomefinderConstants::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderConstants::OPTION_VIRTUAL_PAGE_TITLE_CONTACT_FORM);
 		register_setting(iHomefinderConstants::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderConstants::OPTION_VIRTUAL_PAGE_TEMPLATE_CONTACT_FORM);
 		register_setting(iHomefinderConstants::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderConstants::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_CONTACT_FORM);
+		register_setting(iHomefinderConstants::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderConstants::OPTION_VIRTUAL_PAGE_META_TAGS_CONTACT_FORM);
 		
 		register_setting(iHomefinderConstants::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderConstants::OPTION_VIRTUAL_PAGE_TITLE_VALUATION_FORM);
 		register_setting(iHomefinderConstants::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderConstants::OPTION_VIRTUAL_PAGE_TEMPLATE_VALUATION_FORM);
 		register_setting(iHomefinderConstants::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderConstants::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_VALUATION_FORM);
+		register_setting(iHomefinderConstants::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderConstants::OPTION_VIRTUAL_PAGE_META_TAGS_VALUATION_FORM);
 		
 		register_setting(iHomefinderConstants::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderConstants::OPTION_VIRTUAL_PAGE_TITLE_OPEN_HOME_SEARCH_FORM);
 		register_setting(iHomefinderConstants::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderConstants::OPTION_VIRTUAL_PAGE_TEMPLATE_OPEN_HOME_SEARCH_FORM);
 		register_setting(iHomefinderConstants::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderConstants::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_OPEN_HOME_SEARCH_FORM);
+		register_setting(iHomefinderConstants::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderConstants::OPTION_VIRTUAL_PAGE_META_TAGS_OPEN_HOME_SEARCH_FORM);
 		
 		register_setting(iHomefinderConstants::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderConstants::OPTION_VIRTUAL_PAGE_TITLE_SUPPLEMENTAL_LISTING);
 		register_setting(iHomefinderConstants::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderConstants::OPTION_VIRTUAL_PAGE_TEMPLATE_SUPPLEMENTAL_LISTING);
 		register_setting(iHomefinderConstants::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderConstants::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_SUPPLEMENTAL_LISTING);
+		register_setting(iHomefinderConstants::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderConstants::OPTION_VIRTUAL_PAGE_META_TAGS_SUPPLEMENTAL_LISTING);
 		
 		register_setting(iHomefinderConstants::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderConstants::OPTION_VIRTUAL_PAGE_TITLE_SOLD_FEATURED);
 		register_setting(iHomefinderConstants::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderConstants::OPTION_VIRTUAL_PAGE_TEMPLATE_SOLD_FEATURED);
 		register_setting(iHomefinderConstants::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderConstants::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_SOLD_FEATURED);
+		register_setting(iHomefinderConstants::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderConstants::OPTION_VIRTUAL_PAGE_META_TAGS_SOLD_FEATURED);
 		
 		register_setting(iHomefinderConstants::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderConstants::OPTION_VIRTUAL_PAGE_TITLE_SOLD_DETAIL);
 		register_setting(iHomefinderConstants::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderConstants::OPTION_VIRTUAL_PAGE_TEMPLATE_SOLD_DETAIL);
@@ -77,18 +90,22 @@ class iHomefinderAdminPageConfig extends iHomefinderAdminAbstractPage {
 		register_setting(iHomefinderConstants::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderConstants::OPTION_VIRTUAL_PAGE_TITLE_OFFICE_LIST);
 		register_setting(iHomefinderConstants::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderConstants::OPTION_VIRTUAL_PAGE_TEMPLATE_OFFICE_LIST);
 		register_setting(iHomefinderConstants::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderConstants::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_OFFICE_LIST);
+		register_setting(iHomefinderConstants::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderConstants::OPTION_VIRTUAL_PAGE_META_TAGS_OFFICE_LIST);
 		
 		register_setting(iHomefinderConstants::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderConstants::OPTION_VIRTUAL_PAGE_TITLE_OFFICE_DETAIL);
 		register_setting(iHomefinderConstants::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderConstants::OPTION_VIRTUAL_PAGE_TEMPLATE_OFFICE_DETAIL);
 		register_setting(iHomefinderConstants::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderConstants::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_OFFICE_DETAIL);
+		register_setting(iHomefinderConstants::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderConstants::OPTION_VIRTUAL_PAGE_META_TAGS_OFFICE_DETAIL);
 		
 		register_setting(iHomefinderConstants::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderConstants::OPTION_VIRTUAL_PAGE_TITLE_AGENT_LIST);
 		register_setting(iHomefinderConstants::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderConstants::OPTION_VIRTUAL_PAGE_TEMPLATE_AGENT_LIST);
 		register_setting(iHomefinderConstants::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderConstants::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_AGENT_LIST);
+		register_setting(iHomefinderConstants::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderConstants::OPTION_VIRTUAL_PAGE_META_TAGS_AGENT_LIST);
 		
 		register_setting(iHomefinderConstants::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderConstants::OPTION_VIRTUAL_PAGE_TITLE_AGENT_DETAIL);
 		register_setting(iHomefinderConstants::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderConstants::OPTION_VIRTUAL_PAGE_TEMPLATE_AGENT_DETAIL);
 		register_setting(iHomefinderConstants::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderConstants::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_AGENT_DETAIL);
+		register_setting(iHomefinderConstants::OPTION_VIRTUAL_PAGE_CONFIG, iHomefinderConstants::OPTION_VIRTUAL_PAGE_META_TAGS_AGENT_DETAIL);
 	}
 	
 	private function showDuplicateUrlMessage() {
@@ -281,7 +298,8 @@ class iHomefinderAdminPageConfig extends iHomefinderAdminAbstractPage {
 			"virtualPageType" => iHomefinderVirtualPageFactory::LISTING_SEARCH_FORM, 
 			"permalinkOption" => iHomefinderConstants::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_SEARCH,
 			"titleOption" => iHomefinderConstants::OPTION_VIRTUAL_PAGE_TITLE_SEARCH, 
-			"templateOption" => iHomefinderConstants::OPTION_VIRTUAL_PAGE_TEMPLATE_SEARCH
+			"templateOption" => iHomefinderConstants::OPTION_VIRTUAL_PAGE_TEMPLATE_SEARCH,
+			"metaTagsOption" => iHomefinderConstants::OPTION_VIRTUAL_PAGE_META_TAGS_SEARCH
 		));
 	}
 	
@@ -291,7 +309,8 @@ class iHomefinderAdminPageConfig extends iHomefinderAdminAbstractPage {
 			"virtualPageType" => iHomefinderVirtualPageFactory::MAP_SEARCH_FORM, 
 			"permalinkOption" => iHomefinderConstants::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_MAP_SEARCH,
 			"titleOption" => iHomefinderConstants::OPTION_VIRTUAL_PAGE_TITLE_MAP_SEARCH, 
-			"templateOption" => iHomefinderConstants::OPTION_VIRTUAL_PAGE_TEMPLATE_MAP_SEARCH
+			"templateOption" => iHomefinderConstants::OPTION_VIRTUAL_PAGE_TEMPLATE_MAP_SEARCH,
+			"metaTagsOption" => iHomefinderConstants::OPTION_VIRTUAL_PAGE_META_TAGS_MAP_SEARCH
 		));
 	}
 
@@ -301,7 +320,8 @@ class iHomefinderAdminPageConfig extends iHomefinderAdminAbstractPage {
 			"virtualPageType" => iHomefinderVirtualPageFactory::LISTING_ADVANCED_SEARCH_FORM, 
 			"permalinkOption" => iHomefinderConstants::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_ADVANCED_SEARCH, 
 			"titleOption" => iHomefinderConstants::OPTION_VIRTUAL_PAGE_TITLE_ADVANCED_SEARCH, 
-			"templateOption" => iHomefinderConstants::OPTION_VIRTUAL_PAGE_TEMPLATE_ADVANCED_SEARCH
+			"templateOption" => iHomefinderConstants::OPTION_VIRTUAL_PAGE_TEMPLATE_ADVANCED_SEARCH,
+			"metaTagsOption" => iHomefinderConstants::OPTION_VIRTUAL_PAGE_META_TAGS_ADVANCED_SEARCH
 		));
 	}
 
@@ -311,7 +331,8 @@ class iHomefinderAdminPageConfig extends iHomefinderAdminAbstractPage {
 			"virtualPageType" => iHomefinderVirtualPageFactory::ORGANIZER_LOGIN,
 			"permalinkOption" => iHomefinderConstants::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_ORGANIZER_LOGIN,
 			"titleOption" => iHomefinderConstants::OPTION_VIRTUAL_PAGE_TITLE_ORGANIZER_LOGIN, 
-			"templateOption" => iHomefinderConstants::OPTION_VIRTUAL_PAGE_TEMPLATE_ORGANIZER_LOGIN
+			"templateOption" => iHomefinderConstants::OPTION_VIRTUAL_PAGE_TEMPLATE_ORGANIZER_LOGIN,
+			"metaTagsOption" => iHomefinderConstants::OPTION_VIRTUAL_PAGE_META_TAGS_ORGANIZER_LOGIN
 		));
 	}
 
@@ -321,7 +342,8 @@ class iHomefinderAdminPageConfig extends iHomefinderAdminAbstractPage {
 			"virtualPageType" => iHomefinderVirtualPageFactory::ORGANIZER_EDIT_SAVED_SEARCH, 
 			"permalinkOption" => iHomefinderConstants::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_EMAIL_UPDATES,
 			"titleOption" => iHomefinderConstants::OPTION_VIRTUAL_PAGE_TITLE_EMAIL_UPDATES, 
-			"templateOption" => iHomefinderConstants::OPTION_VIRTUAL_PAGE_TEMPLATE_EMAIL_UPDATES
+			"templateOption" => iHomefinderConstants::OPTION_VIRTUAL_PAGE_TEMPLATE_EMAIL_UPDATES,
+			"metaTagsOption" => iHomefinderConstants::OPTION_VIRTUAL_PAGE_META_TAGS_EMAIL_UPDATES
 		));
 	}
 
@@ -331,7 +353,8 @@ class iHomefinderAdminPageConfig extends iHomefinderAdminAbstractPage {
 			"virtualPageType" => iHomefinderVirtualPageFactory::FEATURED_SEARCH, 
 			"permalinkOption" => iHomefinderConstants::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_FEATURED, 
 			"titleOption" => iHomefinderConstants::OPTION_VIRTUAL_PAGE_TITLE_FEATURED, 
-			"templateOption" => iHomefinderConstants::OPTION_VIRTUAL_PAGE_TEMPLATE_FEATURED
+			"templateOption" => iHomefinderConstants::OPTION_VIRTUAL_PAGE_TEMPLATE_FEATURED,
+			"metaTagsOption" => iHomefinderConstants::OPTION_VIRTUAL_PAGE_META_TAGS_FEATURED
 		));
 	}
 	
@@ -341,7 +364,8 @@ class iHomefinderAdminPageConfig extends iHomefinderAdminAbstractPage {
 			"virtualPageType" => iHomefinderVirtualPageFactory::HOTSHEET_LIST,
 			"permalinkEditable" => false,
 			"permalinkOption" => iHomefinderConstants::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_HOTSHEET,
-			"titleOption" => iHomefinderConstants::OPTION_VIRTUAL_PAGE_TITLE_HOTSHEET_LIST
+			"titleOption" => iHomefinderConstants::OPTION_VIRTUAL_PAGE_TITLE_HOTSHEET_LIST,
+			"metaTagsOption" => iHomefinderConstants::OPTION_VIRTUAL_PAGE_META_TAGS_HOTSHEET_LIST
 		));
 	}
 	
@@ -363,7 +387,8 @@ class iHomefinderAdminPageConfig extends iHomefinderAdminAbstractPage {
 			"virtualPageType" => iHomefinderVirtualPageFactory::CONTACT_FORM, 
 			"permalinkOption" => iHomefinderConstants::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_CONTACT_FORM, 
 			"titleOption" => iHomefinderConstants::OPTION_VIRTUAL_PAGE_TITLE_CONTACT_FORM,
-			"templateOption" => iHomefinderConstants::OPTION_VIRTUAL_PAGE_TEMPLATE_CONTACT_FORM
+			"templateOption" => iHomefinderConstants::OPTION_VIRTUAL_PAGE_TEMPLATE_CONTACT_FORM,
+			"metaTagsOption" => iHomefinderConstants::OPTION_VIRTUAL_PAGE_META_TAGS_CONTACT_FORM
 		));
 	}
 	
@@ -373,7 +398,8 @@ class iHomefinderAdminPageConfig extends iHomefinderAdminAbstractPage {
 			"virtualPageType" => iHomefinderVirtualPageFactory::VALUATION_FORM, 
 			"permalinkOption" => iHomefinderConstants::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_VALUATION_FORM, 
 			"titleOption" => iHomefinderConstants::OPTION_VIRTUAL_PAGE_TITLE_VALUATION_FORM,
-			"templateOption" => iHomefinderConstants::OPTION_VIRTUAL_PAGE_TEMPLATE_VALUATION_FORM
+			"templateOption" => iHomefinderConstants::OPTION_VIRTUAL_PAGE_TEMPLATE_VALUATION_FORM,
+			"metaTagsOption" => iHomefinderConstants::OPTION_VIRTUAL_PAGE_META_TAGS_VALUATION_FORM
 		));
 	}
 	
@@ -383,7 +409,8 @@ class iHomefinderAdminPageConfig extends iHomefinderAdminAbstractPage {
 			"virtualPageType" => iHomefinderVirtualPageFactory::SUPPLEMENTAL_LISTING, 
 			"permalinkOption" => iHomefinderConstants::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_SUPPLEMENTAL_LISTING, 
 			"titleOption" => iHomefinderConstants::OPTION_VIRTUAL_PAGE_TITLE_SUPPLEMENTAL_LISTING,
-			"templateOption" => iHomefinderConstants::OPTION_VIRTUAL_PAGE_TEMPLATE_SUPPLEMENTAL_LISTING
+			"templateOption" => iHomefinderConstants::OPTION_VIRTUAL_PAGE_TEMPLATE_SUPPLEMENTAL_LISTING,
+			"metaTagsOption" => iHomefinderConstants::OPTION_VIRTUAL_PAGE_META_TAGS_SUPPLEMENTAL_LISTING
 		));
 	}
 	
@@ -393,7 +420,8 @@ class iHomefinderAdminPageConfig extends iHomefinderAdminAbstractPage {
 			"virtualPageType" => iHomefinderVirtualPageFactory::SOLD_FEATURED_LISTING, 
 			"permalinkOption" => iHomefinderConstants::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_SOLD_FEATURED, 
 			"titleOption" => iHomefinderConstants::OPTION_VIRTUAL_PAGE_TITLE_SOLD_FEATURED,
-			"templateOption" => iHomefinderConstants::OPTION_VIRTUAL_PAGE_TEMPLATE_SOLD_FEATURED
+			"templateOption" => iHomefinderConstants::OPTION_VIRTUAL_PAGE_TEMPLATE_SOLD_FEATURED,
+			"metaTagsOption" => iHomefinderConstants::OPTION_VIRTUAL_PAGE_META_TAGS_SOLD_FEATURED
 		));
 	}
 	
@@ -403,7 +431,8 @@ class iHomefinderAdminPageConfig extends iHomefinderAdminAbstractPage {
 			"virtualPageType" => iHomefinderVirtualPageFactory::OPEN_HOME_SEARCH_FORM, 
 			"permalinkOption" => iHomefinderConstants::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_OPEN_HOME_SEARCH_FORM, 
 			"titleOption" => iHomefinderConstants::OPTION_VIRTUAL_PAGE_TITLE_OPEN_HOME_SEARCH_FORM,
-			"templateOption" => iHomefinderConstants::OPTION_VIRTUAL_PAGE_TEMPLATE_OPEN_HOME_SEARCH_FORM
+			"templateOption" => iHomefinderConstants::OPTION_VIRTUAL_PAGE_TEMPLATE_OPEN_HOME_SEARCH_FORM,
+			"metaTagsOption" => iHomefinderConstants::OPTION_VIRTUAL_PAGE_META_TAGS_OPEN_HOME_SEARCH_FORM
 		));
 	}
 	
@@ -413,7 +442,8 @@ class iHomefinderAdminPageConfig extends iHomefinderAdminAbstractPage {
 			"virtualPageType" => iHomefinderVirtualPageFactory::OFFICE_LIST, 
 			"permalinkOption" => iHomefinderConstants::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_OFFICE_LIST, 
 			"titleOption" => iHomefinderConstants::OPTION_VIRTUAL_PAGE_TITLE_OFFICE_LIST,
-			"templateOption" => iHomefinderConstants::OPTION_VIRTUAL_PAGE_TEMPLATE_OFFICE_LIST
+			"templateOption" => iHomefinderConstants::OPTION_VIRTUAL_PAGE_TEMPLATE_OFFICE_LIST,
+			"metaTagsOption" => iHomefinderConstants::OPTION_VIRTUAL_PAGE_META_TAGS_OFFICE_LIST
 		));
 	}
 
@@ -424,7 +454,8 @@ class iHomefinderAdminPageConfig extends iHomefinderAdminAbstractPage {
 			"permalinkOption" => iHomefinderConstants::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_OFFICE_DETAIL, 
 			"extraPermalinkText" => "{officeName}/{officeId}/",
 			"titleOption" => iHomefinderConstants::OPTION_VIRTUAL_PAGE_TITLE_OFFICE_DETAIL,
-			"templateOption" => iHomefinderConstants::OPTION_VIRTUAL_PAGE_TEMPLATE_OFFICE_DETAIL
+			"templateOption" => iHomefinderConstants::OPTION_VIRTUAL_PAGE_TEMPLATE_OFFICE_DETAIL,
+			"metaTagsOption" => iHomefinderConstants::OPTION_VIRTUAL_PAGE_META_TAGS_OFFICE_DETAIL
 		));
 	}
 			
@@ -434,7 +465,8 @@ class iHomefinderAdminPageConfig extends iHomefinderAdminAbstractPage {
 			"virtualPageType" => iHomefinderVirtualPageFactory::AGENT_LIST, 
 			"permalinkOption" => iHomefinderConstants::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_AGENT_LIST, 
 			"titleOption" => iHomefinderConstants::OPTION_VIRTUAL_PAGE_TITLE_AGENT_LIST,
-			"templateOption" => iHomefinderConstants::OPTION_VIRTUAL_PAGE_TEMPLATE_AGENT_LIST
+			"templateOption" => iHomefinderConstants::OPTION_VIRTUAL_PAGE_TEMPLATE_AGENT_LIST,
+			"metaTagsOption" => iHomefinderConstants::OPTION_VIRTUAL_PAGE_META_TAGS_AGENT_LIST
 		));
 	}
 
@@ -445,7 +477,8 @@ class iHomefinderAdminPageConfig extends iHomefinderAdminAbstractPage {
 			"permalinkOption" => iHomefinderConstants::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_AGENT_DETAIL,
 			"extraPermalinkText" => "{agentName}/{agentId}/",
 			"titleOption" => iHomefinderConstants::OPTION_VIRTUAL_PAGE_TITLE_AGENT_DETAIL,
-			"templateOption" => iHomefinderConstants::OPTION_VIRTUAL_PAGE_TEMPLATE_AGENT_DETAIL
+			"templateOption" => iHomefinderConstants::OPTION_VIRTUAL_PAGE_TEMPLATE_AGENT_DETAIL,
+			"metaTagsOption" => iHomefinderConstants::OPTION_VIRTUAL_PAGE_META_TAGS_AGENT_DETAIL
 		));
 	}
 	

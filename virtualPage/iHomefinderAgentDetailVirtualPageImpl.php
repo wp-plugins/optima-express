@@ -27,7 +27,12 @@ class iHomefinderAgentDetailVirtualPageImpl extends iHomefinderAbstractVirtualPa
 			$variableUtility->getAgentDesignation()
 		);
 	}
-			
+
+	public function getMetaTags() {
+		$default = "<meta name=\"description\" content=\"\" />\n";
+		return $this->getText(iHomefinderConstants::OPTION_VIRTUAL_PAGE_META_TAGS_AGENT_DETAIL, $default);
+	}	
+	
 	public function getContent() {
 		iHomefinderStateManager::getInstance()->setLastSearchUrl();
 		$this->remoteRequest

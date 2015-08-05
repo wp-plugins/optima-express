@@ -13,7 +13,12 @@ class iHomefinderSupplementalListingVirtualPageImpl extends iHomefinderAbstractV
 	public function getPermalink() {
 		return $this->getText(iHomefinderConstants::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_SUPPLEMENTAL_LISTING, "supplemental-listing");
 	}
-		
+
+	public function getMetaTags() {
+		$default = "<meta name=\"description\" content=\"\" />\n";
+		return $this->getText(iHomefinderConstants::OPTION_VIRTUAL_PAGE_META_TAGS_SUPPLEMENTAL_LISTING, $default);
+	}	
+	
 	public function getContent() {
 		iHomefinderStateManager::getInstance()->setLastSearchUrl();
 		$this->remoteRequest

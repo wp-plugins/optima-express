@@ -9,7 +9,10 @@ class iHomefinderOrganizerLoginSubmitVirtualPageImpl extends iHomefinderAbstract
 	public function getPermalink() {
 		return "property-organizer-login-submit";
 	}
-	
+	public function getMetaTags() {
+		$default = "<meta name=\"description\" content=\"\" />\n";
+		return $this->getText(iHomefinderConstants::OPTION_VIRTUAL_PAGE_META_TAGS_ORGANIZER_LOGIN, $default);
+	}
 	public function getContent() {
 		$rememberMe = iHomefinderUtility::getInstance()->getRequestVar("rememberMe");
 		if($rememberMe === "1") {

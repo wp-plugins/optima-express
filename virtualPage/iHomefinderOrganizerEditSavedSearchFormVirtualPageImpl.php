@@ -14,7 +14,12 @@ class iHomefinderOrganizerEditSavedSearchFormVirtualPageImpl extends iHomefinder
 	public function getPermalink() {
 		return $this->getText(iHomefinderConstants::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_EMAIL_UPDATES, "email-alerts");
 	}
-		
+	
+	public function getMetaTags() {
+		$default = "<meta name=\"description\" content=\"\" />\n";
+		return $this->getText(iHomefinderConstants::OPTION_VIRTUAL_PAGE_META_TAGS_EMAIL_UPDATES, $default);
+	}
+	
 	public function getContent() {
 		$utility = iHomefinderUtility::getInstance();
 		$boardId = $utility->getQueryVar("boardId");

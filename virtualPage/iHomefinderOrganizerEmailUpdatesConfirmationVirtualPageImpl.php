@@ -9,7 +9,7 @@ class iHomefinderOrganizerEmailUpdatesConfirmationVirtualPageImpl extends iHomef
 	public function getPermalink() {
 		return "email-updates-confirmation";
 	}
-	
+
 	public function getContent() {
 		$message = iHomefinderUtility::getInstance()->getQueryVar("message");
 		$this->remoteRequest

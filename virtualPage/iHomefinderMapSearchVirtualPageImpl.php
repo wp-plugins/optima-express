@@ -13,7 +13,12 @@ class iHomefinderMapSearchVirtualPageImpl extends iHomefinderAbstractVirtualPage
 	public function getPermalink() {
 		return $this->getText(iHomefinderConstants::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_MAP_SEARCH, "homes-for-sale-map-search");
 	}
-			
+	
+	public function getMetaTags() {
+		$default = "<meta name=\"description\" content=\"\" />\n";
+		return $this->getText(iHomefinderConstants::OPTION_VIRTUAL_PAGE_META_TAGS_MAP_SEARCH, $default);
+	}		
+	
 	public function getContent() {
 		iHomefinderStateManager::getInstance()->setLastSearchUrl();
 		$this->remoteRequest

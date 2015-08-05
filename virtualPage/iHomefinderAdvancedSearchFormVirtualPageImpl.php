@@ -13,6 +13,11 @@ class iHomefinderAdvancedSearchFormVirtualPageImpl extends iHomefinderAbstractVi
 	public function getPermalink() {
 		return $this->getText(iHomefinderConstants::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_ADVANCED_SEARCH, "homes-for-sale-search-advanced");
 	}
+
+	public function getMetaTags() {
+		$default = "<meta name=\"description\" content=\"\" />\n";
+		return $this->getText(iHomefinderConstants::OPTION_VIRTUAL_PAGE_META_TAGS_ADVANCED_SEARCH, $default);
+	}	
 	
 	public function getContent() {
 		$boardId = iHomefinderUtility::getInstance()->getQueryVar("boardId");

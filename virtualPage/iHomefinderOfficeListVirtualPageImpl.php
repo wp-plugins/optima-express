@@ -13,6 +13,11 @@ class iHomefinderOfficeListVirtualPageImpl extends iHomefinderAbstractVirtualPag
 	public function getPermalink() {
 		return $this->getText(iHomefinderConstants::OPTION_VIRTUAL_PAGE_PERMALINK_TEXT_OFFICE_LIST, "office-list");
 	}
+
+	public function getMetaTags() {
+		$default = "<meta name=\"description\" content=\"\" />\n";
+		return $this->getText(iHomefinderConstants::OPTION_VIRTUAL_PAGE_META_TAGS_OFFICE_LIST, $default);
+	}	
 	
 	public function getContent() {
 		$this->remoteRequest
