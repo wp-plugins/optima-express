@@ -54,7 +54,7 @@ IhfEventManager.prototype.trigger = function(eventNames, data) {
 
 var ihfEventManager = new IhfEventManager();
 
-jQuery(document).on("ready DOMSubtreeModified propertychange", function() {
+(function() {
 	var bindEvent = function($element, element, eventName) {
 		var eventType = eventName.split("-").pop();
 		if(eventType === "loaded") {
@@ -73,7 +73,7 @@ jQuery(document).on("ready DOMSubtreeModified propertychange", function() {
 		}
 	};
 	var bindEvents = function() {
-		jQuery("#ihf-main-container [data-ihf-event]:not([data-ihf-event-bound]").each(function() {
+		jQuery("#ihf-main-container [data-ihf-event]").not("[data-ihf-event-bound]").each(function() {
 			var element = this;
 			var $element = jQuery(element);
 			var eventNames = $element.attr("data-ihf-event");
@@ -83,5 +83,7 @@ jQuery(document).on("ready DOMSubtreeModified propertychange", function() {
 			});
 		});
 	};
-	bindEvents();
-});
+	window.setInterval(function() {
+		bindEvents();
+	}, 1000);
+})();
